@@ -1,2 +1,2 @@
 # PositionObserver
-API Sketch for Position Observers
+[API Sketch for Position Observers](./explainer.md)
