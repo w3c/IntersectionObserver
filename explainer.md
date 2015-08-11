@@ -31,7 +31,8 @@ We propose an API which allows a developer to frame questions about _"is an elem
 ```js
 var observer = new PositionObserver({
     viewport:         /* element || null */,
-    viewportModifier: /* CSS Calc expression of length or time */,
+    viewportModifierLength: /* CSS Length expanding the viewport rect. */,
+    viewportModifierTime: /* Time expanding the viewport rect, e.g. will intersect the viewport in 3 seconds given the current scroll curve. */,
     /* Whether to give callbacks only when an element starts/stops intersecting
      * a viewport or everytime it changes how much it intersects the viewport.
      * Callback only fire if the element isn’t intersecting an edge of the
