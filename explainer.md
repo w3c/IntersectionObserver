@@ -187,7 +187,7 @@ function query(selector) {
 function init() {
   var observer = new PositionObserver({
       viewport: document.querySelector(".container"),
-      viewportModifier: "calc(100% + 1s)"
+      viewportModifierTime: "1s"
     },
     manageItemPositionChanges
   );
@@ -224,7 +224,7 @@ function query(selector) {
 
 var observer = new PositionObserver({
     // Pre-load items that are 1 second of scrolling outside the viewport
-    viewportModifier: "calc(100% + 1s)"
+    viewportModifierTime: "1s"
   },
   function(changes) {
     changes.forEach(function(change) {
