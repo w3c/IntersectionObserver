@@ -46,7 +46,6 @@ var observer = new PositionObserver({
       console.log(c.quads);    // Array, may include a bit to discuss
                                // fully or partially visible
       console.log(c.viewport); // a Rect
-      console.log(c.viewportPaintRect); // Pre-paint window
       console.log(c.element);
       console.log(c.velocity);
       console.log(c.timeToViewport);
