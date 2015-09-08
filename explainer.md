@@ -86,17 +86,23 @@ The information provided by this API, combined with the default viewport query, 
 function logImpressionToServer() { /* ... */ }
 function boundingBoxPct(boundingClientRect) { /* ... */ }
 
-function getComputedOpacity(element) {
-  return document.defaultView.getComputedStyle(element).opacity;
-}
-
 function wasVisible(element, changeRecord) {
-  if (intersectPercentage(changeRecord.viewport,
+  if (intersectPercentage(changeRecord.rootBounds,
            boundingBoxPct(changeRecord.boundingClientRect)) < 50) {
     return false;
   }
 
-  return (getComputedOpacity(element) === 1);
+  var ancestor = element;
+  while (element) {
+    var style = getComputedStyle(ancestor);
+    if (style.opacity != 1 || style.visibility != "visible")
+      return false;
+    if (ancestor.parentNode instanceof ShadowRoot)
+      ancestor = ancestor.host;
+    else
+      ancestor = ancestor.parentNode;
+  }
+  return true;
 };
 
 function processChanges(changes) {
