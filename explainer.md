@@ -93,7 +93,7 @@ function wasVisible(element, changeRecord) {
   }
 
   var ancestor = element;
-  while (element) {
+  while (ancestor) {
     var style = getComputedStyle(ancestor);
     if (style.opacity != 1 || style.visibility != "visible")
       return false;
