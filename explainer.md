@@ -26,42 +26,40 @@ Given the opportunity to reduce CPU use, increase battery life, and eliminate ja
 
 ### Proposed API
 
-We propose an API which allows a developer to frame questions about _"is an element inside a particular viewport?"_
-
 ```js
-var observer = new IntersectionObserver({
-    root:         /* element || null */,
-    /* Same as margin, can be 1, 2, 3 or 4 components, possibly negative lengths.
-     * "5px"
-     * "5px 10px"
-     * "-10px 5px 5px"
-     * "-10px -10px 5px 5px"
-     */
-    rootBoundsModifier: /* string */,
-    /* Whether to give callbacks only when an element starts/stops intersecting
-     * the root bounds or everytime it changes how much it intersects.
-     * Callback only fires if the element isn’t intersecting an edge of the
-     * viewport in the case that the element jumps from being entirely outside
-     * the viewport to entirely inside it.
-     * Defaults to true, a less power-hungry option. */
-     thresholdCallbacks: /* boolean, default=true */,
-  },
-  function(changes) {
-    changes.forEach(function(c) {
-      console.log(c.time);               // Timestamp set by the compositor
-      console.log(c.boundingClientRect); // May include a bit to discuss
-                                         // fully or partially visible
-      console.log(c.rootBounds);         // a Rect
-      console.log(c.element);
-    });
-  },
-);
+[Exposed=Window]
+interface IntersectionRecord {
+  readonly attribute double time;
+  readonly attribute DOMRect rootBounds;
+  readonly attribute DOMRect boundingClientRect;
+  readonly attribute Element target;
+};
 
-// Watch all threshold events on a specific descendant of the viewport
-observer.observe(childElement);
-observer.unobserve(childElement);
+callback IntersectionCallback = void (sequence<IntersectionRecord> records, IntersectionObserver observer);
 
-observer.disconnect(); // removes all
+dictionary IntersectionObserverInit {
+  boolean root = null;
+  // Same as margin, can be 1, 2, 3 or 4 components, possibly negative lengths.
+  // "5px"
+  // "5px 10px"
+  // "-10px 5px 5px"
+  // "-10px -10px 5px 5px"
+  DOMString rootBoundsModifier = "0px";
+  // Whether to give callbacks only when an element starts/stops intersecting
+  // the root bounds or everytime it changes how much it intersects.
+  // Callback only fires if the element isn’t intersecting an edge of the
+  // viewport in the case that the element jumps from being entirely outside
+  // the viewport to entirely inside it.
+  // Defaults to true, a less power-hungry option.
+  boolean thresholdCallbacks = true;
+};
+
+[Constructor(IntersectionCallback callback, IntersectionObserverInit options)]
+interface IntersectionObserver {
+  void observe(Element target);
+  void unobserve(Element target);
+  void disconnect();
+};
 ```
 
 This API uses the outermost document's inherent viewport -- i.e. "the thing the user sees" -- as the default viewport. Other queries can be formed relative to ancestor elements.
