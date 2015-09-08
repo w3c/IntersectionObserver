@@ -30,7 +30,7 @@ We propose an API which allows a developer to frame questions about _"is an elem
 
 ```js
 var observer = new IntersectionObserver({
-    viewport:         /* element || null */,
+    target:         /* element || null */,
     /* Same as margin, can be 1, 2, 3 or 4 components, possibly negative lengths.
      * "5px"
      * "5px 10px"
@@ -189,7 +189,7 @@ function query(selector) {
 
 function init() {
   var observer = new IntersectionObserver({
-      viewport: document.querySelector(".container"),
+      target: document.querySelector(".container"),
       viewportModifierLength: "???"
     },
     manageItemPositionChanges
