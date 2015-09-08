@@ -37,7 +37,7 @@ var observer = new IntersectionObserver({
      * "-10px 5px 5px"
      * "-10px -10px 5px 5px"
      */
-    viewportModifierLength: /* string */,
+    targetBoundsModifier: /* string */,
     /* Whether to give callbacks only when an element starts/stops intersecting
      * a viewport or everytime it changes how much it intersects the viewport.
      * Callback only fire if the element isn’t intersecting an edge of the
@@ -190,7 +190,7 @@ function query(selector) {
 function init() {
   var observer = new IntersectionObserver({
       target: document.querySelector(".container"),
-      viewportModifierLength: "???"
+      targetBoundsModifier: "???"
     },
     manageItemPositionChanges
   );
@@ -227,7 +227,7 @@ function query(selector) {
 
 var observer = new ItersectionObserver({
     // Pre-load items that are 1 second of scrolling outside the viewport
-    viewportModifierLength: "???"
+    targetBoundsModifier: "???"
   },
   function(changes) {
     changes.forEach(function(change) {
