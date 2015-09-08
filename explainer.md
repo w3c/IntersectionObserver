@@ -53,8 +53,6 @@ var observer = new IntersectionObserver({
                                          // fully or partially visible
       console.log(c.viewport);           // a Rect
       console.log(c.element);
-      console.log(c.velocity);
-      console.log(c.timeToViewport);
     });
   },
 );
