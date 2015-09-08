@@ -1,2 +1,4 @@
-# PositionObserver
-[API Sketch for Position Observers](./explainer.md)
+# Intersection Observers
+[API Sketch for Intersection Observers](./explainer.md)
+
+Stay tuned for a Draft Spec.
