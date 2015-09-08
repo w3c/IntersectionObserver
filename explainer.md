@@ -38,7 +38,6 @@ var observer = new PositionObserver({
      * "-10px -10px 5px 5px"
      */
     viewportModifierLength: /* string */,
-    viewportModifierTime: /* Time expanding the viewport rect, e.g. will intersect the viewport in 3 seconds given the current scroll curve. */,
     /* Whether to give callbacks only when an element starts/stops intersecting
      * a viewport or everytime it changes how much it intersects the viewport.
      * Callback only fire if the element isn’t intersecting an edge of the
@@ -193,7 +192,7 @@ function query(selector) {
 function init() {
   var observer = new PositionObserver({
       viewport: document.querySelector(".container"),
-      viewportModifierTime: "1s"
+      viewportModifierLength: "???"
     },
     manageItemPositionChanges
   );
@@ -230,7 +229,7 @@ function query(selector) {
 
 var observer = new PositionObserver({
     // Pre-load items that are 1 second of scrolling outside the viewport
-    viewportModifierTime: "1s"
+    viewportModifierLength: "???"
   },
   function(changes) {
     changes.forEach(function(change) {
