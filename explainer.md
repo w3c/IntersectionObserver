@@ -1,8 +1,8 @@
-# Position Observers Explained
+# Intersection Observers Explained
 
 ## What's All This About?
 
-This repo outlines an API that can be used to understand the visibility and position of DOM elements relative to a viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements, managing pre-loading of DOM and data, as well as deferred loading of "below the fold" page content.
+This repo outlines an API that can be used to understand movement of DOM elements relative to another element or the browser top level viewport. Changesare delivered asynchronously and is useful for understanding the visibility of elements, managing pre-loading of DOM and data, as well as deferred loading of "below the fold" page content.
 
 ## Observing Position
 
@@ -29,7 +29,7 @@ Given the opportunity to reduce CPU use, increase battery life, and eliminate ja
 We propose an API which allows a developer to frame questions about _"is an element inside a particular viewport?"_
 
 ```js
-var observer = new PositionObserver({
+var observer = new IntersectionObserver({
     viewport:         /* element || null */,
     /* Same as margin, can be 1, 2, 3 or 4 components, possibly negative lengths.
      * "5px"
@@ -123,7 +123,7 @@ function processChanges(changes) {
   });
 }
 
-var observer = new PositionObserver(
+var observer = new IntersectionObserver(
   { thresholdCallbacks: false },
   processChanges
 );
@@ -144,7 +144,7 @@ Many systems use data-bound lists which manage their in-view contents, recycling
 
 These systems frequently want to use different queries on the same scroll-containing viewport. Data loading can take a long time, so it is advantageous to pre-populate data stores with significantly more information than is visible. The rendered element count may display a much smaller subset of available data; only the "skirt" on each side of a scrolling area necessary to keep up with scrolling velocity (to avoid "blank" or "checkerboard" data).
 
-We can use a `PositionObserver` on child elements of a parent scrolling element to inform the system when to load data and recycle scrolled-out-of-view elements and stamp new content into them for rendering at the "end" of the list:
+We can use a `IntersectionObserver` on child elements of a parent scrolling element to inform the system when to load data and recycle scrolled-out-of-view elements and stamp new content into them for rendering at the "end" of the list:
 
 ```html
 <style>
@@ -190,7 +190,7 @@ function query(selector) {
 }
 
 function init() {
-  var observer = new PositionObserver({
+  var observer = new IntersectionObserver({
       viewport: document.querySelector(".container"),
       viewportModifierLength: "???"
     },
@@ -211,7 +211,7 @@ Many scrollers also want to fetch even more data than what's displayed in the li
 
 ## Delay Loading
 
-Many sites like to avoid loading certain resources until they're near the viewport. This is easy to do with Position Observers:
+Many sites like to avoid loading certain resources until they're near the viewport. This is easy to do with IntersctionObserver's:
 
 ```html
 <!-- index.html -->
@@ -227,7 +227,7 @@ function query(selector) {
   return Array.prototype.slice.apply(document.querySelectorAll(selector));
 }
 
-var observer = new PositionObserver({
+var observer = new ItersectionObserver({
     // Pre-load items that are 1 second of scrolling outside the viewport
     viewportModifierLength: "???"
   },
