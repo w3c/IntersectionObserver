@@ -30,28 +30,28 @@ We propose an API which allows a developer to frame questions about _"is an elem
 
 ```js
 var observer = new IntersectionObserver({
-    target:         /* element || null */,
+    root:         /* element || null */,
     /* Same as margin, can be 1, 2, 3 or 4 components, possibly negative lengths.
      * "5px"
      * "5px 10px"
      * "-10px 5px 5px"
      * "-10px -10px 5px 5px"
      */
-    targetBoundsModifier: /* string */,
+    rootBoundsModifier: /* string */,
     /* Whether to give callbacks only when an element starts/stops intersecting
-     * a viewport or everytime it changes how much it intersects the viewport.
-     * Callback only fire if the element isn’t intersecting an edge of the
+     * the root bounds or everytime it changes how much it intersects.
+     * Callback only fires if the element isn’t intersecting an edge of the
      * viewport in the case that the element jumps from being entirely outside
      * the viewport to entirely inside it.
      * Defaults to true, a less power-hungry option. */
-     thresholdCallbacks: true
+     thresholdCallbacks: /* boolean, default=true */,
   },
   function(changes) {
     changes.forEach(function(c) {
       console.log(c.time);               // Timestamp set by the compositor
       console.log(c.boundingClientRect); // May include a bit to discuss
                                          // fully or partially visible
-      console.log(c.viewport);           // a Rect
+      console.log(c.rootBounds);         // a Rect
       console.log(c.element);
     });
   },
@@ -189,8 +189,8 @@ function query(selector) {
 
 function init() {
   var observer = new IntersectionObserver({
-      target: document.querySelector(".container"),
-      targetBoundsModifier: "???"
+      root: document.querySelector(".container"),
+      rootBoundsModifier: "???"
     },
     manageItemPositionChanges
   );
@@ -227,7 +227,7 @@ function query(selector) {
 
 var observer = new ItersectionObserver({
     // Pre-load items that are 1 second of scrolling outside the viewport
-    targetBoundsModifier: "???"
+    rootBoundsModifier: "???"
   },
   function(changes) {
     changes.forEach(function(change) {
