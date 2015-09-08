@@ -43,10 +43,10 @@ var observer = new PositionObserver({
   },
   function(changes) {
     changes.forEach(function(c) {
-      console.log(c.time);     // Timestamp set by the compositor
-      console.log(c.quads);    // Array, may include a bit to discuss
-                               // fully or partially visible
-      console.log(c.viewport); // a Rect
+      console.log(c.time);               // Timestamp set by the compositor
+      console.log(c.boundingClientRect); // May include a bit to discuss
+                                         // fully or partially visible
+      console.log(c.viewport);           // a Rect
       console.log(c.element);
       console.log(c.velocity);
       console.log(c.timeToViewport);
@@ -83,7 +83,7 @@ The information provided by this API, combined with the default viewport query, 
 
 // These functions left as an exercise to the reader
 function logImpressionToServer() { /* ... */ }
-function boundingBox(quads) { /* ... */ }
+function boundingBoxPct(boundingClientRect) { /* ... */ }
 
 function getComputedOpacity(element) {
   return document.defaultView.getComputedStyle(element).opacity;
@@ -91,7 +91,7 @@ function getComputedOpacity(element) {
 
 function wasVisible(element, changeRecord) {
   if (intersectPercentage(changeRecord.viewport,
-              boundingBox(changeRecord.quads)) < 50) {
+           boundingBoxPct(changeRecord.boundingClientRect)) < 50) {
     return false;
   }
 
