@@ -73,14 +73,15 @@
 
     <pre class="highlight example">
       var observer = new IntersectionObserver(function(changes) {
-        console.log(c.time);     // Timestamp when the change occurred
-        console.log(c.quads);    // Array
-        console.log(c.viewport); // a Rect
-        console.log(c.element);
-      });
+        console.log(c.time);       // Timestamp when the change occurred
+        console.log(c.rootBounds);
+        console.log(c.intersectionRect);
+        console.log(c.boundingClientRect);
+        console.log(c.target);
+      }, {});
 
       // Watch all threshold events on a specific descendant of the viewport
-      observer.observe(childElement, {});
+      observer.observe(childElement);
 
       observer.disconnect(); // removes all
     </pre>
@@ -89,7 +90,7 @@
   <section>
     <h2><dfn>Intersection Observer</dfn></h2>
 
-    <p>The <a>Intersection Observer</a> API enables .</p>
+    <p>The <a>Intersection Observer</a> API enables developers to understand the visibility and position of DOM elements relative to a root element or the top level document's viewport.</p>
 
     <section>
       <h2>The <dfn>IntersectionObserverCallback</dfn></h2>
@@ -102,9 +103,9 @@
 
       <p>The <a>IntersectionObserver</a> interface can be used to observe changes in the intersection of a _target_ <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a> and a _root_ <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a>. A <dfn>registered intersection observer</dfn> consists of an observer (an <a>IntersectionObserver</a> object) and options (a <a>IntersectionObserverInit</a> dictionary).</p>
 
-      <dl title='[Constructor(IntersectionObserverCallback callback), Exposed=(Window,Worker)] interface IntersectionObserver' class='idl'>
+      <dl title='[Constructor(IntersectionObserverCallback callback, IntersectionObserverInit options), Exposed=(Window,Worker)] interface IntersectionObserver' class='idl'>
 
-        <dt>void observe(Element target, IntersectionObserverInit options)</dt>
+        <dt>void observe(Element target)</dt>
         <dd>This method instructs the user agent to observer a given _target_ (an <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a>) and report any changes in intersection based on the criteria given by _options_ (an object).
         </dd>
         <dt>void disconnect()</dt>
@@ -129,6 +130,8 @@
         <dd>The visible dimensions of _root_, in the coordinate space of the document the root element is in. If _root_ is undefined then use the coordinate space of the top-level document.</dd>
         <dt>readonly attribute DOMRect boundingClientRect</dt>
         <dd>The <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#DOMRect">DOMRect</a> corresponding to the _target_'s <a href="http://www.w3.org/TR/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a>.</dd>
+        <dt>readonly attribute DOMRect intersectionRect</dt>
+        <dd>The <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#DOMRect">DOMRect</a> corresponding to _boundingClientRect_ intersected by each of <i>target</i>'s ancestors' clip rects (up to but not including _root_), intersected with _rootBounds_. This value represents the portion of _target_ actually visible within _rootBounds_.</dd>
         <dt>readonly attribute Element target</dt>
         <dd>The _element_ whose intersection with _root_ changed.</dd>
       </dl>
@@ -138,15 +141,7 @@
       <h2><dfn>IntersectionObserverInit</dfn></h2>
       <dl title='dictionary IntersectionObserverInit' class='idl'>
         <dt>Element? root = null</dt>
-        <dd>The _root_ to use for intersection. If not provided, use the natural viewport. If _target_ is NOT a descendent of _root_, the user agent should throw a TypeError.
-          <div class='note' title='Natural Viewport'>
-            <p>This API uses the outermost document's inherent viewport -- i.e. "the thing the user sees" -- as the default viewport. Other queries can be formed relative to ancestor elements.</p>
-
-            <p>The "natural" viewport isn't represented anywhere in the DOM and so queries against it are a bit magical, but this is reasonable as the information is available through other (expensive) mechanisms today. Should the viewport hierarchy become exposed to DOM, this API can be explained in those terms.</p>
-
-            <p>Thanks to the "natural" viewport, code can be hosted inside an iframe which can report the visibility of the queried element as the user scrolls the iframe (and element) into view.</p>
-          </div>
-        </dd>
+        <dd>The _root_ to use for intersection. If not provided, use the top-level document's viewport. If _target_ is NOT a descendent of _root_, the user agent should throw a TypeError.</dd>
         <dt>DOMString rootBoundsModifier = "0px"</dt>
         <dd>Same as <a href="http://www.w3.org/TR/CSS21/box.html#margin-properties">margin</a>, can be 1, 2, 3 or 4 components, possibly negative lengths. e.g.
           <ul>
@@ -156,10 +151,27 @@
             <li>"-10px -10px 5px 5px"</li>
           </ul>
         </dd>
-        <dt>boolean thresholdCallbacks = true</dt>
-        <dd>If true, invoke _callback_ every time intersection changes.<br /> If false, only invoke _callback_ when intersection changes from zero to non-zero or vice versa.</dd>
+        <dt>DOMString threshold = "1px"</dt>
+        <dd>Threshold at which to trigger _callback_. _callback_ will be invoked when intersectionRect's area changes from greater than or equal to _threshold_ to less than _threshold_, and vice versa.<br /> This is a <a href="http://www.w3.org/TR/css3-values/#lengths">length</a> value.</dd>
       </dl>
     </section>
   </section>
+
+  <section>
+    <h2>Processing Model</h2>
+    <p> This section outlines the steps the user agent SHOULD take when implementing <a>Intersection Observer</a>.</p>
+
+    <section>
+      <h2>Event Loop</h2>
+      <p>An <a>Intersection Observer</a> processing step should take place AFTER the layout and rendering steps have been performed in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-9">update the rendering</a> event loop in the HTML Processing Model.</p>
+      <p>This step is:</p>
+      <pre>For each fully active _Document_ in _docs_, for each <a>registered intersection observer</a> of that _Document_,
+        compute an _intersectionRect_ which is the intersection of _target.getBoundingClientRect()_ with the clip rect of each ancestor between _target_ and _root_.
+        if that <i>intersectionRect</i>'s area is greater than or equal to the <i>IntersectionObserver</i>'s _threshold_ and the previously generated _intersectionRect_ had an area that was smaller than the _threshold_, then post a task to invoke _callback_.
+        else if that <i>intersectionRect</i>'s area is less than the <i>IntersectionObserver</i>'s _threshold_ and the previously generated _intersectionRect_ had an area that was greater or equal to the _threshold_, post a task to invoke _callback_.
+</pre>
+    </section>
+  </section>
+
 </body>
 </html>
