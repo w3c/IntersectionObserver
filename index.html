@@ -108,6 +108,9 @@
         <dt>void observe(Element target)</dt>
         <dd>This method instructs the user agent to observer a given _target_ (an <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a>) and report any changes in intersection based on the criteria given by _options_ (an object).
         </dd>
+        <dt>void unobserve(Element target)</dt>
+        <dd>This method instructs the user agent to remove the <a>registered intersection observer</a> from _target_.
+        </dd>
         <dt>void disconnect()</dt>
         <dd>This method MUST remove the <a>registered intersection observer</a> from every _target_ for which it is an <a>observer</a>.</dd>
         <dt>IntersectionObserverEntryList takeRecords()</dt>
