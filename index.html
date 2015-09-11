@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Intersection Observer</title>
+  <meta charset='utf-8'>
+  <script src='//www.w3.org/Tools/respec/respec-w3c-common' async class='remove'></script>
+  <script class='remove'>
+  var respecConfig = {
+    shortName: "intersection-observer",
+    specStatus: "ED",
+    edDraftURI: "https://github.com/slightlyoff/PositionObserver/",
+    // publishDate: "2015-09-01",
+    editors: [{
+      name: "Michael Blain",
+      mailto: "mpb@google.com",
+      company: "Google",
+      companyURL: "https://www.google.com/",
+    },],
+    wg: "Web Performance Working Group",
+    wgURI: "http://www.w3.org/2010/webperf/",
+    wgPublicList: "public-web-perf",
+    subjectPrefix: "[Intersection Observer]",
+    format: "markdown",
+    otherLinks: [{
+      key: 'Repository',
+      data: [{
+        value: 'We are on GitHub',
+        href: 'https://github.com/slightlyoff/PositionObserver/'
+      }, {
+        value: 'Commit history',
+        href: 'https://github.com/slightlyoff/PositionObserver/commits/master/index.html'
+      }, {
+        value: 'File a bug',
+        href: 'https://github.com/slightlyoff/PositionObserver/issues'
+      }]
+    }],
+    wgPatentURI:  "http://www.w3.org/2004/01/pp-impl/45211/status"
+  };
+  </script>
+</head>
+
+<body>
+  <section id='abstract'>
+    <p>This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to a viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements, managing pre-loading of DOM and data, as well as deferred loading of "below the fold" page content.</p>
+  </section>
+
+  <section id='sotd'>
+    <p>This is a <strong>work in progress</strong> and may change without any notices.</p>
+  </section>
+
+  <section class='informative'>
+    <h2>Introduction</h2>
+    <p>The web's traditional position calculation mechanisms rely on explicit queries of DOM state that are known to cause (expensive) style recalcuation and layout and, frequently, are a source of significant performance overhead due to continuous polling for this information.</p>
+
+    <p>A body of common practice has evolved that relies on these behaviors, however, including (but not limited to):
+      <ul>
+        <li>Building custom pre- and deferred-loading of DOM and data.</li>
+        <li>Implementing data-bound high-performance scrolling lists which load and render subsets of data sets. These lists are a central mobile interaction idiom.</li>
+        <li>Calculating element visibility. In particular, [ad networks now require reporting of ad "visibility" for monetizing impressions](http://www.iab.net/iablog/2014/03/viewability-has-arrived-what-you-need-to-know-to-see-through-this-sea-change.html). This has led to many sites abusing scroll handlers (causing jank on scroll), [synchronous layout invoking readbacks](http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html) (causing unneccessary critical work in rAF loops), and resorting to exotic plugin-based solutions for computing "true" element visibility (with all the associated overhead of the plugin architecture).</li>
+      </ul>
+    </p>
+    <p>These use-cases have several common properties:
+      <ol>
+        <li>They can be represented as passive "queries" about the state of individual elements with respect to some other element (or the global viewport)</li>
+        <li>They do not impose hard latency requirements; that is to say, the information can be delivered asynchronously (e.g. from another thread) without penalty</li>
+        <li>They are poorly supported by nearly all combinations of existing web platform features, requiring extraordinary developer effort despite their widespread use.</li>
+      </ol>
+    </p>
+    <p>A notable non-goal is pixel-accurate information about what was actually displayed (which can be quite difficult to obtain efficiently in certain browser architectures in the face of filters, webgl, and other features). In all of these scenarios the information is useful even when delivered at a slight delay and without perfect compositing-result data.</p>
+
+    <p>The Intersersection Observer API addresses the above issues by giving developers a new method to asynchronously query the position of an element with respect to other elements or the global viewport. The asynchronous delivery eliminates the need for costly DOM and style queries, continuous polling, and use of custom plugins. By removing the need for these methods it allows applications to significantly reduce their CPU, GPU and energy costs.</p>
+
+    <pre class="highlight example">
+      var observer = new IntersectionObserver(function(changes) {
+        console.log(c.time);     // Timestamp when the change occurred
+        console.log(c.quads);    // Array
+        console.log(c.viewport); // a Rect
+        console.log(c.element);
+      });
+
+      // Watch all threshold events on a specific descendant of the viewport
+      observer.observe(childElement, {});
+
+      observer.disconnect(); // removes all
+    </pre>
+  </section>
+
+  <section>
+    <h2><dfn>Intersection Observer</dfn></h2>
+
+    <p>The <a>Intersection Observer</a> API enables .</p>
+
+    <section>
+      <h2>The <dfn>IntersectionObserverCallback</dfn></h2>
+      <dl title='callback IntersectionObserverCallback = void (IntersectionObserverEntryList entries, IntersectionObserver observer)' class='idl'></dl>
+      <p>The callback will be invoked with the <a>IntersectionObserverEntryList</a> as the first argument and the constructed <a>IntersectionObserver</a> object as the second argument. It is invoked after <i>target</i>s registered with the observe() method change their intersection with their _root_. When a change in intersection is observed by the user agent, a task to invoke _callback_ SHOULD be posted.</p>
+    </section>
+
+    <section>
+      <h2>The <dfn>Intersection Observer</dfn> interface</h2>
+
+      <p>The <a>IntersectionObserver</a> interface can be used to observe changes in the intersection of a _target_ <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a> and a _root_ <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a>. A <dfn>registered intersection observer</dfn> consists of an observer (an <a>IntersectionObserver</a> object) and options (a <a>IntersectionObserverInit</a> dictionary).</p>
+
+      <dl title='[Constructor(IntersectionObserverCallback callback), Exposed=(Window,Worker)] interface IntersectionObserver' class='idl'>
+
+        <dt>void observe(Element target, IntersectionObserverInit options)</dt>
+        <dd>This method instructs the user agent to observer a given _target_ (an <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a>) and report any changes in intersection based on the criteria given by _options_ (an object).
+        </dd>
+        <dt>void disconnect()</dt>
+        <dd>This method MUST remove the <a>registered intersection observer</a> from every _target_ for which it is an <a>observer</a>.</dd>
+        <dt>IntersectionObserverEntryList takeRecords()</dt>
+        <dd>Empties the record queue and returns what was in there.</dd>
+      </dl>
+
+    </section>
+
+    <section>
+      <h2>The <dfn>IntersectionObserverEntryList</dfn> typedef</h2>
+      <dl class='idl' title='typedef sequence<IntersectionObserverEntry> IntersectionObserverEntryList'></dl>
+    </section>
+
+    <section>
+      <h2>The <dfn>IntersectionObserverEntry</dfn> interface</h2>
+      <dl class='idl' title='interface IntersectionObserverEntry'>
+        <dt>readonly attribute DOMHighResTimeStamp time</dt>
+        <dd>The attribute MUST return a <a href="https://w3c.github.io/hr-time/#dom-domhighrestimestamp">DOMHighResTimeStamp</a> that corresponds to the time the intersection was recorded.</dd>
+        <dt>readonly attribute DOMRect rootBounds</dt>
+        <dd>The visible dimensions of _root_, in the coordinate space of the document the root element is in. If _root_ is undefined then use the coordinate space of the top-level document.</dd>
+        <dt>readonly attribute DOMRect boundingClientRect</dt>
+        <dd>The <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#DOMRect">DOMRect</a> corresponding to the _target_'s <a href="http://www.w3.org/TR/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a>.</dd>
+        <dt>readonly attribute Element target</dt>
+        <dd>The _element_ whose intersection with _root_ changed.</dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2><dfn>IntersectionObserverInit</dfn></h2>
+      <dl title='dictionary IntersectionObserverInit' class='idl'>
+        <dt>Element? root = null</dt>
+        <dd>The _root_ to use for intersection. If not provided, use the natural viewport. If _target_ is NOT a descendent of _root_, the user agent should throw a TypeError.
+          <div class='note' title='Natural Viewport'>
+            <p>This API uses the outermost document's inherent viewport -- i.e. "the thing the user sees" -- as the default viewport. Other queries can be formed relative to ancestor elements.</p>
+
+            <p>The "natural" viewport isn't represented anywhere in the DOM and so queries against it are a bit magical, but this is reasonable as the information is available through other (expensive) mechanisms today. Should the viewport hierarchy become exposed to DOM, this API can be explained in those terms.</p>
+
+            <p>Thanks to the "natural" viewport, code can be hosted inside an iframe which can report the visibility of the queried element as the user scrolls the iframe (and element) into view.</p>
+          </div>
+        </dd>
+        <dt>DOMString rootBoundsModifier = "0px"</dt>
+        <dd>Same as <a href="http://www.w3.org/TR/CSS21/box.html#margin-properties">margin</a>, can be 1, 2, 3 or 4 components, possibly negative lengths. e.g.
+          <ul>
+            <li>"5px"</li>
+            <li>"5px 10px"</li>
+            <li>"-10px 5px 5px"</li>
+            <li>"-10px -10px 5px 5px"</li>
+          </ul>
+        </dd>
+        <dt>boolean thresholdCallbacks = true</dt>
+        <dd>If true, invoke _callback_ every time intersection changes.<br /> If false, only invoke _callback_ when intersection changes from zero to non-zero or vice versa.</dd>
+      </dl>
+    </section>
+  </section>
+</body>
+</html>
