@@ -9,7 +9,7 @@
   var respecConfig = {
     shortName: "intersection-observer",
     specStatus: "ED",
-    edDraftURI: "https://github.com/slightlyoff/PositionObserver/",
+    edDraftURI: "https://github.com/slightlyoff/IntersectionObserver/",
     // publishDate: "2015-09-01",
     editors: [{
       name: "Michael Blain",
@@ -26,13 +26,13 @@
       key: 'Repository',
       data: [{
         value: 'We are on GitHub',
-        href: 'https://github.com/slightlyoff/PositionObserver/'
+        href: 'https://github.com/slightlyoff/IntersectionObserver/'
       }, {
         value: 'Commit history',
-        href: 'https://github.com/slightlyoff/PositionObserver/commits/master/index.html'
+        href: 'https://github.com/slightlyoff/IntersectionObserver/commits/master/index.html'
       }, {
         value: 'File a bug',
-        href: 'https://github.com/slightlyoff/PositionObserver/issues'
+        href: 'https://github.com/slightlyoff/IntersectionObserver/issues'
       }]
     }],
     wgPatentURI:  "http://www.w3.org/2004/01/pp-impl/45211/status"
@@ -88,7 +88,7 @@
   </section>
 
   <section>
-    <h2><dfn>Intersection Observer</dfn></h2>
+    <h2>Intersection Observer</h2>
 
     <p>The <a>Intersection Observer</a> API enables developers to understand the visibility and position of DOM elements relative to a root element or the top level document's viewport.</p>
 
@@ -168,11 +168,18 @@
       <h2>Event Loop</h2>
       <p>An <a>Intersection Observer</a> processing step should take place AFTER the layout and rendering steps have been performed in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-9">update the rendering</a> event loop in the HTML Processing Model.</p>
       <p>This step is:</p>
-      <pre>For each fully active _Document_ in _docs_, for each <a>registered intersection observer</a> of that _Document_,
-        compute an _intersectionRect_ which is the intersection of _target.getBoundingClientRect()_ with the clip rect of each ancestor between _target_ and _root_.
-        if that <i>intersectionRect</i>'s area is greater than or equal to the <i>IntersectionObserver</i>'s _threshold_ and the previously generated _intersectionRect_ had an area that was smaller than the _threshold_, then post a task to invoke _callback_.
-        else if that <i>intersectionRect</i>'s area is less than the <i>IntersectionObserver</i>'s _threshold_ and the previously generated _intersectionRect_ had an area that was greater or equal to the _threshold_, post a task to invoke _callback_.
-</pre>
+      <ol start="11">
+        <li>For each fully active _Document_ in _docs_, for each <a>registered intersection observer</a> of that _Document_
+          <ol>
+            <li>compute an _intersectionRect_ which is the intersection of _target.getBoundingClientRect()_ with the clip rect of each ancestor between _target_ and _root_.
+              <ul>
+                <li>if that <i>intersectionRect</i>'s area is greater than or equal to the <i>IntersectionObserver</i>'s _threshold_ and the previously generated _intersectionRect_ had an area that was smaller than the _threshold_, then post a task to invoke _callback_.</li>
+                <li>else if that <i>intersectionRect</i>'s area is less than the <i>IntersectionObserver</i>'s _threshold_ and the previously generated _intersectionRect_ had an area that was greater or equal to the _threshold_, post a task to invoke _callback_.</li>
+              </ul>
+            </li>
+          </ol>
+        </li>
+      </ol>
     </section>
   </section>
 
