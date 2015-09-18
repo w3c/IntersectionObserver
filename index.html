@@ -42,7 +42,7 @@
 
 <body>
   <section id='abstract'>
-    <p>This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to a viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements, managing pre-loading of DOM and data, as well as deferred loading of "below the fold" page content.</p>
+    <p>This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to a viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.</p>
   </section>
 
   <section id='sotd'>
@@ -73,11 +73,13 @@
 
     <pre class="highlight example">
       var observer = new IntersectionObserver(function(changes) {
-        console.log(c.time);       // Timestamp when the change occurred
-        console.log(c.rootBounds);
-        console.log(c.intersectionRect);
-        console.log(c.boundingClientRect);
-        console.log(c.target);
+        for (var i in changes) {
+          console.log(changes[i].time);               // Timestamp when the change occurred
+          console.log(changes[i].rootBounds);         // Unclipped area of _root_
+          console.log(changes[i].intersectionRect);   // Unclipped area of _target_ intersected with _rootBounds_
+          console.log(changes[i].boundingClientRect); // _target.boundingClientRect()_
+          console.log(changes[i].target);             // the Element _target_
+        }
       }, {});
 
       // Watch all threshold events on a specific descendant of the viewport
@@ -106,7 +108,7 @@
       <dl title='[Constructor(IntersectionObserverCallback callback, IntersectionObserverInit options), Exposed=(Window,Worker)] interface IntersectionObserver' class='idl'>
 
         <dt>void observe(Element target)</dt>
-        <dd>This method instructs the user agent to observer a given _target_ (an <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a>) and report any changes in intersection based on the criteria given by _options_ (an object).
+        <dd>This method instructs the user agent to register the observer as a <a>registered intersection observer</a> for the given _target_ (an <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a>), and report any changes in intersection based on the criteria given by _options_ (an object). <p class="note">If observe() is called with a _target_ this observer is already a <a>registered intersection observer</a> for, there is no effect.</p>
         </dd>
         <dt>void unobserve(Element target)</dt>
         <dd>This method instructs the user agent to remove the <a>registered intersection observer</a> from _target_.
@@ -146,13 +148,16 @@
         <dt>Element? root = null</dt>
         <dd>The _root_ to use for intersection. If not provided, use the top-level document's viewport. If _target_ is NOT a descendent of _root_, the user agent should throw a TypeError.</dd>
         <dt>DOMString rootBoundsModifier = "0px"</dt>
-        <dd>Same as <a href="http://www.w3.org/TR/CSS21/box.html#margin-properties">margin</a>, can be 1, 2, 3 or 4 components, possibly negative lengths. e.g.
-          <ul>
-            <li>"5px"</li>
-            <li>"5px 10px"</li>
-            <li>"-10px 5px 5px"</li>
-            <li>"-10px -10px 5px 5px"</li>
-          </ul>
+        <dd>
+          Same as <a href="http://www.w3.org/TR/CSS21/box.html#margin-properties">margin</a>, can be 1, 2, 3 or 4 components, possibly negative lengths.
+          <p> If there is only one component value, it applies to all sides. If there are two values, the top and bottom margins are set to the first value and the right and left margins are set to the second. If there are three values, the top is set to the first value, the left and right are set to the second, and the bottom is set to the third. If there are four values, they apply to the top, right, bottom, and left, respectively.e.g.
+            <pre class="highlight">
+"5px"                // all margins set to 5px
+"5px 10px"           // top &amp; bottom = 5px, right &amp; left = 10px
+"-10px 5px 8px"      // top = -10px, right &amp; left = 5px, bottom = 8px
+"-10px -5px 5px 8px" // top = -10px, right = -5px, bottom = 5px, left = 8px
+            </pre>
+          </p>
         </dd>
         <dt>DOMString threshold = "1px"</dt>
         <dd>Threshold at which to trigger _callback_. _callback_ will be invoked when intersectionRect's area changes from greater than or equal to _threshold_ to less than _threshold_, and vice versa.<br /> This is a <a href="http://www.w3.org/TR/css3-values/#lengths">length</a> value.</dd>
