@@ -97,26 +97,46 @@
     <section>
       <h2>The <dfn>IntersectionObserverCallback</dfn></h2>
       <dl title='callback IntersectionObserverCallback = void (IntersectionObserverEntryList entries, IntersectionObserver observer)' class='idl'></dl>
-      <p>The callback will be invoked with the <a>IntersectionObserverEntryList</a> as the first argument and the constructed <a>IntersectionObserver</a> object as the second argument. It is invoked after <i>target</i>s registered with the observe() method change their intersection with their _root_. When a change in intersection is observed by the user agent, a task to invoke _callback_ SHOULD be posted.</p>
+      <p>This callback will be invoked when there are changes to <i>target</i>'s intersection with _root_, as per the <a>processing model</a>.</p>
     </section>
 
     <section>
       <h2>The <dfn>Intersection Observer</dfn> interface</h2>
 
-      <p>The <a>IntersectionObserver</a> interface can be used to observe changes in the intersection of a _target_ <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a> and a _root_ <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a>. A <dfn>registered intersection observer</dfn> consists of an observer (an <a>IntersectionObserver</a> object) and options (a <a>IntersectionObserverInit</a> dictionary).</p>
+      <p>The <a>IntersectionObserver</a> interface can be used to observe changes in the intersection of a _target_ <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a> and a _root_ <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a> (or the top-level document's viewport). </p>
+      <p>A <dfn>registered intersection observer</dfn> consists of an observer (an <a>IntersectionObserver</a> object) and options (a <a>IntersectionObserverInit</a> dictionary).</p>
 
       <dl title='[Constructor(IntersectionObserverCallback callback, IntersectionObserverInit options), Exposed=(Window,Worker)] interface IntersectionObserver' class='idl'>
 
         <dt>void observe(Element target)</dt>
-        <dd>This method instructs the user agent to register the observer as a <a>registered intersection observer</a> for the given _target_ (an <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a>), and report any changes in intersection based on the criteria given by _options_ (an object). <p class="note">If observe() is called with a _target_ this observer is already a <a>registered intersection observer</a> for, there is no effect.</p>
+        <dd>
+          <ol>
+            <li>If _target_ is in _this_.<a>observationTargets</a>, return.</li>
+            <li>If _target_ is NOT a descendent of _this_.<a>init</a>.<a href="#widl-IntersectionObserverInit-root" class="internalDFN">root</a>, throw a TypeError.</li>
+            <li>Add _this_ to _target_.<a>registeredObservers</a>.</li>
+            <li>Add _target_ to _this_.<a>observationTargets</a>.</li>
+          </ol>
         </dd>
         <dt>void unobserve(Element target)</dt>
-        <dd>This method instructs the user agent to remove the <a>registered intersection observer</a> from _target_.
+        <dd>
+          <ol>
+            <li>Remove the <a>registered intersection observer</a> from _target_.<a>registeredObservers</a></li>
+          </ol>
         </dd>
         <dt>void disconnect()</dt>
-        <dd>This method MUST remove the <a>registered intersection observer</a> from every _target_ for which it is an <a>observer</a>.</dd>
+        <dd>For each _target_ in _this_.<a>observationTargets</a>
+          <ol>
+            <li>Remove the <a>registered intersection observer</a> from _target_.<a>registeredObservers</a></li>
+          </ol>
+        </dd>
         <dt>IntersectionObserverEntryList takeRecords()</dt>
-        <dd>Empties the record queue and returns what was in there.</dd>
+        <dd>
+          <ol>
+            <li>Construct an <a>IntersectionObserverEntryList</a> from _this_.<a>queuedEntries</a>.</li>
+            <li>Clear _this_.<a>queuedEntries</a>.</li>
+            <li>Return the <a>IntersectionObserverEntryList</a>.</li>
+          </ol>
+        </dd>
       </dl>
 
     </section>
@@ -136,7 +156,7 @@
         <dt>readonly attribute DOMRect boundingClientRect</dt>
         <dd>The <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#DOMRect">DOMRect</a> corresponding to the _target_'s <a href="http://www.w3.org/TR/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a>.</dd>
         <dt>readonly attribute DOMRect intersectionRect</dt>
-        <dd>The <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#DOMRect">DOMRect</a> corresponding to _boundingClientRect_ intersected by each of <i>target</i>'s ancestors' clip rects (up to but not including _root_), intersected with _rootBounds_. This value represents the portion of _target_ actually visible within _rootBounds_.</dd>
+        <dd>The <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#DOMRect">DOMRect</a> corresponding to _boundingClientRect_ intersected by each of <i>target</i>'s ancestors' clip rects (up to but not including _root_), intersected with _rootBounds_. This value represents the portion of _target_ actually visible within _rootBounds_.
         <dt>readonly attribute Element target</dt>
         <dd>The _element_ whose intersection with _root_ changed.</dd>
       </dl>
@@ -146,7 +166,7 @@
       <h2><dfn>IntersectionObserverInit</dfn></h2>
       <dl title='dictionary IntersectionObserverInit' class='idl'>
         <dt>Element? root = null</dt>
-        <dd>The _root_ to use for intersection. If not provided, use the top-level document's viewport. If _target_ is NOT a descendent of _root_, the user agent should throw a TypeError.</dd>
+        <dd>The _root_ to use for intersection. If not provided, use the top-level document's viewport.</dd>
         <dt>DOMString rootBoundsModifier = "0px"</dt>
         <dd>
           Same as <a href="http://www.w3.org/TR/CSS21/box.html#margin-properties">margin</a>, can be 1, 2, 3 or 4 components, possibly negative lengths.
@@ -166,23 +186,96 @@
   </section>
 
   <section>
-    <h2>Processing Model</h2>
-    <p> This section outlines the steps the user agent SHOULD take when implementing <a>Intersection Observer</a>.</p>
+    <h2><dfn>Processing Model</dfn></h2>
+    <p> This section outlines the steps the user agent MUST take when implementing <a>Intersection Observer</a>.</p>
 
+    <section>
+      <h2>Defines</h2>
+      <section>
+        <h3>_Document_ has:</h3>
+        <ol>
+          <li>Let <dfn>pendingCallbacks</dfn> be a list of <a>IntersectionObserver</a>s which have non-empty <a>queuedEntries</a> lists.</li>
+          <li>Let <dfn>RegisteredIntersectionObserversForDocument</dfn> be a list of <a>registered Intersection Observer</a>s</li>
+        </ol>
+      </section>
+      <section>
+        <h3>_Element_ has:</h3>
+        <ol>
+          <li>Let <dfn>registeredObservers</dfn> be a list of <a>registered Intersection Observer</a>s.</li>
+          <li>Let <dfn>previousIntersectionRect</dfn> be a <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#DOMRect">DOMRect</a> initially set to null.</li>
+        </ol>
+      </section>
+      <section>
+        <h3>_IntersectionObserver_ has:</h3>
+        <ol>
+          <li>Let <dfn>queuedEntries</dfn> be a list of <a>IntersectionObserverEntry</a> objects.</li>
+          <li>Let <dfn>observationTargets</dfn> be a list of <a href="http://www.w3.org/2003/01/dom2-javadoc/org/w3c/dom/Element.html">Element</a>s.</li>
+          <li>Let <dfn>init</dfn> be an <a>IntersectionObserverInit</a> object.</li>
+        </ol>
+      </section>
+    </section>
+
+    <section>
+      <h2>Algorithms</h2>
+      <section>
+        <h3><dfn>Queue an IntersectionObserverCallback</dfn></h3>
+        <p>To <a>queue an IntersectionObserverCallback</a> for _observer_, run these steps:
+          <ol>
+            <li>If _Document_.<a>pendingCallbacks</a> contains _observer_, return.</li>
+            <li>Append _observer_ to _Document_.<a>pendingCallbacks</a>.</li>
+            <li>Post a task to <a>invoke an IntersectionObserverCallback</a>, or enqueue a task to <a>invoke an IntersectionObserverCallback</a> in <i>Document</i>'s <a href="https://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks">list of idle request callbacks</a> with an appropriate _timeout_.
+              <pre class="issue">Should we define an appropriate _timeout_?</pre>
+            </li>
+          </ol>
+        </p>
+      </section>
+
+      <section>
+        <h3><dfn>Invoke an IntersectionObserverCallback</dfn></h3>
+        <p>To <a>invoke an IntersectionObserverCallback</a> for _observer_, run these steps:
+          <ol>
+            <li>If _observer_.<a>queuedEntries</a> is empty, return.</li>
+            <li>Construct an <a>IntersectionObserverEntryList</a> from _observer_.<a>queuedEntries</a>.</li>
+            <li>Clear _observer_.<a>queuedEntries</a>.</li>
+            <li>Remove _observer_ from <i>Document</i>.<a>pendingCallbacks</a>.</li>
+            <li>Invoke _callback_ with the <a>IntersectionObserverEntryList</a> as the first argument and _observer_ as the second argument.</li>
+          </ol>
+        </p>
+      </section>
+
+      <section>
+        <h3><dfn>Queue an IntersectionObserverEntry</dfn></h3>
+        <p>To <a>queue an IntersectionObserverEntry</a> for _observer_, run these steps:
+          <ol>
+            <li>Construct an <a>IntersectionObserverEntry</a>.</li>
+            <li>Append it to _observer_.<a>queuedEntries</a>.</li>
+            <li><a>Queue an IntersectionObserverCallback</a> for _observer_.</li>
+          </ol>
+        </p>
+      </section>
+    </section>
     <section>
       <h2>Event Loop</h2>
       <p>An <a>Intersection Observer</a> processing step should take place AFTER the layout and rendering steps have been performed in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8">update the rendering</a> event loop in the HTML Processing Model.</p>
       <p>This step is:</p>
       <ol start="11">
-        <li>For each fully active _Document_ in _docs_, for each <a>registered intersection observer</a> of that _Document_
-          <ol>
-            <li>compute an _intersectionRect_ which is the intersection of _target.getBoundingClientRect()_ with the clip rect of each ancestor between _target_ and _root_.
-              <ul>
-                <li>if that <i>intersectionRect</i>'s area is greater than or equal to the <i>IntersectionObserver</i>'s _threshold_ and the previously generated _intersectionRect_ had an area that was smaller than the _threshold_, then post a task to invoke _callback_.</li>
-                <li>else if that <i>intersectionRect</i>'s area is less than the <i>IntersectionObserver</i>'s _threshold_ and the previously generated _intersectionRect_ had an area that was greater or equal to the _threshold_, post a task to invoke _callback_.</li>
-              </ul>
-            </li>
-          </ol>
+        <li>For each fully active _Document_ in _docs_
+          <ul>
+            <li>for each _observer_ in _Document_.<a>registeredIntersectionObserversForDocument</a></li>
+            <ul>
+              <li>for each _target_ in _observer_.<a>observationTargets</a></li>
+              <ol>
+                <li>compute an _intersectionRect_ which is the intersection of _target.getBoundingClientRect()_ with the bounds of _root_, adjusted by _observer_.<a>init</a>.<a href="#widl-IntersectionObserverInit-rootBoundsModifier" class="internalDFN">rootBoundsModifier</a>, intersected with the clip rect of each ancestor between _target_ and _observer_.<a>init</a>.<a href="#widl-IntersectionObserverInit-root" class="internalDFN">root</a>.
+                  <ul>
+                    <li>if <i>intersectionRect</i>'s area is greater than or equal to _observer_.<a>init</a>.<a href="#widl-IntersectionObserverInit-threshold" class="internalDFN">threshold</a> and target.<a>previousIntersectionRect</a> had an area that was less than the _threshold_, <a>queue an IntersectionObserverEntry</a>.</li>
+                    <li>else if that <i>intersectionRect</i>'s area is less than _observer_.<a>init</a>.<a href="#widl-IntersectionObserverInit-threshold" class="internalDFN">threshold</a> and _target.<a>previousIntersectionRect</a> had an area that was greater or equal to the _threshold_, <a>queue an IntersectionObserverEntry</a>.</li>
+                  </ul>
+                  <pre class="issue"> TBD: Does _clipRect_ include <a href="http://www.w3.org/TR/2014/WD-css-masking-1-20140213/#the-clip-path">clip path</a> and other clipping properties or just overflow clipping?</pre></dd>
+                </li>
+                <li>record _intersctionRect_ as _target_.<a>previousIntersectionRect</a></li>
+              </ol>
+            </ul>
+          </ul>
         </li>
       </ol>
     </section>
