@@ -167,7 +167,7 @@
       <dl title='dictionary IntersectionObserverInit' class='idl'>
         <dt>Element? root = null</dt>
         <dd>The _root_ to use for intersection. If not provided, use the top-level document's viewport.</dd>
-        <dt>DOMString rootBoundsModifier = "0px"</dt>
+        <dt>DOMString rootMargin = "0px"</dt>
         <dd>
           Same as <a href="http://www.w3.org/TR/CSS21/box.html#margin-properties">margin</a>, can be 1, 2, 3 or 4 components, possibly negative lengths.
           <p> If there is only one component value, it applies to all sides. If there are two values, the top and bottom margins are set to the first value and the right and left margins are set to the second. If there are three values, the top is set to the first value, the left and right are set to the second, and the bottom is set to the third. If there are four values, they apply to the top, right, bottom, and left, respectively.e.g.
@@ -265,7 +265,7 @@
             <ul>
               <li>for each _target_ in _observer_.<a>observationTargets</a></li>
               <ol>
-                <li>compute an _intersectionRect_ which is the intersection of _target.getBoundingClientRect()_ with the bounds of _root_, adjusted by _observer_.<a>init</a>.<a href="#widl-IntersectionObserverInit-rootBoundsModifier" class="internalDFN">rootBoundsModifier</a>, intersected with the clip rect of each ancestor between _target_ and _observer_.<a>init</a>.<a href="#widl-IntersectionObserverInit-root" class="internalDFN">root</a>.
+                <li>compute an _intersectionRect_ which is the intersection of _target.getBoundingClientRect()_ with the bounds of _root_, adjusted by _observer_.<a>init</a>.<a href="#widl-IntersectionObserverInit-rootMargin" class="internalDFN">rootMargin</a>, intersected with the clip rect of each ancestor between _target_ and _observer_.<a>init</a>.<a href="#widl-IntersectionObserverInit-root" class="internalDFN">root</a>.
                   <ul>
                     <li>if <i>intersectionRect</i>'s area is greater than or equal to _observer_.<a>init</a>.<a href="#widl-IntersectionObserverInit-threshold" class="internalDFN">threshold</a> and target.<a>previousIntersectionRect</a> had an area that was less than the _threshold_, <a>queue an IntersectionObserverEntry</a>.</li>
                     <li>else if that <i>intersectionRect</i>'s area is less than _observer_.<a>init</a>.<a href="#widl-IntersectionObserverInit-threshold" class="internalDFN">threshold</a> and _target.<a>previousIntersectionRect</a> had an area that was greater or equal to the _threshold_, <a>queue an IntersectionObserverEntry</a>.</li>
