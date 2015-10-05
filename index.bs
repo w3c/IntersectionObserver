@@ -1,0 +1,201 @@
+<pre class='metadata'>
+Title: Intersection Observer
+Status: ED
+ED: https://github.com/slightlyoff/IntersectionObserver/
+Shortname: intersection-observer
+Level: 1
+Editor: Michael Blain, Google, mpb@google.com
+Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to a viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
+Group: Web Performance Working Group
+Repository: slightlyoff/IntersectionObserver
+Mailing List: public-web-perf@w3c.org
+Mailing List Archives: http://lists.w3.org/Archives/Public/public-web-perf/
+</pre>
+
+<pre class="anchors">
+text: DOMHighResTimeStamp; type: typedef; urlPrefix: http://www.w3.org/TR/hr-time/
+text: margin; type: attribute; url: http://www.w3.org/TR/CSS21/box.html#propdef-margin
+text: length; type: attribute; url: http://www.w3.org/TR/css3-values/#lengths
+text: getBoundingClientRect; type: attribute; url: http://www.w3.org/TR/cssom-view/#dom-element-getboundingclientrect
+
+</pre>
+
+<h2 id='introduction'>Introduction</h2>
+    The web's traditional position calculation mechanisms rely on explicit
+    queries of DOM state that are known to cause (expensive) style recalcuation
+    and layout and, frequently, are a source of significant performance
+    overhead due to continuous polling for this information.
+
+    A body of common practice has evolved that relies on these behaviors,
+    however, including (but not limited to):
+    <ul>
+      <li>Building custom pre- and deferred-loading of DOM and data.</li>
+      <li>Implementing data-bound high-performance scrolling lists which load
+          and render subsets of data sets. These lists are a central mobile
+          interaction idiom.</li>
+      <li>Calculating element visibility. In particular,
+          <a href="http://www.iab.net/iablog/2014/03/viewability-has-arrived-what-you-need-to-know-to-see-through-this-sea-change.html">
+          ad networks now require reporting of ad "visibility" for monetizing
+          impressions</a>. This has led to many sites abusing scroll handlers
+          (causing jank on scroll),
+          <a href="http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html">
+          synchronous layout invoking readbacks</a> (causing unneccessary
+          critical work in rAF loops), and resorting to exotic plugin-based
+          solutions for computing "true" element visibility (with all the
+          associated overhead of the plugin architecture).</li>
+    </ul>
+
+    These use-cases have several common properties:
+    <ol>
+      <li>They can be represented as passive "queries" about the state of individual elements with respect to some other element (or the global viewport)</li>
+      <li>They do not impose hard latency requirements; that is to say, the information can be delivered asynchronously (e.g. from another thread) without penalty</li>
+      <li>They are poorly supported by nearly all combinations of existing web platform features, requiring extraordinary developer effort despite their widespread use.</li>
+    </ol>
+
+    A notable non-goal is pixel-accurate information about what was actually
+    displayed (which can be quite difficult to obtain efficiently in certain
+    browser architectures in the face of filters, webgl, and other features).
+    In all of these scenarios the information is useful even when delivered at
+    a slight delay and without perfect compositing-result data.
+
+    The Intersersection Observer API addresses the above issues by giving
+    developers a new method to asynchronously query the position of an element
+    with respect to other elements or the global viewport. The asynchronous
+    delivery eliminates the need for costly DOM and style queries, continuous
+    polling, and use of custom plugins. By removing the need for these methods
+    it allows applications to significantly reduce their CPU, GPU and energy
+    costs.
+
+    <pre class="example">
+      <code highlight="js">
+        var observer = new IntersectionObserver(function(changes) {
+          for (var i in changes) {
+            console.log(changes[i].time);               // Timestamp when the change occurred
+            console.log(changes[i].rootBounds);         // Unclipped area of _root_
+            console.log(changes[i].intersectionRect);   // Unclipped area of _target_ intersected with _rootBounds_
+            console.log(changes[i].boundingClientRect); // _target.boundingClientRect()_
+            console.log(changes[i].target);             // the Element _target_
+          }
+        }, {});
+
+        // Watch all threshold events on a specific descendant of the viewport
+        observer.observe(childElement);
+
+        observer.disconnect(); // removes all
+      </code>
+    </pre>
+
+<h2 id='2-intersection-observer'>Intersection Observer</h2>
+    The <dfn>Intersection Observer</dfn> API enables developers to understand
+    the visibility and position of DOM elements relative to a root element or
+    the top level document's viewport.
+
+<h3 id='2-1-intersection-observer-callback'>The IntersectionObserverCallback</h3>
+<pre class="idl">
+  callback IntersectionObserverCallback = void (IntersectionObserverEntryList entries, IntersectionObserver observer)
+</pre>
+This callback will be invoked when there are changes to <i>target</i>'s intersection with <i>root</i>, as per the <a>processing model</a>.
+
+<h3 id='2-2-intersection-observer-interface'>The IntersectionObserver interface</h3>
+    The {{IntersectionObserver}} interface can be used to observe changes in the intersection of a <i>target</i> {{Element}} and a <i>root</i> {{Element}} (or the top-level document's viewport).
+
+    A <dfn>registered intersection observer</dfn> consists of an observer (an {{IntersectionObserver}} object) and options (an {{IntersectionObserverInit}} dictionary).
+
+    <pre class="idl">
+      [Constructor(IntersectionObserverCallback callback, IntersectionObserverInit options), Exposed=(Window,Worker)]
+      interface IntersectionObserver {
+        void observe (Element target);
+        void unobserve (Element target);
+        void disconnect ();
+        IntersectionObserverEntryList takeRecords ();
+      };
+    </pre>
+
+<h3 id="2-3-intersection-observer-entry-list">
+  The IntersectionObserverEntryList typedef
+</h3>
+    <pre class="idl">
+      typedef sequence&lt;IntersectionObserverEntry&gt; IntersectionObserverEntryList;
+    </pre>
+
+<h3 id="2-4-intersection-observer-entry">The IntersectionObserverEntry interface</h3>
+    <pre class="idl">
+      interface IntersectionObserverEntry {
+        readonly attribute DOMHighResTimeStamp time;
+        readonly attribute DOMRect rootBounds;
+        readonly attribute DOMRect boundingClientRect;
+        readonly attribute DOMRect intersectionRect;
+        readonly attribute Element target;
+      };
+    </pre>
+
+    <div dfn-type="attribute" dfn-for="IntersectionObserverEntry">
+        : <dfn>boundingClientRect</dfn>
+        ::
+            The {{DOMRect}} corresponding to the <i>target</i>'s
+            {{getBoundingClientRect}}.
+        : <dfn>intersectionRect</dfn>
+        ::
+            The {{DOMRect}} corresponding to <i>boundingClientRect</i>
+            intersected by each of <i>target</i>'s ancestors' clip rects
+            (up to but not including {{root}}), intersected with
+            {{rootBounds}}. This value represents the portion of <i>target</i>
+            actually visible within {{rootBounds}}.
+        : <dfn>rootBounds</dfn>
+        ::
+            The visible dimensions of {{root}}, adjusted by {{rootMargin}},
+            in the coordinate space of the document the root element is in. If
+            {{root}} is undefined, then use the coordinate space of the
+            top-level document.
+        : <dfn>target</dfn>
+        ::
+            The {{element}} whose intersection with {{root}} changed.
+        : <dfn>time</dfn>
+        ::
+            The attribute must return a {{DOMHighResTimeStamp}} that
+            corresponds to the time the intersection was recorded.
+    </div>
+<h3 id="2-5-intersection-observer-init">The IntersectionObserverInit dictionary</h3>
+    <pre class="idl">
+      dictionary IntersectionObserverInit {
+        Element?  root = null;
+        DOMString rootMargin = "0px";
+        DOMString threshold = "1px";
+      };
+    </pre>
+
+    <div dfn-type="dict-member" dfn-for="IntersectionObserverInit">
+        : <dfn>root</dfn>
+        ::
+            The <i>root</i> to use for intersection. If not provided, use the
+            top-level document's viewport.
+        : <dfn>rootMargin</dfn>
+        ::
+            Same as {{margin}}, can be 1, 2, 3 or 4 components, possibly
+            negative lengths.
+
+            If there is only one component value, it applies to all sides.
+            If there are two values, the top and bottom margins are set to
+            the first value and the right and left margins are set to the
+            second. If there are three values, the top is set to the first
+            value, the left and right are set to the second, and the bottom
+            is set to the third. If there are four values, they apply to the
+            top, right, bottom, and left, respectively.e.g.
+            <pre class="example">
+              <code class="js">
+                "5px"                // all margins set to 5px
+                "5px 10px"           // top & bottom = 5px, right & left = 10px
+                "-10px 5px 8px"      // top = -10px, right & left = 5px, bottom = 8px
+                "-10px -5px 5px 8px" // top = -10px, right = -5px, bottom = 5px, left = 8px
+              </code>
+            </pre>
+        : <dfn>threshold</dfn>
+        ::
+            Threshold at which to trigger callback. callback will be invoked
+            when intersectionRect's area changes from greater than or equal
+            to threshold to less than threshold, and vice versa.
+
+            This is a {{length}} value.
+    </div>
+
+<h2 id='3-processing-model'><dfn>Processing Model</dfn></h3>
