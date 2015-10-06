@@ -16,9 +16,11 @@ Mailing List Archives: http://lists.w3.org/Archives/Public/public-web-perf/
 text: DOMHighResTimeStamp; type: typedef; urlPrefix: http://www.w3.org/TR/hr-time/
 text: margin; type: attribute; url: http://www.w3.org/TR/CSS21/box.html#propdef-margin
 text: length; type: attribute; url: http://www.w3.org/TR/css3-values/#lengths
-text: getBoundingClientRect; type: attribute; url: http://www.w3.org/TR/cssom-view/#dom-element-getboundingclientrect
-
 </pre>
+
+<!--pre class=link-defaults>
+spec:cssom-view-1; type:method; for:Element; text:getBoundingClientRect()
+</pre-->
 
 <h2 id='introduction'>Introduction</h2>
     The web's traditional position calculation mechanisms rely on explicit
@@ -111,6 +113,33 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
       };
     </pre>
 
+    <div dfn-type="method" dfn-for="IntersectionObserver">
+        : <dfn>observe()</dfn>
+        ::
+            <ol>
+                <li>If <i>target</i> is in _this_.observationTargets, return.</li>
+                <li>If <i>target</i> is NOT a descendent of _this_.init.{{root}}, throw a TypeError.</li>
+                <li>Add <i>this</i> to <i>target</i>.registeredObservers.</li>
+                <li>Add <i>target</i> to <i>this</i>.observationTargets.</li>
+            </ol>
+        : <dfn>unobserve()</dfn>
+        ::
+            The {{DOMRect}} corresponding to <i>boundingClientRect</i>
+            intersected by each of <i>target</i>'s ancestors' clip rects
+            (up to but not including {{root}}), intersected with
+            {{rootBounds}}. This value represents the portion of <i>target</i>
+            actually visible within {{rootBounds}}.
+        : <dfn>disconnect()</dfn>
+        ::
+            The visible dimensions of {{root}}, adjusted by {{rootMargin}},
+            in the coordinate space of the document the root element is in. If
+            {{root}} is undefined, then use the coordinate space of the
+            top-level document.
+        : <dfn>takeRecords()</dfn>
+        ::
+            The {{element}} whose intersection with {{root}} changed.
+    </div>
+
 <h3 id="2-3-intersection-observer-entry-list">
   The IntersectionObserverEntryList typedef
 </h3>
@@ -133,7 +162,7 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
         : <dfn>boundingClientRect</dfn>
         ::
             The {{DOMRect}} corresponding to the <i>target</i>'s
-            {{getBoundingClientRect}}.
+            {{getBoundingClientRect()}}.
         : <dfn>intersectionRect</dfn>
         ::
             The {{DOMRect}} corresponding to <i>boundingClientRect</i>
@@ -199,3 +228,139 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
     </div>
 
 <h2 id='3-processing-model'><dfn>Processing Model</dfn></h3>
+    This section outlines the steps the user agent MUST take when implementing
+    the {{Intersection Observer}} API.
+
+<h3 id='3-1-defines'>Internal Slot Definitions</h2>
+
+<h4 id='3-1-1-document'>Document</h4>
+    {{Document}} objects have internal
+    <dfn attribute for=Document>\[[PendingIntersectionObserverCallbacks]]</dfn>
+    and <dfn attribute for=Document>\[[RegisteredIntersectionObservers]]</dfn>
+    slots, which are initialized to empty lists.
+
+<h4 id='3-1-2-element'>Element</h4>
+    {{Element}} objects have an internal
+    <dfn attribute for=Element>\[[RegisteredIntersectionObservers]]</dfn> slot,
+    which is initialized to an empty list and an internal
+    <dfn attribute for=Element>\[[PreviousIntersectionRect]]</dfn>
+    slot, which is initialized to null.
+
+<h4 id='3-1-3-intersection-observer'>IntersectionObserver</h4>
+    {{IntersectionObserver}} objects have internal
+    <dfn attribute for=IntersectionObserver>\[[QueuedEntries]]</dfn> and
+    <dfn attribute for=IntersectionObserver>\[[ObservationTargets]]</dfn> slots,
+    which are initialized to empty lists and internal
+    <dfn attribute for=IntersectionObserver>\[[root]]</dfn>,
+    <dfn attribute for=IntersectionObserver>\[[rootMargin]]</dfn> and
+    <dfn attribute for=IntersectionObserver>\[[threshold]]</dfn> slots, which
+    are initialized to the corresponding attributes of the {{options}} parameter
+    passed to <a>IntersectionObserver(callback, options)</a>.
+
+<h3 id='3-2-algorithms'>Algorithms</h2>
+
+<h4 id='3-2-1-queue-intersection-observer-callback'>
+<dfn>Queue an IntersectionObserverCallback</dfn>
+</h4>
+    To <a>queue an IntersectionObserverCallback</a> for <i>observer</i>, run
+    these steps:
+    <ol>
+        <li>If <i>Document</i>'s internal
+            {{[[PendingIntersectionObserverCallbacks]]}} slot contains
+            <i>observer</i>, return.</li>
+        <li>Append <i>observer</i> to <i>Document</i>'s internal
+            {{[[PendingIntersectionObserverCallbacks]]}} slot.</li>
+        <li>Post a task to <a>invoke an IntersectionObserverCallback</a>, or
+            enqueue a task to <a>invoke an IntersectionObserverCallback</a> in
+            <i>Document</i>'s
+            <a href="https://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks">
+            list of idle request callbacks</a> with an appropriate
+            <i>timeout</i>.
+
+            Issue: Should we define an appropriate <i>timeout</i>?
+        </li>
+    </ol>
+
+<h4 id='3-2-2-invoke-intersection-observer-callback'>
+<dfn>Invoke an IntersectionObserverCallback</dfn>
+</h4>
+    To <a>invoke an IntersectionObserverCallback</a> for <i>observer</i>, run
+    these steps:
+    <ol>
+        <li>If <i>observer</i>'s internal {{[[QueuedEntries]]}} slot is empty,
+            return.</li>
+        <li>Construct an {{IntersectionObserverEntryList}} from
+            {{[[QueuedEntries]]}}.</li>
+        <li>Clear <i>observer</i>'s internal {{[[QueuedEntries]]}} slot.</li>
+        <li>Remove <i>observer</i> from <i>Document</i>'s internal
+            {{[[PendingIntersectionObserverCallbacks]]}} slot.</li>
+        <li>Invoke <i>callback</i> with the {{IntersectionObserverEntryList}} as
+            the first argument and <i>observer</i> as the second argument.</li>
+    </ol>
+
+<h4 id='3-2-3-queue-intersection-observer-entry'>
+<dfn>Queue an IntersectionObserverEntry</dfn>
+</h4>
+    To <a>queue an IntersectionObserverEntry</a> for <i>observer</i>, run
+    these steps:
+    <ol>
+        <li>Construct an {{IntersectionObserverEntry}}.</li>
+        <li>Append it to <i>observer</i>'s internal {{[[QueuedEntries]]}} slot.
+        </li>
+        <li><a>Queue an IntersectionObserverCallback</a> for <i>observer</i>.
+        </li>
+    </ol>
+
+<h3 id='3-3-event-loop'>Event Loop</h3>
+    An <a>Intersection Observer</a> processing step should take place AFTER the
+    layout and rendering steps have been performed in the
+    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8">
+    update the rendering</a> event loop in the HTML Processing Model.
+
+    This step is:
+    <ol start="11">
+        <li>For each fully active <i>Document</i> in <i>docs</i></li>
+        <ul>
+            <li>For each <i>observer</i> in <i>Document</i>'s internal
+                {{[[RegisteredIntersectionObservers]]}} slot</li>
+            <ul>
+                <li>For each <i>target</i> in <i>observer</i>'s internal
+                {{[[ObservationTargets]]}} slot</li>
+                <ol>
+                    <li>Compute an <i>intersectionRect</i> which is the
+                        intersection of
+                        <i>target</i>.{{getBoundingClientRect()}}
+                        with the bounds of <i>observer</i>'s internal
+                        {{[[root]]}} slot, adjusted by <i>observer</i>'s
+                        internal {{[[rootMargin]]}} slot, intersected with the
+                        clip rect of each ancestor between <i>target</i> and
+                        <i>observer</i>'s internal {{[[root]]}} slot.
+                        <ul>
+                            <li>if <i>intersectionRect</i>'s area is greater
+                                than or equal to <i>observer</i>'s internal
+                                {{[[threshold]]}} slot and <i>target</i>'s
+                                internal {{[[PreviousIntersectionRect]]}} slot
+                                had an area that was less than <i>observer</i>'s
+                                internal {{[[threshold]]}} slot, <a>queue an
+                                IntersectionObserverEntry</a>.</li>
+                            <li>else if that <i>intersectionRect</i>'s area is
+                                less than <i>observer</i>'s internal
+                                {{[[threshold]]}} slot and <i>target</i>'s
+                                internal {{[[PreviousIntersectionRect]]}} slot
+                                had an area that was greater than or equal to
+                                <i>observer</i>'s internal {{[[threshold]]}}
+                                slot, <a>queue an IntersectionObserverEntry</a>.
+                                </li>
+                        </ul>
+
+                        Issue: TBD: Does <i>clipRect</i> include
+                        <a href="http://www.w3.org/TR/2014/WD-css-masking-1-20140213/#the-clip-path">
+                        clip path</a> and other clipping properties or just
+                        overflow clipping?
+                    </li>
+                    <li>Assign <i>intersctionRect</i> to <i>target</i>'s
+                        internal {{[[PreviousIntersectionRect]]}} slot.</li>
+                </ol>
+            </ul>
+        </ul>
+    </ol>
