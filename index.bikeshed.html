@@ -1,3 +1,4 @@
+
 <!doctype html><html lang="en">
  <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -1132,7 +1133,7 @@ Parts of this work may be from another specification document.  If so, those par
     The web’s traditional position calculation mechanisms rely on explicit
     queries of DOM state that are known to cause (expensive) style recalcuation
     and layout and, frequently, are a source of significant performance
-    overhead due to continuous polling for this information.
+    overhead due to continuous polling for this information. 
    <p>A body of common practice has evolved that relies on these behaviors,
     however, including (but not limited to):</p>
    <ul>
@@ -1182,13 +1183,13 @@ Parts of this work may be from another specification document.  If so, those par
    <h2 class="heading settled" data-level="2" id="2-intersection-observer"><span class="secno">2. </span><span class="content">Intersection Observer</span><a class="self-link" href="#2-intersection-observer"></a></h2>
     The <dfn data-dfn-type="dfn" data-noexport="" id="intersection-observer">Intersection Observer<a class="self-link" href="#intersection-observer"></a></dfn> API enables developers to understand
     the visibility and position of DOM elements relative to a root element or
-    the top level document’s viewport.
+    the top level document’s viewport. 
    <h3 class="heading settled" data-level="2.1" id="2-1-intersection-observer-callback"><span class="secno">2.1. </span><span class="content">The IntersectionObserverCallback</span><a class="self-link" href="#2-1-intersection-observer-callback"></a></h3>
 <pre class="idl">callback <dfn class="idl-code" data-dfn-type="callback" data-export="" id="callbackdef-intersectionobservercallback">IntersectionObserverCallback<a class="self-link" href="#callbackdef-intersectionobservercallback"></a></dfn> = void (<a data-link-type="idl-name" href="#typedefdef-intersectionobserverentrylist">IntersectionObserverEntryList</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverCallback" data-dfn-type="argument" data-export="" id="dom-intersectionobservercallback-entries">entries<a class="self-link" href="#dom-intersectionobservercallback-entries"></a></dfn>, <a data-link-type="idl-name" href="#intersectionobserver">IntersectionObserver</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverCallback" data-dfn-type="argument" data-export="" id="dom-intersectionobservercallback-observer">observer<a class="self-link" href="#dom-intersectionobservercallback-observer"></a></dfn>)
 </pre>
    <p>This callback will be invoked when there are changes to <i>target</i>’s intersection with <i>root</i>, as per the <a data-link-type="dfn" href="#processing-model">processing model</a>.</p>
    <h3 class="heading settled" data-level="2.2" id="2-2-intersection-observer-interface"><span class="secno">2.2. </span><span class="content">The IntersectionObserver interface</span><a class="self-link" href="#2-2-intersection-observer-interface"></a></h3>
-    The <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> interface can be used to observe changes in the intersection of a <i>target</i> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> and a <i>root</i> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> (or the top-level document’s viewport).
+    The <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> interface can be used to observe changes in the intersection of a <i>target</i> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> and a <i>root</i> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> (or the top-level document’s viewport). 
    <p>A <dfn data-dfn-type="dfn" data-noexport="" id="registered-intersection-observer">registered intersection observer<a class="self-link" href="#registered-intersection-observer"></a></dfn> consists of an observer (an <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> object) and options (an <code class="idl"><a data-link-type="idl" href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a></code> dictionary).</p>
 <pre class="idl">[<dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="constructor" data-export="" data-lt="IntersectionObserver(callback, options)" id="dom-intersectionobserver-intersectionobserver">Constructor<a class="self-link" href="#dom-intersectionobserver-intersectionobserver"></a></dfn>(<a data-link-type="idl-name" href="#callbackdef-intersectionobservercallback">IntersectionObserverCallback</a> callback, <a data-link-type="idl-name" href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a> <dfn class="idl-code" data-dfn-for="IntersectionObserver/IntersectionObserver(callback, options)" data-dfn-type="argument" data-export="" id="dom-intersectionobserver-intersectionobserver-callback-options-options">options<a class="self-link" href="#dom-intersectionobserver-intersectionobserver-callback-options-options"></a></dfn>), Exposed=(Window,Worker)]
 interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="intersectionobserver">IntersectionObserver<a class="self-link" href="#intersectionobserver"></a></dfn> {
@@ -1204,26 +1205,35 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="method" data-export="" data-lt="observe(target)" id="dom-intersectionobserver-observe">observe()<a class="self-link" href="#dom-intersectionobserver-observe"></a></dfn></p>
      <dd data-md="">
       <ol>
-       <li>If <i>target</i> is in _this_.observationTargets, return.
-       <li>If <i>target</i> is NOT a descendent of _this_.init.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code>, throw a TypeError.
-       <li>Add <i>this</i> to <i>target</i>.registeredObservers.
-       <li>Add <i>target</i> to <i>this</i>.observationTargets.
+       <li>If <i>target</i> is in <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot, return.
+       <li>If <i>target</i> is NOT a descendent of <i>this</i>’s
+        internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot, throw a TypeError.
+       <li>Add <i>this</i> to <i>target</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot.
+       <li>Add <i>target</i> to <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot.
       </ol>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="method" data-export="" data-lt="unobserve(target)" id="dom-intersectionobserver-unobserve">unobserve()<a class="self-link" href="#dom-intersectionobserver-unobserve"></a></dfn></p>
      <dd data-md="">
-      <p>The <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a></code> corresponding to <i>boundingClientRect</i> intersected by each of <i>target</i>’s ancestors' clip rects
-(up to but not including <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code>), intersected with <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code>. This value represents the portion of <i>target</i> actually visible within <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code>.</p>
+      <ol>
+       <li>Remove the <a data-link-type="dfn" href="#registered-intersection-observer">registered intersection observer</a> from <i>target</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot.
+       <li>Remove <i>target</i> from <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot.
+      </ol>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="method" data-export="" id="dom-intersectionobserver-disconnect">disconnect()<a class="self-link" href="#dom-intersectionobserver-disconnect"></a></dfn></p>
      <dd data-md="">
-      <p>The visible dimensions of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code>, adjusted by <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>,
-in the coordinate space of the document the root element is in. If <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code> is undefined, then use the coordinate space of the
-top-level document.</p>
+      <p>For each <i>target</i> in <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot</p>
+      <ol>
+       <li>Remove the <a data-link-type="dfn" href="#registered-intersection-observer">registered intersection observer</a> from <i>target</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot.
+       <li>Remove <i>target</i> from <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot.
+      </ol>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="method" data-export="" id="dom-intersectionobserver-takerecords">takeRecords()<a class="self-link" href="#dom-intersectionobserver-takerecords"></a></dfn></p>
      <dd data-md="">
-      <p>The <code class="idl"><a data-link-type="idl" href="https://drafts.css-houdini.org/css-properties-values-api-1/#dom-applycallback-element">element</a></code> whose intersection with <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code> changed.</p>
+      <ol>
+       <li>Construct an <code class="idl"><a data-link-type="idl" href="#typedefdef-intersectionobserverentrylist">IntersectionObserverEntryList</a></code> from <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-queuedentries-slot">[[QueuedEntries]]</a></code> slot.
+       <li>Clear <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-queuedentries-slot">[[QueuedEntries]]</a></code> slot. 
+       <li>Return the <i>IntersectionObserverEntryList</i>.
+      </ol>
     </dl>
    </div>
    <h3 class="heading settled" data-level="2.3" id="2-3-intersection-observer-entry-list"><span class="secno">2.3. </span><span class="content"> The IntersectionObserverEntryList typedef </span><a class="self-link" href="#2-3-intersection-observer-entry-list"></a></h3>
@@ -1309,33 +1319,33 @@ to threshold to less than threshold, and vice versa.</p>
    </div>
    <h2 class="heading settled" data-level="3" id="3-processing-model"><span class="secno">3. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="processing-model">Processing Model<a class="self-link" href="#processing-model"></a></dfn></span><a class="self-link" href="#3-processing-model"></a></h2>
     This section outlines the steps the user agent MUST take when implementing
-    the {{Intersection Observer}} API.
+    the {{Intersection Observer}} API. 
    <h3 class="heading settled" data-level="3.1" id="3-1-defines"><span class="secno">3.1. </span><span class="content">Internal Slot Definitions</span><a class="self-link" href="#3-1-defines"></a></h3>
    <h4 class="heading settled" data-level="3.1.1" id="3-1-1-document"><span class="secno">3.1.1. </span><span class="content">Document</span><a class="self-link" href="#3-1-1-document"></a></h4>
-    <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document">Document</a></code> objects have internal <dfn class="idl-code" data-dfn-for="Document" data-dfn-type="attribute" data-export="" id="dom-document-pendingintersectionobservercallbacks-slot">[[PendingIntersectionObserverCallbacks]]<a class="self-link" href="#dom-document-pendingintersectionobservercallbacks-slot"></a></dfn> and <dfn class="idl-code" data-dfn-for="Document" data-dfn-type="attribute" data-export="" id="dom-document-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]<a class="self-link" href="#dom-document-registeredintersectionobservers-slot"></a></dfn> slots, which are initialized to empty lists.
+    <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document">Document</a></code> objects have internal <dfn class="idl-code" data-dfn-for="Document" data-dfn-type="attribute" data-export="" id="dom-document-pendingintersectionobservercallbacks-slot">[[PendingIntersectionObserverCallbacks]]<a class="self-link" href="#dom-document-pendingintersectionobservercallbacks-slot"></a></dfn> and <dfn class="idl-code" data-dfn-for="Document" data-dfn-type="attribute" data-export="" id="dom-document-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]<a class="self-link" href="#dom-document-registeredintersectionobservers-slot"></a></dfn> slots, which are initialized to empty lists. 
    <h4 class="heading settled" data-level="3.1.2" id="3-1-2-element"><span class="secno">3.1.2. </span><span class="content">Element</span><a class="self-link" href="#3-1-2-element"></a></h4>
     <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> objects have an internal <dfn class="idl-code" data-dfn-for="Element" data-dfn-type="attribute" data-export="" id="dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]<a class="self-link" href="#dom-element-registeredintersectionobservers-slot"></a></dfn> slot,
-    which is initialized to an empty list and an internal <dfn class="idl-code" data-dfn-for="Element" data-dfn-type="attribute" data-export="" id="dom-element-previousintersectionrect-slot">[[PreviousIntersectionRect]]<a class="self-link" href="#dom-element-previousintersectionrect-slot"></a></dfn> slot, which is initialized to null.
+    which is initialized to an empty list and an internal <dfn class="idl-code" data-dfn-for="Element" data-dfn-type="attribute" data-export="" id="dom-element-previousintersectionrect-slot">[[PreviousIntersectionRect]]<a class="self-link" href="#dom-element-previousintersectionrect-slot"></a></dfn> slot, which is initialized to null. 
    <h4 class="heading settled" data-level="3.1.3" id="3-1-3-intersection-observer"><span class="secno">3.1.3. </span><span class="content">IntersectionObserver</span><a class="self-link" href="#3-1-3-intersection-observer"></a></h4>
     <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> objects have internal <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-queuedentries-slot">[[QueuedEntries]]<a class="self-link" href="#dom-intersectionobserver-queuedentries-slot"></a></dfn> and <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]<a class="self-link" href="#dom-intersectionobserver-observationtargets-slot"></a></dfn> slots,
     which are initialized to empty lists and internal <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-root-slot">[[root]]<a class="self-link" href="#dom-intersectionobserver-root-slot"></a></dfn>, <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-rootmargin-slot">[[rootMargin]]<a class="self-link" href="#dom-intersectionobserver-rootmargin-slot"></a></dfn> and <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-threshold-slot">[[threshold]]<a class="self-link" href="#dom-intersectionobserver-threshold-slot"></a></dfn> slots, which
     are initialized to the corresponding attributes of the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-intersectionobserver-callback-options-options">options</a></code> parameter
-    passed to <a data-link-type="functionish" href="#dom-intersectionobserver-intersectionobserver">IntersectionObserver(callback, options)</a>.
+    passed to <a data-link-type="functionish" href="#dom-intersectionobserver-intersectionobserver">IntersectionObserver(callback, options)</a>. 
    <h3 class="heading settled" data-level="3.2" id="3-2-algorithms"><span class="secno">3.2. </span><span class="content">Algorithms</span><a class="self-link" href="#3-2-algorithms"></a></h3>
    <h4 class="heading settled" data-level="3.2.1" id="3-2-1-queue-intersection-observer-callback"><span class="secno">3.2.1. </span><span class="content"> <dfn data-dfn-type="dfn" data-noexport="" id="queue-an-intersectionobservercallback">Queue an IntersectionObserverCallback<a class="self-link" href="#queue-an-intersectionobservercallback"></a></dfn> </span><a class="self-link" href="#3-2-1-queue-intersection-observer-callback"></a></h4>
     To <a data-link-type="dfn" href="#queue-an-intersectionobservercallback">queue an IntersectionObserverCallback</a> for <i>observer</i>, run
-    these steps:
+    these steps: 
    <ol>
     <li>If <i>Document</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-document-pendingintersectionobservercallbacks-slot">[[PendingIntersectionObserverCallbacks]]</a></code> slot contains <i>observer</i>, return.
     <li>Append <i>observer</i> to <i>Document</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-document-pendingintersectionobservercallbacks-slot">[[PendingIntersectionObserverCallbacks]]</a></code> slot.
     <li>
      Post a task to <a data-link-type="dfn" href="#invoke-an-intersectionobservercallback">invoke an IntersectionObserverCallback</a>, or
-            enqueue a task to <a data-link-type="dfn" href="#invoke-an-intersectionobservercallback">invoke an IntersectionObserverCallback</a> in <i>Document</i>’s <a href="https://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks"> list of idle request callbacks</a> with an appropriate <i>timeout</i>.
+            enqueue a task to <a data-link-type="dfn" href="#invoke-an-intersectionobservercallback">invoke an IntersectionObserverCallback</a> in <i>Document</i>’s <a href="https://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks"> list of idle request callbacks</a> with an appropriate <i>timeout</i>. 
      <p class="issue" id="issue-2ecbcf0b"><a class="self-link" href="#issue-2ecbcf0b"></a> Should we define an appropriate <i>timeout</i>?</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.2" id="3-2-2-invoke-intersection-observer-callback"><span class="secno">3.2.2. </span><span class="content"> <dfn data-dfn-type="dfn" data-noexport="" id="invoke-an-intersectionobservercallback">Invoke an IntersectionObserverCallback<a class="self-link" href="#invoke-an-intersectionobservercallback"></a></dfn> </span><a class="self-link" href="#3-2-2-invoke-intersection-observer-callback"></a></h4>
     To <a data-link-type="dfn" href="#invoke-an-intersectionobservercallback">invoke an IntersectionObserverCallback</a> for <i>observer</i>, run
-    these steps:
+    these steps: 
    <ol>
     <li>If <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-queuedentries-slot">[[QueuedEntries]]</a></code> slot is empty,
             return.
@@ -1347,15 +1357,15 @@ to threshold to less than threshold, and vice versa.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.3" id="3-2-3-queue-intersection-observer-entry"><span class="secno">3.2.3. </span><span class="content"> <dfn data-dfn-type="dfn" data-noexport="" id="queue-an-intersectionobserverentry">Queue an IntersectionObserverEntry<a class="self-link" href="#queue-an-intersectionobserverentry"></a></dfn> </span><a class="self-link" href="#3-2-3-queue-intersection-observer-entry"></a></h4>
     To <a data-link-type="dfn" href="#queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</a> for <i>observer</i>, run
-    these steps:
+    these steps: 
    <ol>
     <li>Construct an <code class="idl"><a data-link-type="idl" href="#intersectionobserverentry">IntersectionObserverEntry</a></code>.
-    <li>Append it to <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-queuedentries-slot">[[QueuedEntries]]</a></code> slot.
-    <li><a data-link-type="dfn" href="#queue-an-intersectionobservercallback">Queue an IntersectionObserverCallback</a> for <i>observer</i>.
+    <li>Append it to <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-queuedentries-slot">[[QueuedEntries]]</a></code> slot. 
+    <li><a data-link-type="dfn" href="#queue-an-intersectionobservercallback">Queue an IntersectionObserverCallback</a> for <i>observer</i>. 
    </ol>
    <h3 class="heading settled" data-level="3.3" id="3-3-event-loop"><span class="secno">3.3. </span><span class="content">Event Loop</span><a class="self-link" href="#3-3-event-loop"></a></h3>
     An <a data-link-type="dfn" href="#intersection-observer">Intersection Observer</a> processing step should take place AFTER the
-    layout and rendering steps have been performed in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8"> update the rendering</a> event loop in the HTML Processing Model.
+    layout and rendering steps have been performed in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8"> update the rendering</a> event loop in the HTML Processing Model. 
    <p>This step is:</p>
    <ol start="11">
     <li>For each fully active <i>Document</i> in <i>docs</i>
@@ -1368,7 +1378,7 @@ to threshold to less than threshold, and vice versa.</p>
         Compute an <i>intersectionRect</i> which is the
                         intersection of <i>target</i>.<code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> with the bounds of <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot, adjusted by <i>observer</i>’s
                         internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> slot, intersected with the
-                        clip rect of each ancestor between <i>target</i> and <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot.
+                        clip rect of each ancestor between <i>target</i> and <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot. 
         <ul>
          <li>if <i>intersectionRect</i>’s area is greater
                                 than or equal to <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot and <i>target</i>’s
@@ -1379,7 +1389,7 @@ to threshold to less than threshold, and vice versa.</p>
          <li>else if that <i>intersectionRect</i>’s area is
                                 less than <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot and <i>target</i>’s
                                 internal <code class="idl"><a data-link-type="idl" href="#dom-element-previousintersectionrect-slot">[[PreviousIntersectionRect]]</a></code> slot
-                                had an area that was greater than or equal to <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</a>.
+                                had an area that was greater than or equal to <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</a>. 
         </ul>
         <p class="issue" id="issue-a6fa8906"><a class="self-link" href="#issue-a6fa8906"></a> TBD: Does <i>clipRect</i> include <a href="http://www.w3.org/TR/2014/WD-css-masking-1-20140213/#the-clip-path"> clip path</a> and other clipping properties or just
                         overflow clipping?</p>

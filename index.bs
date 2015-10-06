@@ -18,10 +18,6 @@ text: margin; type: attribute; url: http://www.w3.org/TR/CSS21/box.html#propdef-
 text: length; type: attribute; url: http://www.w3.org/TR/css3-values/#lengths
 </pre>
 
-<!--pre class=link-defaults>
-spec:cssom-view-1; type:method; for:Element; text:getBoundingClientRect()
-</pre-->
-
 <h2 id='introduction'>Introduction</h2>
     The web's traditional position calculation mechanisms rely on explicit
     queries of DOM state that are known to cause (expensive) style recalcuation
@@ -117,27 +113,44 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
         : <dfn>observe()</dfn>
         ::
             <ol>
-                <li>If <i>target</i> is in _this_.observationTargets, return.</li>
-                <li>If <i>target</i> is NOT a descendent of _this_.init.{{root}}, throw a TypeError.</li>
-                <li>Add <i>this</i> to <i>target</i>.registeredObservers.</li>
-                <li>Add <i>target</i> to <i>this</i>.observationTargets.</li>
+                <li>If <i>target</i> is in <i>this</i>'s internal
+                    {{[[ObservationTargets]]}} slot, return.</li>
+                <li>If <i>target</i> is NOT a descendent of <i>this</i>'s
+                    internal {{[[root]]}} slot, throw a TypeError.</li>
+                <li>Add <i>this</i> to <i>target</i>'s internal
+                    {{Element/[[RegisteredIntersectionObservers]]}} slot.</li>
+                <li>Add <i>target</i> to <i>this</i>'s internal
+                    {{[[ObservationTargets]]}} slot.</li>
             </ol>
         : <dfn>unobserve()</dfn>
         ::
-            The {{DOMRect}} corresponding to <i>boundingClientRect</i>
-            intersected by each of <i>target</i>'s ancestors' clip rects
-            (up to but not including {{root}}), intersected with
-            {{rootBounds}}. This value represents the portion of <i>target</i>
-            actually visible within {{rootBounds}}.
+            <ol>
+                <li>Remove the <a>registered intersection observer</a> from
+                    <i>target</i>'s internal
+                    {{Element/[[RegisteredIntersectionObservers]]}} slot.</li>
+                <li>Remove <i>target</i> from <i>this</i>'s internal
+                    {{[[ObservationTargets]]}} slot.</li>
+            </ol>
         : <dfn>disconnect()</dfn>
         ::
-            The visible dimensions of {{root}}, adjusted by {{rootMargin}},
-            in the coordinate space of the document the root element is in. If
-            {{root}} is undefined, then use the coordinate space of the
-            top-level document.
+            For each <i>target</i> in <i>this</i>'s internal
+            {{[[ObservationTargets]]}} slot
+            <ol>
+                <li>Remove the <a>registered intersection observer</a> from
+                    <i>target</i>'s internal
+                    {{Element/[[RegisteredIntersectionObservers]]}} slot.</li>
+                <li>Remove <i>target</i> from <i>this</i>'s internal
+                    {{[[ObservationTargets]]}} slot.</li>
+            </ol>
         : <dfn>takeRecords()</dfn>
         ::
-            The {{element}} whose intersection with {{root}} changed.
+            <ol>
+                <li>Construct an {{IntersectionObserverEntryList}} from
+                    <i>this</i>'s internal {{[[QueuedEntries]]}} slot.</li>
+                <li>Clear <i>this</i>'s internal {{[[QueuedEntries]]}} slot.
+                </li>
+                <li>Return the <i>IntersectionObserverEntryList</i>.</li>
+            </ol>
     </div>
 
 <h3 id="2-3-intersection-observer-entry-list">
@@ -162,7 +175,7 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
         : <dfn>boundingClientRect</dfn>
         ::
             The {{DOMRect}} corresponding to the <i>target</i>'s
-            {{getBoundingClientRect()}}.
+            {{Element/getBoundingClientRect()}}.
         : <dfn>intersectionRect</dfn>
         ::
             The {{DOMRect}} corresponding to <i>boundingClientRect</i>
@@ -322,14 +335,14 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
         <li>For each fully active <i>Document</i> in <i>docs</i></li>
         <ul>
             <li>For each <i>observer</i> in <i>Document</i>'s internal
-                {{[[RegisteredIntersectionObservers]]}} slot</li>
+                {{Document/[[RegisteredIntersectionObservers]]}} slot</li>
             <ul>
                 <li>For each <i>target</i> in <i>observer</i>'s internal
                 {{[[ObservationTargets]]}} slot</li>
                 <ol>
                     <li>Compute an <i>intersectionRect</i> which is the
                         intersection of
-                        <i>target</i>.{{getBoundingClientRect()}}
+                        <i>target</i>.{{Element/getBoundingClientRect()}}
                         with the bounds of <i>observer</i>'s internal
                         {{[[root]]}} slot, adjusted by <i>observer</i>'s
                         internal {{[[rootMargin]]}} slot, intersected with the
