@@ -18,6 +18,10 @@ text: margin; type: attribute; url: http://www.w3.org/TR/CSS21/box.html#propdef-
 text: length; type: attribute; url: http://www.w3.org/TR/css3-values/#lengths
 </pre>
 
+<pre class="link-defaults">
+spec:dom-ls; type:interface; text:Document
+</pre>
+
 <h2 id='introduction'>Introduction</h2>
     The web's traditional position calculation mechanisms rely on explicit
     queries of DOM state that are known to cause (expensive) style recalcuation
