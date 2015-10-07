@@ -104,7 +104,7 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
     A <dfn>registered intersection observer</dfn> consists of an observer (an {{IntersectionObserver}} object) and options (an {{IntersectionObserverInit}} dictionary).
 
     <pre class="idl">
-      [Constructor(IntersectionObserverCallback callback, IntersectionObserverInit options), Exposed=(Window,Worker)]
+      [Constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options), Exposed=(Window,Worker)]
       interface IntersectionObserver {
         void observe (Element target);
         void unobserve (Element target);
