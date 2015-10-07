@@ -1,4 +1,4 @@
 # Intersection Observers
-[API Sketch for Intersection Observers](./explainer.md)
+[Explainer Doc](./explainer.md)
 
-Stay tuned for a Draft Spec.
+[Draft Spec](http://rawgit.com/slightlyoff/IntersectionObserver/master/index.html)
