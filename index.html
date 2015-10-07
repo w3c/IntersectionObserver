@@ -1240,27 +1240,37 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
 <pre class="idl">typedef sequence&lt;<a data-link-type="idl-name" href="#intersectionobserverentry">IntersectionObserverEntry</a>> <dfn class="idl-code" data-dfn-type="typedef" data-export="" id="typedefdef-intersectionobserverentrylist">IntersectionObserverEntryList<a class="self-link" href="#typedefdef-intersectionobserverentrylist"></a></dfn>;
 </pre>
    <h3 class="heading settled" data-level="2.4" id="2-4-intersection-observer-entry"><span class="secno">2.4. </span><span class="content">The IntersectionObserverEntry interface</span><a class="self-link" href="#2-4-intersection-observer-entry"></a></h3>
-<pre class="idl">interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="intersectionobserverentry">IntersectionObserverEntry<a class="self-link" href="#intersectionobserverentry"></a></dfn> {
+<pre class="idl">[<dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="constructor" data-export="" data-lt="IntersectionObserverEntry(intersectionObserverEntryInit)" id="dom-intersectionobserverentry-intersectionobserverentry">Constructor<a class="self-link" href="#dom-intersectionobserverentry-intersectionobserverentry"></a></dfn>(<a data-link-type="idl-name" href="#dictdef-intersectionobserverentryinit">IntersectionObserverEntryInit</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverEntry/IntersectionObserverEntry(intersectionObserverEntryInit)" data-dfn-type="argument" data-export="" id="dom-intersectionobserverentry-intersectionobserverentry-intersectionobserverentryinit-intersectionobserverentryinit">intersectionObserverEntryInit<a class="self-link" href="#dom-intersectionobserverentry-intersectionobserverentry-intersectionobserverentryinit-intersectionobserverentryinit"></a></dfn>)]
+interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="intersectionobserverentry">IntersectionObserverEntry<a class="self-link" href="#intersectionobserverentry"></a></dfn> {
   readonly attribute <a data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMHighResTimeStamp " href="#dom-intersectionobserverentry-time">time</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRect " href="#dom-intersectionobserverentry-rootbounds">rootBounds</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRect " href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRect " href="#dom-intersectionobserverentry-intersectionrect">intersectionRect</a>;
+  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly " href="#dom-intersectionobserverentry-rootbounds">rootBounds</a>;
+  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly " href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a>;
+  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly " href="#dom-intersectionobserverentry-intersectionrect">intersectionRect</a>;
   readonly attribute <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Element " href="#dom-intersectionobserverentry-target">target</a>;
 };
+
+dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-intersectionobserverentryinit">IntersectionObserverEntryInit<a class="self-link" href="#dictdef-intersectionobserverentryinit"></a></dfn> {
+  required <a data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMHighResTimeStamp " id="dom-intersectionobserverentryinit-time">time<a class="self-link" href="#dom-intersectionobserverentryinit-time"></a></dfn>;
+  required <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-rootbounds">rootBounds<a class="self-link" href="#dom-intersectionobserverentryinit-rootbounds"></a></dfn>;
+  required <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-boundingclientrect">boundingClientRect<a class="self-link" href="#dom-intersectionobserverentryinit-boundingclientrect"></a></dfn>;
+  required <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-intersectionrect">intersectionRect<a class="self-link" href="#dom-intersectionobserverentryinit-intersectionrect"></a></dfn>;
+  required <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="Element " id="dom-intersectionobserverentryinit-target">target<a class="self-link" href="#dom-intersectionobserverentryinit-target"></a></dfn>;
+};
+
 </pre>
    <div>
     <dl>
      <dt data-md="">
-      <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-boundingclientrect">boundingClientRect<a class="self-link" href="#dom-intersectionobserverentry-boundingclientrect"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a>, readonly</span></p>
+      <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-boundingclientrect">boundingClientRect<a class="self-link" href="#dom-intersectionobserverentry-boundingclientrect"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
       <p>The <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a></code> corresponding to the <i>target</i>’s <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code>.</p>
      <dt data-md="">
-      <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-intersectionrect">intersectionRect<a class="self-link" href="#dom-intersectionobserverentry-intersectionrect"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a>, readonly</span></p>
+      <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-intersectionrect">intersectionRect<a class="self-link" href="#dom-intersectionobserverentry-intersectionrect"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
       <p>The <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a></code> corresponding to <i>boundingClientRect</i> intersected by each of <i>target</i>’s ancestors' clip rects
 (up to but not including <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code>), intersected with <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code>. This value represents the portion of <i>target</i> actually visible within <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code>.</p>
      <dt data-md="">
-      <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-rootbounds">rootBounds<a class="self-link" href="#dom-intersectionobserverentry-rootbounds"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a>, readonly</span></p>
+      <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-rootbounds">rootBounds<a class="self-link" href="#dom-intersectionobserverentry-rootbounds"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
       <p>The visible dimensions of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code>, adjusted by <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>,
 in the coordinate space of the document the root element is in. If <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code> is undefined, then use the coordinate space of the
@@ -1418,7 +1428,12 @@ to threshold to less than threshold, and vice versa.</p>
   <h2 class="no-num heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="indexlist">
-   <li><a href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a><span>, in §2.4</span>
+   <li>
+    boundingClientRect
+    <ul>
+     <li><a href="#dom-intersectionobserverentryinit-boundingclientrect">dict-member for IntersectionObserverEntryInit</a><span>, in §2.4</span>
+     <li><a href="#dom-intersectionobserverentry-boundingclientrect">attribute for IntersectionObserverEntry</a><span>, in §2.4</span>
+    </ul>
    <li><a href="#dom-intersectionobserver-disconnect">disconnect()</a><span>, in §2.2</span>
    <li><a href="#dom-intersectionobservercallback-entries">entries</a><span>, in §2.1</span>
    <li><a href="#intersectionobserver">IntersectionObserver</a><span>, in §2.2</span>
@@ -1426,9 +1441,17 @@ to threshold to less than threshold, and vice versa.</p>
    <li><a href="#callbackdef-intersectionobservercallback">IntersectionObserverCallback</a><span>, in §2.1</span>
    <li><a href="#dom-intersectionobserver-intersectionobserver">IntersectionObserver(callback, options)</a><span>, in §2.2</span>
    <li><a href="#intersectionobserverentry">IntersectionObserverEntry</a><span>, in §2.4</span>
+   <li><a href="#dictdef-intersectionobserverentryinit">IntersectionObserverEntryInit</a><span>, in §2.4</span>
+   <li><a href="#dom-intersectionobserverentry-intersectionobserverentry-intersectionobserverentryinit-intersectionobserverentryinit">intersectionObserverEntryInit</a><span>, in §2.4</span>
+   <li><a href="#dom-intersectionobserverentry-intersectionobserverentry">IntersectionObserverEntry(intersectionObserverEntryInit)</a><span>, in §2.4</span>
    <li><a href="#typedefdef-intersectionobserverentrylist">IntersectionObserverEntryList</a><span>, in §2.3</span>
    <li><a href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a><span>, in §2.5</span>
-   <li><a href="#dom-intersectionobserverentry-intersectionrect">intersectionRect</a><span>, in §2.4</span>
+   <li>
+    intersectionRect
+    <ul>
+     <li><a href="#dom-intersectionobserverentryinit-intersectionrect">dict-member for IntersectionObserverEntryInit</a><span>, in §2.4</span>
+     <li><a href="#dom-intersectionobserverentry-intersectionrect">attribute for IntersectionObserverEntry</a><span>, in §2.4</span>
+    </ul>
    <li><a href="#invoke-an-intersectionobservercallback">Invoke an IntersectionObserverCallback</a><span>, in §3.2.2</span>
    <li><a href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a><span>, in §3.1.3</span>
    <li><a href="#dom-intersectionobservercallback-observer">observer</a><span>, in §2.1</span>
@@ -1449,7 +1472,12 @@ to threshold to less than threshold, and vice versa.</p>
     </ul>
    <li><a href="#dom-intersectionobserver-root-slot">[[root]]</a><span>, in §3.1.3</span>
    <li><a href="#dom-intersectionobserverinit-root">root</a><span>, in §2.5</span>
-   <li><a href="#dom-intersectionobserverentry-rootbounds">rootBounds</a><span>, in §2.4</span>
+   <li>
+    rootBounds
+    <ul>
+     <li><a href="#dom-intersectionobserverentryinit-rootbounds">dict-member for IntersectionObserverEntryInit</a><span>, in §2.4</span>
+     <li><a href="#dom-intersectionobserverentry-rootbounds">attribute for IntersectionObserverEntry</a><span>, in §2.4</span>
+    </ul>
    <li><a href="#dom-intersectionobserverinit-rootmargin">rootMargin</a><span>, in §2.5</span>
    <li><a href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a><span>, in §3.1.3</span>
    <li><a href="#dom-intersectionobserver-takerecords">takeRecords()</a><span>, in §2.2</span>
@@ -1458,11 +1486,17 @@ to threshold to less than threshold, and vice versa.</p>
     <ul>
      <li><a href="#dom-intersectionobserver-observe-target-target">argument for IntersectionObserver/observe(target)</a><span>, in §2.2</span>
      <li><a href="#dom-intersectionobserver-unobserve-target-target">argument for IntersectionObserver/unobserve(target)</a><span>, in §2.2</span>
+     <li><a href="#dom-intersectionobserverentryinit-target">dict-member for IntersectionObserverEntryInit</a><span>, in §2.4</span>
      <li><a href="#dom-intersectionobserverentry-target">attribute for IntersectionObserverEntry</a><span>, in §2.4</span>
     </ul>
    <li><a href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a><span>, in §3.1.3</span>
    <li><a href="#dom-intersectionobserverinit-threshold">threshold</a><span>, in §2.5</span>
-   <li><a href="#dom-intersectionobserverentry-time">time</a><span>, in §2.4</span>
+   <li>
+    time
+    <ul>
+     <li><a href="#dom-intersectionobserverentryinit-time">dict-member for IntersectionObserverEntryInit</a><span>, in §2.4</span>
+     <li><a href="#dom-intersectionobserverentry-time">attribute for IntersectionObserverEntry</a><span>, in §2.4</span>
+    </ul>
    <li><a href="#dom-intersectionobserver-unobserve">unobserve(target)</a><span>, in §2.2</span>
   </ul>
   <h3 class="no-num heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
@@ -1487,6 +1521,8 @@ to threshold to less than threshold, and vice versa.</p>
     <a data-link-type="biblio" href="#biblio-geometry-1">[geometry-1]</a> defines the following terms:
     <ul>
      <li><a href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a>
+     <li><a href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a>
+     <li><a href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>
     </ul>
    <li>
     <a data-link-type="biblio" href="#biblio-webidl">[WebIDL]</a> defines the following terms:
@@ -1523,13 +1559,23 @@ interface <a href="#intersectionobserver">IntersectionObserver</a> {
 
 typedef sequence&lt;<a data-link-type="idl-name" href="#intersectionobserverentry">IntersectionObserverEntry</a>> <a href="#typedefdef-intersectionobserverentrylist">IntersectionObserverEntryList</a>;
 
+[<a href="#dom-intersectionobserverentry-intersectionobserverentry">Constructor</a>(<a data-link-type="idl-name" href="#dictdef-intersectionobserverentryinit">IntersectionObserverEntryInit</a> <a href="#dom-intersectionobserverentry-intersectionobserverentry-intersectionobserverentryinit-intersectionobserverentryinit">intersectionObserverEntryInit</a>)]
 interface <a href="#intersectionobserverentry">IntersectionObserverEntry</a> {
   readonly attribute <a data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMHighResTimeStamp " href="#dom-intersectionobserverentry-time">time</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRect " href="#dom-intersectionobserverentry-rootbounds">rootBounds</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRect " href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRect " href="#dom-intersectionobserverentry-intersectionrect">intersectionRect</a>;
+  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly " href="#dom-intersectionobserverentry-rootbounds">rootBounds</a>;
+  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly " href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a>;
+  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly " href="#dom-intersectionobserverentry-intersectionrect">intersectionRect</a>;
   readonly attribute <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Element " href="#dom-intersectionobserverentry-target">target</a>;
 };
+
+dictionary <a href="#dictdef-intersectionobserverentryinit">IntersectionObserverEntryInit</a> {
+  required <a data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <a data-type="DOMHighResTimeStamp " href="#dom-intersectionobserverentryinit-time">time</a>;
+  required <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-rootbounds">rootBounds</a>;
+  required <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-boundingclientrect">boundingClientRect</a>;
+  required <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-intersectionrect">intersectionRect</a>;
+  required <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a data-type="Element " href="#dom-intersectionobserverentryinit-target">target</a>;
+};
+
 
 dictionary <a href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a> {
   <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>?  <a class="idl-code" data-default="null" data-link-type="dict-member" data-type="Element?  " href="#dom-intersectionobserverinit-root">root</a> = null;
