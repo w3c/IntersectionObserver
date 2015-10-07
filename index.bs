@@ -94,7 +94,7 @@ spec:dom-ls; type:interface; text:Document
 
 <h3 id='2-1-intersection-observer-callback'>The IntersectionObserverCallback</h3>
 <pre class="idl">
-  callback IntersectionObserverCallback = void (IntersectionObserverEntryList entries, IntersectionObserver observer)
+  callback IntersectionObserverCallback = void (sequence&lt;IntersectionObserverEntry> entries, IntersectionObserver observer)
 </pre>
 This callback will be invoked when there are changes to <i>target</i>'s intersection with <i>root</i>, as per the <a>processing model</a>.
 
@@ -109,7 +109,7 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
         void observe (Element target);
         void unobserve (Element target);
         void disconnect ();
-        IntersectionObserverEntryList takeRecords ();
+        sequence&lt;IntersectionObserverEntry> takeRecords ();
       };
     </pre>
 
@@ -149,22 +149,16 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
         : <dfn>takeRecords()</dfn>
         ::
             <ol>
-                <li>Construct an {{IntersectionObserverEntryList}} from
+                <li>Construct a
+                    <i>sequence</i>&lt;{{IntersectionObserverEntry}}> from
                     <i>this</i>'s internal {{[[QueuedEntries]]}} slot.</li>
                 <li>Clear <i>this</i>'s internal {{[[QueuedEntries]]}} slot.
                 </li>
-                <li>Return the <i>IntersectionObserverEntryList</i>.</li>
+                <li>Return the <i>sequence&lt;IntersectionObserverEntry></i>.</li>
             </ol>
     </div>
 
-<h3 id="2-3-intersection-observer-entry-list">
-  The IntersectionObserverEntryList typedef
-</h3>
-    <pre class="idl">
-      typedef sequence&lt;IntersectionObserverEntry&gt; IntersectionObserverEntryList;
-    </pre>
-
-<h3 id="2-4-intersection-observer-entry">The IntersectionObserverEntry interface</h3>
+<h3 id="2-3-intersection-observer-entry">The IntersectionObserverEntry interface</h3>
     <pre class="idl">
       [Constructor(IntersectionObserverEntryInit intersectionObserverEntryInit)]
       interface IntersectionObserverEntry {
@@ -195,8 +189,9 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
             The {{DOMRect}} corresponding to <i>boundingClientRect</i>
             intersected by each of <i>target</i>'s ancestors' clip rects
             (up to but not including {{root}}), intersected with
-            {{rootBounds}}. This value represents the portion of <i>target</i>
-            actually visible within {{rootBounds}}.
+            {{IntersectionObserverEntry/rootBounds}}. This value represents the
+            portion of <i>target</i> actually visible within
+            {{IntersectionObserverEntry/rootBounds}}.
         : <dfn>rootBounds</dfn>
         ::
             The visible dimensions of {{root}}, adjusted by {{rootMargin}},
@@ -205,13 +200,13 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
             top-level document.
         : <dfn>target</dfn>
         ::
-            The {{element}} whose intersection with {{root}} changed.
+            The {{Element}} whose intersection with {{root}} changed.
         : <dfn>time</dfn>
         ::
             The attribute must return a {{DOMHighResTimeStamp}} that
             corresponds to the time the intersection was recorded.
     </div>
-<h3 id="2-5-intersection-observer-init">The IntersectionObserverInit dictionary</h3>
+<h3 id="2-4-intersection-observer-init">The IntersectionObserverInit dictionary</h3>
     <pre class="idl">
       dictionary IntersectionObserverInit {
         Element?  root = null;
@@ -316,12 +311,13 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
     <ol>
         <li>If <i>observer</i>'s internal {{[[QueuedEntries]]}} slot is empty,
             return.</li>
-        <li>Construct an {{IntersectionObserverEntryList}} from
+        <li>Construct a <i>sequence</i>&lt;{{IntersectionObserverEntry}}> from
             {{[[QueuedEntries]]}}.</li>
         <li>Clear <i>observer</i>'s internal {{[[QueuedEntries]]}} slot.</li>
         <li>Remove <i>observer</i> from <i>Document</i>'s internal
             {{[[PendingIntersectionObserverCallbacks]]}} slot.</li>
-        <li>Invoke <i>callback</i> with the {{IntersectionObserverEntryList}} as
+        <li>Invoke <i>callback</i> with the
+            <i>sequence</i>&lt;{{IntersectionObserverEntry}}> as
             the first argument and <i>observer</i> as the second argument.</li>
     </ol>
 
