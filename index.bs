@@ -110,11 +110,11 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
     Note: In {{MutationObserver}}, the {{MutationObserverInit}} options are
     passed to {{MutationObserver/observe()}} while in {{IntersectionObserver}}
     they are passed to the constructor. This is because for MutationObserver,
-    each {{Node}} being observerd could have a different set of attributes to
+    each {{Node}} being observed could have a different set of attributes to
     filter. For IntersectionObserver, having different {{root}},
     {{rootMargin}} or {{threshold}} values for each <i>target</i> seems to
-    introduce more complexity without solving additional use-cases. A
-    per-{{observe()}} init could be provided in the future if V2 introduces
+    introduce more complexity without solving additional use-cases.
+    Per-{{observe()}} options could be provided in the future if V2 introduces
     a need for it.
 
     <pre class="idl">
