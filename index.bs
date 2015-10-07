@@ -99,9 +99,23 @@ spec:dom-ls; type:interface; text:Document
 This callback will be invoked when there are changes to <i>target</i>'s intersection with <i>root</i>, as per the <a>processing model</a>.
 
 <h3 id='2-2-intersection-observer-interface'>The IntersectionObserver interface</h3>
-    The {{IntersectionObserver}} interface can be used to observe changes in the intersection of a <i>target</i> {{Element}} and a <i>root</i> {{Element}} (or the top-level document's viewport).
+    The {{IntersectionObserver}} interface can be used to observe changes in
+    the intersection of a <i>target</i> {{Element}} and a <i>root</i>
+    {{Element}} (or the top-level document's viewport).
 
-    A <dfn>registered intersection observer</dfn> consists of an observer (an {{IntersectionObserver}} object) and options (an {{IntersectionObserverInit}} dictionary).
+    A <dfn>registered intersection observer</dfn> consists of an observer (an
+    {{IntersectionObserver}} object) and options (an
+    {{IntersectionObserverInit}} dictionary).
+
+    Note: In {{MutationObserver}}, the {{MutationObserverInit}} options are
+    passed to {{MutationObserver/observe()}} while in {{IntersectionObserver}}
+    they are passed to the constructor. This is because for MutationObserver,
+    each {{Node}} being observed could have a different set of attributes to
+    filter. For IntersectionObserver, having different {{root}},
+    {{rootMargin}} or {{threshold}} values for each <i>target</i> seems to
+    introduce more complexity without solving additional use-cases.
+    Per-{{observe()}} options could be provided in the future if V2 introduces
+    a need for it.
 
     <pre class="idl">
       [Constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options), Exposed=Window]
@@ -135,6 +149,13 @@ This callback will be invoked when there are changes to <i>target</i>'s intersec
                 <li>Remove <i>target</i> from <i>this</i>'s internal
                     {{[[ObservationTargets]]}} slot.</li>
             </ol>
+
+            Note: {{MutationObserver}} does not implement {{unobserve()}}.
+            For IntersectionObserver, {{unobserve()}} addresses the lazy-loading
+            use case. After a <i>target</i> becomes visible, it does not need
+            to be tracked. It would be more work to either {{disconnect()}} all
+            <i>targets</i> and {{observe()}} the remaining ones, or create a
+            separate {{IntersectionObserver}} for each <i>target</i>.
         : <dfn>disconnect()</dfn>
         ::
             For each <i>target</i> in <i>this</i>'s internal

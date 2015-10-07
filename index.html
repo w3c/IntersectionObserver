@@ -1188,8 +1188,16 @@ Parts of this work may be from another specification document.  If so, those par
 </pre>
    <p>This callback will be invoked when there are changes to <i>target</i>’s intersection with <i>root</i>, as per the <a data-link-type="dfn" href="#processing-model">processing model</a>.</p>
    <h3 class="heading settled" data-level="2.2" id="2-2-intersection-observer-interface"><span class="secno">2.2. </span><span class="content">The IntersectionObserver interface</span><a class="self-link" href="#2-2-intersection-observer-interface"></a></h3>
-    The <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> interface can be used to observe changes in the intersection of a <i>target</i> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> and a <i>root</i> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> (or the top-level document’s viewport). 
+    The <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> interface can be used to observe changes in
+    the intersection of a <i>target</i> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> and a <i>root</i> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> (or the top-level document’s viewport). 
    <p>A <dfn data-dfn-type="dfn" data-noexport="" id="registered-intersection-observer">registered intersection observer<a class="self-link" href="#registered-intersection-observer"></a></dfn> consists of an observer (an <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> object) and options (an <code class="idl"><a data-link-type="idl" href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a></code> dictionary).</p>
+   <p class="note" role="note">Note: In <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#mutationobserver">MutationObserver</a></code>, the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dictdef-mutationobserverinit">MutationObserverInit</a></code> options are
+    passed to <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-mutationobserver-observe">observe()</a></code> while in <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> they are passed to the constructor. This is because for MutationObserver,
+    each <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#node">Node</a></code> being observed could have a different set of attributes to
+    filter. For IntersectionObserver, having different <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code> or <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold">threshold</a></code> values for each <i>target</i> seems to
+    introduce more complexity without solving additional use-cases.
+    Per-<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observe">observe()</a></code> options could be provided in the future if V2 introduces
+    a need for it.</p>
 <pre class="idl">[<dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="constructor" data-export="" data-lt="IntersectionObserver(callback, options)" id="dom-intersectionobserver-intersectionobserver">Constructor<a class="self-link" href="#dom-intersectionobserver-intersectionobserver"></a></dfn>(<a data-link-type="idl-name" href="#callbackdef-intersectionobservercallback">IntersectionObserverCallback</a> callback, optional <a data-link-type="idl-name" href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a> <dfn class="idl-code" data-dfn-for="IntersectionObserver/IntersectionObserver(callback, options)" data-dfn-type="argument" data-export="" id="dom-intersectionobserver-intersectionobserver-callback-options-options">options<a class="self-link" href="#dom-intersectionobserver-intersectionobserver-callback-options-options"></a></dfn>), Exposed=Window]
 interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="intersectionobserver">IntersectionObserver<a class="self-link" href="#intersectionobserver"></a></dfn> {
   void <a class="idl-code" data-link-type="method" href="#dom-intersectionobserver-observe">observe</a> (<a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <dfn class="idl-code" data-dfn-for="IntersectionObserver/observe(target)" data-dfn-type="argument" data-export="" id="dom-intersectionobserver-observe-target-target">target<a class="self-link" href="#dom-intersectionobserver-observe-target-target"></a></dfn>);
@@ -1217,6 +1225,11 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
        <li>Remove the <a data-link-type="dfn" href="#registered-intersection-observer">registered intersection observer</a> from <i>target</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot.
        <li>Remove <i>target</i> from <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot.
       </ol>
+      <p class="note" role="note">Note: <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#mutationobserver">MutationObserver</a></code> does not implement <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-unobserve">unobserve()</a></code>.
+For IntersectionObserver, <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-unobserve">unobserve()</a></code> addresses the lazy-loading
+use case. After a <i>target</i> becomes visible, it does not need
+to be tracked. It would be more work to either <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-disconnect">disconnect()</a></code> all <i>targets</i> and <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observe">observe()</a></code> the remaining ones, or create a
+separate <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> for each <i>target</i>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="method" data-export="" id="dom-intersectionobserver-disconnect">disconnect()<a class="self-link" href="#dom-intersectionobserver-disconnect"></a></dfn></p>
      <dd data-md="">
@@ -1507,6 +1520,10 @@ to threshold to less than threshold, and vice versa.</p>
     <ul>
      <li><a href="https://dom.spec.whatwg.org/#document">Document</a>
      <li><a href="https://dom.spec.whatwg.org/#element">Element</a>
+     <li><a href="https://dom.spec.whatwg.org/#mutationobserver">MutationObserver</a>
+     <li><a href="https://dom.spec.whatwg.org/#dictdef-mutationobserverinit">MutationObserverInit</a>
+     <li><a href="https://dom.spec.whatwg.org/#node">Node</a>
+     <li><a href="https://dom.spec.whatwg.org/#dom-mutationobserver-observe">observe(target, options)</a>
     </ul>
    <li>
     <a data-link-type="biblio" href="#biblio-geometry-1">[geometry-1]</a> defines the following terms:
