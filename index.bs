@@ -12,16 +12,17 @@ Repository: slightlyoff/IntersectionObserver
 
 <pre class="anchors">
 urlPrefix: http://www.w3.org/TR/hr-time/; type: typedef; text: DOMHighResTimeStamp
-url: http://www.w3.org/TR/CSS21/box.html#propdef-margin; type: attribute; text: margin
-url: http://www.w3.org/TR/css3-values/#lengths; type: attribute; text: length
-urlPrefix: http://www.w3.org/TR/html5/browsers.html; type: dfn; text: unit of related similar-origin browsing contexts
-url:http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks; type: dfn; text: list of idle request callbacks
-url:http://heycam.github.io/webidl/#dfn-callback-this-value; type: dfn; text: callback this value
-urlPrefix:http://www.w3.org/TR/html51/webappapis.html; type: dfn; text: report the exception
-url:http://www.w3.org/TR/2014/WD-css-masking-1-20140213/#the-clip-path; type: dfn; text: clip path
-url:https://dom.spec.whatwg.org/#concept-node-remove-ext; type: dfn; text: removing steps
-url:https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant; type: dfn; text: inclusive descendants
-url:https://dom.spec.whatwg.org/#concept-tree-order; type: dfn; text: tree order
+url: http://www.w3.org/TR/css3-box/#margin1; type: attribute; text: margin
+url: https://drafts.csswg.org/css-values/#lengths; type: attribute; text: length
+urlPrefix: https://html.spec.whatwg.org/multipage/browsers.html; type: dfn; text: unit of related similar-origin browsing contexts
+url: http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks; type: dfn; text: list of idle request callbacks
+url: https://html.spec.whatwg.org/multipage/infrastructure.html#dfn-callback-this-value; type: dfn; text: callback this value
+urlPrefix: https://html.spec.whatwg.org/multipage/webappapis.html; type: dfn; text: report the exception
+urlPrefix: https://drafts.fxtf.org/css-masking-1/; type: dfn; text: the clip path
+url: https://dom.spec.whatwg.org/#concept-node-remove-ext; type: dfn; text: removing steps
+url: https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant; type: dfn; text: inclusive descendants
+url: https://dom.spec.whatwg.org/#concept-tree-order; type: dfn; text: tree order
+urlPrefix: https://html.spec.whatwg.org/multipage/webappapis.html; type: dfn; text: event loop
 </pre>
 
 <pre class="link-defaults">
@@ -338,7 +339,7 @@ The IntersectionObserverInit dictionary</h3>
     <ol>
         <li>If <i>unit</i>'s <a>IntersectionObserverTaskQueued</a> flag is set
             to true, return.</li>
-        <li>Set <i>unit<\i>'s <a>IntersectionObserverTaskQueued</a> flag to
+        <li>Set <i>unit</i>'s <a>IntersectionObserverTaskQueued</a> flag to
             true.</li>
         <li>Post a task to <a>notify intersection observers</a>, or
             enqueue a task to <a>notify intersection observers</a> in the
@@ -377,58 +378,63 @@ The IntersectionObserverInit dictionary</h3>
 <h4 id='queue-intersection-observer-entry-algo'>Queue an
 IntersectionObserverEntry</dfn></h4>
     To <dfn>queue an IntersectionObserverEntry</dfn> for <i>observer</i>, given
-    a <a>unit of related similar-origin browsing contexts</a> <i>unit</i>, run
-    these steps:
+    a <a>unit of related similar-origin browsing contexts</a> <i>unit</i>,
+    <i>observer</i>, <i>time</i>, <i>rootBounds</i>, <i>boundingClientRect</i>,
+    <i>intersectionRect</i> and <i>target</i>, run these steps:
     <ol>
-        <li>Construct an {{IntersectionObserverEntry}}.</li>
+        <li>Construct an {{IntersectionObserverEntry}}, passing in <i>time</i>,
+            <i>rootBounds</i>, <i>boundingClientRect</i>,
+            <i>intersectionRect</i> and <i>target</i>.</li>
         <li>Append it to <i>observer</i>'s internal {{[[QueuedEntries]]}} slot.
-        </li>
-        <li><a>Queue an intersection observer task</a> for <i>unit</i>.
-        </li>
+            </li>
+        <li><a>Queue an intersection observer task</a> for <i>unit</i>.</li>
     </ol>
 
 <h4 id='update-intersection-observations-algo'>Run the Update Intersection
 Observations Steps</h4>
-    To <dfn>run the update intersection observations steps</dfn>, run these
+    To <dfn>run the update intersection observations steps</dfn> for an
+    <a>event loop</a> <i>loop</i> given a timestamp <i>time</i>, run these
     steps:
         <ul>
-            <li>For each <i>observer</i> in the
-                <a>unit of related similar-origin browsing contexts</a>'s
+            <li>Let <i>unit</i> be the <a>unit of related similar-origin
+                browsing contexts</a> for <i>loop</i>.</li>
+            <li>For each <i>observer</i> in <i>unit</i>'s
                 <a>IntersectionObservers</a> list</li>
             <ul>
+                <li>Let <i>rootBounds</i> be the bounds of <i>observer</i>'s
+                    internal {{[[root]]}} slot (or the top-level document's
+                    viewport), adjusted by <i>observer</i>'s internal
+                    {{[[rootMargin]]}} slot.</li>
                 <li>For each <i>target</i> in <i>observer</i>'s internal
                 {{[[ObservationTargets]]}} slot</li>
                 <ol>
-                    <li>Compute an <i>intersectionRect</i> which is the
-                        intersection of
-                        <i>target</i>.{{Element/getBoundingClientRect()}}
-                        with the bounds of <i>observer</i>'s internal
-                        {{[[root]]}} slot, adjusted by <i>observer</i>'s
-                        internal {{[[rootMargin]]}} slot, intersected with the
-                        clip rect of each ancestor between <i>target</i> and
-                        <i>observer</i>'s internal {{[[root]]}} slot.
-                        <ul>
-                            <li>if <i>intersectionRect</i>'s area is greater
-                                than or equal to <i>observer</i>'s internal
-                                {{[[threshold]]}} slot and <i>target</i>'s
-                                internal {{[[PreviousIntersectionRect]]}} slot
-                                had an area that was less than <i>observer</i>'s
-                                internal {{[[threshold]]}} slot, <a>queue an
-                                IntersectionObserverEntry</a>.</li>
-                            <li>else if that <i>intersectionRect</i>'s area is
-                                less than <i>observer</i>'s internal
-                                {{[[threshold]]}} slot and <i>target</i>'s
-                                internal {{[[PreviousIntersectionRect]]}} slot
-                                had an area that was greater than or equal to
-                                <i>observer</i>'s internal {{[[threshold]]}}
-                                slot, <a>queue an IntersectionObserverEntry</a>.
-                                </li>
-                        </ul>
+                    <li>Let <i>boundingClientRect</i> be the value of
+                        <i>target</i>.{{Element/getBoundingClientRect()}}.</li>
+                    <li>Let <i>intersectionRect</i> be the intersection of
+                        <i>boundingClientRect</i> with <i>rootBounds</i>,
+                        intersected with the clip rect of each ancestor between
+                        <i>target</i> and <i>observer</i>'s internal
+                        {{[[root]]}} slot.</li>
 
-                        Issue: TBD: Does <i>clipRect</i> include
-                        <a>clip path</a> and other clipping properties or just
-                        overflow clipping?
-                    </li>
+                        Issue: TBD: Do the <i>clip rect</i>s include <a>the clip
+                        path</a> and other clipping properties or just overflow
+                        clipping?
+                    <li>Let <i>newIntersectionExceeds</i> be <i>true</i> if
+                        <i>intersectionRect</i>'s area is greater than or equal
+                        to <i>observer</i>'s internal {{[[threshold]]}} slot,
+                        and <i>false</i> otherwise.</li>
+                    <li>Let <i>oldIntersectionExceeds</i> be <i>true</i> if
+                        <i>target</i>'s internal
+                        {{[[PreviousIntersectionRect]]}} slot is not null and
+                        has an area that is great than or equal to
+                        <i>observer</i>'s internal {{[[threshold]]}} slot and
+                        <i>false</i> otherwise.</li>
+                    <li>If <i>newIntersectionExceeds</i> does not equal
+                        <i>oldIntersectionExceeds</i>, <a>queue an
+                        IntersectionObserverEntry</a> for <i>unit</i>, passing
+                        in <i>observer</i>, <i>time</i>, <i>rootBounds</i>,
+                        <i>boundingClientRect</i>, <i>intersectionRect</i> and
+                        <i>target</i>.</li>
                     <li>Assign <i>intersectionRect</i> to <i>target</i>'s
                         internal {{[[PreviousIntersectionRect]]}} slot.</li>
                 </ol>
@@ -462,6 +468,6 @@ Observations Steps</h4>
     This step is:
     <ol start="11">
         <li><a>Run the update intersection observations steps</a> for the
-        <a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop">
-        event loop</a> in question, passing in <i>now</i> as the timestamp.</li>
+            <a>event loop</a> in question, passing in <i>now</i> as the
+            timestamp.</li>
     </ol>
