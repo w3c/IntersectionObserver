@@ -12,7 +12,6 @@ Repository: slightlyoff/IntersectionObserver
 
 <pre class="anchors">
 urlPrefix: http://www.w3.org/TR/hr-time/; type: typedef; text: DOMHighResTimeStamp
-url: https://drafts.csswg.org/css-values/#lengths; type: attribute; text: length
 url: http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks; type: dfn; text: list of idle request callbacks
 url: https://html.spec.whatwg.org/multipage/infrastructure.html#dfn-callback-this-value; type: dfn; text: callback this value
 urlPrefix: https://html.spec.whatwg.org/multipage/browsers.html; type: dfn; text: unit of related similar-origin browsing contexts
@@ -292,7 +291,7 @@ The IntersectionObserverInit dictionary</h3>
             when intersectionRect's area changes from greater than or equal
             to threshold to less than threshold, and vice versa.
 
-            This is a {{length}} value.
+            This is a <<length>> value.
     </div>
 
 <h2 id='intersection-observer-processing-model'><dfn>Processing Model</dfn></h3>
