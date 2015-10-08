@@ -419,7 +419,7 @@ Observations Steps</h4>
                     <li>Let <i>oldIntersectionExceeds</i> be <i>true</i> if
                         <i>target</i>'s internal
                         {{[[PreviousIntersectionRect]]}} slot is not null and
-                        has an area that is great than or equal to
+                        has an area that is greater than or equal to
                         <i>observer</i>'s internal {{[[threshold]]}} slot and
                         <i>false</i> otherwise.</li>
                     <li>If <i>newIntersectionExceeds</i> does not equal

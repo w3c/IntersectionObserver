@@ -1436,7 +1436,7 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
                         to <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot,
                         and <i>false</i> otherwise.
       <li>Let <i>oldIntersectionExceeds</i> be <i>true</i> if <i>target</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-previousintersectionrect-slot">[[PreviousIntersectionRect]]</a></code> slot is not null and
-                        has an area that is great than or equal to <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot and <i>false</i> otherwise.
+                        has an area that is greater than or equal to <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot and <i>false</i> otherwise.
       <li>If <i>newIntersectionExceeds</i> does not equal <i>oldIntersectionExceeds</i>, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry">queue an
                         IntersectionObserverEntry</a> for <i>unit</i>, passing
                         in <i>observer</i>, <i>time</i>, <i>rootBounds</i>, <i>boundingClientRect</i>, <i>intersectionRect</i> and <i>target</i>.
