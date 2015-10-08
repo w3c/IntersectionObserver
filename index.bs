@@ -13,14 +13,10 @@ Repository: slightlyoff/IntersectionObserver
 <pre class="anchors">
 urlPrefix: http://www.w3.org/TR/hr-time/; type: typedef; text: DOMHighResTimeStamp
 url: https://drafts.csswg.org/css-values/#lengths; type: attribute; text: length
-urlPrefix: https://html.spec.whatwg.org/multipage/browsers.html; type: dfn; text: unit of related similar-origin browsing contexts
 url: http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks; type: dfn; text: list of idle request callbacks
 url: https://html.spec.whatwg.org/multipage/infrastructure.html#dfn-callback-this-value; type: dfn; text: callback this value
+urlPrefix: https://html.spec.whatwg.org/multipage/browsers.html; type: dfn; text: unit of related similar-origin browsing contexts
 urlPrefix: https://html.spec.whatwg.org/multipage/webappapis.html; type: dfn; text: report the exception
-urlPrefix: https://drafts.fxtf.org/css-masking-1/; type: dfn; text: the clip path
-url: https://dom.spec.whatwg.org/#concept-node-remove-ext; type: dfn; text: removing steps
-url: https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant; type: dfn; text: inclusive descendants
-url: https://dom.spec.whatwg.org/#concept-tree-order; type: dfn; text: tree order
 urlPrefix: https://html.spec.whatwg.org/multipage/webappapis.html; type: dfn; text: event loop
 </pre>
 
@@ -415,9 +411,8 @@ Observations Steps</h4>
                         <i>target</i> and <i>observer</i>'s internal
                         {{[[root]]}} slot.</li>
 
-                        Issue: TBD: Do the <i>clip rect</i>s include <a>the clip
-                        path</a> and other clipping properties or just overflow
-                        clipping?
+                        Issue: TBD: Do the <i>clip rect</i>s include 'clip-path'
+                        and other clipping properties or just overflow clipping?
                     <li>Let <i>newIntersectionExceeds</i> be <i>true</i> if
                         <i>intersectionRect</i>'s area is greater than or equal
                         to <i>observer</i>'s internal {{[[threshold]]}} slot,

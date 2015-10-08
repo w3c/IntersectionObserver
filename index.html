@@ -1431,9 +1431,7 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
       <li>Let <i>boundingClientRect</i> be the value of <i>target</i>.<code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code>.
       <li>Let <i>intersectionRect</i> be the intersection of <i>boundingClientRect</i> with <i>rootBounds</i>,
                         intersected with the clip rect of each ancestor between <i>target</i> and <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot.
-      <p class="issue" id="issue-1c13cc58"><a class="self-link" href="#issue-1c13cc58"></a> TBD: Do the <i>clip rect</i>s include <a data-link-type="dfn" href="https://drafts.fxtf.org/css-masking-1/#the-clip-path">the clip
-                        path</a> and other clipping properties or just overflow
-                        clipping?</p>
+      <p class="issue" id="issue-8687d7ba"><a class="self-link" href="#issue-8687d7ba"></a> TBD: Do the <i>clip rect</i>s include <a class="property" data-link-type="propdesc" href="https://drafts.fxtf.org/css-masking-1/#propdef-clip-path">clip-path</a> and other clipping properties or just overflow clipping?</p>
       <li>Let <i>newIntersectionExceeds</i> be <i>true</i> if <i>intersectionRect</i>’s area is greater than or equal
                         to <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot,
                         and <i>false</i> otherwise.
@@ -1557,6 +1555,11 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
   <h3 class="no-num heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="indexlist">
    <li>
+    <a data-link-type="biblio" href="#biblio-css-masking-1">[css-masking-1]</a> defines the following terms:
+    <ul>
+     <li><a href="https://drafts.fxtf.org/css-masking-1/#propdef-clip-path">clip-path</a>
+    </ul>
+   <li>
     <a data-link-type="biblio" href="#biblio-css21">[CSS21]</a> defines the following terms:
     <ul>
      <li><a href="https://drafts.csswg.org/css2/box.html#propdef-margin">margin</a>
@@ -1573,7 +1576,10 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
      <li><a href="https://dom.spec.whatwg.org/#mutationobserver">MutationObserver</a>
      <li><a href="https://dom.spec.whatwg.org/#dictdef-mutationobserverinit">MutationObserverInit</a>
      <li><a href="https://dom.spec.whatwg.org/#node">Node</a>
+     <li><a href="https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant">inclusive descendant</a>
      <li><a href="https://dom.spec.whatwg.org/#dom-mutationobserver-observe">observe(target, options)</a>
+     <li><a href="https://dom.spec.whatwg.org/#concept-node-remove-ext">removing steps</a>
+     <li><a href="https://dom.spec.whatwg.org/#concept-tree-order">tree order</a>
     </ul>
    <li>
     <a data-link-type="biblio" href="#biblio-geometry-1">[geometry-1]</a> defines the following terms:
@@ -1595,6 +1601,8 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
    <dd>Bert Bos; et al. <a href="http://www.w3.org/TR/CSS2">Cascading Style Sheets Level 2 Revision 1 (CSS 2.1) Specification</a>. 7 June 2011. REC. URL: <a href="http://www.w3.org/TR/CSS2">http://www.w3.org/TR/CSS2</a>
    <dt id="biblio-webidl"><a class="self-link" href="#biblio-webidl"></a>[WebIDL]
    <dd>Cameron McCormack; Boris Zbarsky. <a href="http://www.w3.org/TR/WebIDL-1/">WebIDL Level 1</a>. 4 August 2015. WD. URL: <a href="http://www.w3.org/TR/WebIDL-1/">http://www.w3.org/TR/WebIDL-1/</a>
+   <dt id="biblio-css-masking-1"><a class="self-link" href="#biblio-css-masking-1"></a>[CSS-MASKING-1]
+   <dd>Dirk Schulze; Brian Birtles; Tab Atkins Jr.. <a href="http://www.w3.org/TR/css-masking-1/">CSS Masking Module Level 1</a>. 26 August 2014. CR. URL: <a href="http://www.w3.org/TR/css-masking-1/">http://www.w3.org/TR/css-masking-1/</a>
    <dt id="biblio-cssom-view"><a class="self-link" href="#biblio-cssom-view"></a>[CSSOM-VIEW]
    <dd>Simon Pieters; Glenn Adams. <a href="http://www.w3.org/TR/cssom-view/">CSSOM View Module</a>. 17 December 2013. WD. URL: <a href="http://www.w3.org/TR/cssom-view/">http://www.w3.org/TR/cssom-view/</a>
    <dt id="biblio-dom-ls"><a class="self-link" href="#biblio-dom-ls"></a>[DOM-LS]
@@ -1643,9 +1651,7 @@ dictionary <a href="#dictdef-intersectionobserverinit">IntersectionObserverInit<
   <h2 class="no-num heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
    <div class="issue"> Should we define an appropriate <i>timeout</i>?<a href="#issue-2ecbcf0b"> ↵ </a></div>
-   <div class="issue"> TBD: Do the <i>clip rect</i>s include <a data-link-type="dfn" href="https://drafts.fxtf.org/css-masking-1/#the-clip-path">the clip
-                        path</a> and other clipping properties or just overflow
-                        clipping?<a href="#issue-1c13cc58"> ↵ </a></div>
+   <div class="issue"> TBD: Do the <i>clip rect</i>s include <a class="property" data-link-type="propdesc" href="https://drafts.fxtf.org/css-masking-1/#propdef-clip-path">clip-path</a> and other clipping properties or just overflow clipping?<a href="#issue-8687d7ba"> ↵ </a></div>
   </div>
  </body>
 </html>
