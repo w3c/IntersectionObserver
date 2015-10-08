@@ -12,7 +12,6 @@ Repository: slightlyoff/IntersectionObserver
 
 <pre class="anchors">
 urlPrefix: http://www.w3.org/TR/hr-time/; type: typedef; text: DOMHighResTimeStamp
-url: http://www.w3.org/TR/css3-box/#margin1; type: attribute; text: margin
 url: https://drafts.csswg.org/css-values/#lengths; type: attribute; text: length
 urlPrefix: https://html.spec.whatwg.org/multipage/browsers.html; type: dfn; text: unit of related similar-origin browsing contexts
 url: http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks; type: dfn; text: list of idle request callbacks
@@ -273,7 +272,7 @@ The IntersectionObserverInit dictionary</h3>
             top-level document's viewport.
         : <dfn>rootMargin</dfn>
         ::
-            Same as {{margin}}, can be 1, 2, 3 or 4 components, possibly
+            Same as 'margin', can be 1, 2, 3 or 4 components, possibly
             negative lengths.
 
             If there is only one component value, it applies to all sides.

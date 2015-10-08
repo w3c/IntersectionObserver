@@ -1336,7 +1336,7 @@ top-level document’s viewport.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverInit" data-dfn-type="dict-member" data-export="" id="dom-intersectionobserverinit-rootmargin">rootMargin<a class="self-link" href="#dom-intersectionobserverinit-rootmargin"></a></dfn>, <span> of type <a data-link-type="idl-name" href="http://heycam.github.io/webidl/#idl-DOMString">DOMString</a>, defaulting to <code>"0px"</code></span></p>
      <dd data-md="">
-      <p>Same as <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/css3-box/#margin1">margin</a></code>, can be 1, 2, 3 or 4 components, possibly
+      <p>Same as <a class="property" data-link-type="propdesc" href="https://drafts.csswg.org/css2/box.html#propdef-margin">margin</a>, can be 1, 2, 3 or 4 components, possibly
 negative lengths.</p>
       <p>If there is only one component value, it applies to all sides.
 If there are two values, the top and bottom margins are set to
@@ -1557,6 +1557,11 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
   <h3 class="no-num heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="indexlist">
    <li>
+    <a data-link-type="biblio" href="#biblio-css21">[CSS21]</a> defines the following terms:
+    <ul>
+     <li><a href="https://drafts.csswg.org/css2/box.html#propdef-margin">margin</a>
+    </ul>
+   <li>
     <a data-link-type="biblio" href="#biblio-cssom-view-1">[cssom-view]</a> defines the following terms:
     <ul>
      <li><a href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a>
@@ -1586,6 +1591,8 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
   <h2 class="no-num heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
   <h3 class="no-num heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
+   <dt id="biblio-css21"><a class="self-link" href="#biblio-css21"></a>[CSS21]
+   <dd>Bert Bos; et al. <a href="http://www.w3.org/TR/CSS2">Cascading Style Sheets Level 2 Revision 1 (CSS 2.1) Specification</a>. 7 June 2011. REC. URL: <a href="http://www.w3.org/TR/CSS2">http://www.w3.org/TR/CSS2</a>
    <dt id="biblio-webidl"><a class="self-link" href="#biblio-webidl"></a>[WebIDL]
    <dd>Cameron McCormack; Boris Zbarsky. <a href="http://www.w3.org/TR/WebIDL-1/">WebIDL Level 1</a>. 4 August 2015. WD. URL: <a href="http://www.w3.org/TR/WebIDL-1/">http://www.w3.org/TR/WebIDL-1/</a>
    <dt id="biblio-cssom-view"><a class="self-link" href="#biblio-cssom-view"></a>[CSSOM-VIEW]
@@ -1628,7 +1635,7 @@ dictionary <a href="#dictdef-intersectionobserverentryinit">IntersectionObserver
 
 dictionary <a href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a> {
   <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>?  <a class="idl-code" data-default="null" data-link-type="dict-member" data-type="Element?  " href="#dom-intersectionobserverinit-root">root</a> = null;
-  DOMString <a class="idl-code" data-default="&quot;0px&quotquot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-rootmargin">rootMargin</a> = "0px";
+  DOMString <a class="idl-code" data-default="&quot;0px&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-rootmargin">rootMargin</a> = "0px";
   DOMString <a class="idl-code" data-default="&quot;1px&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-threshold">threshold</a> = "1px";
 };
 
