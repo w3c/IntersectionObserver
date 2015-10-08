@@ -11,9 +11,14 @@ Repository: slightlyoff/IntersectionObserver
 </pre>
 
 <pre class="anchors">
-text: DOMHighResTimeStamp; type: typedef; urlPrefix: http://www.w3.org/TR/hr-time/
-text: margin; type: attribute; url: http://www.w3.org/TR/CSS21/box.html#propdef-margin
-text: length; type: attribute; url: http://www.w3.org/TR/css3-values/#lengths
+urlPrefix: http://www.w3.org/TR/hr-time/; type: typedef; text: DOMHighResTimeStamp
+url: http://www.w3.org/TR/CSS21/box.html#propdef-margin; type: attribute; text: margin
+url: http://www.w3.org/TR/css3-values/#lengths; type: attribute; text: length
+urlPrefix: http://www.w3.org/TR/html5/browsers.html; type: dfn; text: unit of related similar-origin browsing contexts
+url:http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks; type: dfn; text: list of idle request callbacks
+url:http://www.w3.org/TR/WebIDL-1/#dfn-callback-this-value; type: dfn; text: callback this value
+urlPrefix:http://www.w3.org/TR/html51/webappapis.html; type: dfn; text: report the exception
+url:http://www.w3.org/TR/2014/WD-css-masking-1-20140213/#the-clip-path; type: dfn; text: clip path
 </pre>
 
 <pre class="link-defaults">
@@ -149,8 +154,7 @@ The IntersectionObserver interface</h3>
                 <li> Set <i>this</i>'s internal {{[[threshold]]}} slot to
                     <i>options</i>.{{threshold}}</li>
                 <li>Append <i>this</i> to the
-                    <a href="http://www.w3.org/TR/html5/browsers.html#unit-of-related-similar-origin-browsing-contexts">
-                    unit of related similar-origin browsing contexts</a>'s
+                    <a>unit of related similar-origin browsing contexts</a>'s
                     internal <a>\[[IntersectionObservers]]</a> slot.</li>
                 <li>return <i>this</i>.</li>
             </ol>
@@ -304,9 +308,7 @@ The IntersectionObserverInit dictionary</h3>
 <h3 id='3-1-defines'>Internal Slot Definitions</h2>
 
 <h4 id='3-1-1-browsing-contexts'>Browsing Contexts</h4>
-    Each
-    <a href="http://www.w3.org/TR/html5/browsers.html#unit-of-related-similar-origin-browsing-contexts">
-    unit of related similar-origin browsing contexts</a> has an internal
+    Each <a>unit of related similar-origin browsing contexts</a> has an internal
     <dfn>\[[IntersectionObserverTaskQueued]]</dfn> slot which is initialized to
     false and an internal <dfn>\[[IntersectionObservers]]</dfn> slot which is
     initialized to an empty list.
@@ -341,8 +343,7 @@ Task</h4>
             true.</li>
         <li>Post a task to <a>notify intersection observers</a>, or
             enqueue a task to <a>notify intersection observers</a> in the
-            <a href="https://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks">
-            list of idle request callbacks</a> with an appropriate
+            <a>list of idle request callbacks</a> with an appropriate
             <i>timeout</i>.
 
             Issue: Should we define an appropriate <i>timeout</i>?
@@ -355,8 +356,7 @@ Task</h4>
         <li>Set the internal <a>\[[IntersectionObserverTaskQueued]]</a> slot to
             false.</li>
         <li>Let <i>notify list</i> be a copy of
-            <a href="http://www.w3.org/TR/html5/browsers.html#unit-of-related-similar-origin-browsing-contexts">
-            unit of related similar-origin browsing contexts</a>'s internal
+            <a>unit of related similar-origin browsing contexts</a>'s internal
             <a>\[[IntersectionObservers]]</a> slot.</li>
         <li>For each {{IntersectionObserver}} object <i>observer</i> in
             <i>notify list</i>, run these steps:</li>
@@ -370,10 +370,8 @@ Task</h4>
                 </li>
                 <li>Invoke <i>callback</i> with <i>queue</i> as the first
                 argument and <i>observer</i> as the second argument and
-                <a href="http://www.w3.org/TR/WebIDL-1/#dfn-callback-this-value">
-                callback this value</a>. If this throws an exception,
-                <a href="http://www.w3.org/TR/html51/webappapis.html#report-the-exception">
-                report the exception</a>.</li>
+                <a>callback this value</a>. If this throws an exception,
+                <a>report the exception</a>.</li>
             </ol>
     </ol>
 
@@ -395,9 +393,8 @@ Observations Steps</h4>
     steps:
         <ul>
             <li>For each <i>observer</i> in the
-                <a href="http://www.w3.org/TR/html5/browsers.html#unit-of-related-similar-origin-browsing-contexts">
-                unit of related similar-origin browsing contexts</a>'s internal
-                <a>\[[IntersectionObservers]]</a> slot</li>
+                <a>unit of related similar-origin browsing contexts</a>'s
+                internal <a>\[[IntersectionObservers]]</a> slot</li>
             <ul>
                 <li>For each <i>target</i> in <i>observer</i>'s internal
                 {{[[ObservationTargets]]}} slot</li>
@@ -429,8 +426,7 @@ Observations Steps</h4>
                         </ul>
 
                         Issue: TBD: Does <i>clipRect</i> include
-                        <a href="http://www.w3.org/TR/2014/WD-css-masking-1-20140213/#the-clip-path">
-                        clip path</a> and other clipping properties or just
+                        <a>clip path</a> and other clipping properties or just
                         overflow clipping?
                     </li>
                     <li>Assign <i>intersctionRect</i> to <i>target</i>'s
