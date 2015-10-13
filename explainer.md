@@ -2,17 +2,17 @@
 
 ## What's All This About?
 
-This repo outlines an API that can be used to understand movement of DOM elements relative to another element or the browser top level viewport. Changesare delivered asynchronously and is useful for understanding the visibility of elements, managing pre-loading of DOM and data, as well as deferred loading of "below the fold" page content.
+This repo outlines an API that can be used to understand movement of DOM elements relative to another element or the browser top level viewport. Changes are delivered asynchronously and are useful for understanding the visibility of elements, managing pre-loading of DOM and data, as well as deferred loading of page content.
 
 ## Observing Position
 
-The web's traditional position calculation mechanisms rely on explicit queries of DOM state that are known to cause style recalcuation and layout and, frequently, are redundant thanks to the requirement that scripts poll for this information.
+The web’s traditional position calculation mechanisms rely on explicit queries of DOM state that are known to cause (expensive) style recalcuation and layout and, frequently, are a source of significant performance overhead due to continuous polling for this information.
 
 A body of common practice has evolved that relies on these behaviors, however, including (but not limited to):
 
-  * Observing the location of "below the fold" sections of content in order to lazy-load content.
+  * Building custom pre- and deferred-loading of DOM and data.
   * Implementing data-bound high-performance scrolling lists which load and render subsets of data sets. These lists are a central mobile interaction idiom.
-  * Calculating element visibility. In particular, [ad networks now require reporting of ad "visibility" for monetizing impressions](http://www.iab.net/iablog/2014/03/viewability-has-arrived-what-you-need-to-know-to-see-through-this-sea-change.html). This has led to many sites abusing scroll handlers, [synchronous layout invoking readbacks](http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html), and resorting to exotic plugin-based solutions for computing "true" element visibility (as a fraction of the element's intended size).
+  * Calculating element visibility. In particular, [ad networks now require reporting of ad "visibility" for monetizing impressions](http://www.iab.net/iablog/2014/03/viewability-has-arrived-what-you-need-to-know-to-see-through-this-sea-change.html). This has led to many sites abusing scroll handlers (causing jank on scroll), [synchronous layout invoking readbacks](http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html) (causing unneccessary critical work in rAF loops), and resorting to exotic plugin-based solutions for computing "true" element visibility (with all the associated overhead of the plugin architecture).
 
 These use-cases have several common properties:
 
@@ -22,36 +22,36 @@ These use-cases have several common properties:
 
 A notable non-goal is pixel-accurate information about what was actually displayed (which can be quite difficult to obtain efficiently in certain browser architectures in the face of filters, webgl, and other features). In all of these scenarios the information is useful even when delivered at a slight delay and without perfect compositing-result data.
 
-Given the opportunity to reduce CPU use, increase battery life, and eliminate jank it seems like a new API to simplify answering these queries is a prudent addition to the web platform.
+The Intersersection Observer API addresses the above issues by giving developers a new method to asynchronously query the position of an element with respect to other elements or the global viewport. The asynchronous delivery eliminates the need for costly DOM and style queries, continuous polling, and use of custom plugins. By removing the need for these methods it allows applications to significantly reduce their CPU, GPU and energy costs.
 
 ### Proposed API
 
 ```js
 [Exposed=Window]
-interface IntersectionRecord {
-  readonly attribute double time;
-  readonly attribute DOMRect rootBounds;
-  readonly attribute DOMRect boundingClientRect;
+interface IntersectionObserverEntry {
+  readonly attribute DOMHighResTimeStamp time;
+  readonly attribute DOMRectReadOnly rootBounds;
+  readonly attribute DOMRectReadOnly boundingClientRect;
+  readonly attribute DOMRectReadOnly intersectionRect;
   readonly attribute Element target;
 };
 
-callback IntersectionCallback = void (sequence<IntersectionRecord> records, IntersectionObserver observer);
+callback IntersectionCallback = void (sequence<IntersectionObserverEntry> entries, IntersectionObserver observer);
 
 dictionary IntersectionObserverInit {
-  boolean root = null;
+  Element?  root = null;
   // Same as margin, can be 1, 2, 3 or 4 components, possibly negative lengths.
   // "5px"
   // "5px 10px"
   // "-10px 5px 5px"
   // "-10px -10px 5px 5px"
-  DOMString rootBoundsModifier = "0px";
-  // Whether to give callbacks only when an element starts/stops intersecting
-  // the root bounds or everytime it changes how much it intersects.
-  // Callback only fires if the element isn’t intersecting an edge of the
-  // viewport in the case that the element jumps from being entirely outside
-  // the viewport to entirely inside it.
-  // Defaults to true, a less power-hungry option.
-  boolean thresholdCallbacks = true;
+  DOMString rootMargin = "0px";
+  // Threshold at which to say the intersection has 'changed'.
+  // Can be used to only trigger when 50% (or other cutoff) of the pixels of an
+  // element have intersected the root bounds, so as not to invoke callback
+  // too frequently.
+  // Defaults to 1px.
+  DOMString threshold = "1px";
 };
 
 [Constructor(IntersectionCallback callback, IntersectionObserverInit options)]
@@ -59,18 +59,19 @@ interface IntersectionObserver {
   void observe(Element target);
   void unobserve(Element target);
   void disconnect();
+  sequence<IntersectionObserverEntry> takeRecords ();
 };
 ```
 
-This API uses the outermost document's inherent viewport -- i.e. "the thing the user sees" -- as the default viewport. Other queries can be formed relative to ancestor elements.
+This API uses the top-level document's viewport -- i.e. "the thing the user sees" -- as the default root if none is provided.
 
-The "natural" viewport isn't represented anywhere in the DOM and so queries against it are a bit magical, but this is reasonable as the information is available through other (expensive) mechanisms today. Should the viewport hierarchy become exposed to DOM, this API can be explained in those terms.
+This value isn't represented anywhere in the DOM, but using it is reasonable as the information is available through other (expensive) mechanisms today. Should the viewport hierarchy become exposed to DOM, this API can be explained in those terms.
 
-Thanks to the "natural" viewport, code can be hosted inside an iframe which can report the visibility of the queried element as the user scrolls the iframe (and element) into view.
+Because of this mechanism, code can be hosted inside an iframe which can report the visibility of the queried element as the user scrolls the iframe (and element) into view.
 
 ## Element Visibility
 
-The information provided by this API, combined with the default viewport query, allows a developer to easily understand when an element comes into (and out of) view. Here's how one might implement the IAB's "50% visible for more than a continuous second" policy for counting an ad impression:
+The information provided by this API, allows a developer to easily understand when an element comes into (and out of) view. Here's how one might implement the [IAB's "50% visible for more than a continuous second" policy](http://www.iab.net/viewability) for counting an ad impression:
 
 ```html
 <!-- the host document includes (or generates) an iframe to contain the ad -->
