@@ -2,7 +2,7 @@
 
 ## What's All This About?
 
-This repo outlines an API that can be used to understand movement of DOM elements relative to another element or the browser top level viewport. Changesare delivered asynchronously and is useful for understanding the visibility of elements, managing pre-loading of DOM and data, as well as deferred loading of "below the fold" page content.
+This repo outlines an API that can be used to understand movement of DOM elements relative to another element or the browser top level viewport. Changes are delivered asynchronously and is useful for understanding the visibility of elements, managing pre-loading of DOM and data, as well as deferred loading of "below the fold" page content.
 
 ## Observing Position
 
@@ -28,16 +28,18 @@ Given the opportunity to reduce CPU use, increase battery life, and eliminate ja
 
 ```js
 [Exposed=Window]
-interface IntersectionRecord {
+interface IntersectionObserverEntry {
   readonly attribute double time;
   readonly attribute DOMRect rootBounds;
   readonly attribute DOMRect boundingClientRect;
+  readonly attribute DOMRectReadOnly intersectionRect;
   readonly attribute Element target;
 };
 
 callback IntersectionCallback = void (sequence<IntersectionRecord> records, IntersectionObserver observer);
 
 dictionary IntersectionObserverInit {
+  // The root to use for intersection. If not provided, use the top-level document’s viewport.
   boolean root = null;
   // Same as margin, can be 1, 2, 3 or 4 components, possibly negative lengths.
   // "5px"
@@ -45,13 +47,10 @@ dictionary IntersectionObserverInit {
   // "-10px 5px 5px"
   // "-10px -10px 5px 5px"
   DOMString rootBoundsModifier = "0px";
-  // Whether to give callbacks only when an element starts/stops intersecting
-  // the root bounds or everytime it changes how much it intersects.
-  // Callback only fires if the element isn’t intersecting an edge of the
-  // viewport in the case that the element jumps from being entirely outside
-  // the viewport to entirely inside it.
-  // Defaults to true, a less power-hungry option.
-  boolean thresholdCallbacks = true;
+  // Threshold at which to trigger callback. callback will be invoked when
+  // intersectionRect’s area changes from greater than or equal to threshold to
+  // less than threshold, and vice versa.
+  DOMString threshold = "1px"
 };
 
 [Constructor(IntersectionCallback callback, IntersectionObserverInit options)]
@@ -59,14 +58,11 @@ interface IntersectionObserver {
   void observe(Element target);
   void unobserve(Element target);
   void disconnect();
+  sequence<IntersectionObserverEntry> takeRecords ();
 };
 ```
 
-This API uses the outermost document's inherent viewport -- i.e. "the thing the user sees" -- as the default viewport. Other queries can be formed relative to ancestor elements.
-
-The "natural" viewport isn't represented anywhere in the DOM and so queries against it are a bit magical, but this is reasonable as the information is available through other (expensive) mechanisms today. Should the viewport hierarchy become exposed to DOM, this API can be explained in those terms.
-
-Thanks to the "natural" viewport, code can be hosted inside an iframe which can report the visibility of the queried element as the user scrolls the iframe (and element) into view.
+The expected use of this API is that you create one InsersectionObserver, give it a root element and then observe one or more of the root element descendants. The callback includes change records for all elements that have crossed the threshold of the root element since the last callback. Conceptually, this gives you a rectangle  (based at the root element) that calls a callback whenever a given point in each element crosses the threshold.
 
 ## Element Visibility
 
