@@ -301,6 +301,8 @@ The IntersectionObserverInit dictionary</h3>
             callback will be invoked when intersectionRect's area changes from
             greater than or equal to any threshold to less than that threshold,
             and vice versa.
+
+            Note: "0%" is effectively "any non-zero number of pixels".
     </div>
 
 <h2 id='intersection-observer-processing-model'><dfn>Processing Model</dfn></h3>
