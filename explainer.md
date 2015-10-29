@@ -2,7 +2,7 @@
 
 ## What's All This About?
 
-This repo outlines an API that can be used to understand movement of DOM elements relative to another element or the browser top level viewport. Changes are delivered asynchronously and are useful for understanding the visibility of elements, managing pre-loading of DOM and data, as well as deferred loading of page content.
+This repo outlines an API that can be used to understand movement of DOM elements relative to another element or the browser top level viewport. Changes are delivered asynchronously and is useful for understanding the visibility of elements, managing pre-loading of DOM and data, as well as deferred loading of "below the fold" page content.
 
 ## Observing Position
 
@@ -39,19 +39,18 @@ interface IntersectionObserverEntry {
 callback IntersectionCallback = void (sequence<IntersectionObserverEntry> entries, IntersectionObserver observer);
 
 dictionary IntersectionObserverInit {
+  // The root to use for intersection. If not provided, use the top-level document’s viewport.
   Element?  root = null;
   // Same as margin, can be 1, 2, 3 or 4 components, possibly negative lengths.
   // "5px"
   // "5px 10px"
   // "-10px 5px 5px"
   // "-10px -10px 5px 5px"
-  DOMString rootMargin = "0px";
-  // Threshold at which to say the intersection has 'changed'.
-  // Can be used to only trigger when 50% (or other cutoff) of the pixels of an
-  // element have intersected the root bounds, so as not to invoke callback
-  // too frequently.
-  // Defaults to 1px.
-  DOMString threshold = "1px";
+  DOMString rootBoundsModifier = "0px";
+  // Threshold at which to trigger callback. callback will be invoked when
+  // intersectionRect’s area changes from greater than or equal to threshold to
+  // less than threshold, and vice versa.
+  DOMString threshold = "1px"
 };
 
 [Constructor(IntersectionCallback callback, IntersectionObserverInit options)]
@@ -63,11 +62,7 @@ interface IntersectionObserver {
 };
 ```
 
-This API uses the top-level document's viewport -- i.e. "the thing the user sees" -- as the default root if none is provided.
-
-This value isn't represented anywhere in the DOM, but using it is reasonable as the information is available through other (expensive) mechanisms today. Should the viewport hierarchy become exposed to DOM, this API can be explained in those terms.
-
-Because of this mechanism, code can be hosted inside an iframe which can report the visibility of the queried element as the user scrolls the iframe (and element) into view.
+The expected use of this API is that you create one InsersectionObserver, give it a root element and then observe one or more of the root element descendants. The callback includes change records for all elements that have crossed the threshold of the root element since the last callback. Conceptually, this gives you a rectangle  (based at the root element) that calls a callback whenever a given point in each element crosses the threshold.
 
 ## Element Visibility
 
