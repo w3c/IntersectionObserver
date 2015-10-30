@@ -1060,7 +1060,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-10-28">28 October 2015</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-10-29">29 October 2015</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1074,7 +1074,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 28 October 2015,
+In addition, as of 29 October 2015,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1235,14 +1235,13 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-callback-slot">[[callback]]</a></code> slot to <i>callback</i>.
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot to <i>options</i>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code>
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> slot to <i>options</i>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>
-       <li>Let <i>input</i> be a string equal to <i>options</i>. <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold">threshold</a></code> with any "%" (U+0025) characters removed.
+       <li>Let <i>input</i> be a string equal to <i>options</i>. <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold">threshold</a></code>.
        <li>Let <i>thresholds</i> be a list of integers produced by
-        running the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#rules-for-parsing-a-list-of-integers">rules for parsing a list of integers</a> algorithym on <i>input</i>.
+        running the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#rules-for-parsing-dimension-values">rules for parsing dimension values</a> algorithym on each of the values in <i>input</i>, in order. 
        <li>Sort <i>thresholds</i> in ascending order, and remove any
         values less than 0 or greater than 100.
        <li>If <i>thresholds</i> is empty, append <i>0</i> to <i>thresholds</i>.
-       <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot to
-        a <i>thresholds</i>.
+       <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot to <i>thresholds</i>.
        <li>Append <i>this</i> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a>’s <a data-link-type="dfn" href="#intersectionobservers">IntersectionObservers</a> list.
        <li>Return <i>this</i>.
       </ol>
@@ -1362,17 +1361,19 @@ is set to the third. If there are four values, they apply to the
 top, right, bottom, and left, respectively.e.g.</p>
 <pre class="example" id="example-09cef868"><a class="self-link" href="#example-09cef868"></a><code class="js">
   "5px"                // all margins set to 5px
-  "5px 10px"           // top &amp; bottom = 5px, right &aamp; left = 10px
+  "5px 10px"           // top &amp; bottom = 5px, right &amp; left = 10px
   "-10px 5px 8px"      // top = -10px, right &amp; left = 5px, bottom = 8px
   "-10px -5px 5px 8px" // top = -10px, right = -5px, bottom = 5px, left = 8px
 </code></pre>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverInit" data-dfn-type="dict-member" data-export="" id="dom-intersectionobserverinit-threshold">threshold<a class="self-link" href="#dom-intersectionobserverinit-threshold"></a></dfn>, <span> of type <a data-link-type="idl-name" href="http://heycam.github.io/webidl/#idl-DOMString">DOMString</a>, defaulting to <code>"0%"</code></span></p>
      <dd data-md="">
-      <p>Comma separated list of threshold(s) at which to trigger callback.
+      <p>Space-separated list of threshold(s) at which to trigger callback.
 callback will be invoked when intersectionRect’s area changes from
 greater than or equal to any threshold to less than that threshold,
 and vice versa.</p>
+      <p>Threshold values are of type <a class="production css" data-link-type="type" href="https://drafts.csswg.org/css-values-3/#percentage-value">&lt;percentage></a> and represent a
+percentage of the area as specified by <i>target</i>.<code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code>.</p>
       <p class="note" role="note">Note: "0%" is effectively "any non-zero number of pixels".</p>
     </dl>
    </div>
@@ -1581,6 +1582,11 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
      <li><a href="https://drafts.fxtf.org/css-masking-1/#propdef-clip-path">clip-path</a>
     </ul>
    <li>
+    <a data-link-type="biblio" href="#biblio-css-values-3">[css-values]</a> defines the following terms:
+    <ul>
+     <li><a href="https://drafts.csswg.org/css-values-3/#percentage-value">&lt;percentage></a>
+    </ul>
+   <li>
     <a data-link-type="biblio" href="#biblio-css21">[CSS21]</a> defines the following terms:
     <ul>
      <li><a href="https://drafts.csswg.org/css2/box.html#propdef-margin">margin</a>
@@ -1624,6 +1630,8 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
    <dd>Cameron McCormack; Boris Zbarsky. <a href="http://www.w3.org/TR/WebIDL-1/">WebIDL Level 1</a>. 4 August 2015. WD. URL: <a href="http://www.w3.org/TR/WebIDL-1/">http://www.w3.org/TR/WebIDL-1/</a>
    <dt id="biblio-css-masking-1"><a class="self-link" href="#biblio-css-masking-1"></a>[CSS-MASKING-1]
    <dd>Dirk Schulze; Brian Birtles; Tab Atkins Jr.. <a href="http://www.w3.org/TR/css-masking-1/">CSS Masking Module Level 1</a>. 26 August 2014. CR. URL: <a href="http://www.w3.org/TR/css-masking-1/">http://www.w3.org/TR/css-masking-1/</a>
+   <dt id="biblio-css-values"><a class="self-link" href="#biblio-css-values"></a>[CSS-VALUES]
+   <dd>Tab Atkins Jr.; Elika Etemad. <a href="http://www.w3.org/TR/css-values/">CSS Values and Units Module Level 3</a>. 11 June 2015. CR. URL: <a href="http://www.w3.org/TR/css-values/">http://www.w3.org/TR/css-values/</a>
    <dt id="biblio-cssom-view"><a class="self-link" href="#biblio-cssom-view"></a>[CSSOM-VIEW]
    <dd>Simon Pieters; Glenn Adams. <a href="http://www.w3.org/TR/cssom-view/">CSSOM View Module</a>. 17 December 2013. WD. URL: <a href="http://www.w3.org/TR/cssom-view/">http://www.w3.org/TR/cssom-view/</a>
    <dt id="biblio-dom-ls"><a class="self-link" href="#biblio-dom-ls"></a>[DOM-LS]
