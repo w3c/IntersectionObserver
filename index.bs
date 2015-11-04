@@ -433,33 +433,33 @@ Observations Steps</h4>
                     </li>
                     <li>Let <i>visibleArea</i> be <i>intersectionRect</i>'s
                      area.</li>
-                    <li>Let <i>threshold</i> be <i>visibleArea</i> divided by
+                    <li>Let <i>visibleRatio</i> be <i>visibleArea</i> divided by
                         <i>area</i> if <i>area</i> is non-zero, and <i>0</i>
                         otherwise.</li>
-                    <li>Let <i>newThresholdIndex</i> be the index of
-                        <i>observer</i>'s internal {{[[threshold]]}} slot whose
-                        value is greater than or equal to <i>threshold</i>.
-                        If <i>threshold</i> is equal to <i>0</i>, let
-                        <i>newThresholdIndex</i> be <i>-1</i>.</li>
+                    <li>Let <i>threshold</i> be the index of <i>observer</i>'s
+                        internal {{[[threshold]]}} slot whose value is greater
+                        than or equal to <i>visibleRatio</i>. If
+                        <i>visibleRatio</i> is equal to <i>0</i>, let
+                        <i>threshold</i> be <i>-1</i>.</li>
                     <li>Let <i>oldVisibleArea</i> be <i>0</i> if <i>target</i>'s
                         internal {{[[PreviousIntersectionRect]]}} slot is null
                         and <i>target</i>'s internal
                         {{[[PreviousIntersectionRect]]}} slot's area otherwise.
                         </li>
-                    <li>Let <i>oldThreshold</i> be <i>oldVisibleArea</i> divided
-                        by <i>area</i> if <i>area</i> is non-zero, and <i>0</i>
-                        otherwise.</li>
-                    <li>Let <i>oldThresholdIndex</i> be the index of
+                    <li>Let <i>oldVisibleRatio</i> be <i>oldVisibleArea</i>
+                        divided by <i>area</i> if <i>area</i> is non-zero, and
+                        <i>0</i> otherwise.</li>
+                    <li>Let <i>oldThreshold</i> be the index of
                         <i>observer</i>'s internal {{[[threshold]]}} slot whose
-                        value is greater than or equal to <i>oldThreshold</i>.
-                        If <i>oldThreshold</i> is equal to <i>0</i>, let
-                        <i>oldThresholdIndex</i> be <i>-1</i>.</li>
-                    <li>If <i>newThresholdIndex</i> does not equal
-                        <i>oldThresholdIndex</i>, <a>queue an
-                        IntersectionObserverEntry</a> for <i>unit</i>, passing
-                        in <i>observer</i>, <i>time</i>, <i>rootBounds</i>,
-                        <i>boundingClientRect</i>, <i>intersectionRect</i> and
-                        <i>target</i>.</li>
+                        value is greater than or equal to
+                        <i>oldVisibleRatio</i>. If <i>oldVisibleRatio</i> is
+                        equal to <i>0</i>, let <i>oldThreshold</i> be <i>-1</i>.
+                        </li>
+                    <li>If <i>threshold</i> does not equal <i>oldThreshold</i>,
+                        <a>queue an IntersectionObserverEntry</a> for
+                        <i>unit</i>, passing in <i>observer</i>, <i>time</i>,
+                        <i>rootBounds</i>, <i>boundingClientRect</i>,
+                        <i>intersectionRect</i> and <i>target</i>.</li>
                     <li>Assign <i>intersectionRect</i> to <i>target</i>'s
                         internal {{[[PreviousIntersectionRect]]}} slot.</li>
                 </ol>
