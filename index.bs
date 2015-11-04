@@ -21,6 +21,7 @@ urlPrefix: https://html.spec.whatwg.org/multipage/infrastructure.html; type: dfn
 url: https://heycam.github.io/webidl/#dfn-simple-exception; type:exception; text: RangeError
 url: https://heycam.github.io/webidl/#dfn-simple-exception; type:exception; text: TypeError
 urlPrefix: http://heycam.github.io/webidl/#dfn-; type:dfn; text: throw
+url: https://drafts.fxtf.org/css-masking-1/#valuedef-content-box0; type:dfn; text: content-box
 </pre>
 
 <pre class="link-defaults">
@@ -327,8 +328,8 @@ The IntersectionObserverInit dictionary</h3>
     {{Element}} objects have an internal
     <dfn attribute for=Element>\[[RegisteredIntersectionObservers]]</dfn> slot,
     which is initialized to an empty list and an internal
-    <dfn attribute for=Element>\[[PreviousIntersectionRect]]</dfn>
-    slot, which is initialized to null.
+    <dfn attribute for=Element>\[[PreviousVisibleRatio]]</dfn> slot, which is
+    initialized to 0.
 
 <h4 id='intersection-observer-private-slots'>IntersectionObserver</h4>
     {{IntersectionObserver}} objects have internal
@@ -412,10 +413,10 @@ Observations Steps</h4>
             <li>For each <i>observer</i> in <i>unit</i>'s
                 <a>IntersectionObservers</a> list</li>
             <ul>
-                <li>Let <i>rootBounds</i> be the bounds of <i>observer</i>'s
-                    internal {{[[root]]}} slot (or the top-level document's
-                    viewport), adjusted by <i>observer</i>'s internal
-                    {{[[rootMargin]]}} slot.</li>
+                <li>Let <i>rootBounds</i> be the <a>content-box</a> of
+                    <i>observer</i>'s internal {{[[root]]}} slot (or the
+                    top-level document's viewport), adjusted by
+                    <i>observer</i>'s internal {{[[rootMargin]]}} slot.</li>
                 <li>For each <i>target</i> in <i>observer</i>'s internal
                 {{[[ObservationTargets]]}} slot</li>
                 <ol>
@@ -441,14 +442,8 @@ Observations Steps</h4>
                         than or equal to <i>visibleRatio</i>. If
                         <i>visibleRatio</i> is equal to <i>0</i>, let
                         <i>threshold</i> be <i>-1</i>.</li>
-                    <li>Let <i>oldVisibleArea</i> be <i>0</i> if <i>target</i>'s
-                        internal {{[[PreviousIntersectionRect]]}} slot is null
-                        and <i>target</i>'s internal
-                        {{[[PreviousIntersectionRect]]}} slot's area otherwise.
-                        </li>
-                    <li>Let <i>oldVisibleRatio</i> be <i>oldVisibleArea</i>
-                        divided by <i>area</i> if <i>area</i> is non-zero, and
-                        <i>0</i> otherwise.</li>
+                    <li>Let <i>oldVisibleRatio</i> be set to <i>target</i>'s
+                        internal {{[[PreviousVisibleRatio]]}} slot.</li>
                     <li>Let <i>oldThreshold</i> be the index of
                         <i>observer</i>'s internal {{[[threshold]]}} slot whose
                         value is greater than or equal to
@@ -460,8 +455,8 @@ Observations Steps</h4>
                         <i>unit</i>, passing in <i>observer</i>, <i>time</i>,
                         <i>rootBounds</i>, <i>boundingClientRect</i>,
                         <i>intersectionRect</i> and <i>target</i>.</li>
-                    <li>Assign <i>intersectionRect</i> to <i>target</i>'s
-                        internal {{[[PreviousIntersectionRect]]}} slot.</li>
+                    <li>Assign <i>visibleRatio</i> to <i>target</i>'s internal
+                        {{[[PreviousVisibleRatio]]}} slot.</li>
                 </ol>
             </ul>
         </ul>
