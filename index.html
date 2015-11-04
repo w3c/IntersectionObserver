@@ -1236,8 +1236,9 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot to <i>options</i>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code>
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> slot to <i>options</i>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>
        <li>Let <i>thresholds</i> be a list equal to <i>options</i>. <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold">threshold</a></code>.
-       <li>Sort <i>thresholds</i> in ascending order, and remove any
-        values less than 0 or greater than 1.0.
+       <li>If any value in <i>thresholds</i> is less than 0.0 or
+        greater than 1.0, <a data-link-type="dfn" href="http://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">RangeError</a></code> exception.
+       <li>Sort <i>thresholds</i> in ascending order
        <li>If <i>thresholds</i> is empty, append <i>0</i> to <i>thresholds</i>.
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot to <i>thresholds</i>.
        <li>Append <i>this</i> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a>’s <a data-link-type="dfn" href="#intersectionobservers">IntersectionObservers</a> list.
@@ -1249,7 +1250,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
       <ol>
        <li>If <i>target</i> is in <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot, return.
        <li>If <i>target</i> is NOT a descendent of <i>this</i>’s
-        internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot, throw a TypeError.
+        internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot, <a data-link-type="dfn" href="http://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">TypeError</a></code>. 
        <li>Add <i>this</i> to <i>target</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot.
        <li>Add <i>target</i> to <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot.
       </ol>
@@ -1370,7 +1371,7 @@ top, right, bottom, and left, respectively.e.g.</p>
 callback will be invoked when intersectionRect’s area changes from
 greater than or equal to any threshold to less than that threshold,
 and vice versa.</p>
-      <p>Threshold values are of type <a class="production css" data-link-type="type" href="https://drafts.csswg.org/css-values-3/#percentage-value">&lt;percentage></a> and represent a
+      <p>Threshold values must be in the range of [0, 1.0] and represent a
 percentage of the area as specified by <i>target</i>.<code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code>.</p>
       <p class="note" role="note">Note: 0.0 is effectively "any non-zero number of pixels".</p>
     </dl>
@@ -1447,16 +1448,21 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
       <li>Let <i>intersectionRect</i> be the intersection of <i>boundingClientRect</i> with <i>rootBounds</i>,
                         intersected with the clip rect of each ancestor between <i>target</i> and <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot.
       <p class="issue" id="issue-8687d7ba"><a class="self-link" href="#issue-8687d7ba"></a> TBD: Do the <i>clip rect</i>s include <a class="property" data-link-type="propdesc" href="https://drafts.fxtf.org/css-masking-1/#propdef-clip-path">clip-path</a> and other clipping properties or just overflow clipping?</p>
-      <li>Let <i>area</i> be <i>intersectionRect</i>’s area.
+      <li>Let <i>area</i> be <i>boundingClientRect</i>’s area. 
+      <li>Let <i>visibleArea</i> be <i>intersectionRect</i>’s
+                     area.
+      <li>Let <i>threshold</i> be <i>visibleArea</i> divided by <i>area</i> if <i>area</i> is non-zero, and <i>0</i> otherwise.
       <li>Let <i>newThresholdIndex</i> be the index of <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot whose
-                        value is greater than or equal to <i>area</i>.
-                        If <i>area</i> is equal to <i>0</i>, let <i>newThresholdIndex</i> be <i>-1</i>.
-      <li>Let <i>oldArea</i> be <i>0</i> if <i>target</i>’s
+                        value is greater than or equal to <i>threshold</i>.
+                        If <i>threshold</i> is equal to <i>0</i>, let <i>newThresholdIndex</i> be <i>-1</i>.
+      <li>Let <i>oldVisibleArea</i> be <i>0</i> if <i>target</i>’s
                         internal <code class="idl"><a data-link-type="idl" href="#dom-element-previousintersectionrect-slot">[[PreviousIntersectionRect]]</a></code> slot is null
                         and <i>target</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-previousintersectionrect-slot">[[PreviousIntersectionRect]]</a></code> slot’s area otherwise. 
+      <li>Let <i>oldThreshold</i> be <i>oldVisibleArea</i> divided
+                        by <i>area</i> if <i>area</i> is non-zero, and <i>0</i> otherwise.
       <li>Let <i>oldThresholdIndex</i> be the index of <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot whose
-                        value is greater than or equal to <i>oldArea</i>.
-                        If <i>oldArea</i> is equal to <i>0</i>, let <i>oldThresholdIndex</i> be <i>-1</i>.
+                        value is greater than or equal to <i>oldThreshold</i>.
+                        If <i>oldThreshold</i> is equal to <i>0</i>, let <i>oldThresholdIndex</i> be <i>-1</i>.
       <li>If <i>newThresholdIndex</i> does not equal <i>oldThresholdIndex</i>, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry">queue an
                         IntersectionObserverEntry</a> for <i>unit</i>, passing
                         in <i>observer</i>, <i>time</i>, <i>rootBounds</i>, <i>boundingClientRect</i>, <i>intersectionRect</i> and <i>target</i>.
@@ -1580,11 +1586,6 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
      <li><a href="https://drafts.fxtf.org/css-masking-1/#propdef-clip-path">clip-path</a>
     </ul>
    <li>
-    <a data-link-type="biblio" href="#biblio-css-values-3">[css-values]</a> defines the following terms:
-    <ul>
-     <li><a href="https://drafts.csswg.org/css-values-3/#percentage-value">&lt;percentage></a>
-    </ul>
-   <li>
     <a data-link-type="biblio" href="#biblio-css21">[CSS21]</a> defines the following terms:
     <ul>
      <li><a href="https://drafts.csswg.org/css2/box.html#propdef-margin">margin</a>
@@ -1628,8 +1629,6 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
    <dd>Cameron McCormack; Boris Zbarsky. <a href="http://www.w3.org/TR/WebIDL-1/">WebIDL Level 1</a>. 4 August 2015. WD. URL: <a href="http://www.w3.org/TR/WebIDL-1/">http://www.w3.org/TR/WebIDL-1/</a>
    <dt id="biblio-css-masking-1"><a class="self-link" href="#biblio-css-masking-1"></a>[CSS-MASKING-1]
    <dd>Dirk Schulze; Brian Birtles; Tab Atkins Jr.. <a href="http://www.w3.org/TR/css-masking-1/">CSS Masking Module Level 1</a>. 26 August 2014. CR. URL: <a href="http://www.w3.org/TR/css-masking-1/">http://www.w3.org/TR/css-masking-1/</a>
-   <dt id="biblio-css-values"><a class="self-link" href="#biblio-css-values"></a>[CSS-VALUES]
-   <dd>Tab Atkins Jr.; Elika Etemad. <a href="http://www.w3.org/TR/css-values/">CSS Values and Units Module Level 3</a>. 11 June 2015. CR. URL: <a href="http://www.w3.org/TR/css-values/">http://www.w3.org/TR/css-values/</a>
    <dt id="biblio-cssom-view"><a class="self-link" href="#biblio-cssom-view"></a>[CSSOM-VIEW]
    <dd>Simon Pieters; Glenn Adams. <a href="http://www.w3.org/TR/cssom-view/">CSSOM View Module</a>. 17 December 2013. WD. URL: <a href="http://www.w3.org/TR/cssom-view/">http://www.w3.org/TR/cssom-view/</a>
    <dt id="biblio-dom-ls"><a class="self-link" href="#biblio-dom-ls"></a>[DOM-LS]
