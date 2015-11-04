@@ -1060,7 +1060,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-10-29">29 October 2015</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-11-04">4 November 2015</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1074,7 +1074,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 29 October 2015,
+In addition, as of 4 November 2015,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1235,11 +1235,9 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-callback-slot">[[callback]]</a></code> slot to <i>callback</i>.
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot to <i>options</i>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code>
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> slot to <i>options</i>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>
-       <li>Let <i>input</i> be a string equal to <i>options</i>. <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold">threshold</a></code>.
-       <li>Let <i>thresholds</i> be a list of integers produced by
-        running the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#rules-for-parsing-dimension-values">rules for parsing dimension values</a> algorithym on each of the values in <i>input</i>, in order. 
+       <li>Let <i>thresholds</i> be a list equal to <i>options</i>. <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold">threshold</a></code>.
        <li>Sort <i>thresholds</i> in ascending order, and remove any
-        values less than 0 or greater than 100.
+        values less than 0 or greater than 1.0.
        <li>If <i>thresholds</i> is empty, append <i>0</i> to <i>thresholds</i>.
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot to <i>thresholds</i>.
        <li>Append <i>this</i> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a>’s <a data-link-type="dfn" href="#intersectionobservers">IntersectionObservers</a> list.
@@ -1337,7 +1335,7 @@ corresponds to the time the intersection was recorded.</p>
 <pre class="idl">dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-intersectionobserverinit">IntersectionObserverInit<a class="self-link" href="#dictdef-intersectionobserverinit"></a></dfn> {
   <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>?  <a class="idl-code" data-default="null" data-link-type="dict-member" data-type="Element?  " href="#dom-intersectionobserverinit-root">root</a> = null;
   DOMString <a class="idl-code" data-default="&quot;0px&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-rootmargin">rootMargin</a> = "0px";
-  DOMString <a class="idl-code" data-default="&quot;0%&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-threshold">threshold</a> = "0%";
+  (double or sequence&lt;double>) <a class="idl-code" data-default="0" data-link-type="dict-member" data-type="(double or sequence<double>) " href="#dom-intersectionobserverinit-threshold">threshold</a> = 0;
 };
 </pre>
    <div>
@@ -1366,15 +1364,15 @@ top, right, bottom, and left, respectively.e.g.</p>
   "-10px -5px 5px 8px" // top = -10px, right = -5px, bottom = 5px, left = 8px
 </code></pre>
      <dt data-md="">
-      <p><dfn class="idl-code" data-dfn-for="IntersectionObserverInit" data-dfn-type="dict-member" data-export="" id="dom-intersectionobserverinit-threshold">threshold<a class="self-link" href="#dom-intersectionobserverinit-threshold"></a></dfn>, <span> of type <a data-link-type="idl-name" href="http://heycam.github.io/webidl/#idl-DOMString">DOMString</a>, defaulting to <code>"0%"</code></span></p>
+      <p><dfn class="idl-code" data-dfn-for="IntersectionObserverInit" data-dfn-type="dict-member" data-export="" id="dom-intersectionobserverinit-threshold">threshold<a class="self-link" href="#dom-intersectionobserverinit-threshold"></a></dfn>, <span> of type <code class="idl-code">(double or sequence&lt;double>)</code>, defaulting to <code>0</code></span></p>
      <dd data-md="">
-      <p>Space-separated list of threshold(s) at which to trigger callback.
+      <p>List of threshold(s) at which to trigger callback.
 callback will be invoked when intersectionRect’s area changes from
 greater than or equal to any threshold to less than that threshold,
 and vice versa.</p>
       <p>Threshold values are of type <a class="production css" data-link-type="type" href="https://drafts.csswg.org/css-values-3/#percentage-value">&lt;percentage></a> and represent a
 percentage of the area as specified by <i>target</i>.<code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code>.</p>
-      <p class="note" role="note">Note: "0%" is effectively "any non-zero number of pixels".</p>
+      <p class="note" role="note">Note: 0.0 is effectively "any non-zero number of pixels".</p>
     </dl>
    </div>
    <h2 class="heading settled" data-level="3" id="intersection-observer-processing-model"><span class="secno">3. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="processing-model">Processing Model<a class="self-link" href="#processing-model"></a></dfn></span><a class="self-link" href="#intersection-observer-processing-model"></a></h2>
@@ -1673,7 +1671,7 @@ dictionary <a href="#dictdef-intersectionobserverentryinit">IntersectionObserver
 dictionary <a href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a> {
   <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>?  <a class="idl-code" data-default="null" data-link-type="dict-member" data-type="Element?  " href="#dom-intersectionobserverinit-root">root</a> = null;
   DOMString <a class="idl-code" data-default="&quot;0px&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-rootmargin">rootMargin</a> = "0px";
-  DOMString <a class="idl-code" data-default="&quot;0%&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-threshold">threshold</a> = "0%";
+  (double or sequence&lt;double>) <a class="idl-code" data-default="0" data-link-type="dict-member" data-type="(double or sequence<double>) " href="#dom-intersectionobserverinit-threshold">threshold</a> = 0;
 };
 
 </pre>

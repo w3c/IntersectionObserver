@@ -147,14 +147,10 @@ The IntersectionObserver interface</h3>
                     <i>options</i>.{{root}}</li>
                 <li>Set <i>this</i>'s internal {{[[rootMargin]]}} slot to
                     <i>options</i>.{{rootMargin}}</li>
-                <li>Let <i>input</i> be a string equal to <i>options</i>.
+                <li>Let <i>thresholds</i> be a list equal to <i>options</i>.
                     {{threshold}}.</li>
-                <li>Let <i>thresholds</i> be a list of integers produced by
-                    running the <a>rules for parsing dimension values</a>
-                    algorithym on each of the values in <i>input</i>, in order.
-                    </li>
                 <li>Sort <i>thresholds</i> in ascending order, and remove any
-                    values less than 0 or greater than 100.</li>
+                    values less than 0 or greater than 1.0.</li>
                 <li>If <i>thresholds</i> is empty, append <i>0</i> to
                     <i>thresholds</i>.</li>
                 <li>Set <i>this</i>'s internal {{[[threshold]]}} slot to
@@ -267,7 +263,7 @@ The IntersectionObserverInit dictionary</h3>
       dictionary IntersectionObserverInit {
         Element?  root = null;
         DOMString rootMargin = "0px";
-        DOMString threshold = "0%";
+        (double or sequence&lt;double>) threshold = 0;
       };
     </pre>
 
@@ -298,7 +294,7 @@ The IntersectionObserverInit dictionary</h3>
             </pre>
         : <dfn>threshold</dfn>
         ::
-            Space-separated list of threshold(s) at which to trigger callback.
+            List of threshold(s) at which to trigger callback.
             callback will be invoked when intersectionRect's area changes from
             greater than or equal to any threshold to less than that threshold,
             and vice versa.
@@ -307,7 +303,7 @@ The IntersectionObserverInit dictionary</h3>
             percentage of the area as specified by
             <i>target</i>.{{Element/getBoundingClientRect()}}.
 
-            Note: "0%" is effectively "any non-zero number of pixels".
+            Note: 0.0 is effectively "any non-zero number of pixels".
     </div>
 
 <h2 id='intersection-observer-processing-model'><dfn>Processing Model</dfn></h3>
