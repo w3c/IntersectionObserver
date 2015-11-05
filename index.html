@@ -1,3 +1,4 @@
+
 <!doctype html><html lang="en">
  <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -1439,7 +1440,7 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
                 browsing contexts</a> for <i>loop</i>.
     <li>For each <i>observer</i> in <i>unit</i>’s <a data-link-type="dfn" href="#intersectionobservers">IntersectionObservers</a> list
     <ul>
-     <li>Let <i>rootBounds</i> be the <a data-link-type="dfn" href="https://drafts.fxtf.org/css-masking-1/#valuedef-content-box0">content-box</a> of <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot (or the
+     <li>Let <i>rootBounds</i> be the <a data-link-type="dfn" href="https://drafts.csswg.org/css2/box.html#content-edge">content-box</a> of <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot (or the
                     top-level document’s viewport), adjusted by <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> slot.
      <li>For each <i>target</i> in <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot
      <ol>
@@ -1451,13 +1452,14 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
       <li>Let <i>visibleArea</i> be <i>intersectionRect</i>’s
                      area.
       <li>Let <i>visibleRatio</i> be <i>visibleArea</i> divided by <i>area</i> if <i>area</i> is non-zero, and <i>0</i> otherwise.
-      <li>Let <i>threshold</i> be the index of <i>observer</i>’s
-                        internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot whose value is greater
-                        than or equal to <i>visibleRatio</i>. If <i>visibleRatio</i> is equal to <i>0</i>, let <i>threshold</i> be <i>-1</i>.
+      <li>Let <i>threshold</i> be the index of the first entry in <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot whose
+                        value is greater than or equal to <i>visibleRatio</i>.
+                        If <i>visibleRatio</i> is equal to <i>0</i>, let <i>threshold</i> be <i>-1</i>.
       <li>Let <i>oldVisibleRatio</i> be set to <i>target</i>’s
                         internal <code class="idl"><a data-link-type="idl" href="#dom-element-previousvisibleratio-slot">[[PreviousVisibleRatio]]</a></code> slot.
-      <li>Let <i>oldThreshold</i> be the index of <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot whose
-                        value is greater than or equal to <i>oldVisibleRatio</i>. If <i>oldVisibleRatio</i> is
+      <li>Let <i>oldThreshold</i> be the index of the first entry
+                        in <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot
+                        whose value is greater than or equal to <i>oldVisibleRatio</i>. If <i>oldVisibleRatio</i> is
                         equal to <i>0</i>, let <i>oldThreshold</i> be <i>-1</i>. 
       <li>If <i>threshold</i> does not equal <i>oldThreshold</i>, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</a> for <i>unit</i>, passing in <i>observer</i>, <i>time</i>, <i>rootBounds</i>, <i>boundingClientRect</i>, <i>intersectionRect</i> and <i>target</i>.
       <li>Assign <i>visibleRatio</i> to <i>target</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-previousvisibleratio-slot">[[PreviousVisibleRatio]]</a></code> slot.
