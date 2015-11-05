@@ -143,47 +143,45 @@ The IntersectionObserver interface</h3>
             new IntersectionObserver(callback, options)</dfn>
         ::
             <ol>
-                <li>Let <i>this</i> be a new {{IntersectionObserver}}
-                    object</li>
-                <li>Set <i>this</i>'s internal {{[[callback]]}} slot to
-                    <i>callback</i>.</li>
-                <li>Set <i>this</i>'s internal {{[[root]]}} slot to
-                    <i>options</i>.{{root}}</li>
-                <li>Set <i>this</i>'s internal {{[[rootMargin]]}} slot to
-                    <i>options</i>.{{rootMargin}}</li>
-                <li>Let <i>thresholds</i> be a list equal to <i>options</i>.
-                    {{threshold}}.</li>
-                <li>If any value in <i>thresholds</i> is less than 0.0 or
-                    greater than 1.0, <a>throw</a> a {{RangeError}} exception.</li>
-                <li>Sort <i>thresholds</i> in ascending order</li>
-                <li>If <i>thresholds</i> is empty, append <i>0</i> to
-                    <i>thresholds</i>.</li>
-                <li>Set <i>this</i>'s internal {{[[threshold]]}} slot to
-                    <i>thresholds</i>.</li>
-                <li>Append <i>this</i> to the
+                <li>Let |this| be a new {{IntersectionObserver}} object</li>
+                <li>Set |this|'s internal {{[[callback]]}} slot to |callback|.
+                    </li>
+                <li>Set |this|'s internal {{[[root]]}} slot to
+                    |options|.{{root}}</li>
+                <li>Set |this|'s internal {{[[rootMargin]]}} slot to
+                    |options|.{{rootMargin}}</li>
+                <li>Let |thresholds| be a list equal to
+                    |options|.{{threshold}}.</li>
+                <li>If any value in |thresholds| is less than 0.0 or greater
+                    than 1.0, <a>throw</a> a {{RangeError}} exception.</li>
+                <li>Sort |thresholds| in ascending order</li>
+                <li>If |thresholds| is empty, append <i>0</i> to |thresholds|.
+                    </li>
+                <li>Set |this|'s internal {{[[threshold]]}} slot to
+                    |thresholds|.</li>
+                <li>Append |this| to the
                     <a>unit of related similar-origin browsing contexts</a>'s
                     <a>IntersectionObservers</a> list.</li>
-                <li>Return <i>this</i>.</li>
+                <li>Return |this|.</li>
             </ol>
         : <dfn>observe(target)</dfn>
         ::
             <ol>
-                <li>If <i>target</i> is in <i>this</i>'s internal
+                <li>If |target| is in |this|'s internal
                     {{[[ObservationTargets]]}} slot, return.</li>
-                <li>If <i>target</i> is NOT a descendent of <i>this</i>'s
-                    internal {{[[root]]}} slot, <a>throw</a> a {{TypeError}}.
-                    </li>
-                <li>Add <i>this</i> to <i>target</i>'s internal
+                <li>If |target| is NOT a descendent of |this|'s internal
+                    {{[[root]]}} slot, <a>throw</a> a {{TypeError}}.</li>
+                <li>Add |this| to |target|'s internal
                     {{[[RegisteredIntersectionObservers]]}} slot.</li>
-                <li>Add <i>target</i> to <i>this</i>'s internal
-                    {{[[ObservationTargets]]}} slot.</li>
+                <li>Add |target| to |this|'s internal {{[[ObservationTargets]]}}
+                    slot.</li>
             </ol>
         : <dfn>unobserve(target)</dfn>
         ::
             <ol>
-                <li>Remove <i>this</i> from <i>target</i>'s internal
+                <li>Remove |this| from |target|'s internal
                     {{[[RegisteredIntersectionObservers]]}} slot.</li>
-                <li>Remove <i>target</i> from <i>this</i>'s internal
+                <li>Remove |target| from |this|'s internal
                     {{[[ObservationTargets]]}} slot.</li>
             </ol>
 
@@ -195,22 +193,21 @@ The IntersectionObserver interface</h3>
             separate {{IntersectionObserver}} for each <i>target</i>.
         : <dfn>disconnect()</dfn>
         ::
-            For each <i>target</i> in <i>this</i>'s internal
-            {{[[ObservationTargets]]}} slot
+            For each |target| in |this|'s internal {{[[ObservationTargets]]}}
+            slot
             <ol>
-                <li>Remove <i>this</i> from <i>target</i>'s internal
+                <li>Remove |this| from |target|'s internal
                     {{[[RegisteredIntersectionObservers]]}} slot.</li>
-                <li>Remove <i>target</i> from <i>this</i>'s internal
+                <li>Remove |target| from |this|'s internal
                     {{[[ObservationTargets]]}} slot.</li>
             </ol>
         : <dfn>takeRecords()</dfn>
         ::
             <ol>
-                <li>Let <i>queue</i> be a copy of <i>this</i>'s internal
+                <li>Let |queue| be a copy of |this|'s internal
                     {{[[QueuedEntries]]}} slot.</li>
-                <li>Clear <i>this</i>'s internal {{[[QueuedEntries]]}} slot.
-                </li>
-                <li>Return <i>queue</i>.</li>
+                <li>Clear |this|'s internal {{[[QueuedEntries]]}} slot.</li>
+                <li>Return |queue|.</li>
             </ol>
     </div>
 
@@ -347,133 +344,123 @@ The IntersectionObserverInit dictionary</h3>
 <h4 id='queue-intersection-observer-task'>Queue an Intersection Observer Task
 </h4>
     To <dfn>queue an intersection observer task</dfn> for a <a>unit of related
-    similar-origin browsing contexts</a> <i>unit</i>, run these steps:
+    similar-origin browsing contexts</a> |unit|, run these steps:
     <ol>
-        <li>If <i>unit</i>'s <a>IntersectionObserverTaskQueued</a> flag is set
-            to true, return.</li>
-        <li>Set <i>unit</i>'s <a>IntersectionObserverTaskQueued</a> flag to
-            true.</li>
-        <li>Post a task to <a>notify intersection observers</a>, or
-            enqueue a task to <a>notify intersection observers</a> in the
-            <a>list of idle request callbacks</a> with an appropriate
-            <i>timeout</i>.
+        <li>If |unit|'s <a>IntersectionObserverTaskQueued</a> flag is set to
+            true, return.</li>
+        <li>Set |unit|'s <a>IntersectionObserverTaskQueued</a> flag to true.
+            </li>
+        <li>Post a task to <a>notify intersection observers</a>, or enqueue a
+            task to <a>notify intersection observers</a> in the
+            <a>list of idle request callbacks</a> with an appropriate |timeout|.
 
-            Issue: Should we define an appropriate <i>timeout</i>?
+            Issue: Should we define an appropriate |timeout|?
         </li>
     </ol>
 
 <h4 id='notify-intersection-observers-algo'>Notify Intersection Observers</h4>
     To <dfn>notify intersection observers</dfn> for a <a>unit of related
-    similar-origin browsing contexts</a> <i>unit</i>, run these steps:
+    similar-origin browsing contexts</a> |unit|, run these steps:
     <ol>
-        <li>Set <i>unit</i>'s <a>IntersectionObserverTaskQueued</a> flag to
-            false.</li>
-        <li>Let <i>notify list</i> be a copy of <i>unit</i>'s
-            <a>IntersectionObservers</a> list.</li>
-        <li>For each {{IntersectionObserver}} object <i>observer</i> in
-            <i>notify list</i>, run these steps:</li>
+        <li>Set |unit|'s <a>IntersectionObserverTaskQueued</a> flag to false.
+            </li>
+        <li>Let |notify list| be a copy of |unit|'s <a>IntersectionObservers</a>
+            list.</li>
+        <li>For each {{IntersectionObserver}} object |observer| in
+            |notify list|, run these steps:</li>
             <ol>
-                <li>If <i>observer</i>'s internal {{[[QueuedEntries]]}} slot is
+                <li>If |observer|'s internal {{[[QueuedEntries]]}} slot is
                     empty, continue.</li>
-                <li>Let <i>queue</i> be a copy of <i>observer</i>'s internal
-                    {{[[QueuedEntries]]}} slot.
-                </li>
-                <li>Clear <i>observer</i>'s internal {{[[QueuedEntries]]}} slot.
-                </li>
-                <li>Invoke <i>callback</i> with <i>queue</i> as the first
-                argument and <i>observer</i> as the second argument and
-                <a>callback this value</a>. If this throws an exception,
-                <a>report the exception</a>.</li>
+                <li>Let |queue| be a copy of |observer|'s internal
+                    {{[[QueuedEntries]]}} slot.</li>
+                <li>Clear |observer|'s internal {{[[QueuedEntries]]}} slot.</li>
+                <li>Invoke |callback| with |queue| as the first argument and
+                    |observer| as the second argument and
+                    <a>callback this value</a>. If this throws an exception,
+                    <a>report the exception</a>.</li>
             </ol>
     </ol>
 
 <h4 id='queue-intersection-observer-entry-algo'>Queue an
 IntersectionObserverEntry</dfn></h4>
-    To <dfn>queue an IntersectionObserverEntry</dfn> for <i>observer</i>, given
-    a <a>unit of related similar-origin browsing contexts</a> <i>unit</i>,
-    <i>observer</i>, <i>time</i>, <i>rootBounds</i>, <i>boundingClientRect</i>,
-    <i>intersectionRect</i> and <i>target</i>, run these steps:
+    To <dfn>queue an IntersectionObserverEntry</dfn> for |observer|, given a
+    <a>unit of related similar-origin browsing contexts</a> |unit|, |observer|,
+    |time|, |rootBounds|, |boundingClientRect|, |intersectionRect| and |target|,
+    run these steps:
     <ol>
-        <li>Construct an {{IntersectionObserverEntry}}, passing in <i>time</i>,
-            <i>rootBounds</i>, <i>boundingClientRect</i>,
-            <i>intersectionRect</i> and <i>target</i>.</li>
-        <li>Append it to <i>observer</i>'s internal {{[[QueuedEntries]]}} slot.
+        <li>Construct an {{IntersectionObserverEntry}}, passing in |time|,
+            |rootBounds|, |boundingClientRect|, |intersectionRect| and |target|.
             </li>
-        <li><a>Queue an intersection observer task</a> for <i>unit</i>.</li>
+        <li>Append it to |observer|'s internal {{[[QueuedEntries]]}} slot.</li>
+        <li><a>Queue an intersection observer task</a> for |unit|.</li>
     </ol>
 
 <h4 id='update-intersection-observations-algo'>Run the Update Intersection
 Observations Steps</h4>
     To <dfn>run the update intersection observations steps</dfn> for an
-    <a>event loop</a> <i>loop</i> given a timestamp <i>time</i>, run these
-    steps:
-        <ul>
-            <li>Let <i>unit</i> be the <a>unit of related similar-origin
-                browsing contexts</a> for <i>loop</i>.</li>
-            <li>For each <i>observer</i> in <i>unit</i>'s
-                <a>IntersectionObservers</a> list</li>
+    <a>event loop</a> |loop| given a timestamp |time|, run these steps:
+    <ul>
+        <li>Let |unit| be the
+            <a>unit of related similar-origin browsing contexts</a> for |loop|.
+            </li>
+        <li>For each |observer| in |unit|'s <a>IntersectionObservers</a> list
+            </li>
             <ul>
-                <li>Let <i>rootBounds</i> be the <a>content-box</a> of
-                    <i>observer</i>'s internal {{[[root]]}} slot (or the
-                    top-level document's viewport), adjusted by
-                    <i>observer</i>'s internal {{[[rootMargin]]}} slot.</li>
-                <li>For each <i>target</i> in <i>observer</i>'s internal
-                {{[[ObservationTargets]]}} slot</li>
+                <li>Let |rootBounds| be the <a>content-box</a> of |observer|'s
+                    internal {{[[root]]}} slot (or the top-level document's
+                    viewport), adjusted by |observer|'s internal
+                    {{[[rootMargin]]}} slot.</li>
+                <li>For each |target| in |observer|'s internal
+                    {{[[ObservationTargets]]}} slot</li>
                 <ol>
-                    <li>Let <i>boundingClientRect</i> be the value of
-                        <i>target</i>.{{Element/getBoundingClientRect()}}.</li>
-                    <li>Let <i>intersectionRect</i> be the intersection of
-                        <i>boundingClientRect</i> with <i>rootBounds</i>,
-                        intersected with the clip rect of each ancestor between
-                        <i>target</i> and <i>observer</i>'s internal
-                        {{[[root]]}} slot.</li>
+                    <li>Let |boundingClientRect| be the value of
+                        |target|.{{Element/getBoundingClientRect()}}.</li>
+                    <li>Let |intersectionRect| be the intersection of
+                        |boundingClientRect| with |rootBounds|, intersected with
+                        the clip rect of each ancestor between |target| and
+                        |observer|'s internal {{[[root]]}} slot.</li>
 
                         Issue: TBD: Do the <i>clip rect</i>s include 'clip-path'
                         and other clipping properties or just overflow clipping?
-                    <li>Let <i>area</i> be <i>boundingClientRect</i>'s area.
-                    </li>
-                    <li>Let <i>visibleArea</i> be <i>intersectionRect</i>'s
-                     area.</li>
-                    <li>Let <i>visibleRatio</i> be <i>visibleArea</i> divided by
-                        <i>area</i> if <i>area</i> is non-zero, and <i>0</i>
-                        otherwise.</li>
-                    <li>Let <i>threshold</i> be the index of the first entry in
-                        <i>observer</i>'s internal {{[[threshold]]}} slot whose
-                        value is greater than or equal to <i>visibleRatio</i>.
-                        If <i>visibleRatio</i> is equal to <i>0</i>, let
-                        <i>threshold</i> be <i>-1</i>.</li>
-                    <li>Let <i>oldVisibleRatio</i> be set to <i>target</i>'s
-                        internal {{[[PreviousVisibleRatio]]}} slot.</li>
-                    <li>Let <i>oldThreshold</i> be the index of the first entry
-                        in <i>observer</i>'s internal {{[[threshold]]}} slot
-                        whose value is greater than or equal to
-                        <i>oldVisibleRatio</i>. If <i>oldVisibleRatio</i> is
-                        equal to <i>0</i>, let <i>oldThreshold</i> be <i>-1</i>.
+                    <li>Let |area| be |boundingClientRect|'s area.</li>
+                    <li>Let |visibleArea| be |intersectionRect|'s area.</li>
+                    <li>Let |visibleRatio| be |visibleArea| divided by |area| if
+                        |area| is non-zero, and <i>0</i> otherwise.</li>
+                    <li>Let |threshold| be the index of the first entry in
+                        |observer|'s internal {{[[threshold]]}} slot whose value
+                        is greater than or equal to |visibleRatio|. If
+                        |visibleRatio| is equal to <i>0</i>, let |threshold| be
+                        <i>-1</i>.</li>
+                    <li>Let |oldVisibleRatio| be set to |target|'s internal
+                        {{[[PreviousVisibleRatio]]}} slot.</li>
+                    <li>Let |oldThreshold| be the index of the first entry in
+                        |observer|'s internal {{[[threshold]]}} slot whose value
+                        is greater than or equal to |oldVisibleRatio|. If
+                        |oldVisibleRatio| is equal to <i>0</i>, let
+                        |oldThreshold| be <i>-1</i>.</li>
+                    <li>If |threshold| does not equal |oldThreshold|,
+                        <a>queue an IntersectionObserverEntry</a> for |unit|,
+                        passing in |observer|, |time|, |rootBounds|,
+                        |boundingClientRect|, |intersectionRect| and |target|.
                         </li>
-                    <li>If <i>threshold</i> does not equal <i>oldThreshold</i>,
-                        <a>queue an IntersectionObserverEntry</a> for
-                        <i>unit</i>, passing in <i>observer</i>, <i>time</i>,
-                        <i>rootBounds</i>, <i>boundingClientRect</i>,
-                        <i>intersectionRect</i> and <i>target</i>.</li>
-                    <li>Assign <i>visibleRatio</i> to <i>target</i>'s internal
+                    <li>Assign |visibleRatio| to |target|'s internal
                         {{[[PreviousVisibleRatio]]}} slot.</li>
                 </ol>
             </ul>
         </ul>
 
 <h4 id='removing-steps'>Removing Steps</h4>
-    Whenever the <a>removing steps</a> run with an <i>oldNode</i>, run these
-    steps:
+    Whenever the <a>removing steps</a> run with an |oldNode|, run these steps:
 
     <ol>
-        <li>Let <i>nodes</i> be <i>oldNode</i>'s <a>inclusive descendants</a>,
-            in <a>tree order</a>.
-        <li>For each <i>node</i> in <i>nodes</i>, run this substep:
+        <li>Let |nodes| be |oldNode|'s <a>inclusive descendants</a>, in
+            <a>tree order</a>.
+        <li>For each |node| in |nodes|, run this substep:
         <ol>
-            <li>For each <i>observer</i> in <i>node</i>'s internal
-                {{[[RegisteredIntersectionObservers]]}} slot, invoke
-                {{unobserve()}} on <i>observer</i>, passing in <i>node</i> as
-                <i>target</i>.</li>
+            <li>For each |observer| in |node|'s internal
+                {{[[RegisteredIntersectionObservers]]}} slot, run the
+                {{unobserve()}} algorithm on |observer|, passing in |node| as
+                |target|.</li>
         </ol>
     </ol>
 
