@@ -17,7 +17,11 @@ url: https://html.spec.whatwg.org/multipage/infrastructure.html#dfn-callback-thi
 urlPrefix: https://html.spec.whatwg.org/multipage/browsers.html; type: dfn; text: unit of related similar-origin browsing contexts
 urlPrefix: https://html.spec.whatwg.org/multipage/webappapis.html; type: dfn; text: report the exception
 urlPrefix: https://html.spec.whatwg.org/multipage/webappapis.html; type: dfn; text: event loop
-urlPrefix: https://html.spec.whatwg.org/multipage/infrastructure.html; type: dfn; text: rules for parsing a list of integers
+urlPrefix: https://html.spec.whatwg.org/multipage/infrastructure.html; type: dfn; text: rules for parsing dimension values
+url: https://heycam.github.io/webidl/#dfn-simple-exception; type:exception; text: RangeError
+url: https://heycam.github.io/webidl/#dfn-simple-exception; type:exception; text: TypeError
+urlPrefix: http://heycam.github.io/webidl/#dfn-; type:dfn; text: throw
+url: https://drafts.csswg.org/css2/box.html#content-edge; type:dfn; text: content-box
 </pre>
 
 <pre class="link-defaults">
@@ -147,17 +151,15 @@ The IntersectionObserver interface</h3>
                     <i>options</i>.{{root}}</li>
                 <li>Set <i>this</i>'s internal {{[[rootMargin]]}} slot to
                     <i>options</i>.{{rootMargin}}</li>
-                <li>Let <i>input</i> be a string equal to <i>options</i>.
-                    {{threshold}} with any "%" (U+0025) characters removed.</li>
-                <li>Let <i>thresholds</i> be a list of integers produced by
-                    running the <a>rules for parsing a list of integers</a>
-                    algorithym on <i>input</i>.</li>
-                <li>Sort <i>thresholds</i> in ascending order, and remove any
-                    values less than 0 or greater than 100.</li>
+                <li>Let <i>thresholds</i> be a list equal to <i>options</i>.
+                    {{threshold}}.</li>
+                <li>If any value in <i>thresholds</i> is less than 0.0 or
+                    greater than 1.0, <a>throw</a> a {{RangeError}} exception.</li>
+                <li>Sort <i>thresholds</i> in ascending order</li>
                 <li>If <i>thresholds</i> is empty, append <i>0</i> to
                     <i>thresholds</i>.</li>
                 <li>Set <i>this</i>'s internal {{[[threshold]]}} slot to
-                    a <i>thresholds</i>.</li>
+                    <i>thresholds</i>.</li>
                 <li>Append <i>this</i> to the
                     <a>unit of related similar-origin browsing contexts</a>'s
                     <a>IntersectionObservers</a> list.</li>
@@ -169,7 +171,8 @@ The IntersectionObserver interface</h3>
                 <li>If <i>target</i> is in <i>this</i>'s internal
                     {{[[ObservationTargets]]}} slot, return.</li>
                 <li>If <i>target</i> is NOT a descendent of <i>this</i>'s
-                    internal {{[[root]]}} slot, throw a TypeError.</li>
+                    internal {{[[root]]}} slot, <a>throw</a> a {{TypeError}}.
+                    </li>
                 <li>Add <i>this</i> to <i>target</i>'s internal
                     {{[[RegisteredIntersectionObservers]]}} slot.</li>
                 <li>Add <i>target</i> to <i>this</i>'s internal
@@ -266,7 +269,7 @@ The IntersectionObserverInit dictionary</h3>
       dictionary IntersectionObserverInit {
         Element?  root = null;
         DOMString rootMargin = "0px";
-        DOMString threshold = "0%";
+        (double or sequence&lt;double>) threshold = 0;
       };
     </pre>
 
@@ -297,10 +300,16 @@ The IntersectionObserverInit dictionary</h3>
             </pre>
         : <dfn>threshold</dfn>
         ::
-            Comma separated list of threshold(s) at which to trigger callback.
+            List of threshold(s) at which to trigger callback.
             callback will be invoked when intersectionRect's area changes from
             greater than or equal to any threshold to less than that threshold,
             and vice versa.
+
+            Threshold values must be in the range of [0, 1.0] and represent a
+            percentage of the area as specified by
+            <i>target</i>.{{Element/getBoundingClientRect()}}.
+
+            Note: 0.0 is effectively "any non-zero number of pixels".
     </div>
 
 <h2 id='intersection-observer-processing-model'><dfn>Processing Model</dfn></h3>
@@ -319,8 +328,8 @@ The IntersectionObserverInit dictionary</h3>
     {{Element}} objects have an internal
     <dfn attribute for=Element>\[[RegisteredIntersectionObservers]]</dfn> slot,
     which is initialized to an empty list and an internal
-    <dfn attribute for=Element>\[[PreviousIntersectionRect]]</dfn>
-    slot, which is initialized to null.
+    <dfn attribute for=Element>\[[PreviousVisibleRatio]]</dfn> slot, which is
+    initialized to 0.
 
 <h4 id='intersection-observer-private-slots'>IntersectionObserver</h4>
     {{IntersectionObserver}} objects have internal
@@ -404,10 +413,10 @@ Observations Steps</h4>
             <li>For each <i>observer</i> in <i>unit</i>'s
                 <a>IntersectionObservers</a> list</li>
             <ul>
-                <li>Let <i>rootBounds</i> be the bounds of <i>observer</i>'s
-                    internal {{[[root]]}} slot (or the top-level document's
-                    viewport), adjusted by <i>observer</i>'s internal
-                    {{[[rootMargin]]}} slot.</li>
+                <li>Let <i>rootBounds</i> be the <a>content-box</a> of
+                    <i>observer</i>'s internal {{[[root]]}} slot (or the
+                    top-level document's viewport), adjusted by
+                    <i>observer</i>'s internal {{[[rootMargin]]}} slot.</li>
                 <li>For each <i>target</i> in <i>observer</i>'s internal
                 {{[[ObservationTargets]]}} slot</li>
                 <ol>
@@ -421,30 +430,33 @@ Observations Steps</h4>
 
                         Issue: TBD: Do the <i>clip rect</i>s include 'clip-path'
                         and other clipping properties or just overflow clipping?
-                    <li>Let <i>area</i> be <i>intersectionRect</i>'s area.</li>
-                    <li>Let <i>newThresholdIndex</i> be the index of
+                    <li>Let <i>area</i> be <i>boundingClientRect</i>'s area.
+                    </li>
+                    <li>Let <i>visibleArea</i> be <i>intersectionRect</i>'s
+                     area.</li>
+                    <li>Let <i>visibleRatio</i> be <i>visibleArea</i> divided by
+                        <i>area</i> if <i>area</i> is non-zero, and <i>0</i>
+                        otherwise.</li>
+                    <li>Let <i>threshold</i> be the index of the first entry in
                         <i>observer</i>'s internal {{[[threshold]]}} slot whose
-                        value is greater than or equal to <i>area</i>.
-                        If <i>area</i> is equal to <i>0</i>, let
-                        <i>newThresholdIndex</i> be <i>-1</i>.</li>
-                    <li>Let <i>oldArea</i> be <i>0</i> if <i>target</i>'s
-                        internal {{[[PreviousIntersectionRect]]}} slot is null
-                        and <i>target</i>'s internal
-                        {{[[PreviousIntersectionRect]]}} slot's area otherwise.
+                        value is greater than or equal to <i>visibleRatio</i>.
+                        If <i>visibleRatio</i> is equal to <i>0</i>, let
+                        <i>threshold</i> be <i>-1</i>.</li>
+                    <li>Let <i>oldVisibleRatio</i> be set to <i>target</i>'s
+                        internal {{[[PreviousVisibleRatio]]}} slot.</li>
+                    <li>Let <i>oldThreshold</i> be the index of the first entry
+                        in <i>observer</i>'s internal {{[[threshold]]}} slot
+                        whose value is greater than or equal to
+                        <i>oldVisibleRatio</i>. If <i>oldVisibleRatio</i> is
+                        equal to <i>0</i>, let <i>oldThreshold</i> be <i>-1</i>.
                         </li>
-                    <li>Let <i>oldThresholdIndex</i> be the index of
-                        <i>observer</i>'s internal {{[[threshold]]}} slot whose
-                        value is greater than or equal to <i>oldArea</i>.
-                        If <i>oldArea</i> is equal to <i>0</i>, let
-                        <i>oldThresholdIndex</i> be <i>-1</i>.</li>
-                    <li>If <i>newThresholdIndex</i> does not equal
-                        <i>oldThresholdIndex</i>, <a>queue an
-                        IntersectionObserverEntry</a> for <i>unit</i>, passing
-                        in <i>observer</i>, <i>time</i>, <i>rootBounds</i>,
-                        <i>boundingClientRect</i>, <i>intersectionRect</i> and
-                        <i>target</i>.</li>
-                    <li>Assign <i>intersectionRect</i> to <i>target</i>'s
-                        internal {{[[PreviousIntersectionRect]]}} slot.</li>
+                    <li>If <i>threshold</i> does not equal <i>oldThreshold</i>,
+                        <a>queue an IntersectionObserverEntry</a> for
+                        <i>unit</i>, passing in <i>observer</i>, <i>time</i>,
+                        <i>rootBounds</i>, <i>boundingClientRect</i>,
+                        <i>intersectionRect</i> and <i>target</i>.</li>
+                    <li>Assign <i>visibleRatio</i> to <i>target</i>'s internal
+                        {{[[PreviousVisibleRatio]]}} slot.</li>
                 </ol>
             </ul>
         </ul>

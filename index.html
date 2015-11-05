@@ -1060,7 +1060,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-10-28">28 October 2015</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-11-04">4 November 2015</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1074,7 +1074,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 28 October 2015,
+In addition, as of 4 November 2015,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1235,14 +1235,12 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-callback-slot">[[callback]]</a></code> slot to <i>callback</i>.
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot to <i>options</i>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code>
        <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> slot to <i>options</i>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>
-       <li>Let <i>input</i> be a string equal to <i>options</i>. <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold">threshold</a></code> with any "%" (U+0025) characters removed.
-       <li>Let <i>thresholds</i> be a list of integers produced by
-        running the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#rules-for-parsing-a-list-of-integers">rules for parsing a list of integers</a> algorithym on <i>input</i>.
-       <li>Sort <i>thresholds</i> in ascending order, and remove any
-        values less than 0 or greater than 100.
+       <li>Let <i>thresholds</i> be a list equal to <i>options</i>. <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold">threshold</a></code>.
+       <li>If any value in <i>thresholds</i> is less than 0.0 or
+        greater than 1.0, <a data-link-type="dfn" href="http://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">RangeError</a></code> exception.
+       <li>Sort <i>thresholds</i> in ascending order
        <li>If <i>thresholds</i> is empty, append <i>0</i> to <i>thresholds</i>.
-       <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot to
-        a <i>thresholds</i>.
+       <li>Set <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot to <i>thresholds</i>.
        <li>Append <i>this</i> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a>’s <a data-link-type="dfn" href="#intersectionobservers">IntersectionObservers</a> list.
        <li>Return <i>this</i>.
       </ol>
@@ -1252,7 +1250,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
       <ol>
        <li>If <i>target</i> is in <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot, return.
        <li>If <i>target</i> is NOT a descendent of <i>this</i>’s
-        internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot, throw a TypeError.
+        internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot, <a data-link-type="dfn" href="http://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">TypeError</a></code>. 
        <li>Add <i>this</i> to <i>target</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot.
        <li>Add <i>target</i> to <i>this</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot.
       </ol>
@@ -1338,7 +1336,7 @@ corresponds to the time the intersection was recorded.</p>
 <pre class="idl">dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-intersectionobserverinit">IntersectionObserverInit<a class="self-link" href="#dictdef-intersectionobserverinit"></a></dfn> {
   <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>?  <a class="idl-code" data-default="null" data-link-type="dict-member" data-type="Element?  " href="#dom-intersectionobserverinit-root">root</a> = null;
   DOMString <a class="idl-code" data-default="&quot;0px&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-rootmargin">rootMargin</a> = "0px";
-  DOMString <a class="idl-code" data-default="&quot;0%&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-threshold">threshold</a> = "0%";
+  (double or sequence&lt;double>) <a class="idl-code" data-default="0" data-link-type="dict-member" data-type="(double or sequence<double>) " href="#dom-intersectionobserverinit-threshold">threshold</a> = 0;
 };
 </pre>
    <div>
@@ -1362,17 +1360,20 @@ is set to the third. If there are four values, they apply to the
 top, right, bottom, and left, respectively.e.g.</p>
 <pre class="example" id="example-09cef868"><a class="self-link" href="#example-09cef868"></a><code class="js">
   "5px"                // all margins set to 5px
-  "5px 10px"           // top &amp; bottom = 5px, right &aamp; left = 10px
+  "5px 10px"           // top &amp; bottom = 5px, right &amp; left = 10px
   "-10px 5px 8px"      // top = -10px, right &amp; left = 5px, bottom = 8px
   "-10px -5px 5px 8px" // top = -10px, right = -5px, bottom = 5px, left = 8px
 </code></pre>
      <dt data-md="">
-      <p><dfn class="idl-code" data-dfn-for="IntersectionObserverInit" data-dfn-type="dict-member" data-export="" id="dom-intersectionobserverinit-threshold">threshold<a class="self-link" href="#dom-intersectionobserverinit-threshold"></a></dfn>, <span> of type <a data-link-type="idl-name" href="http://heycam.github.io/webidl/#idl-DOMString">DOMString</a>, defaulting to <code>"0%"</code></span></p>
+      <p><dfn class="idl-code" data-dfn-for="IntersectionObserverInit" data-dfn-type="dict-member" data-export="" id="dom-intersectionobserverinit-threshold">threshold<a class="self-link" href="#dom-intersectionobserverinit-threshold"></a></dfn>, <span> of type <code class="idl-code">(double or sequence&lt;double>)</code>, defaulting to <code>0</code></span></p>
      <dd data-md="">
-      <p>Comma separated list of threshold(s) at which to trigger callback.
+      <p>List of threshold(s) at which to trigger callback.
 callback will be invoked when intersectionRect’s area changes from
 greater than or equal to any threshold to less than that threshold,
 and vice versa.</p>
+      <p>Threshold values must be in the range of [0, 1.0] and represent a
+percentage of the area as specified by <i>target</i>.<code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code>.</p>
+      <p class="note" role="note">Note: 0.0 is effectively "any non-zero number of pixels".</p>
     </dl>
    </div>
    <h2 class="heading settled" data-level="3" id="intersection-observer-processing-model"><span class="secno">3. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="processing-model">Processing Model<a class="self-link" href="#processing-model"></a></dfn></span><a class="self-link" href="#intersection-observer-processing-model"></a></h2>
@@ -1384,7 +1385,8 @@ and vice versa.</p>
     is initialized to false and an <dfn data-dfn-for="browsing context" data-dfn-type="dfn" data-lt="IntersectionObservers" data-noexport="" id="intersectionobservers"> IntersectionObservers<a class="self-link" href="#intersectionobservers"></a></dfn> list which is initially empty. 
    <h4 class="heading settled" data-level="3.1.2" id="element-private-slots"><span class="secno">3.1.2. </span><span class="content">Element</span><a class="self-link" href="#element-private-slots"></a></h4>
     <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> objects have an internal <dfn class="idl-code" data-dfn-for="Element" data-dfn-type="attribute" data-export="" id="dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]<a class="self-link" href="#dom-element-registeredintersectionobservers-slot"></a></dfn> slot,
-    which is initialized to an empty list and an internal <dfn class="idl-code" data-dfn-for="Element" data-dfn-type="attribute" data-export="" id="dom-element-previousintersectionrect-slot">[[PreviousIntersectionRect]]<a class="self-link" href="#dom-element-previousintersectionrect-slot"></a></dfn> slot, which is initialized to null. 
+    which is initialized to an empty list and an internal <dfn class="idl-code" data-dfn-for="Element" data-dfn-type="attribute" data-export="" id="dom-element-previousvisibleratio-slot">[[PreviousVisibleRatio]]<a class="self-link" href="#dom-element-previousvisibleratio-slot"></a></dfn> slot, which is
+    initialized to 0. 
    <h4 class="heading settled" data-level="3.1.3" id="intersection-observer-private-slots"><span class="secno">3.1.3. </span><span class="content">IntersectionObserver</span><a class="self-link" href="#intersection-observer-private-slots"></a></h4>
     <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> objects have internal <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-queuedentries-slot">[[QueuedEntries]]<a class="self-link" href="#dom-intersectionobserver-queuedentries-slot"></a></dfn> and <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]<a class="self-link" href="#dom-intersectionobserver-observationtargets-slot"></a></dfn> slots,
     which are initialized to empty lists and internal <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-callback-slot">[[callback]]<a class="self-link" href="#dom-intersectionobserver-callback-slot"></a></dfn>, <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-root-slot">[[root]]<a class="self-link" href="#dom-intersectionobserver-root-slot"></a></dfn>, <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-rootmargin-slot">[[rootMargin]]<a class="self-link" href="#dom-intersectionobserver-rootmargin-slot"></a></dfn> and <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-threshold-slot">[[threshold]]<a class="self-link" href="#dom-intersectionobserver-threshold-slot"></a></dfn> slots, which
@@ -1438,30 +1440,29 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
                 browsing contexts</a> for <i>loop</i>.
     <li>For each <i>observer</i> in <i>unit</i>’s <a data-link-type="dfn" href="#intersectionobservers">IntersectionObservers</a> list
     <ul>
-     <li>Let <i>rootBounds</i> be the bounds of <i>observer</i>’s
-                    internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot (or the top-level document’s
-                    viewport), adjusted by <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> slot.
+     <li>Let <i>rootBounds</i> be the <a data-link-type="dfn" href="https://drafts.csswg.org/css2/box.html#content-edge">content-box</a> of <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot (or the
+                    top-level document’s viewport), adjusted by <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> slot.
      <li>For each <i>target</i> in <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot
      <ol>
       <li>Let <i>boundingClientRect</i> be the value of <i>target</i>.<code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code>.
       <li>Let <i>intersectionRect</i> be the intersection of <i>boundingClientRect</i> with <i>rootBounds</i>,
                         intersected with the clip rect of each ancestor between <i>target</i> and <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root-slot">[[root]]</a></code> slot.
       <p class="issue" id="issue-8687d7ba"><a class="self-link" href="#issue-8687d7ba"></a> TBD: Do the <i>clip rect</i>s include <a class="property" data-link-type="propdesc" href="https://drafts.fxtf.org/css-masking-1/#propdef-clip-path">clip-path</a> and other clipping properties or just overflow clipping?</p>
-      <li>Let <i>area</i> be <i>intersectionRect</i>’s area.
-      <li>Let <i>newThresholdIndex</i> be the index of <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot whose
-                        value is greater than or equal to <i>area</i>.
-                        If <i>area</i> is equal to <i>0</i>, let <i>newThresholdIndex</i> be <i>-1</i>.
-      <li>Let <i>oldArea</i> be <i>0</i> if <i>target</i>’s
-                        internal <code class="idl"><a data-link-type="idl" href="#dom-element-previousintersectionrect-slot">[[PreviousIntersectionRect]]</a></code> slot is null
-                        and <i>target</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-previousintersectionrect-slot">[[PreviousIntersectionRect]]</a></code> slot’s area otherwise. 
-      <li>Let <i>oldThresholdIndex</i> be the index of <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot whose
-                        value is greater than or equal to <i>oldArea</i>.
-                        If <i>oldArea</i> is equal to <i>0</i>, let <i>oldThresholdIndex</i> be <i>-1</i>.
-      <li>If <i>newThresholdIndex</i> does not equal <i>oldThresholdIndex</i>, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry">queue an
-                        IntersectionObserverEntry</a> for <i>unit</i>, passing
-                        in <i>observer</i>, <i>time</i>, <i>rootBounds</i>, <i>boundingClientRect</i>, <i>intersectionRect</i> and <i>target</i>.
-      <li>Assign <i>intersectionRect</i> to <i>target</i>’s
-                        internal <code class="idl"><a data-link-type="idl" href="#dom-element-previousintersectionrect-slot">[[PreviousIntersectionRect]]</a></code> slot.
+      <li>Let <i>area</i> be <i>boundingClientRect</i>’s area. 
+      <li>Let <i>visibleArea</i> be <i>intersectionRect</i>’s
+                     area.
+      <li>Let <i>visibleRatio</i> be <i>visibleArea</i> divided by <i>area</i> if <i>area</i> is non-zero, and <i>0</i> otherwise.
+      <li>Let <i>threshold</i> be the index of the first entry in <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot whose
+                        value is greater than or equal to <i>visibleRatio</i>.
+                        If <i>visibleRatio</i> is equal to <i>0</i>, let <i>threshold</i> be <i>-1</i>.
+      <li>Let <i>oldVisibleRatio</i> be set to <i>target</i>’s
+                        internal <code class="idl"><a data-link-type="idl" href="#dom-element-previousvisibleratio-slot">[[PreviousVisibleRatio]]</a></code> slot.
+      <li>Let <i>oldThreshold</i> be the index of the first entry
+                        in <i>observer</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-threshold-slot">[[threshold]]</a></code> slot
+                        whose value is greater than or equal to <i>oldVisibleRatio</i>. If <i>oldVisibleRatio</i> is
+                        equal to <i>0</i>, let <i>oldThreshold</i> be <i>-1</i>. 
+      <li>If <i>threshold</i> does not equal <i>oldThreshold</i>, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</a> for <i>unit</i>, passing in <i>observer</i>, <i>time</i>, <i>rootBounds</i>, <i>boundingClientRect</i>, <i>intersectionRect</i> and <i>target</i>.
+      <li>Assign <i>visibleRatio</i> to <i>target</i>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-previousvisibleratio-slot">[[PreviousVisibleRatio]]</a></code> slot.
      </ol>
     </ul>
    </ul>
@@ -1536,7 +1537,7 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
    <li><a href="#dom-intersectionobservercallback-observer">observer</a><span>, in §2.1</span>
    <li><a href="#dom-intersectionobserver-observe">observe(target)</a><span>, in §2.2</span>
    <li><a href="#dom-intersectionobserver-intersectionobserver-callback-options-options">options</a><span>, in §2.2</span>
-   <li><a href="#dom-element-previousintersectionrect-slot">[[PreviousIntersectionRect]]</a><span>, in §3.1.2</span>
+   <li><a href="#dom-element-previousvisibleratio-slot">[[PreviousVisibleRatio]]</a><span>, in §3.1.2</span>
    <li><a href="#processing-model">Processing Model</a><span>, in §3</span>
    <li><a href="#queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</a><span>, in §3.2.3</span>
    <li><a href="#queue-an-intersection-observer-task">queue an intersection observer task</a><span>, in §3.2.1</span>
@@ -1664,7 +1665,7 @@ dictionary <a href="#dictdef-intersectionobserverentryinit">IntersectionObserver
 dictionary <a href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a> {
   <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>?  <a class="idl-code" data-default="null" data-link-type="dict-member" data-type="Element?  " href="#dom-intersectionobserverinit-root">root</a> = null;
   DOMString <a class="idl-code" data-default="&quot;0px&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-rootmargin">rootMargin</a> = "0px";
-  DOMString <a class="idl-code" data-default="&quot;0%&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-threshold">threshold</a> = "0%";
+  (double or sequence&lt;double>) <a class="idl-code" data-default="0" data-link-type="dict-member" data-type="(double or sequence<double>) " href="#dom-intersectionobserverinit-threshold">threshold</a> = 0;
 };
 
 </pre>

@@ -6,13 +6,13 @@ This repo outlines an API that can be used to understand movement of DOM element
 
 ## Observing Position
 
-The web’s traditional position calculation mechanisms rely on explicit queries of DOM state that are known to cause (expensive) style recalcuation and layout and, frequently, are a source of significant performance overhead due to continuous polling for this information.
+The web's traditional position calculation mechanisms rely on explicit queries of DOM state that are known to cause style recalcuation and layout and, frequently, are redundant thanks to the requirement that scripts poll for this information.
 
 A body of common practice has evolved that relies on these behaviors, however, including (but not limited to):
 
-  * Building custom pre- and deferred-loading of DOM and data.
+  * Observing the location of "below the fold" sections of content in order to lazy-load content.
   * Implementing data-bound high-performance scrolling lists which load and render subsets of data sets. These lists are a central mobile interaction idiom.
-  * Calculating element visibility. In particular, [ad networks now require reporting of ad "visibility" for monetizing impressions](http://www.iab.net/iablog/2014/03/viewability-has-arrived-what-you-need-to-know-to-see-through-this-sea-change.html). This has led to many sites abusing scroll handlers (causing jank on scroll), [synchronous layout invoking readbacks](http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html) (causing unneccessary critical work in rAF loops), and resorting to exotic plugin-based solutions for computing "true" element visibility (with all the associated overhead of the plugin architecture).
+  * Calculating element visibility. In particular, [ad networks now require reporting of ad "visibility" for monetizing impressions](http://www.iab.net/iablog/2014/03/viewability-has-arrived-what-you-need-to-know-to-see-through-this-sea-change.html). This has led to many sites abusing scroll handlers, [synchronous layout invoking readbacks](http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html), and resorting to exotic plugin-based solutions for computing "true" element visibility (as a fraction of the element's intended size).
 
 These use-cases have several common properties:
 
@@ -22,7 +22,7 @@ These use-cases have several common properties:
 
 A notable non-goal is pixel-accurate information about what was actually displayed (which can be quite difficult to obtain efficiently in certain browser architectures in the face of filters, webgl, and other features). In all of these scenarios the information is useful even when delivered at a slight delay and without perfect compositing-result data.
 
-The Intersersection Observer API addresses the above issues by giving developers a new method to asynchronously query the position of an element with respect to other elements or the global viewport. The asynchronous delivery eliminates the need for costly DOM and style queries, continuous polling, and use of custom plugins. By removing the need for these methods it allows applications to significantly reduce their CPU, GPU and energy costs.
+Given the opportunity to reduce CPU use, increase battery life, and eliminate jank it seems like a new API to simplify answering these queries is a prudent addition to the web platform.
 
 ### Proposed API
 
@@ -36,7 +36,7 @@ interface IntersectionObserverEntry {
   readonly attribute Element target;
 };
 
-callback IntersectionCallback = void (sequence<IntersectionObserverEntry> entries, IntersectionObserver observer);
+callback IntersectionCallback = void (sequence<IntersectionRecord> records, IntersectionObserver observer);
 
 dictionary IntersectionObserverInit {
   // The root to use for intersection. If not provided, use the top-level document’s viewport.
@@ -66,7 +66,7 @@ The expected use of this API is that you create one InsersectionObserver, give i
 
 ## Element Visibility
 
-The information provided by this API, allows a developer to easily understand when an element comes into (and out of) view. Here's how one might implement the [IAB's "50% visible for more than a continuous second" policy](http://www.iab.net/viewability) for counting an ad impression:
+The information provided by this API, combined with the default viewport query, allows a developer to easily understand when an element comes into (and out of) view. Here's how one might implement the IAB's "50% visible for more than a continuous second" policy for counting an ad impression:
 
 ```html
 <!-- the host document includes (or generates) an iframe to contain the ad -->
