@@ -171,15 +171,19 @@ The IntersectionObserver interface</h3>
                     {{[[ObservationTargets]]}} slot, return.</li>
                 <li>If |target| is NOT a descendent of |this|'s internal
                     {{[[root]]}} slot, <a>throw</a> a {{TypeError}}.</li>
-                <li>Add |this| to |target|'s internal
-                    {{[[RegisteredIntersectionObservers]]}} slot.</li>
+                <li>Let |intersectionObserverRegistration| be a dictionary with
+                    an <i>observer</i> property set to |this| and a
+                    <i>previousVisibleRatio</i> property set to <i>0</i>.</li>
+                <li>Append |intersectionObserverRegistration| to |target|'s
+                    internal {{[[RegisteredIntersectionObservers]]}} slot.</li>
                 <li>Add |target| to |this|'s internal {{[[ObservationTargets]]}}
                     slot.</li>
             </ol>
         : <dfn>unobserve(target)</dfn>
         ::
             <ol>
-                <li>Remove |this| from |target|'s internal
+                <li>Remove the element whose <i>observer</i> property is equal
+                    to |this| from |target|'s internal
                     {{[[RegisteredIntersectionObservers]]}} slot.</li>
                 <li>Remove |target| from |this|'s internal
                     {{[[ObservationTargets]]}} slot.</li>
@@ -196,7 +200,8 @@ The IntersectionObserver interface</h3>
             For each |target| in |this|'s internal {{[[ObservationTargets]]}}
             slot
             <ol>
-                <li>Remove |this| from |target|'s internal
+                <li>Remove the element whose <i>observer</i> property is equal
+                    to |this| from |target|'s internal
                     {{[[RegisteredIntersectionObservers]]}} slot.</li>
                 <li>Remove |target| from |this|'s internal
                     {{[[ObservationTargets]]}} slot.</li>
@@ -324,9 +329,7 @@ The IntersectionObserverInit dictionary</h3>
 <h4 id='element-private-slots'>Element</h4>
     {{Element}} objects have an internal
     <dfn attribute for=Element>\[[RegisteredIntersectionObservers]]</dfn> slot,
-    which is initialized to an empty list and an internal
-    <dfn attribute for=Element>\[[PreviousVisibleRatio]]</dfn> slot, which is
-    initialized to 0.
+    which is initialized to an empty list.
 
 <h4 id='intersection-observer-private-slots'>IntersectionObserver</h4>
     {{IntersectionObserver}} objects have internal
@@ -431,8 +434,13 @@ Observations Steps</h4>
                         is greater than or equal to |visibleRatio|. If
                         |visibleRatio| is equal to <i>0</i>, let |threshold| be
                         <i>-1</i>.</li>
-                    <li>Let |oldVisibleRatio| be set to |target|'s internal
-                        {{[[PreviousVisibleRatio]]}} slot.</li>
+                    <li>Let |intersectionObserverRegistration| be the element in
+                        |target|'s internal
+                        {{[[RegisteredIntersectionObservers]]}} slot whose
+                        <i>observer</i> property is equal to |observer|.</li>
+                    <li>Let |oldVisibleRatio| be set to
+                        |intersectionObserverRegistration|'s
+                        <i>previousVisibleRatio</i> property.</li>
                     <li>Let |oldThreshold| be the index of the first entry in
                         |observer|'s internal {{[[threshold]]}} slot whose value
                         is greater than or equal to |oldVisibleRatio|. If
@@ -443,8 +451,9 @@ Observations Steps</h4>
                         passing in |observer|, |time|, |rootBounds|,
                         |boundingClientRect|, |intersectionRect| and |target|.
                         </li>
-                    <li>Assign |visibleRatio| to |target|'s internal
-                        {{[[PreviousVisibleRatio]]}} slot.</li>
+                    <li>Assign |visibleRatio| to
+                        |intersectionObserverRegistration|'s
+                        <i>previousVisibleRatio</i> property.</li>
                 </ol>
             </ul>
         </ul>
@@ -457,10 +466,10 @@ Observations Steps</h4>
             <a>tree order</a>.
         <li>For each |node| in |nodes|, run this substep:
         <ol>
-            <li>For each |observer| in |node|'s internal
+            <li>For each |element| in |node|'s internal
                 {{[[RegisteredIntersectionObservers]]}} slot, run the
-                {{unobserve()}} algorithm on |observer|, passing in |node| as
-                |target|.</li>
+                {{unobserve()}} algorithm on |element|'s <i>observer</i>
+                property, passing in |node| as |target|.</li>
         </ol>
     </ol>
 
