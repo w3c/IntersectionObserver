@@ -21,6 +21,7 @@ urlPrefix: https://html.spec.whatwg.org/multipage/infrastructure.html; type: dfn
 url: https://heycam.github.io/webidl/#dfn-simple-exception; type:exception; text: RangeError
 url: https://heycam.github.io/webidl/#dfn-simple-exception; type:exception; text: TypeError
 urlPrefix: http://heycam.github.io/webidl/#dfn-; type:dfn; text: throw
+urlPrefix: http://heycam.github.io/webidl/#idl-; type:interface; text: double
 url: https://drafts.csswg.org/css2/box.html#content-edge; type:dfn; text: content-box
 </pre>
 
@@ -122,15 +123,18 @@ The IntersectionObserver interface</h3>
     passed to {{MutationObserver/observe()}} while in {{IntersectionObserver}}
     they are passed to the constructor. This is because for MutationObserver,
     each {{Node}} being observed could have a different set of attributes to
-    filter. For IntersectionObserver, having different {{root}},
-    {{rootMargin}} or {{threshold}} values for each <i>target</i> seems to
-    introduce more complexity without solving additional use-cases.
-    Per-{{observe()}} options could be provided in the future if V2 introduces
-    a need for it.
+    filter. For IntersectionObserver, having different
+    {{IntersectionObserverInit/root}}, {{IntersectionObserverInit/rootMargin}}
+    or {{threshold}} values for each <i>target</i> seems to introduce more
+    complexity without solving additional use-cases. Per-{{observe()}} options
+    could be provided in the future if V2 introduces a need for it.
 
     <pre class="idl">
       [Constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options), Exposed=Window]
       interface IntersectionObserver {
+        readonly attribute Element? root;
+        readonly attribute DOMString rootMargin;
+        readonly attribute sequence&lt;double> thresholds;
         void observe (Element target);
         void unobserve (Element target);
         void disconnect ();
@@ -146,10 +150,10 @@ The IntersectionObserver interface</h3>
                 <li>Let |this| be a new {{IntersectionObserver}} object</li>
                 <li>Set |this|'s internal {{[[callback]]}} slot to |callback|.
                     </li>
-                <li>Set |this|'s internal {{[[root]]}} slot to
-                    |options|.{{root}}</li>
-                <li>Set |this|'s internal {{[[rootMargin]]}} slot to
-                    |options|.{{rootMargin}}</li>
+                <li>Set |this|.{{IntersectionObserver/root}} to
+                    |options|.{{IntersectionObserverInit/root}}</li>
+                <li>Set |this|.{{IntersectionObserver/rootMargin}} to
+                    |options|.{{IntersectionObserverInit/rootMargin}}</li>
                 <li>Let |thresholds| be a list equal to
                     |options|.{{threshold}}.</li>
                 <li>If any value in |thresholds| is less than 0.0 or greater
@@ -157,8 +161,7 @@ The IntersectionObserver interface</h3>
                 <li>Sort |thresholds| in ascending order</li>
                 <li>If |thresholds| is empty, append <i>0</i> to |thresholds|.
                     </li>
-                <li>Set |this|'s internal {{[[threshold]]}} slot to
-                    |thresholds|.</li>
+                <li>Set |this|.{{thresholds}} to |thresholds|.</li>
                 <li>Append |this| to the
                     <a>unit of related similar-origin browsing contexts</a>'s
                     <a>IntersectionObservers</a> list.</li>
@@ -169,8 +172,9 @@ The IntersectionObserver interface</h3>
             <ol>
                 <li>If |target| is in |this|'s internal
                     {{[[ObservationTargets]]}} slot, return.</li>
-                <li>If |target| is NOT a descendent of |this|'s internal
-                    {{[[root]]}} slot, <a>throw</a> a {{TypeError}}.</li>
+                <li>If |target| is NOT a descendent of
+                    |this|.{{IntersectionObserver/root}}, <a>throw</a> a
+                    {{TypeError}}.</li>
                 <li>Let |intersectionObserverRegistration| be a dictionary with
                     an <i>observer</i> property set to |this| and a
                     <i>previousVisibleRatio</i> property set to <i>0</i>.</li>
@@ -215,6 +219,20 @@ The IntersectionObserver interface</h3>
                 <li>Return |queue|.</li>
             </ol>
     </div>
+    <div dfn-type="attribute" dfn-for="IntersectionObserver">
+        : <dfn>root</dfn>
+        ::
+            The <i>root</i> to use for intersection. If null, use the top-level
+            document's viewport.
+        : <dfn>rootMargin</dfn>
+        ::
+            Same as 'margin', can be 1, 2, 3 or 4 components, possibly
+            negative lengths.
+            See {{IntersectionObserverInit/rootMargin}}.
+        : <dfn>thresholds</dfn>
+        ::
+            List of thresholds at which to trigger callback.
+    </div>
 
 <h3 id="intersection-observer-entry">
 The IntersectionObserverEntry interface</h3>
@@ -247,19 +265,20 @@ The IntersectionObserverEntry interface</h3>
         ::
             The {{DOMRect}} corresponding to <i>boundingClientRect</i>
             intersected by each of <i>target</i>'s ancestors' clip rects
-            (up to but not including {{root}}), intersected with
-            {{IntersectionObserverEntry/rootBounds}}. This value represents the
-            portion of <i>target</i> actually visible within
+            (up to but not including {{IntersectionObserver/root}}), intersected
+            with {{IntersectionObserverEntry/rootBounds}}. This value
+            represents the portion of <i>target</i> actually visible within
             {{IntersectionObserverEntry/rootBounds}}.
         : <dfn>rootBounds</dfn>
         ::
-            The visible dimensions of {{root}}, adjusted by {{rootMargin}},
-            in the coordinate space of the document the root element is in. If
-            {{root}} is undefined, then use the coordinate space of the
-            top-level document.
+            The visible dimensions of {{IntersectionObserver/root}}, adjusted by
+            {{IntersectionObserver/rootMargin}}, in the coordinate space of the
+            document the root element is in. If {{IntersectionObserver/root}} is
+            undefined, then use the coordinate space of the top-level document.
         : <dfn>target</dfn>
         ::
-            The {{Element}} whose intersection with {{root}} changed.
+            The {{Element}} whose intersection with
+            {{IntersectionObserver/root}} changed.
         : <dfn>time</dfn>
         ::
             The attribute must return a {{DOMHighResTimeStamp}} that
@@ -335,12 +354,9 @@ The IntersectionObserverInit dictionary</h3>
     {{IntersectionObserver}} objects have internal
     <dfn attribute for=IntersectionObserver>\[[QueuedEntries]]</dfn> and
     <dfn attribute for=IntersectionObserver>\[[ObservationTargets]]</dfn> slots,
-    which are initialized to empty lists and internal
-    <dfn attribute for=IntersectionObserver>\[[callback]]</dfn>,
-    <dfn attribute for=IntersectionObserver>\[[root]]</dfn>,
-    <dfn attribute for=IntersectionObserver>\[[rootMargin]]</dfn> and
-    <dfn attribute for=IntersectionObserver>\[[threshold]]</dfn> slots, which
-    are initialized by <a>IntersectionObserver(callback, options)</a>.
+    which are initialized to empty lists and an internal
+    <dfn attribute for=IntersectionObserver>\[[callback]]</dfn> slot which is
+    initialized by {{IntersectionObserver(callback, options)}}</a>.
 
 <h3 id='algorithms'>Algorithms</h2>
 
@@ -409,10 +425,11 @@ Observations Steps</h4>
         <li>For each |observer| in |unit|'s <a>IntersectionObservers</a> list
             </li>
             <ul>
-                <li>Let |rootBounds| be the <a>content-box</a> of |observer|'s
-                    internal {{[[root]]}} slot (or the top-level document's
-                    viewport), adjusted by |observer|'s internal
-                    {{[[rootMargin]]}} slot.</li>
+                <li>Let |rootBounds| be the <a>content-box</a> of
+                    |observer|.{{IntersectionObserver/root}} (or the top-level
+                    document's viewport if
+                    |observer|.{{IntersectionObserver/root}} is null), adjusted
+                    by |observer|.{{IntersectionObserver/rootMargin}}.</li>
                 <li>For each |target| in |observer|'s internal
                     {{[[ObservationTargets]]}} slot</li>
                 <ol>
@@ -421,7 +438,9 @@ Observations Steps</h4>
                     <li>Let |intersectionRect| be the intersection of
                         |boundingClientRect| with |rootBounds|, intersected with
                         the clip rect of each ancestor between |target| and
-                        |observer|'s internal {{[[root]]}} slot.</li>
+                        |observer|.{{IntersectionObserver/root}} (or the
+                        top-level document's viewport if
+                        |observer|.{{IntersectionObserver/root}} is null).</li>
 
                         Issue: TBD: Do the <i>clip rect</i>s include 'clip-path'
                         and other clipping properties or just overflow clipping?
@@ -430,7 +449,7 @@ Observations Steps</h4>
                     <li>Let |visibleRatio| be |visibleArea| divided by |area| if
                         |area| is non-zero, and <i>0</i> otherwise.</li>
                     <li>Let |threshold| be the index of the first entry in
-                        |observer|'s internal {{[[threshold]]}} slot whose value
+                        |observer|.{{thresholds}} whose value
                         is greater than or equal to |visibleRatio|. If
                         |visibleRatio| is equal to <i>0</i>, let |threshold| be
                         <i>-1</i>.</li>
@@ -442,10 +461,9 @@ Observations Steps</h4>
                         |intersectionObserverRegistration|'s
                         <i>previousVisibleRatio</i> property.</li>
                     <li>Let |oldThreshold| be the index of the first entry in
-                        |observer|'s internal {{[[threshold]]}} slot whose value
-                        is greater than or equal to |oldVisibleRatio|. If
-                        |oldVisibleRatio| is equal to <i>0</i>, let
-                        |oldThreshold| be <i>-1</i>.</li>
+                        |observer|.{{thresholds}} whose value is greater than
+                        or equal to |oldVisibleRatio|. If |oldVisibleRatio| is
+                        equal to <i>0</i>, let |oldThreshold| be <i>-1</i>.</li>
                     <li>If |threshold| does not equal |oldThreshold|,
                         <a>queue an IntersectionObserverEntry</a> for |unit|,
                         passing in |observer|, |time|, |rootBounds|,
