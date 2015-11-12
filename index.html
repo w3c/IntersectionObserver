@@ -1301,8 +1301,8 @@ document’s viewport.</p>
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-rootmargin">rootMargin<a class="self-link" href="#dom-intersectionobserver-rootmargin"></a></dfn>, <span> of type <a data-link-type="idl-name" href="http://heycam.github.io/webidl/#idl-DOMString">DOMString</a>, readonly</span></p>
      <dd data-md="">
       <p>Same as <a class="property" data-link-type="propdesc" href="https://drafts.csswg.org/css2/box.html#propdef-margin">margin</a>, can be 1, 2, 3 or 4 components, possibly
-negative lengths.
-See <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>.</p>
+negative lengths. See
+IntersectionObserverInit/<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-thresholds">thresholds<a class="self-link" href="#dom-intersectionobserver-thresholds"></a></dfn>, <span> of type sequence&lt;<a data-link-type="idl-name" href="http://heycam.github.io/webidl/#idl-double">double</a>>, readonly</span></p>
      <dd data-md="">
@@ -1333,20 +1333,22 @@ dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="d
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-boundingclientrect">boundingClientRect<a class="self-link" href="#dom-intersectionobserverentry-boundingclientrect"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
-      <p>The <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a></code> corresponding to the <i>target</i>’s <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code>.</p>
+      <p>A <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by the same algorithm as that of <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> performed on <i>target</i>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-intersectionrect">intersectionRect<a class="self-link" href="#dom-intersectionobserverentry-intersectionrect"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
-      <p>The <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a></code> corresponding to <i>boundingClientRect</i> intersected by each of <i>target</i>’s ancestors' clip rects
-(up to but not including <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>), intersected
+      <p><code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a></code>, intersected by
+each of <i>target</i>’s ancestors' clip rects (up to but not
+including <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>), intersected
 with <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code>. This value
 represents the portion of <i>target</i> actually visible within <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-rootbounds">rootBounds<a class="self-link" href="#dom-intersectionobserverentry-rootbounds"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
-      <p>The visible dimensions of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>, adjusted by <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code>, in the coordinate space of the
-document the root element is in. If <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> is
-undefined, then use the coordinate space of the top-level document.</p>
+      <p>The <a data-link-type="dfn" href="https://drafts.csswg.org/css2/box.html#content-edge">content-box</a> dimensions of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>,
+adjusted by <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code>, in the coordinate
+space of the document the root element is in. If <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> is undefined, then use the coordinate
+space of the top-level document.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-target">target<a class="self-link" href="#dom-intersectionobserverentry-target"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>, readonly</span></p>
      <dd data-md="">
@@ -1465,7 +1467,7 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
                     by <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code>.
      <li>For each <var>target</var> in <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot
      <ol>
-      <li>Let <var>boundingClientRect</var> be the value of <var>target</var>.<code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code>.
+      <li>Let <var>boundingClientRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by the same algorithm as that of <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> performed on <var>target</var>.
       <li>Let <var>intersectionRect</var> be the intersection of <var>boundingClientRect</var> with <var>rootBounds</var>, intersected with
                         the clip rect of each ancestor between <var>target</var> and <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> (or the
                         top-level document’s viewport if <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> is null).
@@ -1630,7 +1632,6 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
    <li>
     <a data-link-type="biblio" href="#biblio-geometry-1">[geometry-1]</a> defines the following terms:
     <ul>
-     <li><a href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a>
      <li><a href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a>
      <li><a href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>
     </ul>

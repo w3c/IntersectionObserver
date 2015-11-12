@@ -227,8 +227,8 @@ The IntersectionObserver interface</h3>
         : <dfn>rootMargin</dfn>
         ::
             Same as 'margin', can be 1, 2, 3 or 4 components, possibly
-            negative lengths.
-            See {{IntersectionObserverInit/rootMargin}}.
+            negative lengths. See
+            IntersectionObserverInit/{{IntersectionObserverInit/rootMargin}}.
         : <dfn>thresholds</dfn>
         ::
             List of thresholds at which to trigger callback.
@@ -259,22 +259,24 @@ The IntersectionObserverEntry interface</h3>
     <div dfn-type="attribute" dfn-for="IntersectionObserverEntry">
         : <dfn>boundingClientRect</dfn>
         ::
-            The {{DOMRect}} corresponding to the <i>target</i>'s
-            {{Element/getBoundingClientRect()}}.
+            A {{DOMRectReadOnly}} obtained by the same algorithm as that of
+            {{Element}}'s {{Element/getBoundingClientRect()}} performed on
+            <i>target</i>.
         : <dfn>intersectionRect</dfn>
         ::
-            The {{DOMRect}} corresponding to <i>boundingClientRect</i>
-            intersected by each of <i>target</i>'s ancestors' clip rects
-            (up to but not including {{IntersectionObserver/root}}), intersected
+            {{IntersectionObserverEntry/boundingClientRect}}, intersected by
+            each of <i>target</i>'s ancestors' clip rects (up to but not
+            including {{IntersectionObserver/root}}), intersected
             with {{IntersectionObserverEntry/rootBounds}}. This value
             represents the portion of <i>target</i> actually visible within
             {{IntersectionObserverEntry/rootBounds}}.
         : <dfn>rootBounds</dfn>
         ::
-            The visible dimensions of {{IntersectionObserver/root}}, adjusted by
-            {{IntersectionObserver/rootMargin}}, in the coordinate space of the
-            document the root element is in. If {{IntersectionObserver/root}} is
-            undefined, then use the coordinate space of the top-level document.
+            The <a>content-box</a> dimensions of {{IntersectionObserver/root}},
+            adjusted by {{IntersectionObserver/rootMargin}}, in the coordinate
+            space of the document the root element is in. If
+            {{IntersectionObserver/root}} is undefined, then use the coordinate
+            space of the top-level document.
         : <dfn>target</dfn>
         ::
             The {{Element}} whose intersection with
@@ -433,8 +435,10 @@ Observations Steps</h4>
                 <li>For each |target| in |observer|'s internal
                     {{[[ObservationTargets]]}} slot</li>
                 <ol>
-                    <li>Let |boundingClientRect| be the value of
-                        |target|.{{Element/getBoundingClientRect()}}.</li>
+                    <li>Let |boundingClientRect| be a {{DOMRectReadOnly}}
+                        obtained by the same algorithm as that of {{Element}}'s
+                        {{Element/getBoundingClientRect()}} performed on
+                        |target|.</li>
                     <li>Let |intersectionRect| be the intersection of
                         |boundingClientRect| with |rootBounds|, intersected with
                         the clip rect of each ancestor between |target| and
