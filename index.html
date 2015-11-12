@@ -1427,9 +1427,9 @@ percentage of the area as specified by <i>target</i>.<code class="idl"><a data-l
             true, return.
     <li>Set <var>unit</var>’s <a data-link-type="dfn" href="#intersectionobservertaskqueued">IntersectionObserverTaskQueued</a> flag to true. 
     <li>
-     Post a task to <a data-link-type="dfn" href="#notify-intersection-observers">notify intersection observers</a>, or enqueue a
-            task to <a data-link-type="dfn" href="#notify-intersection-observers">notify intersection observers</a> in the <a data-link-type="dfn" href="http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks">list of idle request callbacks</a> with an appropriate <var>timeout</var>. 
-     <p class="issue" id="issue-49b6accd"><a class="self-link" href="#issue-49b6accd"></a> Should we define an appropriate <var>timeout</var>?</p>
+     Enqueue a task to <a data-link-type="dfn" href="#notify-intersection-observers">notify intersection observers</a> in the <a data-link-type="dfn" href="http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks">list of idle request callbacks</a> with a <var>timeout</var> of 100. 
+     <p class="issue" id="issue-bf9a6e46"><a class="self-link" href="#issue-bf9a6e46"></a> Should we use something other than 100ms as <var>timeout</var>?</p>
+     <p class="issue" id="issue-f67f2718"><a class="self-link" href="#issue-f67f2718"></a> Should we consider making this just post a task instead?</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.2" id="notify-intersection-observers-algo"><span class="secno">3.2.2. </span><span class="content">Notify Intersection Observers</span><a class="self-link" href="#notify-intersection-observers-algo"></a></h4>
     To <dfn data-dfn-type="dfn" data-noexport="" id="notify-intersection-observers">notify intersection observers<a class="self-link" href="#notify-intersection-observers"></a></dfn> for a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related
@@ -1700,7 +1700,8 @@ dictionary <a href="#dictdef-intersectionobserverinit">IntersectionObserverInit<
 </pre>
   <h2 class="no-num heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
-   <div class="issue"> Should we define an appropriate <var>timeout</var>?<a href="#issue-49b6accd"> ↵ </a></div>
+   <div class="issue"> Should we use something other than 100ms as <var>timeout</var>?<a href="#issue-bf9a6e46"> ↵ </a></div>
+   <div class="issue"> Should we consider making this just post a task instead?<a href="#issue-f67f2718"> ↵ </a></div>
    <div class="issue"> TBD: Do the <i>clip rect</i>s include <a class="property" data-link-type="propdesc" href="https://drafts.fxtf.org/css-masking-1/#propdef-clip-path">clip-path</a> and other clipping properties or just overflow clipping?<a href="#issue-8687d7ba"> ↵ </a></div>
   </div>
  </body>

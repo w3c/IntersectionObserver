@@ -371,11 +371,12 @@ The IntersectionObserverInit dictionary</h3>
             true, return.</li>
         <li>Set |unit|'s <a>IntersectionObserverTaskQueued</a> flag to true.
             </li>
-        <li>Post a task to <a>notify intersection observers</a>, or enqueue a
-            task to <a>notify intersection observers</a> in the
-            <a>list of idle request callbacks</a> with an appropriate |timeout|.
+        <li>Enqueue a task to <a>notify intersection observers</a> in the
+            <a>list of idle request callbacks</a> with a |timeout| of 100.
 
-            Issue: Should we define an appropriate |timeout|?
+            Issue: Should we use something other than 100ms as |timeout|?
+
+            Issue: Should we consider making this just post a task instead?
         </li>
     </ol>
 
