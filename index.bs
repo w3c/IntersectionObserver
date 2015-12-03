@@ -275,8 +275,8 @@ The IntersectionObserverEntry interface</h3>
             The <a>content-box</a> dimensions of {{IntersectionObserver/root}},
             adjusted by {{IntersectionObserver/rootMargin}}, in the coordinate
             space of the document the root element is in. If
-            {{IntersectionObserver/root}} is undefined, then use the coordinate
-            space of the top-level document.
+            {{IntersectionObserver/root}} is null, then
+            {{IntersectionObserverEntry/rootBounds}} will be null.
         : <dfn>target</dfn>
         ::
             The {{Element}} whose intersection with
@@ -489,10 +489,10 @@ Observations Steps</h4>
             <a>tree order</a>.
         <li>For each |node| in |nodes|, run this substep:
         <ol>
-            <li>For each |element| in |node|'s internal
+            <li>For each |observer| in |node|'s internal
                 {{[[RegisteredIntersectionObservers]]}} slot, run the
-                {{unobserve()}} algorithm on |element|'s <i>observer</i>
-                property, passing in |node| as |target|.</li>
+                {{unobserve()}} algorithm on |observer|,  passing in |node| as
+                |target|.</li>
         </ol>
     </ol>
 

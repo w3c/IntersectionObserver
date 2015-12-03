@@ -1060,7 +1060,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-11-11">11 November 2015</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-12-02">2 December 2015</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1074,7 +1074,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 11 November 2015,
+In addition, as of 2 December 2015,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1347,8 +1347,7 @@ represents the portion of <i>target</i> actually visible within <code class="idl
      <dd data-md="">
       <p>The <a data-link-type="dfn" href="https://drafts.csswg.org/css2/box.html#content-edge">content-box</a> dimensions of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>,
 adjusted by <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code>, in the coordinate
-space of the document the root element is in. If <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> is undefined, then use the coordinate
-space of the top-level document.</p>
+space of the document the root element is in. If <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> is null, then <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code> will be null.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-target">target<a class="self-link" href="#dom-intersectionobserverentry-target"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>, readonly</span></p>
      <dd data-md="">
@@ -1495,7 +1494,7 @@ Observations Steps</span><a class="self-link" href="#update-intersection-observa
     <li>
      For each <var>node</var> in <var>nodes</var>, run this substep: 
      <ol>
-      <li>For each <var>element</var> in <var>node</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot, run the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-unobserve">unobserve()</a></code> algorithm on <var>element</var>’s <i>observer</i> property, passing in <var>node</var> as <var>target</var>.
+      <li>For each <var>observer</var> in <var>node</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot, run the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-unobserve">unobserve()</a></code> algorithm on <var>observer</var>,  passing in <var>node</var> as <var>target</var>.
      </ol>
    </ol>
    <h3 class="heading settled" data-level="3.3" id="external-spec-integrations"><span class="secno">3.3. </span><span class="content">External Spec Integrations</span><a class="self-link" href="#external-spec-integrations"></a></h3>
