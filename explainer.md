@@ -62,7 +62,7 @@ interface IntersectionObserver {
 };
 ```
 
-The expected use of this API is that you create one InsersectionObserver, give it a root element and then observe one or more of the root element descendants. The callback includes change records for all elements that have crossed the threshold of the root element since the last callback. Conceptually, this gives you a rectangle  (based at the root element) that calls a callback whenever a given point in each element crosses the threshold.
+The expected use of this API is that you create one IntersectionObserver, give it a root element and then observe one or more of the root element descendants. The callback includes change records for all elements that have crossed the threshold of the root element since the last callback. Conceptually, this gives you a rectangle  (based at the root element) that calls a callback whenever a given point in each element crosses the threshold.
 
 ## Element Visibility
 
@@ -142,7 +142,7 @@ Many systems use data-bound lists which manage their in-view contents, recycling
 
 These systems frequently want to use different queries on the same scroll-containing viewport. Data loading can take a long time, so it is advantageous to pre-populate data stores with significantly more information than is visible. The rendered element count may display a much smaller subset of available data; only the "skirt" on each side of a scrolling area necessary to keep up with scrolling velocity (to avoid "blank" or "checkerboard" data).
 
-We can use a `IntersectionObserver` on child elements of a parent scrolling element to inform the system when to load data and recycle scrolled-out-of-view elements and stamp new content into them for rendering at the "end" of the list:
+We can use an `IntersectionObserver` on child elements of a parent scrolling element to inform the system when to load data and recycle scrolled-out-of-view elements and stamp new content into them for rendering at the "end" of the list:
 
 ```html
 <style>
@@ -209,7 +209,7 @@ Many scrollers also want to fetch even more data than what's displayed in the li
 
 ## Delay Loading
 
-Many sites like to avoid loading certain resources until they're near the viewport. This is easy to do with IntersctionObserver's:
+Many sites like to avoid loading certain resources until they're near the viewport. This is easy to do with an IntersectionObserver:
 
 ```html
 <!-- index.html -->
@@ -225,7 +225,7 @@ function query(selector) {
   return Array.prototype.slice.apply(document.querySelectorAll(selector));
 }
 
-var observer = new ItersectionObserver({
+var observer = new IntersectionObserver({
     // Pre-load items that are 1 second of scrolling outside the viewport
     rootBoundsModifier: "???"
   },
