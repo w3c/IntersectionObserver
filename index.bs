@@ -13,15 +13,21 @@ Repository: slightlyoff/IntersectionObserver
 <pre class="anchors">
 urlPrefix: http://www.w3.org/TR/hr-time/; type: typedef; text: DOMHighResTimeStamp
 url: http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks; type: dfn; text: list of idle request callbacks
-url: https://html.spec.whatwg.org/multipage/infrastructure.html#dfn-callback-this-value; type: dfn; text: callback this value
-urlPrefix: https://html.spec.whatwg.org/multipage/browsers.html; type: dfn; text: unit of related similar-origin browsing contexts
-urlPrefix: https://html.spec.whatwg.org/multipage/webappapis.html; type: dfn; text: report the exception
-urlPrefix: https://html.spec.whatwg.org/multipage/webappapis.html; type: dfn; text: event loop
-urlPrefix: https://html.spec.whatwg.org/multipage/infrastructure.html; type: dfn; text: rules for parsing dimension values
-url: https://heycam.github.io/webidl/#dfn-simple-exception; type:exception; text: RangeError
-url: https://heycam.github.io/webidl/#dfn-simple-exception; type:exception; text: TypeError
-urlPrefix: http://heycam.github.io/webidl/#dfn-; type:dfn; text: throw
-urlPrefix: http://heycam.github.io/webidl/#idl-; type:interface; text: double
+urlPrefix: https://html.spec.whatwg.org/multipage/
+    urlPrefix: browsers.html
+        type: dfn; text: unit of related similar-origin browsing contexts
+    urlPrefix: webappapis.html;
+        type: dfn; text: report the exception
+        type: dfn; text: event loop
+    urlPrefix: infrastructure.html;
+        type: dfn; text: rules for parsing dimension values
+        url: #dfn-callback-this-value; type: dfn; text: callback this value
+urlPrefix: https://heycam.github.io/webidl/
+    url: #dfn-simple-exception; type:exception;
+        text: RangeError
+        text: TypeError
+    urlPrefix: #dfn-; type:dfn; text: throw
+    urlPrefix: #idl-; type:interface; text: double
 url: https://drafts.csswg.org/css2/box.html#content-edge; type:dfn; text: content-box
 </pre>
 

@@ -1,4 +1,3 @@
-
 <!doctype html><html lang="en">
  <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -1031,7 +1030,6 @@
 .highlight .nt { color: #0077aa } /* Name.Tag */
 .highlight .nv { color: #0077aa } /* Name.Variable */
 .highlight .ow { color: #999999 } /* Operator.Word */
-.highlight .mb { color: #990055 } /* Literal.Number.Bin */
 .highlight .mf { color: #990055 } /* Literal.Number.Float */
 .highlight .mh { color: #990055 } /* Literal.Number.Hex */
 .highlight .mi { color: #990055 } /* Literal.Number.Integer */
@@ -1060,7 +1058,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-12-02">2 December 2015</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-12-07">7 December 2015</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1074,7 +1072,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 2 December 2015,
+In addition, as of 7 December 2015,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1239,7 +1237,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
        <li>Set <var>this</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code> to <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>
        <li>Let <var>thresholds</var> be a list equal to <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold">threshold</a></code>.
        <li>If any value in <var>thresholds</var> is less than 0.0 or greater
-        than 1.0, <a data-link-type="dfn" href="http://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">RangeError</a></code> exception.
+        than 1.0, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">RangeError</a></code> exception.
        <li>Sort <var>thresholds</var> in ascending order
        <li>If <var>thresholds</var> is empty, append <i>0</i> to <var>thresholds</var>. 
        <li>Set <var>this</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds">thresholds</a></code> to <var>thresholds</var>.
@@ -1251,7 +1249,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
      <dd data-md="">
       <ol>
        <li>If <var>target</var> is in <var>this</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot, return.
-       <li>If <var>target</var> is NOT a descendent of <var>this</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>, <a data-link-type="dfn" href="http://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">TypeError</a></code>.
+       <li>If <var>target</var> is NOT a descendent of <var>this</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">TypeError</a></code>.
        <li>Let <var>intersectionObserverRegistration</var> be a dictionary with
         an <i>observer</i> property set to <var>this</var> and a <i>previousVisibleRatio</i> property set to <i>0</i>.
        <li>Append <var>intersectionObserverRegistration</var> to <var>target</var>’s
@@ -1304,7 +1302,7 @@ document’s viewport.</p>
 negative lengths. See
 IntersectionObserverInit/<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>.</p>
      <dt data-md="">
-      <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-thresholds">thresholds<a class="self-link" href="#dom-intersectionobserver-thresholds"></a></dfn>, <span> of type sequence&lt;<a data-link-type="idl-name" href="http://heycam.github.io/webidl/#idl-double">double</a>>, readonly</span></p>
+      <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-thresholds">thresholds<a class="self-link" href="#dom-intersectionobserver-thresholds"></a></dfn>, <span> of type sequence&lt;<a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-double">double</a>>, readonly</span></p>
      <dd data-md="">
       <p>List of thresholds at which to trigger callback.</p>
     </dl>
