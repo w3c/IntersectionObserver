@@ -40,17 +40,20 @@ callback IntersectionCallback = void (sequence<IntersectionRecord> records, Inte
 
 dictionary IntersectionObserverInit {
   // The root to use for intersection. If not provided, use the top-level document’s viewport.
-  boolean root = null;
-  // Same as margin, can be 1, 2, 3 or 4 components, possibly negative lengths.
+  Element root = null;
+  // Same as margin, can be 1, 2, 3 or 4 components, possibly negative lengths.  If an explicit
+  // root element is specified, components may be percentages of the root element size.  If no
+  // explicit root element is specified, using a percentage here is an error.
   // "5px"
-  // "5px 10px"
+  // "10% 20%"
   // "-10px 5px 5px"
   // "-10px -10px 5px 5px"
-  DOMString rootBoundsModifier = "0px";
-  // Threshold at which to trigger callback. callback will be invoked when
-  // intersectionRect’s area changes from greater than or equal to threshold to
-  // less than threshold, and vice versa.
-  DOMString threshold = "1px"
+  DOMString rootMargin = "0px";
+  // Threshold(s) at which to trigger callback, specified as a ratio, or list of ratios,
+  // of (visible area / total area) of the observed element (hence all entries must be
+  // in the range [0, 1]).  Callback will be invoked when the visible ratio of the observed
+  // element crosses a threshold in the list.
+  (double or sequence<double>) threshold = [0];
 };
 
 [Constructor(IntersectionCallback callback, IntersectionObserverInit options)]
@@ -62,11 +65,11 @@ interface IntersectionObserver {
 };
 ```
 
-The expected use of this API is that you create one IntersectionObserver, give it a root element and then observe one or more of the root element descendants. The callback includes change records for all elements that have crossed the threshold of the root element since the last callback. Conceptually, this gives you a rectangle  (based at the root element) that calls a callback whenever a given point in each element crosses the threshold.
+The expected use of this API is that you create one IntersectionObserver, optionally giving it a root element, and then observe one or more of the root element descendants. The callback includes change records for all elements that have crossed the threshold of the root element since the last callback. Conceptually, this gives you a rectangle  (based at the root element) that calls a callback whenever a given point in each element crosses the threshold.
 
 ## Element Visibility
 
-The information provided by this API, combined with the default viewport query, allows a developer to easily understand when an element comes into (and out of) view. Here's how one might implement the IAB's "50% visible for more than a continuous second" policy for counting an ad impression:
+The information provided by this API, combined with the default viewport query, allows a developer to easily understand when an element comes into, or passes out of, view. Here's how one might implement the IAB's "50% visible for more than a continuous second" policy for counting an ad impression:
 
 ```html
 <!-- the host document includes (or generates) an iframe to contain the ad -->
@@ -78,63 +81,55 @@ The information provided by this API, combined with the default viewport query, 
 ```js
 // ads.js
 
-// These functions left as an exercise to the reader
 function logImpressionToServer() { /* ... */ }
-function boundingBoxPct(boundingClientRect) { /* ... */ }
 
-function wasVisible(element, changeRecord) {
-  if (intersectPercentage(changeRecord.rootBounds,
-           boundingBoxPct(changeRecord.boundingClientRect)) < 50) {
-    return false;
-  }
+function isVisible(boundingClientRect, intersectionRect) {
+  return ((intersectionRect.width * intersectionRect.height) /
+          (boundingClientRect.width * boundingClientRect.height) >= 0.5);
+}
 
-  var ancestor = element;
-  while (ancestor) {
-    var style = getComputedStyle(ancestor);
-    if (style.opacity != 1 || style.visibility != "visible")
-      return false;
-    if (ancestor.parentNode instanceof ShadowRoot)
-      ancestor = ancestor.host;
-    else
-      ancestor = ancestor.parentNode;
+function visibleTimerCallback(element, observer) {
+  delete element.visibleTimeout;
+  // Process any pending observations
+  processChanges(observer.takeRecords());
+  if (element.isVisible) {
+    delete element.isVisible;
+    logAddImpressionToServer();
+    observer.unobserve(element);
   }
-  return true;
-};
+}
 
 function processChanges(changes) {
   changes.forEach(function(changeRecord) {
     var element = changeRecord.element;
-    var wasVisibleInFrame = wasVisible(element);
-    if (element.visibleStartTime) {
-      if (wasVisibleInFrame) {
-        if (changeRecord.time - element.visibleStartTime > 1000) {
-          logAdImpressionToServer();
-          observer.unobserve(element);
-          return;
-        }
-      } else {
-        element.visibleStartTime = null;
+    element.isVisible = isVisible(changeRecord.boundingClientRect, changeRecord.intersectionRect);
+    if (element.isVisible) {
+      // Transitioned from hidden to visible
+      element.visibleTimeout = setTimeout(visibleTimerCallback, 1000, element, observer);
+    } else {
+      // Transitioned from visible to hidden
+      if (element.visibleTimeout) {
+        clearTimeout(element.visibleTimeout);
+        delete element.visibleTimeout;
       }
-    } else if (wasVisibleInFrame) {
-      element.visibleStartTime = changeRecord.time;
     }
   });
 }
 
 var observer = new IntersectionObserver(
-  { thresholdCallbacks: false },
-  processChanges
+  processChanges,
+  { threshold: [0.5] } 
 );
 
 var theAd = document.querySelector('#theAd');
 observer.observe(theAd);
 ```
 
-In this usage the `thresholdCallbacks` flag is set to `false` to ensure that every movement of the element is recorded while it intersects the viewport (in this case, the visible area of the tab). This higher rate of delivery might seem expensive at first glance, but note the power and performance advantages over current practice:
+If more granular information about visibility is needed, the above code may be modified to use a sequence of threshold values.  This higher rate of delivery might seem expensive at first glance, but note the power and performance advantages over current practice:
 
-  - No scroll handlers need be installed/run (a frequent source of jank)
-  - No timers are registered. Off-screen ads do not deliver any events until they come into view
-  - No timeouts, polling, synchronous layouts, or plugins are required
+  - No scroll handlers need be installed/run (a frequent source of jank).
+  - Off-screen ads do not deliver any events or set any timers until they come into view.
+  - No polling, synchronous layouts, or plugins are required; only a single timeout to record the completed ad impression.
 
 ## Data Scrollers
 
@@ -188,12 +183,10 @@ function query(selector) {
 }
 
 function init() {
-  var observer = new IntersectionObserver({
-      root: document.querySelector(".container"),
-      rootBoundsModifier: "???"
-    },
-    manageItemPositionChanges
-  );
+  // Notify when a scroll-item gets within, or moves beyond, 500px from the visible scroll surface.
+  var observer = new IntersectionObserver(manageItemPositionChanges,
+    { root: document.querySelector(".container"),
+      rootMargin: "500px 0" });
   // Set up observer on the items
   query(".inner-scroll-surface > .scroll-item").forEach(function(scrollItem) {
     observer.observe(scrollItem);
@@ -226,16 +219,15 @@ function query(selector) {
 }
 
 var observer = new IntersectionObserver({
-    // Pre-load items that are 1 second of scrolling outside the viewport
-    rootBoundsModifier: "???"
-  },
+  // Pre-load items that are within 2 multiples of the visible viewport height.
   function(changes) {
     changes.forEach(function(change) {
       var content = container.querySelector("template").content;
       container.appendChild(content);
       observer.unobserve(change.element);
     });
-  }
+  },
+  { rootMargin: "200% 0" }
 );
 
 // Set up lazy loading
@@ -246,13 +238,8 @@ query(".lazy-loaded").forEach(function(item) {
 
 ## Open Design Questions
 
-This is a sketch! We've tried to pattern the initial design [`Object.observe()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/observe) and [DOM's Mutation Observers](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver). It's unclear if we should simply make this a special form of Mutation Observer.
-
-There's a question about occlusion: should we try to lean on computed opacity or should the API only ever report quads that have no occlusion/filtering/transforms of any kind?
+This is a work in progress! We've tried to pattern the initial design after [`Object.observe()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/observe) and [DOM's Mutation Observers](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
 
 The specific timing of of change record delivery is also TBD.
 
-Is the magical top-level viewport too magical? What are the alternatives?
-
 Is it meaningful to have overdraw queries against the default viewport?
-
