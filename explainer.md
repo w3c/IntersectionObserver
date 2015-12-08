@@ -128,8 +128,8 @@ observer.observe(theAd);
 If more granular information about visibility is needed, the above code may be modified to use a sequence of threshold values.  This higher rate of delivery might seem expensive at first glance, but note the power and performance advantages over current practice:
 
   - No scroll handlers need be installed/run (a frequent source of jank).
-  - Off-screen ads do not deliver any events or set any times until they come into view.
-  - No polling, synchronous layouts, or plugins are required; only a single timeout to record the complete ad impression.
+  - Off-screen ads do not deliver any events or set any timers until they come into view.
+  - No polling, synchronous layouts, or plugins are required; only a single timeout to record the completed ad impression.
 
 ## Data Scrollers
 
