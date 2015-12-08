@@ -53,7 +53,7 @@ dictionary IntersectionObserverInit {
   // of (visible area / total area) of the observed element (hence all entries must be
   // in the range [0, 1]).  Callback will be invoked when the visible ratio of the observed
   // element crosses a threshold in the list.
-  DOMString threshold = [0];
+  (double or sequence<double>) threshold = [0];
 };
 
 [Constructor(IntersectionCallback callback, IntersectionObserverInit options)]
