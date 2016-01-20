@@ -14,505 +14,505 @@ Repository: slightlyoff/IntersectionObserver
 urlPrefix: http://www.w3.org/TR/hr-time/; type: typedef; text: DOMHighResTimeStamp
 url: http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks; type: dfn; text: list of idle request callbacks
 urlPrefix: https://html.spec.whatwg.org/multipage/
-    urlPrefix: browsers.html
-        type: dfn; text: unit of related similar-origin browsing contexts
-    urlPrefix: webappapis.html;
-        type: dfn; text: report the exception
-        type: dfn; text: event loop
-    urlPrefix: infrastructure.html;
-        type: dfn; text: rules for parsing dimension values
-        url: #dfn-callback-this-value; type: dfn; text: callback this value
+	urlPrefix: browsers.html
+		type: dfn; text: unit of related similar-origin browsing contexts
+	urlPrefix: webappapis.html;
+		type: dfn; text: report the exception
+		type: dfn; text: event loop
+	urlPrefix: infrastructure.html;
+		type: dfn; text: rules for parsing dimension values
+		url: #dfn-callback-this-value; type: dfn; text: callback this value
 urlPrefix: https://heycam.github.io/webidl/
-    url: #dfn-simple-exception; type:exception;
-        text: RangeError
-        text: TypeError
-    urlPrefix: #dfn-; type:dfn; text: throw
-    urlPrefix: #idl-; type:interface; text: double
+	url: #dfn-simple-exception; type:exception;
+		text: RangeError
+		text: TypeError
+	urlPrefix: #dfn-; type:dfn; text: throw
+	urlPrefix: #idl-; type:interface; text: double
 url: https://drafts.csswg.org/css2/box.html#content-edge; type:dfn; text: content-box
 </pre>
 
 <pre class="link-defaults">
-spec:dom-ls; type:interface; text:Document
+spec:dom-ls
+	type:interface; text:Document
+	type:dfn; for:tree; text:root
 </pre>
 
 <h2 id='introduction'>Introduction</h2>
-    The web's traditional position calculation mechanisms rely on explicit
-    queries of DOM state that are known to cause (expensive) style recalcuation
-    and layout and, frequently, are a source of significant performance
-    overhead due to continuous polling for this information.
 
-    A body of common practice has evolved that relies on these behaviors,
-    however, including (but not limited to):
-    <ul>
-      <li>Building custom pre- and deferred-loading of DOM and data.</li>
-      <li>Implementing data-bound high-performance scrolling lists which load
-          and render subsets of data sets. These lists are a central mobile
-          interaction idiom.</li>
-      <li>Calculating element visibility. In particular,
-          <a href="http://www.iab.net/iablog/2014/03/viewability-has-arrived-what-you-need-to-know-to-see-through-this-sea-change.html">
-          ad networks now require reporting of ad "visibility" for monetizing
-          impressions</a>. This has led to many sites abusing scroll handlers
-          (causing jank on scroll),
-          <a href="http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html">
-          synchronous layout invoking readbacks</a> (causing unneccessary
-          critical work in rAF loops), and resorting to exotic plugin-based
-          solutions for computing "true" element visibility (with all the
-          associated overhead of the plugin architecture).</li>
-    </ul>
+The web's traditional position calculation mechanisms
+rely on explicit queries of DOM state
+that are known to cause (expensive) style recalculation and layout
+and, frequently, are a source of significant performance overhead
+due to continuous polling for this information.
 
-    These use-cases have several common properties:
-    <ol>
-      <li>They can be represented as passive "queries" about the state of
-          individual elements with respect to some other element (or the global
-          viewport)</li>
-      <li>They do not impose hard latency requirements; that is to say, the
-          information can be delivered asynchronously (e.g. from another thread)
-          without penalty</li>
-      <li>They are poorly supported by nearly all combinations of existing web
-          platform features, requiring extraordinary developer effort despite
-          their widespread use.</li>
-    </ol>
+A body of common practice has evolved that relies on these behaviors,
+however, including (but not limited to):
 
-    A notable non-goal is pixel-accurate information about what was actually
-    displayed (which can be quite difficult to obtain efficiently in certain
-    browser architectures in the face of filters, webgl, and other features).
-    In all of these scenarios the information is useful even when delivered at
-    a slight delay and without perfect compositing-result data.
+* Building custom pre- and deferred-loading of DOM and data.
+* Implementing data-bound high-performance scrolling lists
+	which load and render subsets of data sets.
+	These lists are a central mobile interaction idiom.
+* Calculating element visibility.
+	In particular,
+	<a href="http://www.iab.net/iablog/2014/03/viewability-has-arrived-what-you-need-to-know-to-see-through-this-sea-change.html">
+	ad networks now require reporting of ad "visibility" for monetizing impressions</a>. This has led to many sites abusing scroll handlers
+	(causing jank on scroll),
+	<a href="http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html">
+	synchronous layout invoking readbacks</a>
+	(causing unneccessary critical work in rAF loops),
+	and resorting to exotic plugin-based solutions for computing "true" element visibility (with all the associated overhead of the plugin architecture).
 
-    The Intersersection Observer API addresses the above issues by giving
-    developers a new method to asynchronously query the position of an element
-    with respect to other elements or the global viewport. The asynchronous
-    delivery eliminates the need for costly DOM and style queries, continuous
-    polling, and use of custom plugins. By removing the need for these methods
-    it allows applications to significantly reduce their CPU, GPU and energy
-    costs.
+These use-cases have several common properties:
 
-    <pre class="example">
-      <code highlight="js">
-        var observer = new IntersectionObserver(function(changes) {
-          for (var i in changes) {
-            console.log(changes[i].time);               // Timestamp when the change occurred
-            console.log(changes[i].rootBounds);         // Unclipped area of root
-            console.log(changes[i].intersectionRect);   // Unclipped area of target intersected with rootBounds
-            console.log(changes[i].boundingClientRect); // target.boundingClientRect()
-            console.log(changes[i].target);             // the Element target
-          }
-        }, {});
+1. They can be represented as passive "queries"
+	about the state of individual elements
+	with respect to some other element
+	(or the global viewport)
+2. They do not impose hard latency requirements;
+	that is to say, the information can be delivered asynchronously
+	(e.g. from another thread)
+	without penalty
+3. They are poorly supported by nearly all combinations of existing web platform features,
+	requiring extraordinary developer effort despite their widespread use.
 
-        // Watch all threshold events on a specific descendant of the viewport
-        observer.observe(childElement);
+A notable non-goal is pixel-accurate information about what was actually displayed
+(which can be quite difficult to obtain efficiently in certain browser architectures
+in the face of filters, webgl, and other features).
+In all of these scenarios the information is useful
+even when delivered at a slight delay
+and without perfect compositing-result data.
 
-        observer.disconnect(); // removes all
-      </code>
-    </pre>
+The Intersersection Observer API addresses the above issues
+by giving developers a new method to asynchronously query the position of an element
+with respect to other elements or the global viewport.
+The asynchronous delivery eliminates the need for costly DOM and style queries,
+continuous polling,
+and use of custom plugins.
+By removing the need for these methods
+it allows applications to significantly reduce their CPU, GPU and energy costs.
+
+<div class="example">
+	<pre highlight="js">
+	var observer = new IntersectionObserver(function(changes) {
+		for (var i in changes) {
+			console.log(changes[i].time);               // Timestamp when the change occurred
+			console.log(changes[i].rootBounds);         // Unclipped area of root
+			console.log(changes[i].intersectionRect);   // Unclipped area of target intersected with rootBounds
+			console.log(changes[i].boundingClientRect); // target.boundingClientRect()
+			console.log(changes[i].target);             // the Element target
+		}
+	}, {});
+
+	// Watch all threshold events on a specific descendant of the viewport
+	observer.observe(childElement);
+
+	observer.disconnect(); // removes all
+	</pre>
+</div>
 
 <h2 id='intersection-observer-api'>Intersection Observer</h2>
-    The <dfn>Intersection Observer</dfn> API enables developers to understand
-    the visibility and position of DOM elements relative to a root element or
-    the top level document's viewport.
+
+The <dfn>Intersection Observer</dfn> API enables developers to understand
+the visibility and position of DOM elements relative to a root element or
+the top level document's viewport.
 
 <h3 id='intersection-observer-callback'>
 The IntersectionObserverCallback</h3>
-    <pre class="idl">
-        callback IntersectionObserverCallback = void (sequence&lt;IntersectionObserverEntry> entries, IntersectionObserver observer)
-    </pre>
-    This callback will be invoked when there are changes to <i>target</i>'s
-    intersection with <i>root</i>, as per the <a>processing model</a>.
+
+<pre class="idl">
+	callback IntersectionObserverCallback = void (sequence&lt;IntersectionObserverEntry> entries, IntersectionObserver observer)
+</pre>
+
+This callback will be invoked when there are changes to <a>target</a>'s
+intersection with <a>root</a>, as per the <a>processing model</a>.
 
 <h3 id='intersection-observer-interface'>
 The IntersectionObserver interface</h3>
-    The {{IntersectionObserver}} interface can be used to observe changes in
-    the intersection of a <i>target</i> {{Element}} and a <i>root</i>
-    {{Element}} (or the top-level document's viewport).
 
-    Note: In {{MutationObserver}}, the {{MutationObserverInit}} options are
-    passed to {{MutationObserver/observe()}} while in {{IntersectionObserver}}
-    they are passed to the constructor. This is because for MutationObserver,
-    each {{Node}} being observed could have a different set of attributes to
-    filter. For IntersectionObserver, having different
-    {{IntersectionObserverInit/root}}, {{IntersectionObserverInit/rootMargin}}
-    or {{threshold}} values for each <i>target</i> seems to introduce more
-    complexity without solving additional use-cases. Per-{{observe()}} options
-    could be provided in the future if V2 introduces a need for it.
+The {{IntersectionObserver}} interface can be used
+to observe changes in the intersection of a <a>target</a> {{Element}}
+and a <a>root</a> {{Element}}
+(or the top-level document's viewport).
 
-    <pre class="idl">
-      [Constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options), Exposed=Window]
-      interface IntersectionObserver {
-        readonly attribute Element? root;
-        readonly attribute DOMString rootMargin;
-        readonly attribute sequence&lt;double> thresholds;
-        void observe (Element target);
-        void unobserve (Element target);
-        void disconnect ();
-        sequence&lt;IntersectionObserverEntry> takeRecords ();
-      };
-    </pre>
+Note: In {{MutationObserver}},
+the {{MutationObserverInit}} options are passed to {{MutationObserver/observe()}}
+while in {{IntersectionObserver}} they are passed to the constructor.
+This is because for MutationObserver,
+each {{Node}} being observed could have a different set of attributes to filter.
+For {{IntersectionObserver}},
+having different {{IntersectionObserverInit/root}},
+{{IntersectionObserverInit/rootMargin}}
+or {{threshold}} values
+for each <a>target</a>
+seems to introduce more complexity without solving additional use-cases.
+Per-{{observe()}} options could be provided in the future if V2 introduces a need for it.
 
-    <div dfn-type="method" dfn-for="IntersectionObserver">
-        : <dfn constructor lt="IntersectionObserver(callback, options)">
-            new IntersectionObserver(callback, options)</dfn>
-        ::
-            <ol>
-                <li>Let |this| be a new {{IntersectionObserver}} object</li>
-                <li>Set |this|'s internal {{[[callback]]}} slot to |callback|.
-                    </li>
-                <li>Set |this|.{{IntersectionObserver/root}} to
-                    |options|.{{IntersectionObserverInit/root}}</li>
-                <li>Set |this|.{{IntersectionObserver/rootMargin}} to
-                    |options|.{{IntersectionObserverInit/rootMargin}}</li>
-                <li>Let |thresholds| be a list equal to
-                    |options|.{{threshold}}.</li>
-                <li>If any value in |thresholds| is less than 0.0 or greater
-                    than 1.0, <a>throw</a> a {{RangeError}} exception.</li>
-                <li>Sort |thresholds| in ascending order</li>
-                <li>If |thresholds| is empty, append <i>0</i> to |thresholds|.
-                    </li>
-                <li>Set |this|.{{thresholds}} to |thresholds|.</li>
-                <li>Append |this| to the
-                    <a>unit of related similar-origin browsing contexts</a>'s
-                    <a>IntersectionObservers</a> list.</li>
-                <li>Return |this|.</li>
-            </ol>
-        : <dfn>observe(target)</dfn>
-        ::
-            <ol>
-                <li>If |target| is in |this|'s internal
-                    {{[[ObservationTargets]]}} slot, return.</li>
-                <li>If |target| is NOT a descendent of
-                    |this|.{{IntersectionObserver/root}}, <a>throw</a> a
-                    {{TypeError}}.</li>
-                <li>Let |intersectionObserverRegistration| be a dictionary with
-                    an <i>observer</i> property set to |this| and a
-                    <i>previousVisibleRatio</i> property set to <i>0</i>.</li>
-                <li>Append |intersectionObserverRegistration| to |target|'s
-                    internal {{[[RegisteredIntersectionObservers]]}} slot.</li>
-                <li>Add |target| to |this|'s internal {{[[ObservationTargets]]}}
-                    slot.</li>
-            </ol>
-        : <dfn>unobserve(target)</dfn>
-        ::
-            <ol>
-                <li>Remove the element whose <i>observer</i> property is equal
-                    to |this| from |target|'s internal
-                    {{[[RegisteredIntersectionObservers]]}} slot.</li>
-                <li>Remove |target| from |this|'s internal
-                    {{[[ObservationTargets]]}} slot.</li>
-            </ol>
+<pre class="idl">
+[Constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options),
+ Exposed=Window]
+interface IntersectionObserver {
+	readonly attribute Element? root;
+	readonly attribute DOMString rootMargin;
+	readonly attribute sequence&lt;double> thresholds;
+	void observe (Element target);
+	void unobserve (Element target);
+	void disconnect ();
+	sequence&lt;IntersectionObserverEntry> takeRecords ();
+};
+</pre>
 
-            Note: {{MutationObserver}} does not implement {{unobserve()}}.
-            For IntersectionObserver, {{unobserve()}} addresses the lazy-loading
-            use case. After a <i>target</i> becomes visible, it does not need
-            to be tracked. It would be more work to either {{disconnect()}} all
-            <i>targets</i> and {{observe()}} the remaining ones, or create a
-            separate {{IntersectionObserver}} for each <i>target</i>.
-        : <dfn>disconnect()</dfn>
-        ::
-            For each |target| in |this|'s internal {{[[ObservationTargets]]}}
-            slot
-            <ol>
-                <li>Remove the element whose <i>observer</i> property is equal
-                    to |this| from |target|'s internal
-                    {{[[RegisteredIntersectionObservers]]}} slot.</li>
-                <li>Remove |target| from |this|'s internal
-                    {{[[ObservationTargets]]}} slot.</li>
-            </ol>
-        : <dfn>takeRecords()</dfn>
-        ::
-            <ol>
-                <li>Let |queue| be a copy of |this|'s internal
-                    {{[[QueuedEntries]]}} slot.</li>
-                <li>Clear |this|'s internal {{[[QueuedEntries]]}} slot.</li>
-                <li>Return |queue|.</li>
-            </ol>
-    </div>
-    <div dfn-type="attribute" dfn-for="IntersectionObserver">
-        : <dfn>root</dfn>
-        ::
-            The <i>root</i> to use for intersection. If null, use the top-level
-            document's viewport.
-        : <dfn>rootMargin</dfn>
-        ::
-            Same as 'margin', can be 1, 2, 3 or 4 components, possibly
-            negative lengths. See
-            IntersectionObserverInit/{{IntersectionObserverInit/rootMargin}}.
-        : <dfn>thresholds</dfn>
-        ::
-            List of thresholds at which to trigger callback.
-    </div>
+<div dfn-type="method" dfn-for="IntersectionObserver">
+	: <dfn constructor lt="IntersectionObserver(callback, options)">
+		new IntersectionObserver(callback, options)</dfn>
+	::
+		1. Let |this| be a new {{IntersectionObserver}} object
+		2. Set |this|'s internal {{[[callback]]}} slot to |callback|.
+		3. Set |this|.{{IntersectionObserver/root}} to
+			|options|.{{IntersectionObserverInit/root}}
+		4. Set |this|.{{IntersectionObserver/rootMargin}} to
+			|options|.{{IntersectionObserverInit/rootMargin}}
+		5. Let |thresholds| be a list equal to
+			|options|.{{threshold}}.
+		6. If any value in |thresholds| is less than 0.0 or greater than 1.0,
+			<a>throw</a> a {{RangeError}} exception.
+		7. Sort |thresholds| in ascending order
+		8. If |thresholds| is empty, append <code>0</code> to |thresholds|.
+		9. Set |this|.{{thresholds}} to |thresholds|.
+		10. Append |this| to the
+			<a>unit of related similar-origin browsing contexts</a>'s
+			<a>IntersectionObservers</a> list.
+		11. Return |this|.
+	: <dfn>observe(target)</dfn>
+	::
+		1. If |target| is in |this|'s internal {{[[ObservationTargets]]}} slot,
+			return.
+		2. If |target| is NOT a descendent of
+			|this|.{{IntersectionObserver/root}},
+			<a>throw</a> a {{TypeError}}.
+		3. Let |intersectionObserverRegistration| be
+			an {{IntersectionObserverRegistration}} record
+			with an {{IntersectionObserverRegistration/observer}} property set to |this|
+			and a {{previousVisibleRatio}} property set to <code>0</code>.
+		4. Append |intersectionObserverRegistration|
+			to |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
+		5. Add |target| to |this|'s internal {{[[ObservationTargets]]}} slot.
+	: <dfn>unobserve(target)</dfn>
+	::
+		1. Remove the element whose {{IntersectionObserverRegistration/observer}} property is equal to |this|
+			from |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
+		2. Remove |target| from |this|'s internal {{[[ObservationTargets]]}} slot.
+
+		Note: {{MutationObserver}} does not implement {{unobserve()}}.
+		For {{IntersectionObserver}},
+		{{unobserve()}} addresses the lazy-loading use case.
+		After a <a>target</a> becomes visible,
+		it does not need to be tracked.
+		It would be more work to either {{disconnect()}} all <a>targets</a>
+		and {{observe()}} the remaining ones,
+		or create a separate {{IntersectionObserver}} for each <a>target</a>.
+	: <dfn>disconnect()</dfn>
+	::
+		For each |target| in |this|'s internal {{[[ObservationTargets]]}} slot:
+
+		1. Remove the element whose {{IntersectionObserverRegistration/observer}} property is equal to |this|
+			from |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
+		2. Remove |target| from |this|'s internal {{[[ObservationTargets]]}} slot.
+	: <dfn>takeRecords()</dfn>
+	::
+			1. Let |queue| be a copy of |this|'s internal {{[[QueuedEntries]]}} slot.
+			2. Clear |this|'s internal {{[[QueuedEntries]]}} slot.
+			3. Return |queue|.
+</div>
+
+<div dfn-type="attribute" dfn-for="IntersectionObserver">
+	: <dfn>root</dfn>
+	::
+		The <a>root</a> to use for intersection.
+		If null, use the top-level document's viewport.
+	: <dfn>rootMargin</dfn>
+	::
+		Same as 'margin',
+		can be 1, 2, 3 or 4 components,
+		possibly negative lengths.
+		See IntersectionObserverInit/{{IntersectionObserverInit/rootMargin}}.
+	: <dfn>thresholds</dfn>
+	::
+		List of thresholds at which to trigger callback.
+</div>
 
 <h3 id="intersection-observer-entry">
 The IntersectionObserverEntry interface</h3>
-    <pre class="idl">
-      [Constructor(IntersectionObserverEntryInit intersectionObserverEntryInit)]
-      interface IntersectionObserverEntry {
-        readonly attribute DOMHighResTimeStamp time;
-        readonly attribute DOMRectReadOnly rootBounds;
-        readonly attribute DOMRectReadOnly boundingClientRect;
-        readonly attribute DOMRectReadOnly intersectionRect;
-        readonly attribute Element target;
-      };
 
-      dictionary IntersectionObserverEntryInit {
-        required DOMHighResTimeStamp time;
-        required DOMRectInit rootBounds;
-        required DOMRectInit boundingClientRect;
-        required DOMRectInit intersectionRect;
-        required Element target;
-      };
+<pre class="idl">
+[Constructor(IntersectionObserverEntryInit intersectionObserverEntryInit)]
+interface IntersectionObserverEntry {
+	readonly attribute DOMHighResTimeStamp time;
+	readonly attribute DOMRectReadOnly rootBounds;
+	readonly attribute DOMRectReadOnly boundingClientRect;
+	readonly attribute DOMRectReadOnly intersectionRect;
+	readonly attribute Element target;
+};
 
-    </pre>
+dictionary IntersectionObserverEntryInit {
+	required DOMHighResTimeStamp time;
+	required DOMRectInit rootBounds;
+	required DOMRectInit boundingClientRect;
+	required DOMRectInit intersectionRect;
+	required Element target;
+};
+</pre>
 
-    <div dfn-type="attribute" dfn-for="IntersectionObserverEntry">
-        : <dfn>boundingClientRect</dfn>
-        ::
-            A {{DOMRectReadOnly}} obtained by the same algorithm as that of
-            {{Element}}'s {{Element/getBoundingClientRect()}} performed on
-            <i>target</i>.
-        : <dfn>intersectionRect</dfn>
-        ::
-            {{IntersectionObserverEntry/boundingClientRect}}, intersected by
-            each of <i>target</i>'s ancestors' clip rects (up to but not
-            including {{IntersectionObserver/root}}), intersected
-            with {{IntersectionObserverEntry/rootBounds}}. This value
-            represents the portion of <i>target</i> actually visible within
-            {{IntersectionObserverEntry/rootBounds}}.
-        : <dfn>rootBounds</dfn>
-        ::
-            The <a>content-box</a> dimensions of {{IntersectionObserver/root}},
-            adjusted by {{IntersectionObserver/rootMargin}}, in the coordinate
-            space of the document the root element is in. If
-            {{IntersectionObserver/root}} is null, then
-            {{IntersectionObserverEntry/rootBounds}} will be null.
-        : <dfn>target</dfn>
-        ::
-            The {{Element}} whose intersection with
-            {{IntersectionObserver/root}} changed.
-        : <dfn>time</dfn>
-        ::
-            The attribute must return a {{DOMHighResTimeStamp}} that
-            corresponds to the time the intersection was recorded.
-    </div>
+<div dfn-type="attribute" dfn-for="IntersectionObserverEntry">
+	: <dfn>boundingClientRect</dfn>
+	::
+		A {{DOMRectReadOnly}} obtained by the same algorithm
+		as that of {{Element}}'s {{Element/getBoundingClientRect()}}
+		performed on <a>target</a>.
+	: <dfn>intersectionRect</dfn>
+	::
+		{{IntersectionObserverEntry/boundingClientRect}},
+		intersected by each of <a>target</a>'s ancestors' clip rects
+		(up to but not including {{IntersectionObserver/root}}),
+		intersected with {{IntersectionObserverEntry/rootBounds}}.
+		This value represents the portion of <a>target</a> actually visible
+		within {{IntersectionObserverEntry/rootBounds}}.
+	: <dfn>rootBounds</dfn>
+	::
+		The <a>content-box</a> dimensions of {{IntersectionObserver/root}},
+		adjusted by {{IntersectionObserver/rootMargin}},
+		in the coordinate space of the document the root element is in.
+		If {{IntersectionObserver/root}} is null,
+		then {{IntersectionObserverEntry/rootBounds}} will be null.
+	: <dfn>target</dfn>
+	::
+		The {{Element}} whose intersection with {{IntersectionObserver/root}} changed.
+	: <dfn>time</dfn>
+	::
+		The attribute must return a {{DOMHighResTimeStamp}}
+		that corresponds to the time the intersection was recorded.
+</div>
+
 <h3 id="intersection-observer-init">
 The IntersectionObserverInit dictionary</h3>
-    <pre class="idl">
-      dictionary IntersectionObserverInit {
-        Element?  root = null;
-        DOMString rootMargin = "0px";
-        (double or sequence&lt;double>) threshold = 0;
-      };
-    </pre>
 
-    <div dfn-type="dict-member" dfn-for="IntersectionObserverInit">
-        : <dfn>root</dfn>
-        ::
-            The <i>root</i> to use for intersection. If not provided, use the
-            top-level document's viewport.
-        : <dfn>rootMargin</dfn>
-        ::
-            Same as 'margin', can be 1, 2, 3 or 4 components, possibly
-            negative lengths.
+<pre class="idl">
+dictionary IntersectionObserverInit {
+	Element?  root = null;
+	DOMString rootMargin = "0px";
+	(double or sequence&lt;double>) threshold = 0;
+};
+</pre>
 
-            If there is only one component value, it applies to all sides.
-            If there are two values, the top and bottom margins are set to
-            the first value and the right and left margins are set to the
-            second. If there are three values, the top is set to the first
-            value, the left and right are set to the second, and the bottom
-            is set to the third. If there are four values, they apply to the
-            top, right, bottom, and left, respectively.e.g.
-            <pre class="example">
-              <code class="js">
-                "5px"                // all margins set to 5px
-                "5px 10px"           // top & bottom = 5px, right & left = 10px
-                "-10px 5px 8px"      // top = -10px, right & left = 5px, bottom = 8px
-                "-10px -5px 5px 8px" // top = -10px, right = -5px, bottom = 5px, left = 8px
-              </code>
-            </pre>
-        : <dfn>threshold</dfn>
-        ::
-            List of threshold(s) at which to trigger callback.
-            callback will be invoked when intersectionRect's area changes from
-            greater than or equal to any threshold to less than that threshold,
-            and vice versa.
+<div dfn-type="dict-member" dfn-for="IntersectionObserverInit">
+	: <dfn>root</dfn>
+	::
+		The <a>root</a> to use for intersection. If not provided, use the
+		top-level document's viewport.
+	: <dfn>rootMargin</dfn>
+	::
+		Same as 'margin', can be 1, 2, 3 or 4 components, possibly
+		negative lengths.
 
-            Threshold values must be in the range of [0, 1.0] and represent a
-            percentage of the area as specified by
-            <i>target</i>.{{Element/getBoundingClientRect()}}.
+		If there is only one component value, it applies to all sides.
+		If there are two values, the top and bottom margins are set to
+		the first value and the right and left margins are set to the
+		second. If there are three values, the top is set to the first
+		value, the left and right are set to the second, and the bottom
+		is set to the third. If there are four values, they apply to the
+		top, right, bottom, and left, respectively.e.g.
+		<pre class="example">
+		  <code class="js">
+			"5px"                // all margins set to 5px
+			"5px 10px"           // top & bottom = 5px, right & left = 10px
+			"-10px 5px 8px"      // top = -10px, right & left = 5px, bottom = 8px
+			"-10px -5px 5px 8px" // top = -10px, right = -5px, bottom = 5px, left = 8px
+		  </code>
+		</pre>
+	: <dfn>threshold</dfn>
+	::
+		List of threshold(s) at which to trigger callback.
+		callback will be invoked when intersectionRect's area changes from
+		greater than or equal to any threshold to less than that threshold,
+		and vice versa.
 
-            Note: 0.0 is effectively "any non-zero number of pixels".
-    </div>
+		Threshold values must be in the range of [0, 1.0] and represent a
+		percentage of the area as specified by
+		<a>target</a>.{{Element/getBoundingClientRect()}}.
 
-<h2 id='intersection-observer-processing-model'><dfn>Processing Model</dfn></h3>
-    This section outlines the steps the user agent must take when implementing
-    the <a>Intersection Observer</a> API.
+		Note: 0.0 is effectively "any non-zero number of pixels".
+</div>
 
-<h3 id='defines'>Internal Slot Definitions</h2>
+<h2 dfn id='intersection-observer-processing-model'>
+Processing Model</h3>
 
-<h4 id='browsing-contexts-defines'>Browsing Contexts</h4>
-    Each <a>unit of related similar-origin browsing contexts</a> has an
-    <dfn for="browsing context">IntersectionObserverTaskQueued</dfn> flag which
-    is initialized to false and an <dfn for="browsing context">
-    IntersectionObservers</dfn> list which is initially empty.
+This section outlines the steps the user agent must take when implementing
+the <a>Intersection Observer</a> API.
 
-<h4 id='element-private-slots'>Element</h4>
-    {{Element}} objects have an internal
-    <dfn attribute for=Element>\[[RegisteredIntersectionObservers]]</dfn> slot,
-    which is initialized to an empty list.
+<h3 id='defines'>
+Internal Slot Definitions</h2>
 
-<h4 id='intersection-observer-private-slots'>IntersectionObserver</h4>
-    {{IntersectionObserver}} objects have internal
-    <dfn attribute for=IntersectionObserver>\[[QueuedEntries]]</dfn> and
-    <dfn attribute for=IntersectionObserver>\[[ObservationTargets]]</dfn> slots,
-    which are initialized to empty lists and an internal
-    <dfn attribute for=IntersectionObserver>\[[callback]]</dfn> slot which is
-    initialized by {{IntersectionObserver(callback, options)}}</a>.
+<h4 id='browsing-contexts-defines'>
+Browsing Contexts</h4>
 
-<h3 id='algorithms'>Algorithms</h2>
+Each <a>unit of related similar-origin browsing contexts</a> has an
+<dfn for="browsing context">IntersectionObserverTaskQueued</dfn> flag which
+is initialized to false and an <dfn for="browsing context">
+IntersectionObservers</dfn> list which is initially empty.
 
-<h4 id='queue-intersection-observer-task'>Queue an Intersection Observer Task
-</h4>
-    To <dfn>queue an intersection observer task</dfn> for a <a>unit of related
-    similar-origin browsing contexts</a> |unit|, run these steps:
-    <ol>
-        <li>If |unit|'s <a>IntersectionObserverTaskQueued</a> flag is set to
-            true, return.</li>
-        <li>Set |unit|'s <a>IntersectionObserverTaskQueued</a> flag to true.
-            </li>
-        <li>Enqueue a task to <a>notify intersection observers</a> in the
-            <a>list of idle request callbacks</a> with a |timeout| of 100.
+<h4 id='element-private-slots'>
+Element</h4>
 
-            Issue: Should we use something other than 100ms as |timeout|?
+{{Element}} objects have an internal
+<dfn attribute for=Element>\[[RegisteredIntersectionObservers]]</dfn> slot,
+which is initialized to an empty list.
+This list holds <dfn interface>IntersectionObserverRegistration</dfn> records,
+which have an <dfn attribute for=IntersectionObserverRegistration>observer</dfn> property
+holding an {{Element}}
+and a <dfn attribute for=IntersectionObserverRegistration>previousVisibleRatio</dfn> property
+holding a number between 0 and 1.
 
-            Issue: Should we consider making this just post a task instead?
-        </li>
-    </ol>
+<h4 id='intersection-observer-private-slots'>
+IntersectionObserver</h4>
 
-<h4 id='notify-intersection-observers-algo'>Notify Intersection Observers</h4>
-    To <dfn>notify intersection observers</dfn> for a <a>unit of related
-    similar-origin browsing contexts</a> |unit|, run these steps:
-    <ol>
-        <li>Set |unit|'s <a>IntersectionObserverTaskQueued</a> flag to false.
-            </li>
-        <li>Let |notify list| be a copy of |unit|'s <a>IntersectionObservers</a>
-            list.</li>
-        <li>For each {{IntersectionObserver}} object |observer| in
-            |notify list|, run these steps:</li>
-            <ol>
-                <li>If |observer|'s internal {{[[QueuedEntries]]}} slot is
-                    empty, continue.</li>
-                <li>Let |queue| be a copy of |observer|'s internal
-                    {{[[QueuedEntries]]}} slot.</li>
-                <li>Clear |observer|'s internal {{[[QueuedEntries]]}} slot.</li>
-                <li>Invoke |callback| with |queue| as the first argument and
-                    |observer| as the second argument and
-                    <a>callback this value</a>. If this throws an exception,
-                    <a>report the exception</a>.</li>
-            </ol>
-    </ol>
+{{IntersectionObserver}} objects have internal
+<dfn attribute for=IntersectionObserver>\[[QueuedEntries]]</dfn> and
+<dfn attribute for=IntersectionObserver>\[[ObservationTargets]]</dfn> slots,
+which are initialized to empty lists and an internal
+<dfn attribute for=IntersectionObserver>\[[callback]]</dfn> slot which is
+initialized by {{IntersectionObserver(callback, options)}}</a>.
 
-<h4 id='queue-intersection-observer-entry-algo'>Queue an
-IntersectionObserverEntry</dfn></h4>
-    To <dfn>queue an IntersectionObserverEntry</dfn> for |observer|, given a
-    <a>unit of related similar-origin browsing contexts</a> |unit|, |observer|,
-    |time|, |rootBounds|, |boundingClientRect|, |intersectionRect| and |target|,
-    run these steps:
-    <ol>
-        <li>Construct an {{IntersectionObserverEntry}}, passing in |time|,
-            |rootBounds|, |boundingClientRect|, |intersectionRect| and |target|.
-            </li>
-        <li>Append it to |observer|'s internal {{[[QueuedEntries]]}} slot.</li>
-        <li><a>Queue an intersection observer task</a> for |unit|.</li>
-    </ol>
+<h3 id='algorithms'>
+Algorithms</h2>
 
-<h4 id='update-intersection-observations-algo'>Run the Update Intersection
-Observations Steps</h4>
-    To <dfn>run the update intersection observations steps</dfn> for an
-    <a>event loop</a> |loop| given a timestamp |time|, run these steps:
-    <ul>
-        <li>Let |unit| be the
-            <a>unit of related similar-origin browsing contexts</a> for |loop|.
-            </li>
-        <li>For each |observer| in |unit|'s <a>IntersectionObservers</a> list
-            </li>
-            <ul>
-                <li>Let |rootBounds| be the <a>content-box</a> of
-                    |observer|.{{IntersectionObserver/root}} (or the top-level
-                    document's viewport if
-                    |observer|.{{IntersectionObserver/root}} is null), adjusted
-                    by |observer|.{{IntersectionObserver/rootMargin}}.</li>
-                <li>For each |target| in |observer|'s internal
-                    {{[[ObservationTargets]]}} slot</li>
-                <ol>
-                    <li>Let |boundingClientRect| be a {{DOMRectReadOnly}}
-                        obtained by the same algorithm as that of {{Element}}'s
-                        {{Element/getBoundingClientRect()}} performed on
-                        |target|.</li>
-                    <li>Let |intersectionRect| be the intersection of
-                        |boundingClientRect| with |rootBounds|, intersected with
-                        the clip rect of each ancestor between |target| and
-                        |observer|.{{IntersectionObserver/root}} (or the
-                        top-level document's viewport if
-                        |observer|.{{IntersectionObserver/root}} is null).</li>
+<h4 id='queue-intersection-observer-task'>
+Queue an Intersection Observer Task</h4>
 
-                        Issue: TBD: Do the <i>clip rect</i>s include 'clip-path'
-                        and other clipping properties or just overflow clipping?
-                    <li>Let |area| be |boundingClientRect|'s area.</li>
-                    <li>Let |visibleArea| be |intersectionRect|'s area.</li>
-                    <li>Let |visibleRatio| be |visibleArea| divided by |area| if
-                        |area| is non-zero, and <i>0</i> otherwise.</li>
-                    <li>Let |threshold| be the index of the first entry in
-                        |observer|.{{thresholds}} whose value
-                        is greater than or equal to |visibleRatio|. If
-                        |visibleRatio| is equal to <i>0</i>, let |threshold| be
-                        <i>-1</i>.</li>
-                    <li>Let |intersectionObserverRegistration| be the element in
-                        |target|'s internal
-                        {{[[RegisteredIntersectionObservers]]}} slot whose
-                        <i>observer</i> property is equal to |observer|.</li>
-                    <li>Let |oldVisibleRatio| be set to
-                        |intersectionObserverRegistration|'s
-                        <i>previousVisibleRatio</i> property.</li>
-                    <li>Let |oldThreshold| be the index of the first entry in
-                        |observer|.{{thresholds}} whose value is greater than
-                        or equal to |oldVisibleRatio|. If |oldVisibleRatio| is
-                        equal to <i>0</i>, let |oldThreshold| be <i>-1</i>.</li>
-                    <li>If |threshold| does not equal |oldThreshold|,
-                        <a>queue an IntersectionObserverEntry</a> for |unit|,
-                        passing in |observer|, |time|, |rootBounds|,
-                        |boundingClientRect|, |intersectionRect| and |target|.
-                        </li>
-                    <li>Assign |visibleRatio| to
-                        |intersectionObserverRegistration|'s
-                        <i>previousVisibleRatio</i> property.</li>
-                </ol>
-            </ul>
-        </ul>
+To <dfn>queue an intersection observer task</dfn> for a <a>unit of related
+similar-origin browsing contexts</a> |unit|, run these steps:
 
-<h4 id='removing-steps'>Removing Steps</h4>
-    Whenever the <a>removing steps</a> run with an |oldNode|, run these steps:
+1. If |unit|'s <a>IntersectionObserverTaskQueued</a> flag is set to true,
+	return.
+2. Set |unit|'s <a>IntersectionObserverTaskQueued</a> flag to true.
+3. Enqueue a task to <a>notify intersection observers</a>
+	in the <a>list of idle request callbacks</a>
+	with a |timeout| of 100.
 
-    <ol>
-        <li>Let |nodes| be |oldNode|'s <a>inclusive descendants</a>, in
-            <a>tree order</a>.
-        <li>For each |node| in |nodes|, run this substep:
-        <ol>
-            <li>For each |observer| in |node|'s internal
-                {{[[RegisteredIntersectionObservers]]}} slot, run the
-                {{unobserve()}} algorithm on |observer|,  passing in |node| as
-                |target|.</li>
-        </ol>
-    </ol>
+	Issue: Should we use something other than 100ms as |timeout|?
 
-<h3 id='external-spec-integrations'>External Spec Integrations</h3>
+	Issue: Should we consider making this just post a task instead?
 
-<h4 id='event-loop'>HTML Processing Model: Event Loop</h4>
-    An <a>Intersection Observer</a> processing step should take place AFTER the
-    layout and rendering steps have been performed in the
-    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8">
-    update the rendering</a> event loop in the HTML Processing Model.
+<h4 id='notify-intersection-observers-algo'>
+Notify Intersection Observers</h4>
 
-    This step is:
-    <ol start="11">
-        <li><a>Run the update intersection observations steps</a> for the
-            <a>event loop</a> in question, passing in <i>now</i> as the
-            timestamp.</li>
-    </ol>
+To <dfn>notify intersection observers</dfn> for a <a>unit of related
+similar-origin browsing contexts</a> |unit|, run these steps:
+
+1. Set |unit|'s <a>IntersectionObserverTaskQueued</a> flag to false.
+2. Let |notify list| be a copy of |unit|'s <a>IntersectionObservers</a> list.
+3. For each {{IntersectionObserver}} object |observer| in |notify list|,
+	run these steps:
+
+	1. If |observer|'s internal {{[[QueuedEntries]]}} slot is empty,
+		continue.
+	2. Let |queue| be a copy of |observer|'s internal {{[[QueuedEntries]]}} slot.
+	3. Clear |observer|'s internal {{[[QueuedEntries]]}} slot.
+	4. Invoke |callback| with |queue| as the first argument
+		and |observer| as the second argument
+		and <a>callback this value</a>.
+		If this throws an exception,
+		<a>report the exception</a>.
+
+<h4 id='queue-intersection-observer-entry-algo'>
+Queue an IntersectionObserverEntry</h4>
+
+To <dfn>queue an IntersectionObserverEntry</dfn> for |observer|,
+given a <a>unit of related similar-origin browsing contexts</a> |unit|,
+|observer|, |time|, |rootBounds|, |boundingClientRect|, |intersectionRect| and |target|,
+run these steps:
+
+1. Construct an {{IntersectionObserverEntry}},
+	passing in |time|, |rootBounds|, |boundingClientRect|, |intersectionRect| and |target|.
+2. Append it to |observer|'s internal {{[[QueuedEntries]]}} slot.
+3. <a>Queue an intersection observer task</a> for |unit|.
+
+<h4 id='update-intersection-observations-algo'>
+Run the Update Intersection Observations Steps</h4>
+
+To <dfn>run the update intersection observations steps</dfn>
+for an <a>event loop</a> |loop|
+given a timestamp |time|,
+run these steps:
+
+1. Let |unit| be the <a>unit of related similar-origin browsing contexts</a> for |loop|.
+2. For each |observer| in |unit|'s <a>IntersectionObservers</a> list:
+	1. Let |rootBounds| be the <a>content-box</a>
+		of |observer|.{{IntersectionObserver/root}}
+		(or the top-level document's viewport
+		if |observer|.{{IntersectionObserver/root}} is null),
+		adjusted by |observer|.{{IntersectionObserver/rootMargin}}.
+	2. For each |target| in |observer|'s internal {{[[ObservationTargets]]}} slot:
+		1. Let |boundingClientRect| be a {{DOMRectReadOnly}}
+			obtained by the same algorithm
+			as that of {{Element}}'s {{Element/getBoundingClientRect()}}
+			performed on |target|.
+		2. Let |intersectionRect| be the intersection of |boundingClientRect| with |rootBounds|,
+			intersected with the clip rect of each ancestor
+			between |target| and |observer|. {{IntersectionObserver/root}}
+			(or the top-level document's viewport if |observer|.{{IntersectionObserver/root}} is null).
+
+			Issue: TBD: Do the clip rects include 'clip-path'
+			and other clipping properties or just overflow clipping?
+		3. Let |area| be |boundingClientRect|'s area.
+		4. Let |visibleArea| be |intersectionRect|'s area.
+		5. Let |visibleRatio| be |visibleArea| divided by |area| if |area| is non-zero,
+			and <code>0</code> otherwise.
+		6. Let |threshold| be the index of the first entry in |observer|.{{thresholds}}
+			whose value is greater than or equal to |visibleRatio|.
+			If |visibleRatio| is equal to <code>0</code>,
+			let |threshold| be <code>-1</code>.
+		7. Let |intersectionObserverRegistration| be the element
+			in |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot
+			whose {{IntersectionObserverRegistration/observer}} property is equal to |observer|.
+		8. Let |oldVisibleRatio| be set to
+			|intersectionObserverRegistration|'s {{previousVisibleRatio}} property.
+		9. Let |oldThreshold| be the index of the first entry in |observer|.{{thresholds}}
+			whose value is greater than or equal to |oldVisibleRatio|.
+			If |oldVisibleRatio| is equal to <code>0</code>,
+			let |oldThreshold| be <code>-1</code>.
+		10. If |threshold| does not equal |oldThreshold|,
+			<a>queue an IntersectionObserverEntry</a> for |unit|,
+			passing in |observer|, |time|, |rootBounds|,
+			|boundingClientRect|, |intersectionRect| and |target|.
+		11. Assign |visibleRatio| to
+			|intersectionObserverRegistration|'s {{previousVisibleRatio}} property.
+
+<h4 id='removing-steps'>
+Removing Steps</h4>
+
+Whenever the <a>removing steps</a> run with an |oldNode|, run these steps:
+
+1. Let |nodes| be |oldNode|'s <a>inclusive descendants</a>,
+	in <a>tree order</a>.
+2. For each |node| in |nodes|, run this substep:
+	1. For each |observer| in |node|'s internal {{[[RegisteredIntersectionObservers]]}} slot,
+		run the {{unobserve()}} algorithm on |observer|,
+		passing in |node| as |target|.
+
+<h3 id='external-spec-integrations'>
+External Spec Integrations</h3>
+
+<h4 id='event-loop'>
+HTML Processing Model: Event Loop</h4>
+
+An <a>Intersection Observer</a> processing step should take place
+AFTER the layout and rendering steps have been performed
+in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8"> update the rendering</a> event loop
+in the HTML Processing Model.
+
+This step is:
+
+<ol start="11">
+	<li><a>Run the update intersection observations steps</a> for the
+		<a>event loop</a> in question, passing in <i>now</i> as the
+		timestamp.
+</ol>
