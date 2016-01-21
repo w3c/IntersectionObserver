@@ -26,6 +26,7 @@ urlPrefix: https://heycam.github.io/webidl/
 	url: #dfn-simple-exception; type:exception;
 		text: RangeError
 		text: TypeError
+		text: SyntaxError
 	urlPrefix: #dfn-; type:dfn; text: throw
 	urlPrefix: #idl-; type:interface; text: double
 url: https://drafts.csswg.org/css2/box.html#content-edge; type:dfn; text: content-box
@@ -35,6 +36,9 @@ url: https://drafts.csswg.org/css2/box.html#content-edge; type:dfn; text: conten
 spec:dom-ls
 	type:interface; text:Document
 	type:dfn; for:tree; text:root
+spec: css-values-3; type: dfn
+	text: absolute length
+	text: dimension
 </pre>
 
 <h2 id='introduction'>Introduction</h2>
@@ -154,10 +158,10 @@ interface IntersectionObserver {
 	readonly attribute Element? root;
 	readonly attribute DOMString rootMargin;
 	readonly attribute sequence&lt;double> thresholds;
-	void observe (Element target);
-	void unobserve (Element target);
-	void disconnect ();
-	sequence&lt;IntersectionObserverEntry> takeRecords ();
+	void observe(Element target);
+	void unobserve(Element target);
+	void disconnect();
+	sequence&lt;IntersectionObserverEntry> takeRecords();
 };
 </pre>
 
@@ -169,8 +173,12 @@ interface IntersectionObserver {
 		2. Set |this|'s internal {{[[callback]]}} slot to |callback|.
 		3. Set |this|.{{IntersectionObserver/root}} to
 			|options|.{{IntersectionObserverInit/root}}
-		4. Set |this|.{{IntersectionObserver/rootMargin}} to
-			|options|.{{IntersectionObserverInit/rootMargin}}
+		4. Attempt to <a>parse a root margin</a>
+			from |options|.{{IntersectionObserverInit/rootMargin}}.
+			If a list is returned,
+			set |this|'s internal {{[[rootMargin]]}} slot to that.
+			Otherwise,
+			<a>throw</a> a {{SyntaxError}} exception.
 		5. Let |thresholds| be a list equal to
 			|options|.{{threshold}}.
 		6. If any value in |thresholds| is less than 0.0 or greater than 1.0,
@@ -228,17 +236,81 @@ interface IntersectionObserver {
 	: <dfn>root</dfn>
 	::
 		The <a>root</a> to use for intersection.
-		If null, use the top-level document's viewport.
 	: <dfn>rootMargin</dfn>
 	::
-		Same as 'margin',
-		can be 1, 2, 3 or 4 components,
-		possibly negative lengths.
+		Represents offsets from the <a>intersection root's</a> bounding box,
+		growing the "box" that is used to calculate intersections.
+
+		On getting,
+		return the result of serializing
+		the elements of {{[[rootMargin]]}}
+		space-separated,
+		where pixel lengths serialize as the numeric value followed by "px",
+		and percentages serialize as the numeric value followed by "%".
 		See IntersectionObserverInit/{{IntersectionObserverInit/rootMargin}}.
 	: <dfn>thresholds</dfn>
 	::
+		Represents a list of thresholds,
+		where each threshold is a percentage of a target's bounding box
+
 		List of thresholds at which to trigger callback.
 </div>
+
+The <dfn for="IntersectionObserver">intersection root</dfn>
+for an {{IntersectionObserver}}
+is the value of its {{IntersectionObserver/root}} attribute,
+if it's an element,
+or else the top-level document's viewport.
+
+The <dfn for=IntersectionObserver>root intersection rectangle</dfn>
+for an {{IntersectionObserver}}
+is the rectangle we'll use to check against the targets.
+
+<dl class=switch>
+	<dt>If the <a>intersection root</a> is a scrollable element,
+	<dd>it's the element's scroll viewport.
+
+	<dt>If the <a>intersection root</a> is a document's viewport,
+	<dd>it's that document's layout scroll viewport.
+
+	<dt>Otherwise,
+	<dd>it's the element's axis-aligned bounding box of its fragments after layout.
+</dl>
+
+In all cases, the rectangle is then further grown
+according to the offsets in the {{IntersectionObserver}}’s
+{{[[rootMargin]]}} slot
+in a manner similar to CSS's 'margin' property,
+with the four values indicating
+the amount the top, right, bottom, and left edges, respectively, are offset by,
+with positive lengths indicating an outward offset.
+Percentages are resolved relative to the width of the undilated rectangle,
+unless the <a>intersection root</a> is a document's viewport,
+in which case they resolve to 0.
+
+To <dfn>parse a root margin</dfn>
+from an input string |marginString|,
+returning either a list of 4 pixel lengths or percentages,
+or failure:
+
+1. <a>Parse a list of component values</a> |marginString|,
+	storing the result as |tokens|.
+2. Remove all whitespace tokens from |tokens|.
+3. If the length of |tokens| is 0 or greater than 4,
+	return failure.
+4. Replace each |token| in |tokens|:
+	* If |token| is an <a>absolute length</a> <a>dimension</a> token,
+		replace it with a an equivalent pixel length.
+	* If |token| is a <<percentage>> token,
+		replace it with an equivalent percentage.
+	* Otherwise, return failure.
+5. If there is one element in |tokens|,
+	append three duplicates of that element to |tokens|.
+	If there is two elements are |tokens|,
+	append a duplicate of each element to |tokens|.
+	If there are three elements in |tokens|,
+	append a duplicate of the second element to |tokens|.
+6. Return |tokens|.
 
 <h3 id="intersection-observer-entry">
 The IntersectionObserverEntry interface</h3>
@@ -278,11 +350,13 @@ dictionary IntersectionObserverEntryInit {
 		within {{IntersectionObserverEntry/rootBounds}}.
 	: <dfn>rootBounds</dfn>
 	::
-		The <a>content-box</a> dimensions of {{IntersectionObserver/root}},
-		adjusted by {{IntersectionObserver/rootMargin}},
+		On getting,
+		if {{IntersectionObserver/root}} is <code>null</code>,
+		return <code>null</code>.
+		Otherwise,
+		return a {{DOMRectReadOnly}} representing
+		the <a>root intersection rectangle</a>
 		in the coordinate space of the document the root element is in.
-		If {{IntersectionObserver/root}} is null,
-		then {{IntersectionObserverEntry/rootBounds}} will be null.
 	: <dfn>target</dfn>
 	::
 		The {{Element}} whose intersection with {{IntersectionObserver/root}} changed.
@@ -306,27 +380,20 @@ dictionary IntersectionObserverInit {
 <div dfn-type="dict-member" dfn-for="IntersectionObserverInit">
 	: <dfn>root</dfn>
 	::
-		The <a>root</a> to use for intersection. If not provided, use the
-		top-level document's viewport.
+		The <a>root</a> to use for intersection.
+		If not provided,
+		use the top-level document's viewport.
 	: <dfn>rootMargin</dfn>
 	::
-		Same as 'margin', can be 1, 2, 3 or 4 components, possibly
-		negative lengths.
+		Similar to the CSS 'margin' property,
+		this is a string of 1-4 components,
+		each either an absolute length or a percentage.
 
-		If there is only one component value, it applies to all sides.
-		If there are two values, the top and bottom margins are set to
-		the first value and the right and left margins are set to the
-		second. If there are three values, the top is set to the first
-		value, the left and right are set to the second, and the bottom
-		is set to the third. If there are four values, they apply to the
-		top, right, bottom, and left, respectively.e.g.
-		<pre class="example">
-		  <code class="js">
+		<pre class="example" highlight=js>
 			"5px"                // all margins set to 5px
 			"5px 10px"           // top & bottom = 5px, right & left = 10px
 			"-10px 5px 8px"      // top = -10px, right & left = 5px, bottom = 8px
 			"-10px -5px 5px 8px" // top = -10px, right = -5px, bottom = 5px, left = 8px
-		  </code>
 		</pre>
 	: <dfn>threshold</dfn>
 	::
@@ -378,8 +445,10 @@ IntersectionObserver</h4>
 <dfn attribute for=IntersectionObserver>\[[QueuedEntries]]</dfn> and
 <dfn attribute for=IntersectionObserver>\[[ObservationTargets]]</dfn> slots,
 which are initialized to empty lists and an internal
-<dfn attribute for=IntersectionObserver>\[[callback]]</dfn> slot which is
-initialized by {{IntersectionObserver(callback, options)}}</a>.
+<dfn attribute for=IntersectionObserver>\[[callback]]</dfn> slot
+which is initialized by {{IntersectionObserver(callback, options)}}</a>.
+They also have an internal <dfn attribute for=IntersectionObserver>\[[rootMargin]]</dfn> slot
+which is a list of four pixel lengths or percentages.
 
 <h3 id='algorithms'>
 Algorithms</h2>
@@ -445,11 +514,7 @@ run these steps:
 
 1. Let |unit| be the <a>unit of related similar-origin browsing contexts</a> for |loop|.
 2. For each |observer| in |unit|'s <a>IntersectionObservers</a> list:
-	1. Let |rootBounds| be the <a>content-box</a>
-		of |observer|.{{IntersectionObserver/root}}
-		(or the top-level document's viewport
-		if |observer|.{{IntersectionObserver/root}} is null),
-		adjusted by |observer|.{{IntersectionObserver/rootMargin}}.
+	1. Let |rootBounds| be |observer|'s <a>root intersection rectangle</a>.
 	2. For each |target| in |observer|'s internal {{[[ObservationTargets]]}} slot:
 		1. Let |boundingClientRect| be a {{DOMRectReadOnly}}
 			obtained by the same algorithm
