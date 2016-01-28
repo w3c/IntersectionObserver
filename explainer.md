@@ -94,14 +94,14 @@ function visibleTimerCallback(element, observer) {
   processChanges(observer.takeRecords());
   if (element.isVisible) {
     delete element.isVisible;
-    logAddImpressionToServer();
+    logImpressionToServer();
     observer.unobserve(element);
   }
 }
 
 function processChanges(changes) {
   changes.forEach(function(changeRecord) {
-    var element = changeRecord.element;
+    var element = changeRecord.target;
     element.isVisible = isVisible(changeRecord.boundingClientRect, changeRecord.intersectionRect);
     if (element.isVisible) {
       // Transitioned from hidden to visible
