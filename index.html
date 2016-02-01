@@ -503,16 +503,13 @@
 
 	/* We hyperlink a lot, so make it less intrusive */
 	a[href] {
-		color: inherit;
+		color: #005a9c;
 		text-decoration: none;
-		border-bottom: 1px solid #949494;
+		border-bottom: 1px solid #555;
 	}
 	a:visited {
-		border-bottom-color: silver;
+		border-bottom-color: #969696;
 	}
-	/* Consider making the border thinner, if not everywhere, then at least
-	   in .head and .index
-	   ... or only make it 2px in p/li/dd/dt/tr/div/pre (running text)  */
 
 	/* Use distinguishing colors when user is interacting with the link */
 	a[href]:focus,
@@ -520,7 +517,7 @@
 		background: #f8f8f8;
 		background: rgba(75%, 75%, 75%, .25);
 		border-bottom-width: 3px;
-		margin-bottom: -1px;
+		margin-bottom: -2px;
 	}
 	a[href]:active {
 		color: #C00;
@@ -1326,6 +1323,7 @@
 .highlight .nt { color: #669900 } /* Name.Tag */
 .highlight .nv { color: #0077aa } /* Name.Variable */
 .highlight .ow { color: #999999 } /* Operator.Word */
+.highlight .mb { color: #000000 } /* Literal.Number.Bin */
 .highlight .mf { color: #000000 } /* Literal.Number.Float */
 .highlight .mh { color: #000000 } /* Literal.Number.Hex */
 .highlight .mi { color: #000000 } /* Literal.Number.Integer */
@@ -1354,7 +1352,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-01-20">20 January 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-01">1 February 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1368,7 +1366,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 20 January 2016,
+In addition, as of 1 February 2016,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1667,6 +1665,8 @@ with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle,
 unless the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is a document’s viewport,
 in which case they resolve to 0.</p>
+   <p class="note" role="note">Note: <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">Root intersection rectangle</a> is not affected by <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#pinch-zoom">pinch zoom</a> and will report the unadjusted viewport, consistent with the
+intent of pinch zooming (to act like a magnifying glass and NOT change layout.)</p>
    <p>To <dfn data-dfn-type="dfn" data-noexport="" id="parse-a-root-margin">parse a root margin<a class="self-link" href="#parse-a-root-margin"></a></dfn> from an input string <var>marginString</var>,
 returning either a list of 4 pixel lengths or percentages,
 or failure:</p>
