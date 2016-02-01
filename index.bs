@@ -1,13 +1,13 @@
 <pre class='metadata'>
 Title: Intersection Observer
 Status: ED
-ED: https://github.com/slightlyoff/IntersectionObserver/
+ED: https://github.com/WICG/IntersectionObserver/
 Shortname: intersection-observer
 Level: 1
 Editor: Michael Blain, Google, mpb@google.com
 Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to a viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
 Group: Web Performance Working Group
-Repository: slightlyoff/IntersectionObserver
+Repository: WICG/IntersectionObserver
 </pre>
 
 <pre class="anchors">
