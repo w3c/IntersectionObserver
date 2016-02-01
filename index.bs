@@ -30,6 +30,7 @@ urlPrefix: https://heycam.github.io/webidl/
 	urlPrefix: #dfn-; type:dfn; text: throw
 	urlPrefix: #idl-; type:interface; text: double
 url: https://drafts.csswg.org/css2/box.html#content-edge; type:dfn; text: content-box
+url: http://dev.w3.org/csswg/cssom-view/#pinch-zoom; type:dfn; text: pinch zoom
 </pre>
 
 <pre class="link-defaults">
@@ -287,6 +288,10 @@ with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle,
 unless the <a>intersection root</a> is a document's viewport,
 in which case they resolve to 0.
+
+Note: <a>Root intersection rectangle</a> is not affected by
+<a>pinch zoom</a> and will report the unadjusted viewport, consistent with the
+intent of pinch zooming (to act like a magnifying glass and NOT change layout.)
 
 To <dfn>parse a root margin</dfn>
 from an input string |marginString|,
