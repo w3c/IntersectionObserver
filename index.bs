@@ -11,7 +11,9 @@ Repository: WICG/IntersectionObserver
 </pre>
 
 <pre class="anchors">
-urlPrefix: http://www.w3.org/TR/hr-time/; type: typedef; text: DOMHighResTimeStamp
+urlPrefix: http://www.w3.org/TR/hr-time/
+	type: typedef; text: DOMHighResTimeStamp
+	type: dfn; text: time origin
 url: http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks; type: dfn; text: list of idle request callbacks
 urlPrefix: https://html.spec.whatwg.org/multipage/
 	urlPrefix: browsers.html
@@ -368,7 +370,9 @@ dictionary IntersectionObserverEntryInit {
 	: <dfn>time</dfn>
 	::
 		The attribute must return a {{DOMHighResTimeStamp}}
-		that corresponds to the time the intersection was recorded.
+		that corresponds to the time the intersection was recorded, relative to the
+		<a>time origin</a> of the global object associated with the IntersectionObserver instance
+		that generated the notification.
 </div>
 
 <h3 id="intersection-observer-init">
