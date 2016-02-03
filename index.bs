@@ -38,7 +38,6 @@ url: http://dev.w3.org/csswg/cssom-view/#pinch-zoom; type:dfn; text: pinch zoom
 <pre class="link-defaults">
 spec:dom-ls
 	type:interface; text:Document
-	type:dfn; for:tree; text:root
 spec: css-values-3; type: dfn
 	text: absolute length
 	text: dimension
@@ -119,9 +118,10 @@ it allows applications to significantly reduce their CPU, GPU and energy costs.
 
 <h2 id='intersection-observer-api'>Intersection Observer</h2>
 
-The <dfn>Intersection Observer</dfn> API enables developers to understand
-the visibility and position of DOM elements relative to a root element or
-the top level document's viewport.
+The <dfn>Intersection Observer</dfn> API enables developers to understand the
+visibility and position of <dfn for="IntersectionObserver">target</dfn> DOM
+elements relative to an <a>intersection root</a> or the top level document's
+viewport.
 
 <h3 id='intersection-observer-callback'>
 The IntersectionObserverCallback</h3>
@@ -131,28 +131,25 @@ The IntersectionObserverCallback</h3>
 </pre>
 
 This callback will be invoked when there are changes to <a>target</a>'s
-intersection with <a>root</a>, as per the <a>processing model</a>.
+intersection with the <a>intersection root</a>, as per the
+<a>processing model</a>.
 
 <h3 id='intersection-observer-interface'>
 The IntersectionObserver interface</h3>
 
-The {{IntersectionObserver}} interface can be used
-to observe changes in the intersection of a <a>target</a> {{Element}}
-and a <a>root</a> {{Element}}
-(or the top-level document's viewport).
+The {{IntersectionObserver}} interface can be used to observe changes in the
+intersection of a <a>target</a> {{Element}} and a {{IntersectionObserver/root}}
+{{Element}} (or the top-level document's viewport).
 
-Note: In {{MutationObserver}},
-the {{MutationObserverInit}} options are passed to {{MutationObserver/observe()}}
-while in {{IntersectionObserver}} they are passed to the constructor.
-This is because for MutationObserver,
-each {{Node}} being observed could have a different set of attributes to filter.
-For {{IntersectionObserver}},
-having different {{IntersectionObserverInit/root}},
-{{IntersectionObserverInit/rootMargin}}
-or {{threshold}} values
-for each <a>target</a>
-seems to introduce more complexity without solving additional use-cases.
-Per-{{observe()}} options could be provided in the future if V2 introduces a need for it.
+Note: In {{MutationObserver}}, the {{MutationObserverInit}} options are passed
+to {{MutationObserver/observe()}} while in {{IntersectionObserver}} they are
+passed to the constructor. This is because for MutationObserver, each {{Node}}
+being observed could have a different set of attributes to filter. For
+{{IntersectionObserver}}, having different {{IntersectionObserverInit/root}},
+{{IntersectionObserverInit/rootMargin}} or {{threshold}} values for each
+<a>target</a> seems to introduce more complexity without solving additional
+use-cases. Per-{{observe()}} options could be provided in the future if V2
+introduces a need for it.
 
 <pre class="idl">
 [Constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options),
@@ -184,8 +181,8 @@ interface IntersectionObserver {
 			<a>throw</a> a {{SyntaxError}} exception.
 		5. Let |thresholds| be a list equal to
 			|options|.{{threshold}}.
-		6. If any value in |thresholds| is less than 0.0 or greater than 1.0,
-			<a>throw</a> a {{RangeError}} exception.
+		6. If any value in |thresholds| is less than 0.0 or greater than
+			1.0, <a>throw</a> a {{RangeError}} exception.
 		7. Sort |thresholds| in ascending order
 		8. If |thresholds| is empty, append <code>0</code> to |thresholds|.
 		9. Set |this|.{{thresholds}} to |thresholds|.
@@ -214,13 +211,12 @@ interface IntersectionObserver {
 		2. Remove |target| from |this|'s internal {{[[ObservationTargets]]}} slot.
 
 		Note: {{MutationObserver}} does not implement {{unobserve()}}.
-		For {{IntersectionObserver}},
-		{{unobserve()}} addresses the lazy-loading use case.
-		After a <a>target</a> becomes visible,
+		For {{IntersectionObserver}}, {{unobserve()}} addresses the
+		lazy-loading use case. After |target| becomes visible,
 		it does not need to be tracked.
-		It would be more work to either {{disconnect()}} all <a>targets</a>
+		It would be more work to either {{disconnect()}} all |target|s
 		and {{observe()}} the remaining ones,
-		or create a separate {{IntersectionObserver}} for each <a>target</a>.
+		or create a separate {{IntersectionObserver}} for each |target|.
 	: <dfn>disconnect()</dfn>
 	::
 		For each |target| in |this|'s internal {{[[ObservationTargets]]}} slot:
@@ -238,7 +234,7 @@ interface IntersectionObserver {
 <div dfn-type="attribute" dfn-for="IntersectionObserver">
 	: <dfn>root</dfn>
 	::
-		The <a>root</a> to use for intersection.
+		The |root| to use for intersection.
 	: <dfn>rootMargin</dfn>
 	::
 		Represents offsets from the <a>intersection root's</a> bounding box,
@@ -346,14 +342,15 @@ dictionary IntersectionObserverEntryInit {
 	::
 		A {{DOMRectReadOnly}} obtained by the same algorithm
 		as that of {{Element}}'s {{Element/getBoundingClientRect()}}
-		performed on <a>target</a>.
+		performed on {{IntersectionObserverEntry/target}}.
 	: <dfn>intersectionRect</dfn>
 	::
-		{{IntersectionObserverEntry/boundingClientRect}},
-		intersected by each of <a>target</a>'s ancestors' clip rects
-		(up to but not including {{IntersectionObserver/root}}),
+		{{IntersectionObserverEntry/boundingClientRect}}, intersected by
+		each of {{IntersectionObserverEntry/target}}'s ancestors' clip
+		rects (up to but not including {{IntersectionObserver/root}}),
 		intersected with {{IntersectionObserverEntry/rootBounds}}.
-		This value represents the portion of <a>target</a> actually visible
+		This value represents the portion of
+		{{IntersectionObserverEntry/target}} actually visible
 		within {{IntersectionObserverEntry/rootBounds}}.
 	: <dfn>rootBounds</dfn>
 	::
@@ -366,7 +363,8 @@ dictionary IntersectionObserverEntryInit {
 		in the coordinate space of the document the root element is in.
 	: <dfn>target</dfn>
 	::
-		The {{Element}} whose intersection with {{IntersectionObserver/root}} changed.
+		The {{Element}} whose intersection with the
+		<a>intersection root</a> changed.
 	: <dfn>time</dfn>
 	::
 		The attribute must return a {{DOMHighResTimeStamp}}
@@ -389,9 +387,8 @@ dictionary IntersectionObserverInit {
 <div dfn-type="dict-member" dfn-for="IntersectionObserverInit">
 	: <dfn>root</dfn>
 	::
-		The <a>root</a> to use for intersection.
-		If not provided,
-		use the top-level document's viewport.
+		The |root| to use for intersection.
+		If not provided, use the top-level document's viewport.
 	: <dfn>rootMargin</dfn>
 	::
 		Similar to the CSS 'margin' property,
@@ -492,47 +489,47 @@ similar-origin browsing contexts</a> |unit|, run these steps:
 
 	1. If |observer|'s internal {{[[QueuedEntries]]}} slot is empty,
 		continue.
-	2. Let |queue| be a copy of |observer|'s internal {{[[QueuedEntries]]}} slot.
+	2. Let |queue| be a copy of |observer|'s internal {{[[QueuedEntries]]}}
+		slot.
 	3. Clear |observer|'s internal {{[[QueuedEntries]]}} slot.
-	4. Invoke |callback| with |queue| as the first argument
-		and |observer| as the second argument
-		and <a>callback this value</a>.
-		If this throws an exception,
-		<a>report the exception</a>.
+	4. Invoke |callback| with |queue| as the first argument and |observer|
+		as the second argument and <a>callback this value</a>.
+		If this throws an exception, <a>report the exception</a>.
 
 <h4 id='queue-intersection-observer-entry-algo'>
 Queue an IntersectionObserverEntry</h4>
 
-To <dfn>queue an IntersectionObserverEntry</dfn> for |observer|,
-given a <a>unit of related similar-origin browsing contexts</a> |unit|,
-|observer|, |time|, |rootBounds|, |boundingClientRect|, |intersectionRect| and |target|,
+To <dfn>queue an IntersectionObserverEntry</dfn> for |observer|, given a
+<a>unit of related similar-origin browsing contexts</a> |unit|, |observer|,
+|time|, |rootBounds|, |boundingClientRect|, |intersectionRect| and |target|,
 run these steps:
 
-1. Construct an {{IntersectionObserverEntry}},
-	passing in |time|, |rootBounds|, |boundingClientRect|, |intersectionRect| and |target|.
+1. Construct an {{IntersectionObserverEntry}}, passing in |time|, |rootBounds|,
+	|boundingClientRect|, |intersectionRect| and |target|.
 2. Append it to |observer|'s internal {{[[QueuedEntries]]}} slot.
 3. <a>Queue an intersection observer task</a> for |unit|.
 
 <h4 id='update-intersection-observations-algo'>
 Run the Update Intersection Observations Steps</h4>
 
-To <dfn>run the update intersection observations steps</dfn>
-for an <a>event loop</a> |loop|
-given a timestamp |time|,
-run these steps:
+To <dfn>run the update intersection observations steps</dfn> for an
+<a>event loop</a> |loop| given a timestamp |time|, run these steps:
 
-1. Let |unit| be the <a>unit of related similar-origin browsing contexts</a> for |loop|.
+1. Let |unit| be the <a>unit of related similar-origin browsing contexts</a> for
+	|loop|.
 2. For each |observer| in |unit|'s <a>IntersectionObservers</a> list:
 	1. Let |rootBounds| be |observer|'s <a>root intersection rectangle</a>.
 	2. For each |target| in |observer|'s internal {{[[ObservationTargets]]}} slot:
 		1. Let |boundingClientRect| be a {{DOMRectReadOnly}}
-			obtained by the same algorithm
-			as that of {{Element}}'s {{Element/getBoundingClientRect()}}
-			performed on |target|.
-		2. Let |intersectionRect| be the intersection of |boundingClientRect| with |rootBounds|,
-			intersected with the clip rect of each ancestor
-			between |target| and |observer|. {{IntersectionObserver/root}}
-			(or the top-level document's viewport if |observer|.{{IntersectionObserver/root}} is null).
+			obtained by the same algorithm as that of {{Element}}'s
+			{{Element/getBoundingClientRect()}} performed on
+			|target|.
+		2. Let |intersectionRect| be the intersection of
+			|boundingClientRect| with |rootBounds|, intersected with
+			the clip rect of each ancestor between |target| and
+			|observer|. {{IntersectionObserver/root}} (or the
+			top-level document's viewport if
+			|observer|.{{IntersectionObserver/root}} is null).
 
 			Issue: TBD: Do the clip rects include 'clip-path'
 			and other clipping properties or just overflow clipping?
