@@ -5,7 +5,7 @@ ED: https://github.com/WICG/IntersectionObserver/
 Shortname: intersection-observer
 Level: 1
 Editor: Michael Blain, Google, mpb@google.com
-Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to a viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
+Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to an ancestor container or to the top-level window's visual viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
 Group: Web Performance Working Group
 Repository: WICG/IntersectionObserver
 </pre>
@@ -148,11 +148,11 @@ The IntersectionObserver interface</h3>
 
 The {{IntersectionObserver}} interface can be used to observe changes in the
 intersection of a {{IntersectionObserver/root}} {{Element}} (or the
-<a>top-level browsing context</a>'s visual viewport), and one or more <a>target</a> {{Elements}}.
+<a>top-level browsing context</a>'s visual viewport), and one or more <a>target</a> {{Element}}s.
 
 An {{IntersectionObserver}} with a {{IntersectionObserver/root}} {{Element}} can
 observe any <a>target</a> {{Element}} that is a descendant of the
-{{IntersectionObserver/root}} in the <a>node tree</a>, including {{Elements}} inside
+{{IntersectionObserver/root}} in the <a>node tree</a>, including {{Element}}s inside
 an <a>iframe</a> that belongs to the same <a>unit of related similar-origin browsing contexts</a>
 as the {{IntersectionObserver/root}}.  For example, this is a valid root-target
 relationship:

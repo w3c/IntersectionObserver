@@ -1354,7 +1354,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-03">3 February 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-04">4 February 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1368,7 +1368,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 3 February 2016,
+In addition, as of 4 February 2016,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1376,7 +1376,7 @@ Parts of this work may be from another specification document.  If so, those par
   </div>
   <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
   <div class="p-summary" data-fill-with="abstract">
-   <p>This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to a viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.</p>
+   <p>This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to an ancestor container or to the top-level window’s visual viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.</p>
   </div>
   <div data-fill-with="at-risk"></div>
   <nav data-fill-with="table-of-contents" id="toc">
@@ -1513,9 +1513,9 @@ visual viewport.</p>
 intersection with the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>, as per the <a data-link-type="dfn" href="#intersection-observer-processing-model">processing model</a>.</p>
    <h3 class="heading settled" data-level="2.2" id="intersection-observer-interface"><span class="secno">2.2. </span><span class="content"> The IntersectionObserver interface</span><a class="self-link" href="#intersection-observer-interface"></a></h3>
    <p>The <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> interface can be used to observe changes in the
-intersection of a <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> (or the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>’s visual viewport), and one or more <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#elements">Elements</a></code>.</p>
+intersection of a <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> (or the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>’s visual viewport), and one or more <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>s.</p>
    <p>An <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> with a <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> can
-observe any <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> that is a descendant of the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> in the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#node-trees">node tree</a>, including <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#elements">Elements</a></code> inside
+observe any <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> that is a descendant of the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> in the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#node-trees">node tree</a>, including <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>s inside
 an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/embedded-content.html#the-iframe-element">iframe</a> that belongs to the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> as the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>.  For example, this is a valid root-target
 relationship:</p>
    <div class="example" id="example-fa8ad642">
@@ -2081,7 +2081,6 @@ in the HTML Processing Model.</p>
     <a data-link-type="biblio" href="#biblio-dom-ls">[dom-ls]</a> defines the following terms:
     <ul>
      <li><a href="https://dom.spec.whatwg.org/#element">Element</a>
-     <li><a href="https://dom.spec.whatwg.org/#elements">Elements</a>
      <li><a href="https://dom.spec.whatwg.org/#mutationobserver">MutationObserver</a>
      <li><a href="https://dom.spec.whatwg.org/#dictdef-mutationobserverinit">MutationObserverInit</a>
      <li><a href="https://dom.spec.whatwg.org/#node">Node</a>
