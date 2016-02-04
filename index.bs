@@ -174,11 +174,9 @@ interface IntersectionObserver {
 		3. Set |this|.{{IntersectionObserver/root}} to
 			|options|.{{IntersectionObserverInit/root}}
 		4. Attempt to <a>parse a root margin</a>
-			from |options|.{{IntersectionObserverInit/rootMargin}}.
-			If a list is returned,
+			from |options.rootMargin|.  If a list is returned,
 			set |this|'s internal {{[[rootMargin]]}} slot to that.
-			Otherwise,
-			<a>throw</a> a {{SyntaxError}} exception.
+			Otherwise, <a>throw</a> a {{SyntaxError}} exception.
 		5. Let |thresholds| be a list equal to
 			|options|.{{threshold}}.
 		6. If any value in |thresholds| is less than 0.0 or greater than
@@ -269,7 +267,7 @@ is the rectangle we'll use to check against the targets.
 	<dt>If the <a>intersection root</a> is a scrollable element,
 	<dd>it's the element's scroll viewport.
 
-	<dt>If the <a>intersection root</a> is a document's viewport,
+	<dt>If the <a>intersection root</a> is null,
 	<dd>it's that document's layout scroll viewport.
 
 	<dt>Otherwise,
@@ -286,6 +284,11 @@ with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle,
 unless the <a>intersection root</a> is a document's viewport,
 in which case they resolve to 0.
+
+Note: {{IntersectionObserver/rootMargin}} only applies to the <a>intersection root</a> itself.
+If a <a>target</a> {{Element}} is clipped by an ancestor other than the
+<a>intersection root</a>, that clipping is unaffected by
+{{IntersectionObserver/rootMargin}}.
 
 Note: <a>Root intersection rectangle</a> is not affected by
 <a>pinch zoom</a> and will report the unadjusted viewport, consistent with the
