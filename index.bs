@@ -174,16 +174,16 @@ interface IntersectionObserver {
 		3. Set |this|.{{IntersectionObserver/root}} to
 			|options|.{{IntersectionObserverInit/root}}
 		4. Attempt to <a>parse a root margin</a>
-			from |options.rootMargin|.  If a list is returned,
+			from |options|.{{IntersectionObserverInit/rootMargin}}.  If a list is returned,
 			set |this|'s internal {{[[rootMargin]]}} slot to that.
 			Otherwise, <a>throw</a> a {{SyntaxError}} exception.
 		5. Let |thresholds| be a list equal to
-			|options|.{{threshold}}.
+			|options|.{{IntersectionObserverInit/threshold}}.
 		6. If any value in |thresholds| is less than 0.0 or greater than
 			1.0, <a>throw</a> a {{RangeError}} exception.
-		7. Sort |thresholds| in ascending order
+		7. Sort |thresholds| in ascending order.
 		8. If |thresholds| is empty, append <code>0</code> to |thresholds|.
-		9. Set |this|.{{thresholds}} to |thresholds|.
+		9. Set |this|.{{IntersectionObserver/thresholds}} to |thresholds|.
 		10. Append |this| to the
 			<a>unit of related similar-origin browsing contexts</a>'s
 			<a>IntersectionObservers</a> list.
@@ -238,19 +238,21 @@ interface IntersectionObserver {
 		Represents offsets from the <a>intersection root's</a> bounding box,
 		growing the "box" that is used to calculate intersections.
 
-		On getting,
-		return the result of serializing
-		the elements of {{[[rootMargin]]}}
-		space-separated,
-		where pixel lengths serialize as the numeric value followed by "px",
-		and percentages serialize as the numeric value followed by "%".
-		See IntersectionObserverInit/{{IntersectionObserverInit/rootMargin}}.
+		On getting, return the result of serializing the elements of {{[[rootMargin]]}}
+		space-separated, where pixel lengths serialize as the numeric value followed by "px",
+		and percentages serialize as the numeric value followed by "%".  Note that
+		this is not guaranteed to be identical to the |options|.{{IntersectionObserverInit/rootMargin}}
+		passed to the {{IntersectionObserver}} constructor.  If no
+		{{IntersectionObserverInit/rootMargin}} was passed to the {{IntersectionObserver}}
+		constructor, the value of this attribute is "0px 0px 0px 0px".
 	: <dfn>thresholds</dfn>
 	::
-		Represents a list of thresholds,
-		where each threshold is a percentage of a target's bounding box
-
-		List of thresholds at which to trigger callback.
+		A list of thresholds, sorted in increasing numeric order,
+		where each threshold is a ratio of intersection area to bounding box area
+		of an observed target.  Notifications for a target are generated when any
+		of the thresholds are crossed for that target.
+		If no |options|.{{IntersectionObserverInit/threshold}} was provided to the
+		{{IntersectionObserver}} constructor, the value of this attribute will be [0].
 </div>
 
 The <dfn for="IntersectionObserver">intersection root</dfn>
