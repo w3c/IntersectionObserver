@@ -11,6 +11,8 @@ Repository: WICG/IntersectionObserver
 </pre>
 
 <pre class="anchors">
+urlPrefix: https://dom.spec.whatwg.org/
+	url: #node-trees; type: dfn; text: node tree
 urlPrefix: http://www.w3.org/TR/hr-time/
 	type: typedef; text: DOMHighResTimeStamp
 	type: dfn; text: time origin
@@ -18,17 +20,23 @@ url: http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callback
 urlPrefix: https://html.spec.whatwg.org/multipage/
 	urlPrefix: browsers.html
 		type: dfn; text: unit of related similar-origin browsing contexts
+		type: dfn; text: browsing context
+		type: dfn; text: top-level browsing context
+		type: dfn; text: nested browsing contexts
 	urlPrefix: webappapis.html;
 		type: dfn; text: report the exception
 		type: dfn; text: event loop
 	urlPrefix: infrastructure.html;
 		type: dfn; text: rules for parsing dimension values
 		url: #dfn-callback-this-value; type: dfn; text: callback this value
+	urlPrefix: embedded-content.html;
+		url: #the-iframe-element; type: dfn; text: iframe
 urlPrefix: https://heycam.github.io/webidl/
 	url: #dfn-simple-exception; type:exception;
 		text: RangeError
 		text: TypeError
 		text: SyntaxError
+	url: #dom-domexception-hierarchy_request_err; type: exception; text: HierarchyRequestError
 	urlPrefix: #dfn-; type:dfn; text: throw
 	urlPrefix: #idl-; type:interface; text: double
 url: https://drafts.csswg.org/css2/box.html#content-edge; type:dfn; text: content-box
@@ -41,6 +49,7 @@ spec:dom-ls
 spec: css-values-3; type: dfn
 	text: absolute length
 	text: dimension
+spec: embedded-content; type: element; text: iframe
 </pre>
 
 <h2 id='introduction'>Introduction</h2>
@@ -120,8 +129,8 @@ it allows applications to significantly reduce their CPU, GPU and energy costs.
 
 The <dfn>Intersection Observer</dfn> API enables developers to understand the
 visibility and position of <dfn for="IntersectionObserver">target</dfn> DOM
-elements relative to an <a>intersection root</a> or the top level document's
-viewport.
+elements relative to an <a>intersection root</a> or the <a>top-level browsing context</a>'s
+visual viewport.
 
 <h3 id='intersection-observer-callback'>
 The IntersectionObserverCallback</h3>
@@ -138,8 +147,29 @@ intersection with the <a>intersection root</a>, as per the
 The IntersectionObserver interface</h3>
 
 The {{IntersectionObserver}} interface can be used to observe changes in the
-intersection of a <a>target</a> {{Element}} and a {{IntersectionObserver/root}}
-{{Element}} (or the top-level document's viewport).
+intersection of a {{IntersectionObserver/root}} {{Element}} (or the
+<a>top-level browsing context</a>'s visual viewport), and one or more <a>target</a> {{Elements}}.
+
+An {{IntersectionObserver}} with a {{IntersectionObserver/root}} {{Element}} can
+observe any <a>target</a> {{Element}} that is a descendant of the
+{{IntersectionObserver/root}} in the <a>node tree</a>, including {{Elements}} inside
+an <a>iframe</a> that belongs to the same <a>unit of related similar-origin browsing contexts</a>
+as the {{IntersectionObserver/root}}.  For example, this is a valid root-target
+relationship:
+
+<div class="example">
+     <pre highlight="html">
+     &lt;div id="root"&gt;
+       &lt;iframe srcdoc="&lt;div id='target'&gt;"&gt;&lt;iframe&gt;
+     &lt;div&gt;
+     </pre>
+</div>
+
+An {{IntersectionObserver}} with no {{IntersectionObserver/root}} {{Element}}
+will automatically observe intersections with the <a>top-level browsing context</a>'s
+visual viewport, and valid <a>targets</a> include any {{Element}} in the
+<a>top-level browsing context</a>, as well as any {{Element}} in any
+<a>nested browsing contexts</a> inside the <a>top-level browsing context</a>.
 
 Note: In {{MutationObserver}}, the {{MutationObserverInit}} options are passed
 to {{MutationObserver/observe()}} while in {{IntersectionObserver}} they are
@@ -196,7 +226,7 @@ interface IntersectionObserver {
 			return.
 		2. If |target| is NOT a descendent of
 			|this|.{{IntersectionObserver/root}},
-			<a>throw</a> a {{TypeError}}.
+			<a>throw</a> a {{HierarchyRequestError}}.
 		3. Let |intersectionObserverRegistration| be
 			an {{IntersectionObserverRegistration}} record
 			with an {{IntersectionObserverRegistration/observer}} property set to |this|
