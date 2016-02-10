@@ -1555,8 +1555,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
        <li data-md="">
         <p>Set <var>this</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> to <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code></p>
        <li data-md="">
-        <p>Attempt to <a data-link-type="dfn" href="#parse-a-root-margin">parse a root margin</a> from <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>.
-If a list is returned,
+        <p>Attempt to <a data-link-type="dfn" href="#parse-a-root-margin">parse a root margin</a> from <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>.  If a list is returned,
 set <var>this</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> slot to that.
 Otherwise, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">SyntaxError</a></code> exception.</p>
        <li data-md="">
@@ -1565,7 +1564,7 @@ Otherwise, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-th
         <p>If any value in <var>thresholds</var> is less than 0.0 or greater than
 1.0, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">RangeError</a></code> exception.</p>
        <li data-md="">
-        <p>Sort <var>thresholds</var> in ascending order</p>
+        <p>Sort <var>thresholds</var> in ascending order.</p>
        <li data-md="">
         <p>If <var>thresholds</var> is empty, append <code>0</code> to <var>thresholds</var>.</p>
        <li data-md="">
@@ -1644,18 +1643,17 @@ observer uses the <a data-link-type="dfn" href="#intersectionobserver-implicit-r
      <dd data-md="">
       <p>Represents offsets from the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root’s</a> bounding box,
 growing the "box" that is used to calculate intersections.</p>
-      <p>On getting,
-return the result of serializing
-the elements of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> space-separated,
-where pixel lengths serialize as the numeric value followed by "px",
-and percentages serialize as the numeric value followed by "%".
-See IntersectionObserverInit/<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>.</p>
+      <p>On getting, return the result of serializing the elements of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> space-separated, where pixel lengths serialize as the numeric value followed by "px",
+and percentages serialize as the numeric value followed by "%".  Note that
+this is not guaranteed to be identical to the <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code> passed to the <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> constructor.  If no <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code> was passed to the <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> constructor, the value of this attribute is "0px 0px 0px 0px".</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-thresholds">thresholds<a class="self-link" href="#dom-intersectionobserver-thresholds"></a></dfn>, <span> of type sequence&lt;<a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-double">double</a>>, readonly</span></p>
      <dd data-md="">
-      <p>Represents a list of thresholds,
-where each threshold is a percentage of a target’s bounding box</p>
-      <p>List of thresholds at which to trigger callback.</p>
+      <p>A list of thresholds, sorted in increasing numeric order,
+where each threshold is a ratio of intersection area to bounding box area
+of an observed target.  Notifications for a target are generated when any
+of the thresholds are crossed for that target.
+If no <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold">threshold</a></code> was provided to the <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> constructor, the value of this attribute will be [0].</p>
     </dl>
    </div>
    <p>The <dfn data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-intersection-root">intersection root<a class="self-link" href="#intersectionobserver-intersection-root"></a></dfn> for an <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> is the value of its <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> attribute,
@@ -1679,6 +1677,8 @@ with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle,
 unless the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is the <a data-link-type="dfn" href="#intersectionobserver-implicit-root">implicit root</a>,
 in which case they resolve to 0.</p>
+   <p class="note" role="note">Note: <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code> only applies to the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> itself.
+If a <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> is clipped by an ancestor other than the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>, that clipping is unaffected by <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code>.</p>
    <p class="note" role="note">Note: <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">Root intersection rectangle</a> is not affected by <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#pinch-zoom">pinch zoom</a> and will report the unadjusted <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a>, consistent with the
 intent of pinch zooming (to act like a magnifying glass and NOT change layout.)</p>
    <p>To <dfn data-dfn-type="dfn" data-noexport="" id="parse-a-root-margin">parse a root margin<a class="self-link" href="#parse-a-root-margin"></a></dfn> from an input string <var>marginString</var>,
