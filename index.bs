@@ -44,6 +44,8 @@ urlPrefix: https://drafts.csswg.org/css-box/
 	url: #viewport; type: dfn; text: viewport
 	url: #containing-block; type: dfn; text: containing block
 	url: #content-area; type: dfn; text: content area
+urlPrefix: https://drafts.csswg.org/css-display/
+	url: #containing-block-chain; type: dfn; text: containing block chain
 urlPrefix: http://dev.w3.org/csswg/cssom-view/
 	url: #pinch-zoom; type:dfn; text: pinch zoom
 	url: #dom-element-getboundingclientrect; type:dfn; text: getBoundingClientRect
@@ -156,18 +158,7 @@ intersection of a {{IntersectionObserver/root}} {{Element}} (or the
 
 An {{IntersectionObserver}} with a {{IntersectionObserver/root}} {{Element}} can
 observe any <a>target</a> {{Element}} that is a descendant of the
-{{IntersectionObserver/root}} in the <a>node tree</a>, including {{Element}}s inside
-an <a>iframe</a> that belongs to the same <a>unit of related similar-origin browsing contexts</a>
-as the {{IntersectionObserver/root}}.  For example, this is a valid root-target
-relationship:
-
-<div class="example">
-     <pre highlight="html">
-     &lt;div id="root"&gt;
-       &lt;iframe srcdoc="&lt;div id='target'&gt;"&gt;&lt;iframe&gt;
-     &lt;div&gt;
-     </pre>
-</div>
+{{IntersectionObserver/root}} in the <a>containing block chain</a>.
 
 An {{IntersectionObserver}} with no {{IntersectionObserver/root}} {{Element}}
 will automatically observe intersections with the <a>implicit root</a>,
