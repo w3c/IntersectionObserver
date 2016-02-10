@@ -1,4 +1,3 @@
-
 <!doctype html><html lang="en">
  <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -1298,8 +1297,10 @@
 .highlight .n { color: #0077aa } /* Name */
 .highlight .o { color: #999999 } /* Operator */
 .highlight .p { color: #999999 } /* Punctuation */
+.highlight .ch { color: #708090 } /* Comment.Hashbang */
 .highlight .cm { color: #708090 } /* Comment.Multiline */
 .highlight .cp { color: #708090 } /* Comment.Preproc */
+.highlight .cpf { color: #708090 } /* Comment.PreprocFile */
 .highlight .c1 { color: #708090 } /* Comment.Single */
 .highlight .cs { color: #708090 } /* Comment.Special */
 .highlight .kc { color: #990055 } /* Keyword.Constant */
@@ -1353,7 +1354,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-03">3 February 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-04">4 February 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1367,7 +1368,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 3 February 2016,
+In addition, as of 4 February 2016,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1543,8 +1544,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
        <li data-md="">
         <p>Set <var>this</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> to <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code></p>
        <li data-md="">
-        <p>Attempt to <a data-link-type="dfn" href="#parse-a-root-margin">parse a root margin</a> from <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>.
-If a list is returned,
+        <p>Attempt to <a data-link-type="dfn" href="#parse-a-root-margin">parse a root margin</a> from <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>.  If a list is returned,
 set <var>this</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> slot to that.
 Otherwise, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">SyntaxError</a></code> exception.</p>
        <li data-md="">
@@ -1553,7 +1553,7 @@ Otherwise, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-th
         <p>If any value in <var>thresholds</var> is less than 0.0 or greater than
 1.0, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">RangeError</a></code> exception.</p>
        <li data-md="">
-        <p>Sort <var>thresholds</var> in ascending order</p>
+        <p>Sort <var>thresholds</var> in ascending order.</p>
        <li data-md="">
         <p>If <var>thresholds</var> is empty, append <code>0</code> to <var>thresholds</var>.</p>
        <li data-md="">
@@ -1631,18 +1631,17 @@ or create a separate <code class="idl"><a data-link-type="idl" href="#intersecti
      <dd data-md="">
       <p>Represents offsets from the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root’s</a> bounding box,
 growing the "box" that is used to calculate intersections.</p>
-      <p>On getting,
-return the result of serializing
-the elements of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> space-separated,
-where pixel lengths serialize as the numeric value followed by "px",
-and percentages serialize as the numeric value followed by "%".
-See IntersectionObserverInit/<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code>.</p>
+      <p>On getting, return the result of serializing the elements of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> space-separated, where pixel lengths serialize as the numeric value followed by "px",
+and percentages serialize as the numeric value followed by "%".  Note that
+this is not guaranteed to be identical to the <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code> passed to the <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> constructor.  If no <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code> was passed to the <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> constructor, the value of this attribute is "0px 0px 0px 0px".</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-thresholds">thresholds<a class="self-link" href="#dom-intersectionobserver-thresholds"></a></dfn>, <span> of type sequence&lt;<a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-double">double</a>>, readonly</span></p>
      <dd data-md="">
-      <p>Represents a list of thresholds,
-where each threshold is a percentage of a target’s bounding box</p>
-      <p>List of thresholds at which to trigger callback.</p>
+      <p>A list of thresholds, sorted in increasing numeric order,
+where each threshold is a ratio of intersection area to bounding box area
+of an observed target.  Notifications for a target are generated when any
+of the thresholds are crossed for that target.
+If no <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold">threshold</a></code> was provided to the <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> constructor, the value of this attribute will be [0].</p>
     </dl>
    </div>
    <p>The <dfn data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-intersection-root">intersection root<a class="self-link" href="#intersectionobserver-intersection-root"></a></dfn> for an <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> is the value of its <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> attribute,
@@ -1652,7 +1651,7 @@ or else the top-level document’s viewport.</p>
    <dl class="switch">
     <dt>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is a scrollable element, 
     <dd>it’s the element’s scroll viewport. 
-    <dt>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is a document’s viewport, 
+    <dt>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is null, 
     <dd>it’s that document’s layout scroll viewport. 
     <dt>Otherwise, 
     <dd>it’s the element’s axis-aligned bounding box of its fragments after layout. 
@@ -1666,6 +1665,8 @@ with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle,
 unless the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is a document’s viewport,
 in which case they resolve to 0.</p>
+   <p class="note" role="note">Note: <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code> only applies to the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> itself.
+If a <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> is clipped by an ancestor other than the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>, that clipping is unaffected by <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code>.</p>
    <p class="note" role="note">Note: <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">Root intersection rectangle</a> is not affected by <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#pinch-zoom">pinch zoom</a> and will report the unadjusted viewport, consistent with the
 intent of pinch zooming (to act like a magnifying glass and NOT change layout.)</p>
    <p>To <dfn data-dfn-type="dfn" data-noexport="" id="parse-a-root-margin">parse a root margin<a class="self-link" href="#parse-a-root-margin"></a></dfn> from an input string <var>marginString</var>,
