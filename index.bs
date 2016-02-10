@@ -5,7 +5,7 @@ ED: https://github.com/WICG/IntersectionObserver/
 Shortname: intersection-observer
 Level: 1
 Editor: Michael Blain, Google, mpb@google.com
-Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to an ancestor container or to the top-level window's visual viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
+Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to an ancestor container or to the top-level window's viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
 Group: Web Performance Working Group
 Repository: WICG/IntersectionObserver
 </pre>
@@ -40,7 +40,13 @@ urlPrefix: https://heycam.github.io/webidl/
 	urlPrefix: #dfn-; type:dfn; text: throw
 	urlPrefix: #idl-; type:interface; text: double
 url: https://drafts.csswg.org/css2/box.html#content-edge; type:dfn; text: content-box
-url: http://dev.w3.org/csswg/cssom-view/#pinch-zoom; type:dfn; text: pinch zoom
+urlPrefix: https://drafts.csswg.org/css-box/
+	url: #viewport; type: dfn; text: viewport
+	url: #containing-block; type: dfn; text: containing block
+	url: #content-area; type: dfn; text: content area
+urlPrefix: http://dev.w3.org/csswg/cssom-view/
+	url: #pinch-zoom; type:dfn; text: pinch zoom
+	url: #dom-element-getboundingclientrect; type:dfn; text: getBoundingClientRect
 </pre>
 
 <pre class="link-defaults">
@@ -79,32 +85,27 @@ however, including (but not limited to):
 
 These use-cases have several common properties:
 
-1. They can be represented as passive "queries"
-	about the state of individual elements
-	with respect to some other element
-	(or the global viewport)
-2. They do not impose hard latency requirements;
-	that is to say, the information can be delivered asynchronously
-	(e.g. from another thread)
-	without penalty
-3. They are poorly supported by nearly all combinations of existing web platform features,
-	requiring extraordinary developer effort despite their widespread use.
+1. They can be represented as passive "queries" about the state of individual
+	elements with respect to some other element (or the global viewport).
+2. They do not impose hard latency requirements; that is to say, the
+	information can be delivered asynchronously (e.g. from another thread)
+	without penalty.
+3. They are poorly supported by nearly all combinations of existing web platform
+	features, requiring extraordinary developer effort despite their
+	widespread use.
 
-A notable non-goal is pixel-accurate information about what was actually displayed
-(which can be quite difficult to obtain efficiently in certain browser architectures
-in the face of filters, webgl, and other features).
-In all of these scenarios the information is useful
-even when delivered at a slight delay
-and without perfect compositing-result data.
+A notable non-goal is pixel-accurate information about what was actually
+displayed (which can be quite difficult to obtain efficiently in certain
+browser architectures in the face of filters, webgl, and other features). In all
+of these scenarios the information is useful even when delivered at a slight
+delay and without perfect compositing-result data.
 
-The Intersersection Observer API addresses the above issues
-by giving developers a new method to asynchronously query the position of an element
-with respect to other elements or the global viewport.
-The asynchronous delivery eliminates the need for costly DOM and style queries,
-continuous polling,
-and use of custom plugins.
-By removing the need for these methods
-it allows applications to significantly reduce their CPU, GPU and energy costs.
+The Intersersection Observer API addresses the above issues by giving developers
+a new method to asynchronously query the position of an element with respect to
+other elements or the global viewport. The asynchronous delivery eliminates the
+need for costly DOM and style queries, continuous polling, and use of custom
+plugins. By removing the need for these methods it allows applications to
+significantly reduce their CPU, GPU and energy costs.
 
 <div class="example">
 	<pre highlight="js">
@@ -118,10 +119,14 @@ it allows applications to significantly reduce their CPU, GPU and energy costs.
 		}
 	}, {});
 
-	// Watch all threshold events on a specific descendant of the viewport
+	// Watch all threshold events on a specific descendant of the <a>top-level browsing context</a>'s <a>viewport</a>
 	observer.observe(childElement);
 
-	observer.disconnect(); // removes all
+	// Stop observing threshold events on given target element.
+	observer.unobserve(childElement);
+
+	// Stop observing threshold events on all target elements.
+	observer.disconnect();
 	</pre>
 </div>
 
@@ -129,8 +134,7 @@ it allows applications to significantly reduce their CPU, GPU and energy costs.
 
 The <dfn>Intersection Observer</dfn> API enables developers to understand the
 visibility and position of <dfn for="IntersectionObserver">target</dfn> DOM
-elements relative to an <a>intersection root</a> or the <a>top-level browsing context</a>'s
-visual viewport.
+elements relative to an <a>intersection root</a>.
 
 <h3 id='intersection-observer-callback'>
 The IntersectionObserverCallback</h3>
@@ -148,7 +152,7 @@ The IntersectionObserver interface</h3>
 
 The {{IntersectionObserver}} interface can be used to observe changes in the
 intersection of a {{IntersectionObserver/root}} {{Element}} (or the
-<a>top-level browsing context</a>'s visual viewport), and one or more <a>target</a> {{Element}}s.
+<a>implicit root</a>), and one or more <a>target</a> {{Element}}s.
 
 An {{IntersectionObserver}} with a {{IntersectionObserver/root}} {{Element}} can
 observe any <a>target</a> {{Element}} that is a descendant of the
@@ -166,8 +170,8 @@ relationship:
 </div>
 
 An {{IntersectionObserver}} with no {{IntersectionObserver/root}} {{Element}}
-will automatically observe intersections with the <a>top-level browsing context</a>'s
-visual viewport, and valid <a>targets</a> include any {{Element}} in the
+will automatically observe intersections with the <a>implicit root</a>,
+and valid <a>targets</a> include any {{Element}} in the
 <a>top-level browsing context</a>, as well as any {{Element}} in any
 <a>nested browsing contexts</a> inside the <a>top-level browsing context</a>.
 
@@ -264,7 +268,8 @@ interface IntersectionObserver {
 <div dfn-type="attribute" dfn-for="IntersectionObserver">
 	: <dfn>root</dfn>
 	::
-		The |root| to use for intersection.
+		The |root| to use for intersection, or <code>null</code> if the
+		observer uses the <a>implicit root</a>.
 	: <dfn>rootMargin</dfn>
 	::
 		Represents offsets from the <a>intersection root's</a> bounding box,
@@ -286,24 +291,24 @@ interface IntersectionObserver {
 </div>
 
 The <dfn for="IntersectionObserver">intersection root</dfn>
-for an {{IntersectionObserver}}
-is the value of its {{IntersectionObserver/root}} attribute,
-if it's an element,
-or else the top-level document's viewport.
+for an {{IntersectionObserver}} is the value of its {{IntersectionObserver/root}} attribute,
+or else the <a>top-level browsing context</a>'s <a>viewport</a>
+(referred to as the <dfn for="IntersectionObserver">implicit root</dfn>) if
+the {{IntersectionObserver/root}} attribute is <code>null</code>.
 
 The <dfn for=IntersectionObserver>root intersection rectangle</dfn>
 for an {{IntersectionObserver}}
 is the rectangle we'll use to check against the targets.
 
 <dl class=switch>
-	<dt>If the <a>intersection root</a> is a scrollable element,
-	<dd>it's the element's scroll viewport.
+	<dt>If the <a>intersection root</a> is the <a>implicit root</a>,
+	<dd>it's the viewport's size.
 
-	<dt>If the <a>intersection root</a> is a document's viewport,
-	<dd>it's that document's layout scroll viewport.
+	<dt>If the <a>intersection root</a> is a scrollable element,
+	<dd>it's the element's <a>content area</a>.
 
 	<dt>Otherwise,
-	<dd>it's the element's axis-aligned bounding box of its fragments after layout.
+	<dd>it's the result of running the <a>getBoundingClientRect</a> algorithm on the <a>intersection root</a>.
 </dl>
 
 In all cases, the rectangle is then further grown
@@ -314,11 +319,11 @@ with the four values indicating
 the amount the top, right, bottom, and left edges, respectively, are offset by,
 with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle,
-unless the <a>intersection root</a> is a document's viewport,
+unless the <a>intersection root</a> is the <a>implicit root</a>,
 in which case they resolve to 0.
 
 Note: <a>Root intersection rectangle</a> is not affected by
-<a>pinch zoom</a> and will report the unadjusted viewport, consistent with the
+<a>pinch zoom</a> and will report the unadjusted <a>viewport</a>, consistent with the
 intent of pinch zooming (to act like a magnifying glass and NOT change layout.)
 
 To <dfn>parse a root margin</dfn>
@@ -418,7 +423,7 @@ dictionary IntersectionObserverInit {
 	: <dfn>root</dfn>
 	::
 		The |root| to use for intersection.
-		If not provided, use the top-level document's viewport.
+		If not provided, use the <a>implicit root</a>.
 	: <dfn>rootMargin</dfn>
 	::
 		Similar to the CSS 'margin' property,
@@ -557,12 +562,7 @@ To <dfn>run the update intersection observations steps</dfn> for an
 		2. Let |intersectionRect| be the intersection of
 			|boundingClientRect| with |rootBounds|, intersected with
 			the clip rect of each ancestor between |target| and
-			|observer|. {{IntersectionObserver/root}} (or the
-			top-level document's viewport if
-			|observer|.{{IntersectionObserver/root}} is null).
-
-			Issue: TBD: Do the clip rects include 'clip-path'
-			and other clipping properties or just overflow clipping?
+			the <a>intersection root</a>.
 		3. Let |area| be |boundingClientRect|'s area.
 		4. Let |visibleArea| be |intersectionRect|'s area.
 		5. Let |visibleRatio| be |visibleArea| divided by |area| if |area| is non-zero,
