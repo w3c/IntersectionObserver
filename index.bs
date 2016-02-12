@@ -29,8 +29,6 @@ urlPrefix: https://html.spec.whatwg.org/multipage/
 	urlPrefix: infrastructure.html;
 		type: dfn; text: rules for parsing dimension values
 		url: #dfn-callback-this-value; type: dfn; text: callback this value
-	urlPrefix: embedded-content.html;
-		url: #the-iframe-element; type: dfn; text: iframe
 urlPrefix: https://heycam.github.io/webidl/
 	url: #dfn-simple-exception; type:exception;
 		text: RangeError
@@ -57,7 +55,6 @@ spec:dom-ls
 spec: css-values-3; type: dfn
 	text: absolute length
 	text: dimension
-spec: embedded-content; type: element; text: iframe
 </pre>
 
 <h2 id='introduction'>Introduction</h2>
@@ -87,27 +84,32 @@ however, including (but not limited to):
 
 These use-cases have several common properties:
 
-1. They can be represented as passive "queries" about the state of individual
-	elements with respect to some other element (or the global viewport).
-2. They do not impose hard latency requirements; that is to say, the
-	information can be delivered asynchronously (e.g. from another thread)
+1. They can be represented as passive "queries"
+	about the state of individual elements
+	with respect to some other element
+	(or the global viewport).
+2. They do not impose hard latency requirements;
+	that is to say, the information can be delivered asynchronously
+	(e.g. from another thread)
 	without penalty.
-3. They are poorly supported by nearly all combinations of existing web platform
-	features, requiring extraordinary developer effort despite their
-	widespread use.
+3. They are poorly supported by nearly all combinations of existing web platform features,
+	requiring extraordinary developer effort despite their widespread use.
 
-A notable non-goal is pixel-accurate information about what was actually
-displayed (which can be quite difficult to obtain efficiently in certain
-browser architectures in the face of filters, webgl, and other features). In all
-of these scenarios the information is useful even when delivered at a slight
-delay and without perfect compositing-result data.
+A notable non-goal is pixel-accurate information about what was actually displayed
+(which can be quite difficult to obtain efficiently in certain browser architectures
+in the face of filters, webgl, and other features).
+In all of these scenarios the information is useful
+even when delivered at a slight delay
+and without perfect compositing-result data.
 
-The Intersersection Observer API addresses the above issues by giving developers
-a new method to asynchronously query the position of an element with respect to
-other elements or the global viewport. The asynchronous delivery eliminates the
-need for costly DOM and style queries, continuous polling, and use of custom
-plugins. By removing the need for these methods it allows applications to
-significantly reduce their CPU, GPU and energy costs.
+The Intersersection Observer API addresses the above issues
+by giving developers a new method to asynchronously query the position of an element
+with respect to other elements or the global viewport.
+The asynchronous delivery eliminates the need for costly DOM and style queries,
+continuous polling,
+and use of custom plugins.
+By removing the need for these methods
+it allows applications to significantly reduce their CPU, GPU and energy costs.
 
 <div class="example">
 	<pre highlight="js">
