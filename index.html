@@ -1289,72 +1289,12 @@
 	.toc .atrisk::before { content:none }
 </style>
   <meta content="Bikeshed 1.0.0" name="generator">
-<style>.highlight .hll { background-color: #ffffcc }
-.highlight  { background: #ffffff; }
-.highlight .c { color: #708090 } /* Comment */
-.highlight .k { color: #990055 } /* Keyword */
-.highlight .l { color: #000000 } /* Literal */
-.highlight .n { color: #0077aa } /* Name */
-.highlight .o { color: #999999 } /* Operator */
-.highlight .p { color: #999999 } /* Punctuation */
-.highlight .ch { color: #708090 } /* Comment.Hashbang */
-.highlight .cm { color: #708090 } /* Comment.Multiline */
-.highlight .cp { color: #708090 } /* Comment.Preproc */
-.highlight .cpf { color: #708090 } /* Comment.PreprocFile */
-.highlight .c1 { color: #708090 } /* Comment.Single */
-.highlight .cs { color: #708090 } /* Comment.Special */
-.highlight .kc { color: #990055 } /* Keyword.Constant */
-.highlight .kd { color: #990055 } /* Keyword.Declaration */
-.highlight .kn { color: #990055 } /* Keyword.Namespace */
-.highlight .kp { color: #990055 } /* Keyword.Pseudo */
-.highlight .kr { color: #990055 } /* Keyword.Reserved */
-.highlight .kt { color: #990055 } /* Keyword.Type */
-.highlight .ld { color: #000000 } /* Literal.Date */
-.highlight .m { color: #000000 } /* Literal.Number */
-.highlight .s { color: #a67f59 } /* Literal.String */
-.highlight .na { color: #0077aa } /* Name.Attribute */
-.highlight .nc { color: #0077aa } /* Name.Class */
-.highlight .no { color: #0077aa } /* Name.Constant */
-.highlight .nd { color: #0077aa } /* Name.Decorator */
-.highlight .ni { color: #0077aa } /* Name.Entity */
-.highlight .ne { color: #0077aa } /* Name.Exception */
-.highlight .nf { color: #0077aa } /* Name.Function */
-.highlight .nl { color: #0077aa } /* Name.Label */
-.highlight .nn { color: #0077aa } /* Name.Namespace */
-.highlight .py { color: #0077aa } /* Name.Property */
-.highlight .nt { color: #669900 } /* Name.Tag */
-.highlight .nv { color: #0077aa } /* Name.Variable */
-.highlight .ow { color: #999999 } /* Operator.Word */
-.highlight .mb { color: #000000 } /* Literal.Number.Bin */
-.highlight .mf { color: #000000 } /* Literal.Number.Float */
-.highlight .mh { color: #000000 } /* Literal.Number.Hex */
-.highlight .mi { color: #000000 } /* Literal.Number.Integer */
-.highlight .mo { color: #000000 } /* Literal.Number.Oct */
-.highlight .sb { color: #a67f59 } /* Literal.String.Backtick */
-.highlight .sc { color: #a67f59 } /* Literal.String.Char */
-.highlight .sd { color: #a67f59 } /* Literal.String.Doc */
-.highlight .s2 { color: #a67f59 } /* Literal.String.Double */
-.highlight .se { color: #a67f59 } /* Literal.String.Escape */
-.highlight .sh { color: #a67f59 } /* Literal.String.Heredoc */
-.highlight .si { color: #a67f59 } /* Literal.String.Interpol */
-.highlight .sx { color: #a67f59 } /* Literal.String.Other */
-.highlight .sr { color: #a67f59 } /* Literal.String.Regex */
-.highlight .s1 { color: #a67f59 } /* Literal.String.Single */
-.highlight .ss { color: #a67f59 } /* Literal.String.Symbol */
-.highlight .vc { color: #0077aa } /* Name.Variable.Class */
-.highlight .vg { color: #0077aa } /* Name.Variable.Global */
-.highlight .vi { color: #0077aa } /* Name.Variable.Instance */
-.highlight .il { color: #000000 } /* Literal.Number.Integer.Long */
-        .highlight { background: hsl(24, 20%, 95%); }
-        code.highlight { padding: .1em; border-radius: .3em; }
-        pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
-        </style>
  </head>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-04">4 February 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-12">12 February 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1368,7 +1308,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 4 February 2016,
+In addition, as of 12 February 2016,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1376,7 +1316,7 @@ Parts of this work may be from another specification document.  If so, those par
   </div>
   <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
   <div class="p-summary" data-fill-with="abstract">
-   <p>This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to a viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.</p>
+   <p>This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to an ancestor container or to the top-level window’s viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.</p>
   </div>
   <div data-fill-with="at-risk"></div>
   <nav data-fill-with="table-of-contents" id="toc">
@@ -1457,55 +1397,54 @@ and resorting to exotic plugin-based solutions for computing "true" element visi
    <p>These use-cases have several common properties:</p>
    <ol>
     <li data-md="">
-     <p>They can be represented as passive "queries"
-about the state of individual elements
-with respect to some other element
-(or the global viewport)</p>
+     <p>They can be represented as passive "queries" about the state of individual
+elements with respect to some other element (or the global viewport).</p>
     <li data-md="">
-     <p>They do not impose hard latency requirements;
-that is to say, the information can be delivered asynchronously
-(e.g. from another thread)
-without penalty</p>
+     <p>They do not impose hard latency requirements; that is to say, the
+information can be delivered asynchronously (e.g. from another thread)
+without penalty.</p>
     <li data-md="">
-     <p>They are poorly supported by nearly all combinations of existing web platform features,
-requiring extraordinary developer effort despite their widespread use.</p>
+     <p>They are poorly supported by nearly all combinations of existing web platform
+features, requiring extraordinary developer effort despite their
+widespread use.</p>
    </ol>
-   <p>A notable non-goal is pixel-accurate information about what was actually displayed
-(which can be quite difficult to obtain efficiently in certain browser architectures
-in the face of filters, webgl, and other features).
-In all of these scenarios the information is useful
-even when delivered at a slight delay
-and without perfect compositing-result data.</p>
-   <p>The Intersersection Observer API addresses the above issues
-by giving developers a new method to asynchronously query the position of an element
-with respect to other elements or the global viewport.
-The asynchronous delivery eliminates the need for costly DOM and style queries,
-continuous polling,
-and use of custom plugins.
-By removing the need for these methods
-it allows applications to significantly reduce their CPU, GPU and energy costs.</p>
-   <div class="example" id="example-08070828">
-    <a class="self-link" href="#example-08070828"></a> 
-<pre class="highlight"><span class="kd">var</span> <span class="nx">observer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">IntersectionObserver</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">time</span><span class="p">);</span>               <span class="c1">// Timestamp when the change occurred</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">rootBounds</span><span class="p">);</span>         <span class="c1">// Unclipped area of root</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">intersectionRect</span><span class="p">);</span>   <span class="c1">// Unclipped area of target intersected with rootBounds</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">boundingClientRect</span><span class="p">);</span> <span class="c1">// target.boundingClientRect()</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">target</span><span class="p">);</span>             <span class="c1">// the Element target</span>
-  <span class="p">}</span>
-<span class="p">},</span> <span class="p">{});</span>
+   <p>A notable non-goal is pixel-accurate information about what was actually
+displayed (which can be quite difficult to obtain efficiently in certain
+browser architectures in the face of filters, webgl, and other features). In all
+of these scenarios the information is useful even when delivered at a slight
+delay and without perfect compositing-result data.</p>
+   <p>The Intersersection Observer API addresses the above issues by giving developers
+a new method to asynchronously query the position of an element with respect to
+other elements or the global viewport. The asynchronous delivery eliminates the
+need for costly DOM and style queries, continuous polling, and use of custom
+plugins. By removing the need for these methods it allows applications to
+significantly reduce their CPU, GPU and energy costs.</p>
+   <div class="example" id="example-25a3b0b0">
+    <a class="self-link" href="#example-25a3b0b0"></a> 
+<pre>var observer = new IntersectionObserver(function(changes) {
+  for (var i in changes) {
+    console.log(changes[i].time);               // Timestamp when the change occurred
+    console.log(changes[i].rootBounds);         // Unclipped area of root
+    console.log(changes[i].intersectionRect);   // Unclipped area of target intersected with rootBounds
+    console.log(changes[i].boundingClientRect); // target.boundingClientRect()
+    console.log(changes[i].target);             // the Element target
+  }
+}, {});
 
-<span class="c1">// Watch all threshold events on a specific descendant of the viewport</span>
-<span class="nx">observer</span><span class="p">.</span><span class="nx">observe</span><span class="p">(</span><span class="nx">childElement</span><span class="p">);</span>
+// Watch all threshold events on a specific descendant of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>’s <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a>
+observer.observe(childElement);
 
-<span class="nx">observer</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">();</span> <span class="c1">// removes all</span></pre>
+// Stop observing threshold events on given target element.
+observer.unobserve(childElement);
+
+// Stop observing threshold events on all target elements.
+observer.disconnect();
+</pre>
    </div>
    <h2 class="heading settled" data-level="2" id="intersection-observer-api"><span class="secno">2. </span><span class="content">Intersection Observer</span><a class="self-link" href="#intersection-observer-api"></a></h2>
    <p>The <dfn data-dfn-type="dfn" data-noexport="" id="intersection-observer">Intersection Observer<a class="self-link" href="#intersection-observer"></a></dfn> API enables developers to understand the
 visibility and position of <dfn data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-target">target<a class="self-link" href="#intersectionobserver-target"></a></dfn> DOM
-elements relative to an <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> or the top level document’s
-viewport.</p>
+elements relative to an <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>.</p>
    <h3 class="heading settled" data-level="2.1" id="intersection-observer-callback"><span class="secno">2.1. </span><span class="content"> The IntersectionObserverCallback</span><a class="self-link" href="#intersection-observer-callback"></a></h3>
 <pre class="idl">callback <dfn class="idl-code" data-dfn-type="callback" data-export="" id="callbackdef-intersectionobservercallback">IntersectionObserverCallback<a class="self-link" href="#callbackdef-intersectionobservercallback"></a></dfn> = void (sequence&lt;<a data-link-type="idl-name" href="#intersectionobserverentry">IntersectionObserverEntry</a>> <dfn class="idl-code" data-dfn-for="IntersectionObserverCallback" data-dfn-type="argument" data-export="" id="dom-intersectionobservercallback-entries">entries<a class="self-link" href="#dom-intersectionobservercallback-entries"></a></dfn>, <a data-link-type="idl-name" href="#intersectionobserver">IntersectionObserver</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverCallback" data-dfn-type="argument" data-export="" id="dom-intersectionobservercallback-observer">observer<a class="self-link" href="#dom-intersectionobservercallback-observer"></a></dfn>)
 </pre>
@@ -1513,7 +1452,11 @@ viewport.</p>
 intersection with the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>, as per the <a data-link-type="dfn" href="#intersection-observer-processing-model">processing model</a>.</p>
    <h3 class="heading settled" data-level="2.2" id="intersection-observer-interface"><span class="secno">2.2. </span><span class="content"> The IntersectionObserver interface</span><a class="self-link" href="#intersection-observer-interface"></a></h3>
    <p>The <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> interface can be used to observe changes in the
-intersection of a <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> and a <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> (or the top-level document’s viewport).</p>
+intersection of a <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> (or the <a data-link-type="dfn" href="#intersectionobserver-implicit-root">implicit root</a>), and one or more <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>s.</p>
+   <p>An <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> with a <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> can
+observe any <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> that is a descendant of the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain">containing block chain</a>.</p>
+   <p>An <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> with no <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> will automatically observe intersections with the <a data-link-type="dfn" href="#intersectionobserver-implicit-root">implicit root</a>,
+and valid <a data-link-type="dfn" href="#intersectionobserver-target">targets</a> include any <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>, as well as any <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> in any <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-contexts">nested browsing contexts</a> inside the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>.</p>
    <p class="note" role="note">Note: In <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#mutationobserver">MutationObserver</a></code>, the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dictdef-mutationobserverinit">MutationObserverInit</a></code> options are passed
 to <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-mutationobserver-observe">observe()</a></code> while in <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> they are
 passed to the constructor. This is because for MutationObserver, each <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#node">Node</a></code> being observed could have a different set of attributes to filter. For <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code>, having different <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root">root</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code> or <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold">threshold</a></code> values for each <a data-link-type="dfn" href="#intersectionobserver-target">target</a> seems to introduce more complexity without solving additional
@@ -1571,7 +1514,7 @@ Otherwise, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-th
         <p>If <var>target</var> is in <var>this</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot,
 return.</p>
        <li data-md="">
-        <p>If <var>target</var> is NOT a descendent of <var>this</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dfn-simple-exception">TypeError</a></code>.</p>
+        <p>If <var>target</var> is NOT a descendent of <var>this</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dom-domexception-hierarchy_request_err">HierarchyRequestError</a></code>.</p>
        <li data-md="">
         <p>Let <var>intersectionObserverRegistration</var> be
 an <code class="idl"><a data-link-type="idl" href="#intersectionobserverregistration">IntersectionObserverRegistration</a></code> record
@@ -1625,7 +1568,8 @@ or create a separate <code class="idl"><a data-link-type="idl" href="#intersecti
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-root">root<a class="self-link" href="#dom-intersectionobserver-root"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>, readonly, nullable</span></p>
      <dd data-md="">
-      <p>The <var>root</var> to use for intersection.</p>
+      <p>The <var>root</var> to use for intersection, or <code>null</code> if the
+observer uses the <a data-link-type="dfn" href="#intersectionobserver-implicit-root">implicit root</a>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-rootmargin">rootMargin<a class="self-link" href="#dom-intersectionobserver-rootmargin"></a></dfn>, <span> of type <a data-link-type="idl-name" href="http://heycam.github.io/webidl/#idl-DOMString">DOMString</a>, readonly</span></p>
      <dd data-md="">
@@ -1645,16 +1589,16 @@ If no <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-in
     </dl>
    </div>
    <p>The <dfn data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-intersection-root">intersection root<a class="self-link" href="#intersectionobserver-intersection-root"></a></dfn> for an <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> is the value of its <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> attribute,
-if it’s an element,
-or else the top-level document’s viewport.</p>
+or else the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>’s <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a> (referred to as the <dfn data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-implicit-root">implicit root<a class="self-link" href="#intersectionobserver-implicit-root"></a></dfn>) if
+the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> attribute is <code>null</code>.</p>
    <p>The <dfn data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-root-intersection-rectangle">root intersection rectangle<a class="self-link" href="#intersectionobserver-root-intersection-rectangle"></a></dfn> for an <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> is the rectangle we’ll use to check against the targets.</p>
    <dl class="switch">
+    <dt>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is the <a data-link-type="dfn" href="#intersectionobserver-implicit-root">implicit root</a>, 
+    <dd>it’s the viewport’s size. 
     <dt>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is a scrollable element, 
-    <dd>it’s the element’s scroll viewport. 
-    <dt>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is null, 
-    <dd>it’s that document’s layout scroll viewport. 
+    <dd>it’s the element’s <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#content-area">content area</a>. 
     <dt>Otherwise, 
-    <dd>it’s the element’s axis-aligned bounding box of its fragments after layout. 
+    <dd>it’s the result of running the <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>. 
    </dl>
    <p>In all cases, the rectangle is then further grown
 according to the offsets in the <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> slot
@@ -1663,11 +1607,11 @@ with the four values indicating
 the amount the top, right, bottom, and left edges, respectively, are offset by,
 with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle,
-unless the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is a document’s viewport,
+unless the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is the <a data-link-type="dfn" href="#intersectionobserver-implicit-root">implicit root</a>,
 in which case they resolve to 0.</p>
    <p class="note" role="note">Note: <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code> only applies to the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> itself.
 If a <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> is clipped by an ancestor other than the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>, that clipping is unaffected by <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code>.</p>
-   <p class="note" role="note">Note: <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">Root intersection rectangle</a> is not affected by <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#pinch-zoom">pinch zoom</a> and will report the unadjusted viewport, consistent with the
+   <p class="note" role="note">Note: <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">Root intersection rectangle</a> is not affected by <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#pinch-zoom">pinch zoom</a> and will report the unadjusted <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a>, consistent with the
 intent of pinch zooming (to act like a magnifying glass and NOT change layout.)</p>
    <p>To <dfn data-dfn-type="dfn" data-noexport="" id="parse-a-root-margin">parse a root margin<a class="self-link" href="#parse-a-root-margin"></a></dfn> from an input string <var>marginString</var>,
 returning either a list of 4 pixel lengths or percentages,
@@ -1770,7 +1714,7 @@ that generated the notification.</p>
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverInit" data-dfn-type="dict-member" data-export="" id="dom-intersectionobserverinit-root">root<a class="self-link" href="#dom-intersectionobserverinit-root"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>, nullable, defaulting to <code>null</code></span></p>
      <dd data-md="">
       <p>The <var>root</var> to use for intersection.
-If not provided, use the top-level document’s viewport.</p>
+If not provided, use the <a data-link-type="dfn" href="#intersectionobserver-implicit-root">implicit root</a>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverInit" data-dfn-type="dict-member" data-export="" id="dom-intersectionobserverinit-rootmargin">rootMargin<a class="self-link" href="#dom-intersectionobserverinit-rootmargin"></a></dfn>, <span> of type <a data-link-type="idl-name" href="http://heycam.github.io/webidl/#idl-DOMString">DOMString</a>, defaulting to <code>"0px"</code></span></p>
      <dd data-md="">
@@ -1881,9 +1825,8 @@ run these steps:</p>
          <p>Let <var>boundingClientRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by the same algorithm as that of <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> performed on <var>target</var>.</p>
         <li data-md="">
          <p>Let <var>intersectionRect</var> be the intersection of <var>boundingClientRect</var> with <var>rootBounds</var>, intersected with
-the clip rect of each ancestor between <var>target</var> and <var>observer</var>. <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> (or the
-top-level document’s viewport if <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> is null).</p>
-         <p class="issue" id="issue-d411b270"><a class="self-link" href="#issue-d411b270"></a> TBD: Do the clip rects include <a class="property" data-link-type="propdesc" href="https://drafts.fxtf.org/css-masking-1/#propdef-clip-path">clip-path</a> and other clipping properties or just overflow clipping?</p>
+the clip rect of each ancestor between <var>target</var> and
+the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>.</p>
         <li data-md="">
          <p>Let <var>area</var> be <var>boundingClientRect</var>’s area.</p>
         <li data-md="">
@@ -1968,6 +1911,7 @@ in the HTML Processing Model.</p>
     </ul>
    <li><a href="#dom-intersectionobserver-callback-slot">[[callback]]</a><span>, in §3.1.3</span>
    <li><a href="#dom-intersectionobserver-disconnect">disconnect()</a><span>, in §2.2</span>
+   <li><a href="#intersectionobserver-implicit-root">implicit root</a><span>, in §2.2</span>
    <li><a href="#intersectionobserver">IntersectionObserver</a><span>, in §2.2</span>
    <li><a href="#intersection-observer">Intersection Observer</a><span>, in §2</span>
    <li><a href="#callbackdef-intersectionobservercallback">IntersectionObserverCallback</a><span>, in §2.1</span>
@@ -2039,11 +1983,6 @@ in the HTML Processing Model.</p>
   <h3 class="no-num heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
-    <a data-link-type="biblio" href="#biblio-css-masking-1">[css-masking-1]</a> defines the following terms:
-    <ul>
-     <li><a href="https://drafts.fxtf.org/css-masking-1/#propdef-clip-path">clip-path</a>
-    </ul>
-   <li>
     <a data-link-type="biblio" href="#biblio-css-syntax-3">[css-syntax-3]</a> defines the following terms:
     <ul>
      <li><a href="https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-component-values">parse a list of component values</a>
@@ -2096,8 +2035,6 @@ in the HTML Processing Model.</p>
    <dd>Bert Bos; et al. <a href="http://www.w3.org/TR/CSS2">Cascading Style Sheets Level 2 Revision 1 (CSS 2.1) Specification</a>. 7 June 2011. REC. URL: <a href="http://www.w3.org/TR/CSS2">http://www.w3.org/TR/CSS2</a>
    <dt id="biblio-webidl"><a class="self-link" href="#biblio-webidl"></a>[WebIDL]
    <dd>Cameron McCormack; Boris Zbarsky. <a href="http://www.w3.org/TR/WebIDL-1/">WebIDL Level 1</a>. 4 August 2015. WD. URL: <a href="http://www.w3.org/TR/WebIDL-1/">http://www.w3.org/TR/WebIDL-1/</a>
-   <dt id="biblio-css-masking-1"><a class="self-link" href="#biblio-css-masking-1"></a>[CSS-MASKING-1]
-   <dd>Dirk Schulze; Brian Birtles; Tab Atkins Jr.. <a href="http://www.w3.org/TR/css-masking-1/">CSS Masking Module Level 1</a>. 26 August 2014. CR. URL: <a href="http://www.w3.org/TR/css-masking-1/">http://www.w3.org/TR/css-masking-1/</a>
    <dt id="biblio-css-syntax-3"><a class="self-link" href="#biblio-css-syntax-3"></a>[CSS-SYNTAX-3]
    <dd>Tab Atkins Jr.; Simon Sapin. <a href="http://www.w3.org/TR/css-syntax-3/">CSS Syntax Module Level 3</a>. 20 February 2014. CR. URL: <a href="http://www.w3.org/TR/css-syntax-3/">http://www.w3.org/TR/css-syntax-3/</a>
    <dt id="biblio-css-values"><a class="self-link" href="#biblio-css-values"></a>[CSS-VALUES]
@@ -2154,7 +2091,6 @@ dictionary <a href="#dictdef-intersectionobserverinit">IntersectionObserverInit<
   <div style="counter-reset:issue">
    <div class="issue"> Should we use something other than 100ms as <var>timeout</var>?<a href="#issue-bf9a6e46"> ↵ </a></div>
    <div class="issue"> Should we consider making this just post a task instead?<a href="#issue-f67f2718"> ↵ </a></div>
-   <div class="issue"> TBD: Do the clip rects include <a class="property" data-link-type="propdesc" href="https://drafts.fxtf.org/css-masking-1/#propdef-clip-path">clip-path</a> and other clipping properties or just overflow clipping?<a href="#issue-d411b270"> ↵ </a></div>
   </div>
  </body>
 </html>
