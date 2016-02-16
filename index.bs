@@ -218,9 +218,7 @@ interface IntersectionObserver {
 		7. Sort |thresholds| in ascending order.
 		8. If |thresholds| is empty, append <code>0</code> to |thresholds|.
 		9. Set |this|.|thresholds| to |thresholds|.
-		10. Append |this| to the <a>unit of related similar-origin browsing context</a>'s
-			<a>IntersectionObservers</a> list.
-		11. Return |this|.
+		10. Return |this|.
 	: <dfn>observe(target)</dfn>
 	::
 		1. If |target| is in |this|'s internal {{[[ObservationTargets]]}} slot,
@@ -272,6 +270,9 @@ interface IntersectionObserver {
 	::
 		Offsets applied to the <a>intersection root's</a> bounding box,
 		effectively growing or shrinking the box that is used to calculate intersections.
+		Note that {{IntersectionObserver/rootMargin}} is only applied
+		for <a>targets</a> which belong to the same <a>unit of related similar-origin browsing contexts</a>
+		as the <a>intersection root</a>.
 
 		On getting, return the result of serializing the elements of {{[[rootMargin]]}}
 		space-separated, where pixel lengths serialize as the numeric value followed by "px",
@@ -311,14 +312,14 @@ is the rectangle we'll use to check against the targets.
 	<dd>it's the result of running the <a>getBoundingClientRect</a> algorithm on the <a>intersection root</a>.
 </dl>
 
-In all cases, the rectangle is then expanded
+For any <a>target</a> which belongs to the same <a>unit of related similar-origin browsing contexts</a>
+as the <a>intersection root</a>,
+the rectangle is then expanded
 according to the offsets in the {{IntersectionObserver}}’s {{[[rootMargin]]}} slot
 in a manner similar to CSS's 'margin' property,
 with the four values indicating the amount the top, right, bottom, and left edges, respectively, are offset by,
 with positive lengths indicating an outward offset.
-Percentages are resolved relative to the width of the undilated rectangle,
-unless the <a>target</a>'s owner {{Document}} is not part of the same <a>unit of related similar-origin browsing contexts</a> as the {{IntersectionObserver/root}}'s owner {{Document}},
-in which case a percentage-valued margin evaluates to zero.
+Percentages are resolved relative to the width of the undilated rectangle.
 
 Note: {{IntersectionObserver/rootMargin}} only applies to the <a>intersection root</a> itself.
 If a <a>target</a> {{Element}} is clipped by an ancestor other than the
@@ -472,8 +473,7 @@ Browsing Contexts</h4>
 
 Each <a>unit of related similar-origin browsing contexts</a> has an
 <dfn for="browsing context">IntersectionObserverTaskQueued</dfn> flag which
-is initialized to false and an <dfn for="browsing context">
-IntersectionObservers</dfn> list which is initially empty.
+is initialized to false.
 
 <h4 id='element-private-slots'>
 Element</h4>
@@ -526,7 +526,8 @@ To <dfn>notify intersection observers</dfn> for a <a>unit of related
 similar-origin browsing contexts</a> |unit|, run these steps:
 
 1. Set |unit|'s <a>IntersectionObserverTaskQueued</a> flag to false.
-2. Let |notify list| be a copy of |unit|'s <a>IntersectionObservers</a> list.
+2. Let |notify list| be a list of all {{IntersectionObserver}}s
+	whose {{IntersectionObserver/root}} is in the DOM tree of a document in |unit|.
 3. For each {{IntersectionObserver}} object |observer| in |notify list|,
 	run these steps:
 
@@ -582,48 +583,44 @@ To <dfn>run the update intersection observations steps</dfn> for an
 
 1. Let |unit| be the <a>unit of related similar-origin browsing contexts</a> for
 	|loop|.
-2. For each |observer| in |unit|'s <a>IntersectionObservers</a> list:
+2. Let |observer list| be a list of all {{IntersectionObserver}}s
+	whose {{IntersectionObserver/root}} is in the DOM tree of a document in |unit|.
+3. For each |observer| in |observer list|:
 	1. Let |rootBounds| be |observer|'s <a>root intersection rectangle</a>.
 	2. For each |target| in |observer|'s internal {{[[ObservationTargets]]}} slot:
-		1. Let |targetRect| be a {{DOMRectReadOnly}}
+		1. If |target| is not a descendant of the <a>intersection root</a>
+			in the <a>containing block chain</a>,
+			skip further processing for |target|.
+		2. If the <a>intersection root</a> is not the <a>implicit root</a>,
+			and |target| is not in the same document as the <a>intersection root</a>,
+			skip further processing for |target|.
+		3. Let |targetRect| be a {{DOMRectReadOnly}}
 			obtained by the same algorithm as that of {{Element}}'s
 			{{Element/getBoundingClientRect()}} performed on
 			|target|.
-		2. Let |intersectionRect| be the result of running the <a>compute the intersection</a>
+		4. Let |intersectionRect| be the result of running the <a>compute the intersection</a>
 			algorithm on |target|.
-		3. Let |targetArea| be |targetRect|'s area.
-		4. Let |intersectionArea| be |intersectionRect|'s area.
-		5. Let |intersectionRatio| be |intersectionArea| divided by |targetArea| if |targetArea| is non-zero,
+		5. Let |targetArea| be |targetRect|'s area.
+		6. Let |intersectionArea| be |intersectionRect|'s area.
+		7. Let |intersectionRatio| be |intersectionArea| divided by |targetArea| if |targetArea| is non-zero,
 			and <code>0</code> otherwise.
-		6. If |intersectionRatio| is equal to <code>0</code>,
+		8. If |intersectionRatio| is equal to <code>0</code>,
 			let |threshold| be <code>0</code>.
 			If |intersectionRatio| is equal to <code>1</code>,
 			let |threshold| be the length of |observer|.{{thresholds}}.
 			Otherwise, let |threshold| be the index of the first entry in |observer|.{{thresholds}}
 			whose value is greater than |intersectionRatio|.
-		7. Let |intersectionObserverRegistration| be the {{IntersectionObserverRegistration}} record 
+		9. Let |intersectionObserverRegistration| be the {{IntersectionObserverRegistration}} record 
 			in |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot
 			whose {{IntersectionObserverRegistration/observer}} property is equal to |observer|.
-		8. Let |previousThreshold| be set to
+		10. Let |previousThreshold| be set to
 			|intersectionObserverRegistration|'s {{IntersectionObserverRegistration/previousThreshold}} property.
-		9. If |threshold| does not equal |previousThreshold|,
+		11. If |threshold| does not equal |previousThreshold|,
 			<a>queue an IntersectionObserverEntry</a> for |unit|,
 			passing in |observer|, |time|, |rootBounds|,
 			|boundingClientRect|, |intersectionRect| and |target|.
-		10. Assign |threshold| to
+		12. Assign |threshold| to
 			|intersectionObserverRegistration|'s {{IntersectionObserverRegistration/previousThreshold}} property.
-
-<h4 id='removing-steps'>
-Removing Steps</h4>
-
-Whenever the <a>removing steps</a> run with an |oldNode|, run these steps:
-
-1. Let |nodes| be |oldNode|'s <a>inclusive descendants</a>,
-	in <a>tree order</a>.
-2. For each |node| in |nodes|, run this substep:
-	1. For each |observer| in |node|'s internal {{[[RegisteredIntersectionObservers]]}} slot,
-		run the {{unobserve()}} algorithm on |observer|,
-		passing in |node| as |target|.
 
 <h3 id='external-spec-integrations'>
 External Spec Integrations</h3>
@@ -632,14 +629,12 @@ External Spec Integrations</h3>
 HTML Processing Model: Event Loop</h4>
 
 An <a>Intersection Observer</a> processing step should take place
-AFTER the layout and rendering steps have been performed
-in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8"> update the rendering</a> event loop
-in the HTML Processing Model.
+at the end of the "<i>Update the rendering</i>" steps
+in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8">event loop
+in the HTML Processing Model.</a>
 
 This step is:
 
-<ol start="11">
-	<li><a>Run the update intersection observations steps</a> for the
-		<a>event loop</a> in question, passing in <i>now</i> as the
-		timestamp.
+<ol start="12">
+	<li><a>Run the update intersection observations steps</a> for the <a>event loop</a> in question.</li>
 </ol>
