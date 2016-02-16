@@ -121,9 +121,10 @@ it allows applications to significantly reduce their CPU, GPU and energy costs.
 		for (var i in changes) {
 			console.log(changes[i].time);               // Timestamp when the change occurred
 			console.log(changes[i].rootBounds);         // Unclipped area of root
-			console.log(changes[i].intersectionRect);   // Unclipped area of target intersected with rootBounds
 			console.log(changes[i].boundingClientRect); // target.boundingClientRect()
-			console.log(changes[i].target);             // the target Element
+			console.log(changes[i].intersectionRect);   // boundingClientRect, clipped by its containing block ancestors, and intersected with rootBounds
+			console.log(changes[i].intersectionRatio);  // Ratio of intersectionRect area to boundingClientRect area
+			console.log(changes[i].target);             // the Element target
 		}
 	}, {});
 
@@ -229,13 +230,14 @@ interface IntersectionObserver {
 		3. Let |intersectionObserverRegistration| be
 			an {{IntersectionObserverRegistration}} record
 			with an {{IntersectionObserverRegistration/observer}} property set to |this|
-			and a {{previousVisibleRatio}} property set to <code>0</code>.
+			and a {{IntersectionObserverRegistration/previousThreshold}} property set to <code>0</code>.
 		4. Append |intersectionObserverRegistration|
 			to |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
 		5. Add |target| to |this|'s internal {{[[ObservationTargets]]}} slot.
 	: <dfn>unobserve(target)</dfn>
 	::
-		1. Remove the element whose {{IntersectionObserverRegistration/observer}} property is equal to |this|
+		1. Remove the {{IntersectionObserverRegistration}} record
+			whose {{IntersectionObserverRegistration/observer}} property is equal to |this|
 			from |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
 		2. Remove |target| from |this|'s internal {{[[ObservationTargets]]}} slot.
 
@@ -250,7 +252,8 @@ interface IntersectionObserver {
 	::
 		For each |target| in |this|'s internal {{[[ObservationTargets]]}} slot:
 
-		1. Remove the element whose {{IntersectionObserverRegistration/observer}} property is equal to |this|
+		1. Remove the {{IntersectionObserverRegistration}} record
+			whose {{IntersectionObserverRegistration/observer}} property is equal to |this|
 			from |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
 		2. Remove |target| from |this|'s internal {{[[ObservationTargets]]}} slot.
 	: <dfn>takeRecords()</dfn>
@@ -360,6 +363,7 @@ interface IntersectionObserverEntry {
 	readonly attribute DOMRectReadOnly rootBounds;
 	readonly attribute DOMRectReadOnly boundingClientRect;
 	readonly attribute DOMRectReadOnly intersectionRect;
+	readonly attribute double intersectionRatio;
 	readonly attribute Element target;
 };
 
@@ -387,6 +391,10 @@ dictionary IntersectionObserverEntryInit {
 		This value represents the portion of
 		{{IntersectionObserverEntry/target}} actually visible
 		within {{IntersectionObserverEntry/rootBounds}}.
+	: <dfn>intersectionRatio</dfn>
+	::
+		Ratio of {{IntersectionObserverEntry/intersectionRect}} area to
+		{{IntersectionObserverEntry/boundingClientRect}} area.
 	: <dfn>rootBounds</dfn>
 	::
 		On getting,
@@ -475,9 +483,9 @@ Element</h4>
 which is initialized to an empty list.
 This list holds <dfn interface>IntersectionObserverRegistration</dfn> records,
 which have an <dfn attribute for=IntersectionObserverRegistration>observer</dfn> property
-holding an {{Element}}
-and a <dfn attribute for=IntersectionObserverRegistration>previousVisibleRatio</dfn> property
-holding a number between 0 and 1.
+holding an {{IntersectionObserver}}
+and a <dfn attribute for=IntersectionObserverRegistration>previousThreshold</dfn> property
+holding a number between 0 and the length of the observer's {{IntersectionObserver/thresholds}} property (inclusive).
 
 <h4 id='intersection-observer-private-slots'>
 IntersectionObserver</h4>
@@ -577,35 +585,33 @@ To <dfn>run the update intersection observations steps</dfn> for an
 2. For each |observer| in |unit|'s <a>IntersectionObservers</a> list:
 	1. Let |rootBounds| be |observer|'s <a>root intersection rectangle</a>.
 	2. For each |target| in |observer|'s internal {{[[ObservationTargets]]}} slot:
-		1. Let |boundingClientRect| be a {{DOMRectReadOnly}}
+		1. Let |targetRect| be a {{DOMRectReadOnly}}
 			obtained by the same algorithm as that of {{Element}}'s
 			{{Element/getBoundingClientRect()}} performed on
 			|target|.
 		2. Let |intersectionRect| be the result of running the <a>compute the intersection</a>
 			algorithm on |target|.
-		3. Let |area| be |boundingClientRect|'s area.
-		4. Let |visibleArea| be |intersectionRect|'s area.
-		5. Let |visibleRatio| be |visibleArea| divided by |area| if |area| is non-zero,
+		3. Let |targetArea| be |targetRect|'s area.
+		4. Let |intersectionArea| be |intersectionRect|'s area.
+		5. Let |intersectionRatio| be |intersectionArea| divided by |targetArea| if |targetArea| is non-zero,
 			and <code>0</code> otherwise.
-		6. Let |threshold| be the index of the first entry in |observer|.{{thresholds}}
-			whose value is greater than or equal to |visibleRatio|.
-			If |visibleRatio| is equal to <code>0</code>,
-			let |threshold| be <code>-1</code>.
-		7. Let |intersectionObserverRegistration| be the element
+		6. If |intersectionRatio| is equal to <code>0</code>,
+			let |threshold| be <code>0</code>.
+			If |intersectionRatio| is equal to <code>1</code>,
+			let |threshold| be the length of |observer|.{{thresholds}}.
+			Otherwise, let |threshold| be the index of the first entry in |observer|.{{thresholds}}
+			whose value is greater than |intersectionRatio|.
+		7. Let |intersectionObserverRegistration| be the {{IntersectionObserverRegistration}} record 
 			in |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot
 			whose {{IntersectionObserverRegistration/observer}} property is equal to |observer|.
-		8. Let |oldVisibleRatio| be set to
-			|intersectionObserverRegistration|'s {{previousVisibleRatio}} property.
-		9. Let |oldThreshold| be the index of the first entry in |observer|.{{thresholds}}
-			whose value is greater than or equal to |oldVisibleRatio|.
-			If |oldVisibleRatio| is equal to <code>0</code>,
-			let |oldThreshold| be <code>-1</code>.
-		10. If |threshold| does not equal |oldThreshold|,
+		8. Let |previousThreshold| be set to
+			|intersectionObserverRegistration|'s {{IntersectionObserverRegistration/previousThreshold}} property.
+		9. If |threshold| does not equal |previousThreshold|,
 			<a>queue an IntersectionObserverEntry</a> for |unit|,
 			passing in |observer|, |time|, |rootBounds|,
 			|boundingClientRect|, |intersectionRect| and |target|.
-		11. Assign |visibleRatio| to
-			|intersectionObserverRegistration|'s {{previousVisibleRatio}} property.
+		10. Assign |threshold| to
+			|intersectionObserverRegistration|'s {{IntersectionObserverRegistration/previousThreshold}} property.
 
 <h4 id='removing-steps'>
 Removing Steps</h4>

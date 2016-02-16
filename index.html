@@ -1485,15 +1485,16 @@ continuous polling,
 and use of custom plugins.
 By removing the need for these methods
 it allows applications to significantly reduce their CPU, GPU and energy costs.</p>
-   <div class="example" id="example-fb4e56a5">
-    <a class="self-link" href="#example-fb4e56a5"></a> 
+   <div class="example" id="example-f53b9bf9">
+    <a class="self-link" href="#example-f53b9bf9"></a> 
 <pre class="highlight"><span class="kd">var</span> <span class="nx">observer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">IntersectionObserver</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">time</span><span class="p">);</span>               <span class="c1">// Timestamp when the change occurred</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">rootBounds</span><span class="p">);</span>         <span class="c1">// Unclipped area of root</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">intersectionRect</span><span class="p">);</span>   <span class="c1">// Unclipped area of target intersected with rootBounds</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">boundingClientRect</span><span class="p">);</span> <span class="c1">// target.boundingClientRect()</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">target</span><span class="p">);</span>             <span class="c1">// the target Element</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">intersectionRect</span><span class="p">);</span>   <span class="c1">// boundingClientRect, clipped by its containing block ancestors, and intersected with rootBounds</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">intersectionRatio</span><span class="p">);</span>  <span class="c1">// Ratio of intersectionRect area to boundingClientRect area</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">target</span><span class="p">);</span>             <span class="c1">// the Element target</span>
   <span class="p">}</span>
 <span class="p">},</span> <span class="p">{});</span>
 
@@ -1587,7 +1588,7 @@ return.</p>
        <li data-md="">
         <p>Let <var>intersectionObserverRegistration</var> be
 an <code class="idl"><a data-link-type="idl" href="#intersectionobserverregistration">IntersectionObserverRegistration</a></code> record
-with an <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-observer">observer</a></code> property set to <var>this</var> and a <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousvisibleratio">previousVisibleRatio</a></code> property set to <code>0</code>.</p>
+with an <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-observer">observer</a></code> property set to <var>this</var> and a <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousthreshold">previousThreshold</a></code> property set to <code>0</code>.</p>
        <li data-md="">
         <p>Append <var>intersectionObserverRegistration</var> to <var>target</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot.</p>
        <li data-md="">
@@ -1598,7 +1599,8 @@ with an <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserve
      <dd data-md="">
       <ol>
        <li data-md="">
-        <p>Remove the element whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-observer">observer</a></code> property is equal to <var>this</var> from <var>target</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot.</p>
+        <p>Remove the <code class="idl"><a data-link-type="idl" href="#intersectionobserverregistration">IntersectionObserverRegistration</a></code> record
+whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-observer">observer</a></code> property is equal to <var>this</var> from <var>target</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot.</p>
        <li data-md="">
         <p>Remove <var>target</var> from <var>this</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot.</p>
       </ol>
@@ -1615,7 +1617,8 @@ or create a separate <code class="idl"><a data-link-type="idl" href="#intersecti
       <p>For each <var>target</var> in <var>this</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot:</p>
       <ol>
        <li data-md="">
-        <p>Remove the element whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-observer">observer</a></code> property is equal to <var>this</var> from <var>target</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot.</p>
+        <p>Remove the <code class="idl"><a data-link-type="idl" href="#intersectionobserverregistration">IntersectionObserverRegistration</a></code> record
+whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-observer">observer</a></code> property is equal to <var>this</var> from <var>target</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot.</p>
        <li data-md="">
         <p>Remove <var>target</var> from <var>this</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot.</p>
       </ol>
@@ -1722,6 +1725,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="int
   readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly " href="#dom-intersectionobserverentry-rootbounds">rootBounds</a>;
   readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly " href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a>;
   readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly " href="#dom-intersectionobserverentry-intersectionrect">intersectionRect</a>;
+  readonly attribute double <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="double " href="#dom-intersectionobserverentry-intersectionratio">intersectionRatio</a>;
   readonly attribute <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Element " href="#dom-intersectionobserverentry-target">target</a>;
 };
 
@@ -1749,6 +1753,10 @@ rects (up to but not including <code class="idl"><a data-link-type="idl" href="#
 intersected with <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code>.
 This value represents the portion of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target">target</a></code> actually visible
 within <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code>.</p>
+     <dt data-md="">
+      <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-intersectionratio">intersectionRatio<a class="self-link" href="#dom-intersectionobserverentry-intersectionratio"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-double">double</a>, readonly</span></p>
+     <dd data-md="">
+      <p>Ratio of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-intersectionrect">intersectionRect</a></code> area to <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a></code> area.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-rootbounds">rootBounds<a class="self-link" href="#dom-intersectionobserverentry-rootbounds"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
@@ -1818,8 +1826,8 @@ is initialized to false and an <dfn data-dfn-for="browsing context" data-dfn-typ
 which is initialized to an empty list.
 This list holds <dfn class="idl-code" data-dfn-type="interface" data-export="" id="intersectionobserverregistration">IntersectionObserverRegistration<a class="self-link" href="#intersectionobserverregistration"></a></dfn> records,
 which have an <dfn class="idl-code" data-dfn-for="IntersectionObserverRegistration" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverregistration-observer">observer<a class="self-link" href="#dom-intersectionobserverregistration-observer"></a></dfn> property
-holding an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> and a <dfn class="idl-code" data-dfn-for="IntersectionObserverRegistration" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverregistration-previousvisibleratio">previousVisibleRatio<a class="self-link" href="#dom-intersectionobserverregistration-previousvisibleratio"></a></dfn> property
-holding a number between 0 and 1.</p>
+holding an <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> and a <dfn class="idl-code" data-dfn-for="IntersectionObserverRegistration" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverregistration-previousthreshold">previousThreshold<a class="self-link" href="#dom-intersectionobserverregistration-previousthreshold"></a></dfn> property
+holding a number between 0 and the length of the observer’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds">thresholds</a></code> property (inclusive).</p>
    <h4 class="heading settled" data-level="3.1.3" id="intersection-observer-private-slots"><span class="secno">3.1.3. </span><span class="content"> IntersectionObserver</span><a class="self-link" href="#intersection-observer-private-slots"></a></h4>
    <p><code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> objects have internal <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-queuedentries-slot">[[QueuedEntries]]<a class="self-link" href="#dom-intersectionobserver-queuedentries-slot"></a></dfn> and <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]<a class="self-link" href="#dom-intersectionobserver-observationtargets-slot"></a></dfn> slots,
 which are initialized to empty lists and an internal <dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-callback-slot">[[callback]]<a class="self-link" href="#dom-intersectionobserver-callback-slot"></a></dfn> slot
@@ -1920,35 +1928,33 @@ Otherwise, map <var>intersectionRect</var> to the coordinate space of the <a dat
        <p>For each <var>target</var> in <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot:</p>
        <ol>
         <li data-md="">
-         <p>Let <var>boundingClientRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by the same algorithm as that of <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> performed on <var>target</var>.</p>
+         <p>Let <var>targetRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by the same algorithm as that of <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> performed on <var>target</var>.</p>
         <li data-md="">
          <p>Let <var>intersectionRect</var> be the result of running the <a data-link-type="dfn" href="#compute-the-intersection">compute the intersection</a> algorithm on <var>target</var>.</p>
         <li data-md="">
-         <p>Let <var>area</var> be <var>boundingClientRect</var>’s area.</p>
+         <p>Let <var>targetArea</var> be <var>targetRect</var>’s area.</p>
         <li data-md="">
-         <p>Let <var>visibleArea</var> be <var>intersectionRect</var>’s area.</p>
+         <p>Let <var>intersectionArea</var> be <var>intersectionRect</var>’s area.</p>
         <li data-md="">
-         <p>Let <var>visibleRatio</var> be <var>visibleArea</var> divided by <var>area</var> if <var>area</var> is non-zero,
+         <p>Let <var>intersectionRatio</var> be <var>intersectionArea</var> divided by <var>targetArea</var> if <var>targetArea</var> is non-zero,
 and <code>0</code> otherwise.</p>
         <li data-md="">
-         <p>Let <var>threshold</var> be the index of the first entry in <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds">thresholds</a></code> whose value is greater than or equal to <var>visibleRatio</var>.
-If <var>visibleRatio</var> is equal to <code>0</code>,
-let <var>threshold</var> be <code>-1</code>.</p>
+         <p>If <var>intersectionRatio</var> is equal to <code>0</code>,
+let <var>threshold</var> be <code>0</code>.
+If <var>intersectionRatio</var> is equal to <code>1</code>,
+let <var>threshold</var> be the length of <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds">thresholds</a></code>.
+Otherwise, let <var>threshold</var> be the index of the first entry in <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds">thresholds</a></code> whose value is greater than <var>intersectionRatio</var>.</p>
         <li data-md="">
-         <p>Let <var>intersectionObserverRegistration</var> be the element
+         <p>Let <var>intersectionObserverRegistration</var> be the <code class="idl"><a data-link-type="idl" href="#intersectionobserverregistration">IntersectionObserverRegistration</a></code> record
 in <var>target</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot
 whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-observer">observer</a></code> property is equal to <var>observer</var>.</p>
         <li data-md="">
-         <p>Let <var>oldVisibleRatio</var> be set to <var>intersectionObserverRegistration</var>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousvisibleratio">previousVisibleRatio</a></code> property.</p>
+         <p>Let <var>previousThreshold</var> be set to <var>intersectionObserverRegistration</var>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousthreshold">previousThreshold</a></code> property.</p>
         <li data-md="">
-         <p>Let <var>oldThreshold</var> be the index of the first entry in <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds">thresholds</a></code> whose value is greater than or equal to <var>oldVisibleRatio</var>.
-If <var>oldVisibleRatio</var> is equal to <code>0</code>,
-let <var>oldThreshold</var> be <code>-1</code>.</p>
-        <li data-md="">
-         <p>If <var>threshold</var> does not equal <var>oldThreshold</var>, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</a> for <var>unit</var>,
+         <p>If <var>threshold</var> does not equal <var>previousThreshold</var>, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</a> for <var>unit</var>,
 passing in <var>observer</var>, <var>time</var>, <var>rootBounds</var>, <var>boundingClientRect</var>, <var>intersectionRect</var> and <var>target</var>.</p>
         <li data-md="">
-         <p>Assign <var>visibleRatio</var> to <var>intersectionObserverRegistration</var>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousvisibleratio">previousVisibleRatio</a></code> property.</p>
+         <p>Assign <var>threshold</var> to <var>intersectionObserverRegistration</var>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousthreshold">previousThreshold</a></code> property.</p>
        </ol>
      </ol>
    </ol>
@@ -2020,6 +2026,7 @@ in the HTML Processing Model.</p>
    <li><a href="#intersectionobserverregistration">IntersectionObserverRegistration</a><span>, in §3.1.2</span>
    <li><a href="#browsing-context-intersectionobservers">IntersectionObservers</a><span>, in §3.1.1</span>
    <li><a href="#browsing-context-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a><span>, in §3.1.1</span>
+   <li><a href="#dom-intersectionobserverentry-intersectionratio">intersectionRatio</a><span>, in §2.3</span>
    <li>
     intersectionRect
     <ul>
@@ -2032,7 +2039,7 @@ in the HTML Processing Model.</p>
    <li><a href="#dom-intersectionobserverregistration-observer">observer</a><span>, in §3.1.2</span>
    <li><a href="#dom-intersectionobserver-observe">observe(target)</a><span>, in §2.2</span>
    <li><a href="#parse-a-root-margin">parse a root margin</a><span>, in §2.2</span>
-   <li><a href="#dom-intersectionobserverregistration-previousvisibleratio">previousVisibleRatio</a><span>, in §3.1.2</span>
+   <li><a href="#dom-intersectionobserverregistration-previousthreshold">previousThreshold</a><span>, in §3.1.2</span>
    <li><a href="#intersection-observer-processing-model">Processing Model</a><span>, in §2.4</span>
    <li><a href="#queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</a><span>, in §3.2.3</span>
    <li><a href="#queue-an-intersection-observer-task">queue an intersection observer task</a><span>, in §3.2.1</span>
@@ -2167,6 +2174,7 @@ interface <a href="#intersectionobserverentry">IntersectionObserverEntry</a> {
   readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly " href="#dom-intersectionobserverentry-rootbounds">rootBounds</a>;
   readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly " href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a>;
   readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly " href="#dom-intersectionobserverentry-intersectionrect">intersectionRect</a>;
+  readonly attribute double <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="double " href="#dom-intersectionobserverentry-intersectionratio">intersectionRatio</a>;
   readonly attribute <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Element " href="#dom-intersectionobserverentry-target">target</a>;
 };
 
