@@ -5,9 +5,10 @@ ED: https://github.com/WICG/IntersectionObserver/
 Shortname: intersection-observer
 Level: 1
 Editor: Michael Blain, Google, mpb@google.com
-Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements relative to an ancestor container or to the top-level window's viewport. The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
+Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements ("targets") relative to a containing element or to the top-level viewport ("root"). The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
 Group: Web Performance Working Group
 Repository: WICG/IntersectionObserver
+Ignored Vars: rootMargin
 </pre>
 
 <pre class="anchors">
@@ -122,15 +123,15 @@ it allows applications to significantly reduce their CPU, GPU and energy costs.
 			console.log(changes[i].rootBounds);         // Unclipped area of root
 			console.log(changes[i].intersectionRect);   // Unclipped area of target intersected with rootBounds
 			console.log(changes[i].boundingClientRect); // target.boundingClientRect()
-			console.log(changes[i].target);             // the Element target
+			console.log(changes[i].target);             // the target Element
 		}
 	}, {});
 
-	// Watch all threshold events on a specific descendant of the <a>top-level browsing context</a>'s <a>viewport</a>
-	observer.observe(childElement);
+	// Watch for intersection events on a specific target Element.
+	observer.observe(target);
 
-	// Stop observing threshold events on given target element.
-	observer.unobserve(childElement);
+	// Stop watching for intersection events on a specific target Element.
+	observer.unobserve(target);
 
 	// Stop observing threshold events on all target elements.
 	observer.disconnect();
@@ -158,8 +159,7 @@ intersection with the <a>intersection root</a>, as per the
 The IntersectionObserver interface</h3>
 
 The {{IntersectionObserver}} interface can be used to observe changes in the
-intersection of a {{IntersectionObserver/root}} {{Element}} (or the
-<a>implicit root</a>), and one or more <a>target</a> {{Element}}s.
+intersection of an <a>intersection root</a> and one or more <a>target</a> {{Element}}s.
 
 An {{IntersectionObserver}} with a {{IntersectionObserver/root}} {{Element}} can
 observe any <a>target</a> {{Element}} that is a descendant of the
@@ -174,8 +174,11 @@ and valid <a>targets</a> include any {{Element}} in the
 Note: In {{MutationObserver}}, the {{MutationObserverInit}} options are passed
 to {{MutationObserver/observe()}} while in {{IntersectionObserver}} they are
 passed to the constructor. This is because for MutationObserver, each {{Node}}
-being observed could have a different set of attributes to filter. For
-{{IntersectionObserver}}, having different {{IntersectionObserverInit/root}},
+being observed could have a different set of attributes to filter for. For
+{{IntersectionObserver}}, developers may choose to use a single observer to
+track multiple targets using the same set of options; or they may use a different
+observer for each tracked target.
+
 {{IntersectionObserverInit/rootMargin}} or {{threshold}} values for each
 <a>target</a> seems to introduce more complexity without solving additional
 use-cases. Per-{{observe()}} options could be provided in the future if V2
@@ -201,29 +204,27 @@ interface IntersectionObserver {
 	::
 		1. Let |this| be a new {{IntersectionObserver}} object
 		2. Set |this|'s internal {{[[callback]]}} slot to |callback|.
-		3. Set |this|.{{IntersectionObserver/root}} to
-			|options|.{{IntersectionObserverInit/root}}
+		3. Set |this|.|root| to |options|.|root|.
 		4. Attempt to <a>parse a root margin</a>
-			from |options|.{{IntersectionObserverInit/rootMargin}}.  If a list is returned,
+			from |options|.|rootMargin|.
+			If a list is returned,
 			set |this|'s internal {{[[rootMargin]]}} slot to that.
 			Otherwise, <a>throw</a> a {{SyntaxError}} exception.
 		5. Let |thresholds| be a list equal to
-			|options|.{{IntersectionObserverInit/threshold}}.
+			|options|.|threshold|.
 		6. If any value in |thresholds| is less than 0.0 or greater than
 			1.0, <a>throw</a> a {{RangeError}} exception.
 		7. Sort |thresholds| in ascending order.
 		8. If |thresholds| is empty, append <code>0</code> to |thresholds|.
-		9. Set |this|.{{IntersectionObserver/thresholds}} to |thresholds|.
-		10. Append |this| to the
-			<a>unit of related similar-origin browsing contexts</a>'s
+		9. Set |this|.|thresholds| to |thresholds|.
+		10. Append |this| to the <a>unit of related similar-origin browsing context</a>'s
 			<a>IntersectionObservers</a> list.
 		11. Return |this|.
 	: <dfn>observe(target)</dfn>
 	::
 		1. If |target| is in |this|'s internal {{[[ObservationTargets]]}} slot,
 			return.
-		2. If |target| is NOT a descendent of
-			|this|.{{IntersectionObserver/root}},
+		2. If |target| is NOT a descendent of |this|.|root|,
 			<a>throw</a> a {{HierarchyRequestError}}.
 		3. Let |intersectionObserverRegistration| be
 			an {{IntersectionObserverRegistration}} record
@@ -262,12 +263,12 @@ interface IntersectionObserver {
 <div dfn-type="attribute" dfn-for="IntersectionObserver">
 	: <dfn>root</dfn>
 	::
-		The |root| to use for intersection, or <code>null</code> if the
+		The root {{Element}} to use for intersection, or <code>null</code> if the
 		observer uses the <a>implicit root</a>.
 	: <dfn>rootMargin</dfn>
 	::
-		Represents offsets from the <a>intersection root's</a> bounding box,
-		growing the "box" that is used to calculate intersections.
+		Offsets applied to the <a>intersection root's</a> bounding box,
+		effectively growing or shrinking the box that is used to calculate intersections.
 
 		On getting, return the result of serializing the elements of {{[[rootMargin]]}}
 		space-separated, where pixel lengths serialize as the numeric value followed by "px",
@@ -307,16 +308,14 @@ is the rectangle we'll use to check against the targets.
 	<dd>it's the result of running the <a>getBoundingClientRect</a> algorithm on the <a>intersection root</a>.
 </dl>
 
-In all cases, the rectangle is then further grown
-according to the offsets in the {{IntersectionObserver}}’s
-{{[[rootMargin]]}} slot
+In all cases, the rectangle is then expanded
+according to the offsets in the {{IntersectionObserver}}’s {{[[rootMargin]]}} slot
 in a manner similar to CSS's 'margin' property,
-with the four values indicating
-the amount the top, right, bottom, and left edges, respectively, are offset by,
+with the four values indicating the amount the top, right, bottom, and left edges, respectively, are offset by,
 with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle,
-unless the <a>intersection root</a> is the <a>implicit root</a>,
-in which case they resolve to 0.
+unless the <a>target</a>'s owner {{Document}} is not part of the same <a>unit of related similar-origin browsing contexts</a> as the {{IntersectionObserver/root}}'s owner {{Document}},
+in which case a percentage-valued margin evaluates to zero.
 
 Note: {{IntersectionObserver/rootMargin}} only applies to the <a>intersection root</a> itself.
 If a <a>target</a> {{Element}} is clipped by an ancestor other than the
