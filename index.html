@@ -1409,7 +1409,6 @@ Parts of this work may be from another specification document.  If so, those par
         <li><a href="#queue-intersection-observer-entry-algo"><span class="secno">3.2.3</span> <span class="content"> Queue an IntersectionObserverEntry</span></a>
         <li><a href="#calculate-intersection-rect-algo"><span class="secno">3.2.4</span> <span class="content"> Compute the Intersection of a Target Element and the Root</span></a>
         <li><a href="#update-intersection-observations-algo"><span class="secno">3.2.5</span> <span class="content"> Run the Update Intersection Observations Steps</span></a>
-        <li><a href="#removing-steps"><span class="secno">3.2.6</span> <span class="content"> Removing Steps</span></a>
        </ol>
       <li>
        <a href="#external-spec-integrations"><span class="secno">3.3</span> <span class="content"> External Spec Integrations</span></a>
@@ -1572,8 +1571,6 @@ Otherwise, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-th
        <li data-md="">
         <p>Set <var>this</var>.<var>thresholds</var> to <var>thresholds</var>.</p>
        <li data-md="">
-        <p>Append <var>this</var> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing context</a>’s <a data-link-type="dfn" href="#browsing-context-intersectionobservers">IntersectionObservers</a> list.</p>
-       <li data-md="">
         <p>Return <var>this</var>.</p>
       </ol>
      <dt data-md="">
@@ -1648,7 +1645,9 @@ observer uses the <a data-link-type="dfn" href="#intersectionobserver-implicit-r
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-rootmargin">rootMargin<a class="self-link" href="#dom-intersectionobserver-rootmargin"></a></dfn>, <span> of type <a data-link-type="idl-name" href="http://heycam.github.io/webidl/#idl-DOMString">DOMString</a>, readonly</span></p>
      <dd data-md="">
       <p>Offsets applied to the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root’s</a> bounding box,
-effectively growing or shrinking the box that is used to calculate intersections.</p>
+effectively growing or shrinking the box that is used to calculate intersections.
+Note that <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code> is only applied
+for <a data-link-type="dfn" href="#intersectionobserver-target">targets</a> which belong to the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>.</p>
       <p>On getting, return the result of serializing the elements of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> space-separated, where pixel lengths serialize as the numeric value followed by "px",
 and percentages serialize as the numeric value followed by "%".  Note that
 this is not guaranteed to be identical to the <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code> passed to the <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> constructor.  If no <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin">rootMargin</a></code> was passed to the <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> constructor, the value of this attribute is "0px 0px 0px 0px".</p>
@@ -1674,14 +1673,13 @@ the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-ro
     <dt>Otherwise, 
     <dd>it’s the result of running the <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>. 
    </dl>
-   <p>In all cases, the rectangle is then expanded
+   <p>For any <a data-link-type="dfn" href="#intersectionobserver-target">target</a> which belongs to the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>,
+the rectangle is then expanded
 according to the offsets in the <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin-slot">[[rootMargin]]</a></code> slot
 in a manner similar to CSS’s <a class="property" data-link-type="propdesc" href="https://drafts.csswg.org/css2/box.html#propdef-margin">margin</a> property,
 with the four values indicating the amount the top, right, bottom, and left edges, respectively, are offset by,
 with positive lengths indicating an outward offset.
-Percentages are resolved relative to the width of the undilated rectangle,
-unless the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>’s owner <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document">Document</a></code> is not part of the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> as the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>'s owner <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document">Document</a></code>,
-in which case a percentage-valued margin evaluates to zero.</p>
+Percentages are resolved relative to the width of the undilated rectangle.</p>
    <p class="note" role="note">Note: <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code> only applies to the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> itself.
 If a <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> is clipped by an ancestor other than the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>, that clipping is unaffected by <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code>.</p>
    <p class="note" role="note">Note: <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">Root intersection rectangle</a> is not affected by <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#pinch-zoom">pinch zoom</a> and will report the unadjusted <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a>, consistent with the
@@ -1822,7 +1820,7 @@ the <a data-link-type="dfn" href="#intersection-observer">Intersection Observer<
    <h3 class="heading settled" data-level="3.1" id="defines"><span class="secno">3.1. </span><span class="content"> Internal Slot Definitions</span><a class="self-link" href="#defines"></a></h3>
    <h4 class="heading settled" data-level="3.1.1" id="browsing-contexts-defines"><span class="secno">3.1.1. </span><span class="content"> Browsing Contexts</span><a class="self-link" href="#browsing-contexts-defines"></a></h4>
    <p>Each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> has an <dfn data-dfn-for="browsing context" data-dfn-type="dfn" data-noexport="" id="browsing-context-intersectionobservertaskqueued">IntersectionObserverTaskQueued<a class="self-link" href="#browsing-context-intersectionobservertaskqueued"></a></dfn> flag which
-is initialized to false and an <dfn data-dfn-for="browsing context" data-dfn-type="dfn" data-lt="IntersectionObservers" data-noexport="" id="browsing-context-intersectionobservers"> IntersectionObservers<a class="self-link" href="#browsing-context-intersectionobservers"></a></dfn> list which is initially empty.</p>
+is initialized to false.</p>
    <h4 class="heading settled" data-level="3.1.2" id="element-private-slots"><span class="secno">3.1.2. </span><span class="content"> Element</span><a class="self-link" href="#element-private-slots"></a></h4>
    <p><code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> objects have an internal <dfn class="idl-code" data-dfn-for="Element" data-dfn-type="attribute" data-export="" id="dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]<a class="self-link" href="#dom-element-registeredintersectionobservers-slot"></a></dfn> slot,
 which is initialized to an empty list.
@@ -1858,7 +1856,8 @@ similar-origin browsing contexts</a> <var>unit</var>, run these steps:</p>
     <li data-md="">
      <p>Set <var>unit</var>’s <a data-link-type="dfn" href="#browsing-context-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a> flag to false.</p>
     <li data-md="">
-     <p>Let <var>notify list</var> be a copy of <var>unit</var>’s <a data-link-type="dfn" href="#browsing-context-intersectionobservers">IntersectionObservers</a> list.</p>
+     <p>Let <var>notify list</var> be a list of all <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code>s
+whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> is in the DOM tree of a document in <var>unit</var>.</p>
     <li data-md="">
      <p>For each <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> object <var>observer</var> in <var>notify list</var>,
 run these steps:</p>
@@ -1922,13 +1921,23 @@ Otherwise, map <var>intersectionRect</var> to the coordinate space of the <a dat
     <li data-md="">
      <p>Let <var>unit</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> for <var>loop</var>.</p>
     <li data-md="">
-     <p>For each <var>observer</var> in <var>unit</var>’s <a data-link-type="dfn" href="#browsing-context-intersectionobservers">IntersectionObservers</a> list:</p>
+     <p>Let <var>observer list</var> be a list of all <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code>s
+whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> is in the DOM tree of a document in <var>unit</var>.</p>
+    <li data-md="">
+     <p>For each <var>observer</var> in <var>observer list</var>:</p>
      <ol>
       <li data-md="">
        <p>Let <var>rootBounds</var> be <var>observer</var>’s <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">root intersection rectangle</a>.</p>
       <li data-md="">
        <p>For each <var>target</var> in <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot:</p>
        <ol>
+        <li data-md="">
+         <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root">implicit root</a> and <var>target</var> is not a descendant of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain">containing block chain</a>,
+skip further processing for <var>target</var>.</p>
+        <li data-md="">
+         <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root">implicit root</a>,
+and <var>target</var> is not in the same document as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>,
+skip further processing for <var>target</var>.</p>
         <li data-md="">
          <p>Let <var>targetRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by the same algorithm as that of <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> performed on <var>target</var>.</p>
         <li data-md="">
@@ -1960,31 +1969,15 @@ passing in <var>observer</var>, <var>time</var>, <var>rootBounds</var>, <var>bou
        </ol>
      </ol>
    </ol>
-   <h4 class="heading settled" data-level="3.2.6" id="removing-steps"><span class="secno">3.2.6. </span><span class="content"> Removing Steps</span><a class="self-link" href="#removing-steps"></a></h4>
-   <p>Whenever the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-remove-ext">removing steps</a> run with an <var>oldNode</var>, run these steps:</p>
-   <ol>
-    <li data-md="">
-     <p>Let <var>nodes</var> be <var>oldNode</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant">inclusive descendants</a>,
-in <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-order">tree order</a>.</p>
-    <li data-md="">
-     <p>For each <var>node</var> in <var>nodes</var>, run this substep:</p>
-     <ol>
-      <li data-md="">
-       <p>For each <var>observer</var> in <var>node</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot,
-run the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-unobserve">unobserve()</a></code> algorithm on <var>observer</var>,
-passing in <var>node</var> as <var>target</var>.</p>
-     </ol>
-   </ol>
    <h3 class="heading settled" data-level="3.3" id="external-spec-integrations"><span class="secno">3.3. </span><span class="content"> External Spec Integrations</span><a class="self-link" href="#external-spec-integrations"></a></h3>
    <h4 class="heading settled" data-level="3.3.1" id="event-loop"><span class="secno">3.3.1. </span><span class="content"> HTML Processing Model: Event Loop</span><a class="self-link" href="#event-loop"></a></h4>
    <p>An <a data-link-type="dfn" href="#intersection-observer">Intersection Observer</a> processing step should take place
-AFTER the layout and rendering steps have been performed
-in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8"> update the rendering</a> event loop
-in the HTML Processing Model.</p>
+at the end of the "<i>Update the rendering</i>" steps
+in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8">event loop
+in the HTML Processing Model.</a></p>
    <p>This step is:</p>
-   <ol start="11">
-    <li><a data-link-type="dfn" href="#run-the-update-intersection-observations-steps">Run the update intersection observations steps</a> for the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop">event loop</a> in question, passing in <i>now</i> as the
-		timestamp. 
+   <ol start="12">
+    <li><a data-link-type="dfn" href="#run-the-update-intersection-observations-steps">Run the update intersection observations steps</a> for the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop">event loop</a> in question.
    </ol>
   </main>
   <div data-fill-with="conformance">
@@ -2026,7 +2019,6 @@ in the HTML Processing Model.</p>
    <li><a href="#dom-intersectionobserverentry-intersectionobserverentry">IntersectionObserverEntry(intersectionObserverEntryInit)</a><span>, in §2.3</span>
    <li><a href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a><span>, in §2.4</span>
    <li><a href="#intersectionobserverregistration">IntersectionObserverRegistration</a><span>, in §3.1.2</span>
-   <li><a href="#browsing-context-intersectionobservers">IntersectionObservers</a><span>, in §3.1.1</span>
    <li><a href="#browsing-context-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a><span>, in §3.1.1</span>
    <li><a href="#dom-intersectionobserverentry-intersectionratio">intersectionRatio</a><span>, in §2.3</span>
    <li>
@@ -2113,15 +2105,11 @@ in the HTML Processing Model.</p>
    <li>
     <a data-link-type="biblio" href="#biblio-dom-ls">[dom-ls]</a> defines the following terms:
     <ul>
-     <li><a href="https://dom.spec.whatwg.org/#document">Document</a>
      <li><a href="https://dom.spec.whatwg.org/#element">Element</a>
      <li><a href="https://dom.spec.whatwg.org/#mutationobserver">MutationObserver</a>
      <li><a href="https://dom.spec.whatwg.org/#dictdef-mutationobserverinit">MutationObserverInit</a>
      <li><a href="https://dom.spec.whatwg.org/#node">Node</a>
-     <li><a href="https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant">inclusive descendant</a>
      <li><a href="https://dom.spec.whatwg.org/#dom-mutationobserver-observe">observe(target, options)</a>
-     <li><a href="https://dom.spec.whatwg.org/#concept-node-remove-ext">removing steps</a>
-     <li><a href="https://dom.spec.whatwg.org/#concept-tree-order">tree order</a>
     </ul>
    <li>
     <a data-link-type="biblio" href="#biblio-geometry-1">[geometry-1]</a> defines the following terms:
