@@ -1593,6 +1593,8 @@ with an <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserve
         <p>Append <var>intersectionObserverRegistration</var> to <var>target</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</a></code> slot.</p>
        <li data-md="">
         <p>Add <var>target</var> to <var>this</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot.</p>
+       <li data-md="">
+        <p>Schedule an iteration of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop">event loop</a> in the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context">browsing context</a>.</p>
       </ol>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="method" data-export="" id="dom-intersectionobserver-unobserve">unobserve(target)<a class="self-link" href="#dom-intersectionobserver-unobserve"></a></dfn></p>
