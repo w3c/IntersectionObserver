@@ -1930,7 +1930,7 @@ whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-
        <p>For each <var>target</var> in <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot:</p>
        <ol>
         <li data-md="">
-         <p>If <var>target</var> is not a descendant of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain">containing block chain</a>,
+         <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root">implicit root</a> and <var>target</var> is not a descendant of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain">containing block chain</a>,
 skip further processing for <var>target</var>.</p>
         <li data-md="">
          <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root">implicit root</a>,

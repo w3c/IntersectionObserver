@@ -588,7 +588,8 @@ To <dfn>run the update intersection observations steps</dfn> for an
 3. For each |observer| in |observer list|:
 	1. Let |rootBounds| be |observer|'s <a>root intersection rectangle</a>.
 	2. For each |target| in |observer|'s internal {{[[ObservationTargets]]}} slot:
-		1. If |target| is not a descendant of the <a>intersection root</a>
+		1. If the <a>intersection root</a> is not the <a>implicit root</a>
+			and |target| is not a descendant of the <a>intersection root</a>
 			in the <a>containing block chain</a>,
 			skip further processing for |target|.
 		2. If the <a>intersection root</a> is not the <a>implicit root</a>,
