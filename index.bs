@@ -234,6 +234,8 @@ interface IntersectionObserver {
 		4. Append |intersectionObserverRegistration|
 			to |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
 		5. Add |target| to |this|'s internal {{[[ObservationTargets]]}} slot.
+		6. Schedule an iteration of the <a>event loop</a>
+			in the {{IntersectionObserver/root}}'s <a>browsing context</a>.
 	: <dfn>unobserve(target)</dfn>
 	::
 		1. Remove the {{IntersectionObserverRegistration}} record
