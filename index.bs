@@ -47,9 +47,6 @@ urlPrefix: https://drafts.csswg.org/css-box/
 	url: #content-area; type: dfn; text: content area
 urlPrefix: https://drafts.csswg.org/css-display/
 	url: #containing-block-chain; type: dfn; text: containing block chain
-urlPrefix: http://dev.w3.org/csswg/cssom-view/
-	url: #pinch-zoom; type:dfn; text: pinch zoom
-	url: #dom-element-getboundingclientrect; type:method; text: getBoundingClientRect(); for: Element
 urlPrefix: http://www.w3.org/TR/css-masking-1/
 	url: #propdef-clip-path; type:dfn; text: clip-path
 </pre>
@@ -60,6 +57,8 @@ spec:dom-ls
 spec: css-values-3; type: dfn
 	text: absolute length
 	text: dimension
+spec: cssom-view-1; type: dfn; text: pinch zoom
+spec: cssom-view-1; type: method; for: Element; text: getBoundingClientRect()
 </pre>
 
 <h2 id='introduction'>Introduction</h2>
