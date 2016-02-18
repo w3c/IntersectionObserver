@@ -1623,7 +1623,8 @@ with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle.</p>
    <p class="note" role="note">Note: <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code> only applies to the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> itself.
 If a <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> is clipped by an ancestor other than the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>, that clipping is unaffected by <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code>.</p>
-   <p class="note" role="note">Note: <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">Root intersection rectangle</a> is not affected by <a data-link-type="dfn" href="https://drafts.csswg.org/cssom-view-1/#pinch-zoom">pinch zoom</a> and will report the unadjusted <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a>, consistent with the
+   <p class="note" role="note">Note: <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">Root intersection rectangle</a> is not affected by
+{{pinch zoom}} and will report the unadjusted <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a>, consistent with the
 intent of pinch zooming (to act like a magnifying glass and NOT change layout.)</p>
    <p>To <dfn data-dfn-type="dfn" data-noexport="" id="parse-a-root-margin">parse a root margin<a class="self-link" href="#parse-a-root-margin"></a></dfn> from an input string <var>marginString</var>,
 returning either a list of 4 pixel lengths or percentages,
@@ -2059,7 +2060,6 @@ in the HTML Processing Model.</a></p>
     <a data-link-type="biblio" href="#biblio-cssom-view-1">[cssom-view]</a> defines the following terms:
     <ul>
      <li><a href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a>
-     <li><a href="https://drafts.csswg.org/cssom-view-1/#pinch-zoom">pinch zoom</a>
     </ul>
    <li>
     <a data-link-type="biblio" href="#biblio-dom-ls">[dom-ls]</a> defines the following terms:

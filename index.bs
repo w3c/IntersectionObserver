@@ -57,9 +57,6 @@ spec:dom-ls
 spec: css-values-3; type: dfn
 	text: absolute length
 	text: dimension
-spec: cssom-view-1
-	type: dfn; text: pinch zoom
-	type: method; for: Element; text: getBoundingClientRect()
 </pre>
 
 <h2 id='introduction'>Introduction</h2>
@@ -328,7 +325,7 @@ If a <a>target</a> {{Element}} is clipped by an ancestor other than the
 {{IntersectionObserver/rootMargin}}.
 
 Note: <a>Root intersection rectangle</a> is not affected by
-<a>pinch zoom</a> and will report the unadjusted <a>viewport</a>, consistent with the
+{{pinch zoom}} and will report the unadjusted <a>viewport</a>, consistent with the
 intent of pinch zooming (to act like a magnifying glass and NOT change layout.)
 
 To <dfn>parse a root margin</dfn>
