@@ -1354,7 +1354,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-16">16 February 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-17">17 February 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1368,7 +1368,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 16 February 2016,
+In addition, as of 17 February 2016,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1742,17 +1742,17 @@ dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="d
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-boundingclientrect">boundingClientRect<a class="self-link" href="#dom-intersectionobserverentry-boundingclientrect"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
-      <p>A <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by the same algorithm
-as that of <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> performed on <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target">target</a></code>.</p>
+      <p>A <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by running the <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a> algorithm
+on the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target">target</a></code>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-intersectionrect">intersectionRect<a class="self-link" href="#dom-intersectionobserverentry-intersectionrect"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
       <p><code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a></code>, intersected by
 each of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target">target</a></code>'s ancestors' clip
 rects (up to but not including <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>),
-intersected with <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code>.
+intersected with the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">root intersection rectangle</a>.
 This value represents the portion of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target">target</a></code> actually visible
-within <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code>.</p>
+within the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">root intersection rectangle</a>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-intersectionratio">intersectionRatio<a class="self-link" href="#dom-intersectionobserverentry-intersectionratio"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-double">double</a>, readonly</span></p>
      <dd data-md="">
@@ -1760,12 +1760,12 @@ within <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-rootbounds">rootBounds<a class="self-link" href="#dom-intersectionobserverentry-rootbounds"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
-      <p>On getting,
-if <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> is <code>null</code>,
-return <code>null</code>.
-Otherwise,
-return a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> representing
-the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">root intersection rectangle</a> in the coordinate space of the document the root element is in.</p>
+      <p>If <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target">target</a></code> belongs to the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>,
+this will be the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">root intersection rectangle</a>.
+Otherwise, this will be <code>null</code>.
+Note that if the target is in a different <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context">browsing context</a> than the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>,
+this will be in a different coordinate system
+than <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-intersectionrect">intersectionRect</a></code>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-target">target<a class="self-link" href="#dom-intersectionobserverentry-target"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>, readonly</span></p>
      <dd data-md="">
@@ -1810,7 +1810,9 @@ callback will be invoked when intersectionRect’s area changes from
 greater than or equal to any threshold to less than that threshold,
 and vice versa.</p>
       <p>Threshold values must be in the range of [0, 1.0] and represent a
-percentage of the area as specified by <a data-link-type="dfn" href="#intersectionobserver-target">target</a>.<code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code>.</p>
+percentage of the area of the rectangle produced
+by running the <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a> algorithm
+on the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>.</p>
       <p class="note" role="note">Note: 0.0 is effectively "any non-zero number of pixels".</p>
     </dl>
    </div>
@@ -1911,9 +1913,7 @@ Otherwise, update <var>container</var> to be the parent node of <var>container</
     <li data-md="">
      <p>Update <var>intersectionRect</var> by intersecting it with the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">root intersection rectangle</a>.</p>
     <li data-md="">
-     <p>If the <a data-link-type="dfn" href="#intersectionobserver-target">target</a> belongs to the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>, map <var>intersectionRect</var> to the coordinate space of
-the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>’s document.
-Otherwise, map <var>intersectionRect</var> to the coordinate space of the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>’s document.</p>
+     <p>Map <var>intersectionRect</var> to the coordinate space of the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>’s document.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.5" id="update-intersection-observations-algo"><span class="secno">3.2.5. </span><span class="content"> Run the Update Intersection Observations Steps</span><a class="self-link" href="#update-intersection-observations-algo"></a></h4>
    <p>To <dfn data-dfn-type="dfn" data-noexport="" id="run-the-update-intersection-observations-steps">run the update intersection observations steps<a class="self-link" href="#run-the-update-intersection-observations-steps"></a></dfn> for an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop">event loop</a> <var>loop</var> given a timestamp <var>time</var>, run these steps:</p>
@@ -1939,7 +1939,8 @@ skip further processing for <var>target</var>.</p>
 and <var>target</var> is not in the same document as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>,
 skip further processing for <var>target</var>.</p>
         <li data-md="">
-         <p>Let <var>targetRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by the same algorithm as that of <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> performed on <var>target</var>.</p>
+         <p>Let <var>targetRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained
+by running the <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a> algorithm on <var>target</var>.</p>
         <li data-md="">
          <p>Let <var>intersectionRect</var> be the result of running the <a data-link-type="dfn" href="#compute-the-intersection">compute the intersection</a> algorithm on <var>target</var>.</p>
         <li data-md="">
@@ -2098,11 +2099,6 @@ in the HTML Processing Model.</a></p>
      <li><a href="https://drafts.csswg.org/css2/box.html#propdef-margin">margin</a>
     </ul>
    <li>
-    <a data-link-type="biblio" href="#biblio-cssom-view-1">[cssom-view]</a> defines the following terms:
-    <ul>
-     <li><a href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a>
-    </ul>
-   <li>
     <a data-link-type="biblio" href="#biblio-dom-ls">[dom-ls]</a> defines the following terms:
     <ul>
      <li><a href="https://dom.spec.whatwg.org/#element">Element</a>
@@ -2134,8 +2130,6 @@ in the HTML Processing Model.</a></p>
    <dd>Tab Atkins Jr.; Simon Sapin. <a href="http://www.w3.org/TR/css-syntax-3/">CSS Syntax Module Level 3</a>. 20 February 2014. CR. URL: <a href="http://www.w3.org/TR/css-syntax-3/">http://www.w3.org/TR/css-syntax-3/</a>
    <dt id="biblio-css-values"><a class="self-link" href="#biblio-css-values"></a>[CSS-VALUES]
    <dd>Tab Atkins Jr.; Elika Etemad. <a href="http://www.w3.org/TR/css-values/">CSS Values and Units Module Level 3</a>. 11 June 2015. CR. URL: <a href="http://www.w3.org/TR/css-values/">http://www.w3.org/TR/css-values/</a>
-   <dt id="biblio-cssom-view"><a class="self-link" href="#biblio-cssom-view"></a>[CSSOM-VIEW]
-   <dd>Simon Pieters; Glenn Adams. <a href="http://www.w3.org/TR/cssom-view/">CSSOM View Module</a>. 17 December 2013. WD. URL: <a href="http://www.w3.org/TR/cssom-view/">http://www.w3.org/TR/cssom-view/</a>
    <dt id="biblio-dom-ls"><a class="self-link" href="#biblio-dom-ls"></a>[DOM-LS]
    <dd>Document Object Model URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-geometry-1"><a class="self-link" href="#biblio-geometry-1"></a>[GEOMETRY-1]
