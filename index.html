@@ -1354,7 +1354,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-16">16 February 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-17">17 February 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1368,7 +1368,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 16 February 2016,
+In addition, as of 17 February 2016,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1410,10 +1410,11 @@ Parts of this work may be from another specification document.  If so, those par
         <li><a href="#calculate-intersection-rect-algo"><span class="secno">3.2.4</span> <span class="content"> Compute the Intersection of a Target Element and the Root</span></a>
         <li><a href="#update-intersection-observations-algo"><span class="secno">3.2.5</span> <span class="content"> Run the Update Intersection Observations Steps</span></a>
        </ol>
+      <li><a href="#lifetime"><span class="secno">3.3</span> <span class="content"> IntersectionObserver Lifetime</span></a>
       <li>
-       <a href="#external-spec-integrations"><span class="secno">3.3</span> <span class="content"> External Spec Integrations</span></a>
+       <a href="#external-spec-integrations"><span class="secno">3.4</span> <span class="content"> External Spec Integrations</span></a>
        <ol class="toc">
-        <li><a href="#event-loop"><span class="secno">3.3.1</span> <span class="content"> HTML Processing Model: Event Loop</span></a>
+        <li><a href="#event-loop"><span class="secno">3.4.1</span> <span class="content"> HTML Processing Model: Event Loop</span></a>
        </ol>
      </ol>
     <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
@@ -1580,8 +1581,6 @@ Otherwise, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-th
        <li data-md="">
         <p>If <var>target</var> is in <var>this</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</a></code> slot,
 return.</p>
-       <li data-md="">
-        <p>If <var>target</var> is NOT a descendent of <var>this</var>.<var>root</var>, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#dom-domexception-hierarchy_request_err">HierarchyRequestError</a></code>.</p>
        <li data-md="">
         <p>Let <var>intersectionObserverRegistration</var> be
 an <code class="idl"><a data-link-type="idl" href="#intersectionobserverregistration">IntersectionObserverRegistration</a></code> record
@@ -1969,8 +1968,24 @@ passing in <var>observer</var>, <var>time</var>, <var>rootBounds</var>, <var>bou
        </ol>
      </ol>
    </ol>
-   <h3 class="heading settled" data-level="3.3" id="external-spec-integrations"><span class="secno">3.3. </span><span class="content"> External Spec Integrations</span><a class="self-link" href="#external-spec-integrations"></a></h3>
-   <h4 class="heading settled" data-level="3.3.1" id="event-loop"><span class="secno">3.3.1. </span><span class="content"> HTML Processing Model: Event Loop</span><a class="self-link" href="#event-loop"></a></h4>
+   <h3 class="heading settled" data-level="3.3" id="lifetime"><span class="secno">3.3. </span><span class="content"> IntersectionObserver Lifetime</span><a class="self-link" href="#lifetime"></a></h3>
+   <p>An <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> will remain alive until both of these conditions hold:</p>
+   <ul>
+    <li>There are no scripting references to the observer.
+    <li>The observer is not observing any targets. 
+   </ul>
+   <p>An <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> will continue observing a target until any of the following occurs:</p>
+   <ul>
+    <li><code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-unobserve">unobserve(target)</a></code> is called on the target.
+    <li><code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-disconnect">disconnect()</a></code> is called.
+    <li>The target <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> is deleted.
+    <li>The observer’s <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is deleted. 
+   </ul>
+   <p>If an <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code>'s <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is deleted
+while there are still JavaScript references to the observer,
+calling any API method on the observer will <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> an <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#invalidstateerror">InvalidStateError</a></code>.</p>
+   <h3 class="heading settled" data-level="3.4" id="external-spec-integrations"><span class="secno">3.4. </span><span class="content"> External Spec Integrations</span><a class="self-link" href="#external-spec-integrations"></a></h3>
+   <h4 class="heading settled" data-level="3.4.1" id="event-loop"><span class="secno">3.4.1. </span><span class="content"> HTML Processing Model: Event Loop</span><a class="self-link" href="#event-loop"></a></h4>
    <p>An <a data-link-type="dfn" href="#intersection-observer">Intersection Observer</a> processing step should take place
 at the end of the "<i>Update the rendering</i>" steps
 in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8">event loop
