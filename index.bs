@@ -36,9 +36,10 @@ urlPrefix: https://heycam.github.io/webidl/
 		text: RangeError
 		text: TypeError
 		text: SyntaxError
-	url: #dom-domexception-hierarchy_request_err; type: exception; text: HierarchyRequestError
 	urlPrefix: #dfn-; type:dfn; text: throw
 	urlPrefix: #idl-; type:interface; text: double
+	url: #hierarchyrequesterror; type: exception; text: HierarchyRequestError
+	url: #invalidstateerror; type: exception; text: InvalidStateError
 url: https://drafts.csswg.org/css2/box.html#content-edge; type:dfn; text: content-box
 urlPrefix: https://drafts.csswg.org/css-box/
 	url: #viewport; type: dfn; text: viewport
@@ -223,16 +224,14 @@ interface IntersectionObserver {
 	::
 		1. If |target| is in |this|'s internal {{[[ObservationTargets]]}} slot,
 			return.
-		2. If |target| is NOT a descendent of |this|.|root|,
-			<a>throw</a> a {{HierarchyRequestError}}.
-		3. Let |intersectionObserverRegistration| be
+		2. Let |intersectionObserverRegistration| be
 			an {{IntersectionObserverRegistration}} record
 			with an {{IntersectionObserverRegistration/observer}} property set to |this|
 			and a {{IntersectionObserverRegistration/previousThreshold}} property set to <code>0</code>.
-		4. Append |intersectionObserverRegistration|
+		3. Append |intersectionObserverRegistration|
 			to |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
-		5. Add |target| to |this|'s internal {{[[ObservationTargets]]}} slot.
-		6. Schedule an iteration of the <a>event loop</a>
+		4. Add |target| to |this|'s internal {{[[ObservationTargets]]}} slot.
+		5. Schedule an iteration of the <a>event loop</a>
 			in the {{IntersectionObserver/root}}'s <a>browsing context</a>.
 	: <dfn>unobserve(target)</dfn>
 	::
@@ -620,6 +619,27 @@ To <dfn>run the update intersection observations steps</dfn> for an
 			|boundingClientRect|, |intersectionRect| and |target|.
 		12. Assign |threshold| to
 			|intersectionObserverRegistration|'s {{IntersectionObserverRegistration/previousThreshold}} property.
+
+<h3 id='lifetime'>
+IntersectionObserver Lifetime</h2>
+
+An {{IntersectionObserver}} will remain alive until both of these conditions hold:
+<ul>
+	<li>There are no scripting references to the observer.</li>
+	<li>The observer is not observing any targets.
+</ul>
+
+An {{IntersectionObserver}} will continue observing a target until any of the following occurs:
+<ul>
+	<li>{{IntersectionObserver/unobserve(target)}} is called on the target.</li>
+	<li>{{IntersectionObserver/disconnect()}} is called.</li>
+	<li>The target {{Element}} is deleted.</li>
+	<li>The observer's <a>intersection root</a> is deleted.
+</ul>
+
+If an {{IntersectionObserver}}'s <a>intersection root</a> is deleted
+while there are still JavaScript references to the observer,
+calling any API method on the observer will <a>throw</a> an {{InvalidStateError}}.
 
 <h3 id='external-spec-integrations'>
 External Spec Integrations</h3>
