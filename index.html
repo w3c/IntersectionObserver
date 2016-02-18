@@ -2,7 +2,7 @@
  <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
   <title>Intersection Observer</title>
-  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 <style data-fill-with="stylesheet">/******************************************************************************
  *                   Style sheet for the W3C specifications                   *
  *
@@ -11,7 +11,7 @@
  * Indices
  *   - .toc for the Table of Contents (<ol class="toc">)
  *     -> <span class="secno"> for the section numbers
- *   - #toc for the Table of Contents (<section id="toc">)
+ *   - #toc for the Table of Contents (<nav id="toc">)
  *   - ul.index for Indices (<a href="#ref">term</a><span>, in §N.M</span>)
  *   - table.index for Index Tables (e.g. for properties or elements)
  *
@@ -76,10 +76,10 @@
 		counter-reset: example figure issue;
 
 		/* Layout */
-		max-width: 50em;           /* limit line length to 50em for readability   */
-		margin: 0;                 /* start-align text within page                     */
-		padding: 1.6em 1em 2em 58px; /* assume 16px font size for downlevel clients */
-		padding: 1.6em 1em 2em calc(26px + 2em); /* leave space for status flag    */
+		max-width: 50em;               /* limit line length to 50em for readability   */
+		margin: 0 auto;                /* center text within page                     */
+		padding: 1.6em 1.5em 2em 50px; /* assume 16px font size for downlevel clients */
+		padding: 1.6em 1.5em 2em calc(26px + 1.5em); /* leave space for status flag     */
 
 		/* Typography */
 		line-height: 1.5;
@@ -93,19 +93,9 @@
 		/* Colors */
 		color: black;
 		background: white top left fixed no-repeat;
-		background-size: 25px 380px;
+		background-size: 25px auto;
 	}
 
-	.overlarge {
-		width: calc(100vw - 26px - 3em);
-		max-width: none;
-	}
-	div.figure img,    div.sidefigure img,    figure img,
-	div.figure object, div.sidefigure object, figure object,
-	table.data, table.index {
-		max-width: calc(100vw - 26px - 3em);
-		/* See below for sidebar-accommodating override. */
-	}
 
 /******************************************************************************/
 /*                         Front Matter & Navigation                          */
@@ -127,30 +117,6 @@
 	.head > :first-child {
 		float: right;
 		margin: 0;
-	}
-
-	@media screen {
-		.head > p:first-child > a {
-			display: inline-block;
-			background: url("logos/w3c-white.svg") no-repeat center / contain content-box border-box;
-			padding: .4rem .7rem;
-			border-radius: .4rem;
-			margin: .4rem 0 0 .4rem;
-			background-color: hsl(208, 71%, 35%);
-		}
-
-		.head > p:first-child > a > img {
-			visibility: hidden;
-		}
-
-		.head > p:first-child > a:hover,
-		.head > p:first-child > a:focus {
-			background-color: hsla(208, 71%, 35%,.8);
-		}
-
-		.head > p:first-child > a:active {
-			background-color: #c00;
-		}
 	}
 
 
@@ -291,22 +257,16 @@
 
 		body:not(.toc-inline) {
 			padding-left: 29em;
-			padding-right: 1.5em;
 		}
-		body:not(.toc-inline) .overlarge,
-		body:not(.toc-inline) div.figure img,
-		body:not(.toc-inline) div.sidefigure img,
-		body:not(.toc-inline) figure img,
-		body:not(.toc-inline) div.figure object,
-		body:not(.toc-inline) div.sidefigure object,
-		body:not(.toc-inline) figure object,
-		body:not(.toc-inline) table.data,
-		body:not(.toc-inline) table.index {
-			max-width: calc(100vw - 30.5em);
-		}
+		/* See also Overflow section at the bottom */
 
 		body:not(.toc-inline) #back-to-top :first-child {
 			display: none;
+		}
+	}
+	@media screen and (min-width: 90em) {
+		body:not(.toc-inline) {
+			margin: 0 4em;
 		}
 	}
 
@@ -479,6 +439,7 @@
 		font-size: .9em;
 		page-break-inside: avoid;
 		hyphens: none;
+		text-transform: none;
 	}
 	pre code,
 	code code {
@@ -503,12 +464,15 @@
 
 	/* We hyperlink a lot, so make it less intrusive */
 	a[href] {
-		color: #005a9c;
+		color: #034575;
 		text-decoration: none;
-		border-bottom: 1px solid #555;
+		border-bottom: 1px solid #707070;
+		/* Need a bit of extending for it to look okay */
+		padding: 0 1px 0;
+		margin: 0 -1px 0;
 	}
 	a:visited {
-		border-bottom-color: #969696;
+		border-bottom-color: #BBB;
 	}
 
 	/* Use distinguishing colors when user is interacting with the link */
@@ -542,16 +506,17 @@
 	   .caption::before, figcaption::before { content: "Figure " counter(figure) ". "; }
 	*/
 
-	figure, div.figure, div.sidefigure {
+	figure, .figure, .sidefigure {
 		page-break-inside: avoid;
-		text-align: center;
-	}
-
-	div.figure, p.figure, div.sidefigure, figure {
 		text-align: center;
 		margin: 2.5em 0;
 	}
-	div.figure pre, div.sidefigure pre, figure pre {
+	.figure img,    .sidefigure img,    figure img,
+	.figure object, .sidefigure object, figure object {
+		max-width: 100%;
+		margin: auto;
+	}
+	.figure pre, .sidefigure pre, figure pre {
 		text-align: left;
 		display: table;
 		margin: 1em auto;
@@ -559,24 +524,26 @@
 	.figure table, figure table {
 		margin: auto;
 	}
-	div.sidefigure, figure.sidefigure {
-		float: right;
-		width: 50%;
-		margin: 0 0 0.5em 0.5em
+	@media screen and (min-width: 20em) {
+		.sidefigure {
+			float: right;
+			width: 50%;
+			margin: 0 0 0.5em 0.5em
+		}
 	}
-	p.caption, figcaption, caption {
+	.caption, figcaption, caption {
 		font-style: italic;
 		font-size: 90%;
 	}
-	p.caption::before, figcaption::before, figcaption > .marker {
+	.caption::before, figcaption::before, figcaption > .marker {
 		font-weight: bold;
 	}
-	p.caption, figcaption {
+	.caption, figcaption {
 		counter-increment: figure;
 	}
 
 	/* DL list is indented 2em, but figure inside it is not */
-	dd > div.figure, dd > figure { margin-left: -2em }
+	dd > .figure, dd > figure { margin-left: -2em }
 
 /******************************************************************************/
 /*                             Colored Boxes                                  */
@@ -593,14 +560,10 @@
 		border-right-style: solid;
 	}
 
-	div.issue,
-	div.note,
-	details.note,
-	aside.note,
-	div.example,
-	div.advisement,
-	p.advisement,
-	strong.advisement,
+	.issue,
+	.note,
+	.example,
+	.advisement,
 	blockquote {
 		margin: 1em auto;
 	}
@@ -737,7 +700,7 @@
 
 /** Entity Definition Boxes ***************************************************/
 
-	.def, pre.idl {
+	.def {
 		padding: .5em 1em;
 		background: #DEF;
 		margin: 1.2em 0;
@@ -810,6 +773,8 @@
 	*/
 
 	table {
+		word-wrap: normal;
+		overflow-wrap: normal;
 		hyphens: manual;
 	}
 
@@ -820,12 +785,10 @@
 		width: 100%;
 		border: hidden;
 	}
-	table.data {
-		width: auto;
-	}
 	table.data caption,
 	table.index caption {
-		width: 100%;
+		max-width: 50em;
+		margin: 0 auto 1em;
 	}
 
 	table.data td,  table.data th,
@@ -866,9 +829,15 @@
 		padding-right: 1em;
 	}
 
+	table.data th[colspan],
+	table.data td[colspan] {
+		text-align: center;
+	}
+
 	table.complex.data th,
 	table.complex.data td {
 		border: 1px solid silver;
+		text-align: center;
 	}
 
 	table.data.longlastcol td:last-child,
@@ -937,8 +906,8 @@
 	/* ToC not indented until third level, but font style & margins show hierarchy */
 	.toc > li             { margin: 1.2em 0;   font-weight: bold;   }
 	.toc > li li          { margin: 0;         font-weight: normal; }
-	.toc > li li li       { margin-left:  2em; font-style:  italic; }
-	.toc > li li li li    { margin-left:    0; font-style:  normal; }
+	.toc > li li li       { margin-left:  1em; font-style:  italic; }
+	.toc > li li li li    { margin-left:  1em; font-style:  normal; }
 	.toc > li li li li li { margin-left: 1rem; font-style:  italic; font-size: 85%; }
 
 	.toc a {
@@ -946,10 +915,12 @@
 		padding-top: 0.1em;
 		/* Larger, more consistently-sized click target */
 		display: block;
-		/* Consistent layout across link hover effects */
-		border-bottom-style: solid;
-		border-bottom-width: 3px;
-		margin-bottom: -1px;
+		/* Reverse color scheme */
+		color: black;
+		border-color: #3980B5;
+	}
+	.toc a:visited {
+		border-color: #054572;
 	}
 	.toc a:not(:focus):not(:hover) {
 		/* Allow colors to cascade through from link styling */
@@ -965,10 +936,11 @@
 		float: left;
 		width: 4em;
 		margin-left: -4em;
+		white-space: nowrap;
 	}
 
 	.toc > li li li .secno {
-		margin-left: -6em;
+		margin-left: -5em;
 	}
 	.toc > li li li li .secno {
 		font-size: 85%;
@@ -1004,7 +976,7 @@
 			color: transparent; }
 		ul.index li a:hover + span,
 		ul.index li a:focus + span {
-			color: gray;
+			color: #707070;
 		}
 	}
 
@@ -1053,62 +1025,75 @@
 	}
 
 /******************************************************************************/
+/*                                    Legacy                                  */
+/******************************************************************************/
+
+	/* This rule is inherited from past style sheets. No idea what it's for. */
+	.hide { display: none }
+
+
+
+/******************************************************************************/
+/*                             Overflow Control                               */
+/******************************************************************************/
+
+	.figure .caption, .sidefigure .caption, figcaption {
+		/* in case figure is overlarge, limit caption to 50em */
+		max-width: 50rem;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	@media (min-width: 55em) {
+		.overlarge {
+			margin-left: calc(13px + 26.5rem - 50vw);
+			margin-right: calc(13px + 26.5rem - 50vw);
+			max-width: none;
+		}
+	}
+	@media screen and (min-width: 78em) {
+		body:not(.toc-inline) .overlarge {
+			/* 30.5em body padding 50em content area */
+			margin-left: calc(40em - 50vw) !important;
+			margin-right: calc(40em - 50vw) !important;
+		}
+	}
+	@media screen and (min-width: 90em) {
+		body:not(.toc-inline) .overlarge {
+			/* 4em html margin 30.5em body padding 50em content area */
+			margin-left: 0 !important;
+			margin-right: calc(84.5em - 100vw) !important;
+		}
+	}
+
+	@media not print {
+		.overlarge {
+			overflow-x: auto;
+			/* See Lea Verou's explanation background-attachment:
+			 * http://lea.verou.me/2012/04/background-attachment-local/
+			 *
+			background: top left  / 4em 100% linear-gradient(to right,  #ffffff, rgba(255, 255, 255, 0)) local,
+			            top right / 4em 100% linear-gradient(to left, #ffffff, rgba(255, 255, 255, 0)) local,
+			            top left  / 1em 100% linear-gradient(to right,  #c3c3c5, rgba(195, 195, 197, 0)) scroll,
+			            top right / 1em 100% linear-gradient(to left, #c3c3c5, rgba(195, 195, 197, 0)) scroll,
+			            white;
+			background-repeat: no-repeat;
+			*/
+		}
+	}
+
+/******************************************************************************/
 /*                                  Bikeshed                                  */
 /******************************************************************************/
 
 	/* Style for paragraphs I know are in MD-genned lists */
+	/* This is a weird hack for me not yet following the commonmark spec
+	   regarding paragraph and lists. */
 	[data-md] > :first-child {
 		margin-top: 0;
 	}
 	[data-md] > :last-child {
 		margin-bottom: 0;
-	}
-
-	/* This is mostly to make the list inside the CR exit criteria more compact. */
-
-	ol.inline, ol.inline li {
-		display: inline;
-		padding: 0; margin: 0;
-	}
-	ol.inline {
-		counter-reset: list-item;
-	}
-	ol.inline li {
-		counter-increment: list-item;
-	}
-	ol.inline li::before {
-		content: "(" counter(list-item) ") ";
-		font-weight: bold;
-	}
-
-/** Syntax-Highlighted Code ***************************************************/
-
-	.example pre[class*="language-"],
-	.example [class*="language-"] pre,
-	.example pre[class*="lang-"],
-	.example [class*="lang-"] pre {
-		background: transparent; /* Prism applies a gray background that doesn't work well in the template. */
-	}
-
-/** Example Code **************************************************************/
-
-	div.html, div.xml,
-	pre.html, pre.xml {
-		padding: 0.5em;
-		margin: 1em 0;
-		position: relative;
-		clear: both;
-		color: #600;
-	}
-	pre.example,
-	pre.html,
-	pre.xml {
-		padding-top: 1.5em;
-	}
-
-	pre.illegal, .illegal pre
-	pre.deprecated, .deprecated pre {
-		color: red;
 	}
 
 /** Inline CSS fragments ******************************************************/
@@ -1133,12 +1118,6 @@
 	}
 	pre .property::before, pre .property::after {
 		content: "";
-	}
-
-/** Inline markup fragments ***************************************************/
-
-	code.html, code.xml {
-		color: #660000;
 	}
 
 /** Autolinks produced using Bikeshed *****************************************/
@@ -1184,7 +1163,7 @@
 	}
 
 /** Self-Links ****************************************************************/
-	/* Auto-generated links from an element to its own anchor, for usability */
+/* Auto-generated links from an element to its own anchor, for usability */
 
 	.heading, .issue, .note, .example, li, dt {
 		position: relative;
@@ -1192,8 +1171,8 @@
 	a.self-link {
 		position: absolute;
 		top: 0;
-		left: -2.5em;
-		width: 2em;
+		left: calc(-1 * (3.5rem - 26px));
+		width: calc(3.5rem - 26px);
 		height: 2em;
 		text-align: center;
 		border: none;
@@ -1205,9 +1184,6 @@
 	}
 	.heading > a.self-link {
 		font-size: 83%;
-	}
-	li > a.self-link {
-		left: -3.5em;
 	}
 	dfn > a.self-link {
 		top: auto;
@@ -1231,29 +1207,9 @@
 	.heading > a.self-link::before { content: "§"; }
 	dfn > a.self-link::before      { content: "#"; }
 
-/******************************************************************************/
-/*                                    Images                                  */
-/******************************************************************************/
-
-	pre.ascii-art {
-		display: table; /* shrinkwrap */
-		margin: 1em auto;
-	}
-
-	/* Displaying the output of text layout, particularly when
-		 line-breaking is being invoked, and thus having a
-		 visible width is good. */
-	pre.output {
-		margin: 1em;
-		border: solid thin silver;
-		padding: 0.25em;
-		display: table;
-	}
-
-/******************************************************************************/
-/*                                  Counters                                  */
-/******************************************************************************/
-
+/** Counters ******************************************************************/
+/* Adds the auto-genned issue/example counters,
+   until Bikeshed fills in manual ones. */
 	.issue:not(.no-marker)::before {
 		content: "Issue " counter(issue);
 	}
@@ -1269,24 +1225,10 @@
 	}
 
 
-/** At-risk List **************************************************************/
-	/* Style for At Risk features (intended as editorial aid, not intended for publishing) */
 
-	.atrisk::before {
-	 float: right;
-	 margin-top: -0.25em;
-	 padding: 0.5em 1em 0.5em 0;
-	 text-indent: -0.9em;
-	 border: 1px solid;
-	 content: '\25C0    Not yet widely implemented';
-	 white-space: pre;
-	 font-size: small;
-	 background-color: white;
-	 color: gray;
-	 text-align: center;
-	}
-
-	.toc .atrisk::before { content:none }
+/********************************************
+ Remember to remove the logo section when copypasting freshly.
+ */
 </style>
   <meta content="Bikeshed 1.0.0" name="generator">
 <style>.highlight .hll { background-color: #ffffcc }
@@ -1349,7 +1291,6 @@
         code.highlight { padding: .1em; border-radius: .3em; }
         pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
         </style>
- </head>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"></p>
@@ -1428,6 +1369,7 @@ Parts of this work may be from another specification document.  If so, those par
      <a href="#references"><span class="secno"></span> <span class="content">References</span></a>
      <ol class="toc">
       <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
+      <li><a href="#informative"><span class="secno"></span> <span class="content">Informative References</span></a>
      </ol>
     <li><a href="#idl-index"><span class="secno"></span> <span class="content">IDL Index</span></a>
     <li><a href="#issues-index"><span class="secno"></span> <span class="content">Issues Index</span></a>
@@ -1670,7 +1612,7 @@ the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-ro
     <dt>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is a scrollable element, 
     <dd>it’s the element’s <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#content-area">content area</a>. 
     <dt>Otherwise, 
-    <dd>it’s the result of running the <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>. 
+    <dd>it’s the result of running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>. 
    </dl>
    <p>For any <a data-link-type="dfn" href="#intersectionobserver-target">target</a> which belongs to the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>,
 the rectangle is then expanded
@@ -1681,7 +1623,8 @@ with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle.</p>
    <p class="note" role="note">Note: <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code> only applies to the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> itself.
 If a <a data-link-type="dfn" href="#intersectionobserver-target">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> is clipped by an ancestor other than the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>, that clipping is unaffected by <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin">rootMargin</a></code>.</p>
-   <p class="note" role="note">Note: <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">Root intersection rectangle</a> is not affected by <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#pinch-zoom">pinch zoom</a> and will report the unadjusted <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a>, consistent with the
+   <p class="note" role="note">Note: <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">Root intersection rectangle</a> is not affected by
+{{pinch zoom}} and will report the unadjusted <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a>, consistent with the
 intent of pinch zooming (to act like a magnifying glass and NOT change layout.)</p>
    <p>To <dfn data-dfn-type="dfn" data-noexport="" id="parse-a-root-margin">parse a root margin<a class="self-link" href="#parse-a-root-margin"></a></dfn> from an input string <var>marginString</var>,
 returning either a list of 4 pixel lengths or percentages,
@@ -1741,17 +1684,17 @@ dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="d
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-boundingclientrect">boundingClientRect<a class="self-link" href="#dom-intersectionobserverentry-boundingclientrect"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
-      <p>A <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by the same algorithm
-as that of <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> performed on <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target">target</a></code>.</p>
+      <p>A <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> algorithm
+on the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target">target</a></code>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-intersectionrect">intersectionRect<a class="self-link" href="#dom-intersectionobserverentry-intersectionrect"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
       <p><code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a></code>, intersected by
 each of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target">target</a></code>'s ancestors' clip
 rects (up to but not including <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code>),
-intersected with <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code>.
+intersected with the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">root intersection rectangle</a>.
 This value represents the portion of <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target">target</a></code> actually visible
-within <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a></code>.</p>
+within the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">root intersection rectangle</a>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-intersectionratio">intersectionRatio<a class="self-link" href="#dom-intersectionobserverentry-intersectionratio"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-double">double</a>, readonly</span></p>
      <dd data-md="">
@@ -1759,12 +1702,12 @@ within <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-rootbounds">rootBounds<a class="self-link" href="#dom-intersectionobserverentry-rootbounds"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
-      <p>On getting,
-if <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> is <code>null</code>,
-return <code>null</code>.
-Otherwise,
-return a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> representing
-the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">root intersection rectangle</a> in the coordinate space of the document the root element is in.</p>
+      <p>If <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target">target</a></code> belongs to the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>,
+this will be the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">root intersection rectangle</a>.
+Otherwise, this will be <code>null</code>.
+Note that if the target is in a different <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context">browsing context</a> than the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>,
+this will be in a different coordinate system
+than <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-intersectionrect">intersectionRect</a></code>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-target">target<a class="self-link" href="#dom-intersectionobserverentry-target"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>, readonly</span></p>
      <dd data-md="">
@@ -1809,7 +1752,9 @@ callback will be invoked when intersectionRect’s area changes from
 greater than or equal to any threshold to less than that threshold,
 and vice versa.</p>
       <p>Threshold values must be in the range of [0, 1.0] and represent a
-percentage of the area as specified by <a data-link-type="dfn" href="#intersectionobserver-target">target</a>.<code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code>.</p>
+percentage of the area of the rectangle produced
+by running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> algorithm
+on the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>.</p>
       <p class="note" role="note">Note: 0.0 is effectively "any non-zero number of pixels".</p>
     </dl>
    </div>
@@ -1889,7 +1834,7 @@ run these steps:</p>
 run these steps:</p>
    <ol>
     <li data-md="">
-     <p>Let <var>intersectionRect</var> be the result of running the <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>.</p>
+     <p>Let <var>intersectionRect</var> be the result of running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>.</p>
     <li data-md="">
      <p>Let <var>container</var> be the parent node of the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>.</p>
     <li data-md="">
@@ -1910,9 +1855,7 @@ Otherwise, update <var>container</var> to be the parent node of <var>container</
     <li data-md="">
      <p>Update <var>intersectionRect</var> by intersecting it with the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle">root intersection rectangle</a>.</p>
     <li data-md="">
-     <p>If the <a data-link-type="dfn" href="#intersectionobserver-target">target</a> belongs to the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>, map <var>intersectionRect</var> to the coordinate space of
-the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>’s document.
-Otherwise, map <var>intersectionRect</var> to the coordinate space of the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>’s document.</p>
+     <p>Map <var>intersectionRect</var> to the coordinate space of the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>’s document.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.5" id="update-intersection-observations-algo"><span class="secno">3.2.5. </span><span class="content"> Run the Update Intersection Observations Steps</span><a class="self-link" href="#update-intersection-observations-algo"></a></h4>
    <p>To <dfn data-dfn-type="dfn" data-noexport="" id="run-the-update-intersection-observations-steps">run the update intersection observations steps<a class="self-link" href="#run-the-update-intersection-observations-steps"></a></dfn> for an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop">event loop</a> <var>loop</var> given a timestamp <var>time</var>, run these steps:</p>
@@ -1938,7 +1881,8 @@ skip further processing for <var>target</var>.</p>
 and <var>target</var> is not in the same document as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>,
 skip further processing for <var>target</var>.</p>
         <li data-md="">
-         <p>Let <var>targetRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by the same algorithm as that of <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> performed on <var>target</var>.</p>
+         <p>Let <var>targetRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained
+by running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> algorithm on <var>target</var>.</p>
         <li data-md="">
          <p>Let <var>intersectionRect</var> be the result of running the <a data-link-type="dfn" href="#compute-the-intersection">compute the intersection</a> algorithm on <var>target</var>.</p>
         <li data-md="">
@@ -2144,19 +2088,22 @@ in the HTML Processing Model.</a></p>
    <dt id="biblio-css21"><a class="self-link" href="#biblio-css21"></a>[CSS21]
    <dd>Bert Bos; et al. <a href="http://www.w3.org/TR/CSS2">Cascading Style Sheets Level 2 Revision 1 (CSS 2.1) Specification</a>. 7 June 2011. REC. URL: <a href="http://www.w3.org/TR/CSS2">http://www.w3.org/TR/CSS2</a>
    <dt id="biblio-webidl"><a class="self-link" href="#biblio-webidl"></a>[WebIDL]
-   <dd>Cameron McCormack; Boris Zbarsky. <a href="http://www.w3.org/TR/WebIDL-1/">WebIDL Level 1</a>. 4 August 2015. WD. URL: <a href="http://www.w3.org/TR/WebIDL-1/">http://www.w3.org/TR/WebIDL-1/</a>
+   <dd>Cameron McCormack; Boris Zbarsky. <a href="https://heycam.github.io/webidl/">WebIDL Level 1</a>. 4 August 2015. WD. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
    <dt id="biblio-css-syntax-3"><a class="self-link" href="#biblio-css-syntax-3"></a>[CSS-SYNTAX-3]
-   <dd>Tab Atkins Jr.; Simon Sapin. <a href="http://www.w3.org/TR/css-syntax-3/">CSS Syntax Module Level 3</a>. 20 February 2014. CR. URL: <a href="http://www.w3.org/TR/css-syntax-3/">http://www.w3.org/TR/css-syntax-3/</a>
+   <dd>Tab Atkins Jr.; Simon Sapin. <a href="http://dev.w3.org/csswg/css-syntax/">CSS Syntax Module Level 3</a>. 20 February 2014. CR. URL: <a href="http://dev.w3.org/csswg/css-syntax/">http://dev.w3.org/csswg/css-syntax/</a>
    <dt id="biblio-css-values"><a class="self-link" href="#biblio-css-values"></a>[CSS-VALUES]
-   <dd>Tab Atkins Jr.; Elika Etemad. <a href="http://www.w3.org/TR/css-values/">CSS Values and Units Module Level 3</a>. 11 June 2015. CR. URL: <a href="http://www.w3.org/TR/css-values/">http://www.w3.org/TR/css-values/</a>
+   <dd>Tab Atkins Jr.; Elika Etemad. <a href="http://dev.w3.org/csswg/css-values/">CSS Values and Units Module Level 3</a>. 11 June 2015. CR. URL: <a href="http://dev.w3.org/csswg/css-values/">http://dev.w3.org/csswg/css-values/</a>
    <dt id="biblio-cssom-view"><a class="self-link" href="#biblio-cssom-view"></a>[CSSOM-VIEW]
-   <dd>Simon Pieters; Glenn Adams. <a href="http://www.w3.org/TR/cssom-view/">CSSOM View Module</a>. 17 December 2013. WD. URL: <a href="http://www.w3.org/TR/cssom-view/">http://www.w3.org/TR/cssom-view/</a>
-   <dt id="biblio-dom-ls"><a class="self-link" href="#biblio-dom-ls"></a>[DOM-LS]
-   <dd>Document Object Model URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
+   <dd>Simon Pieters; Glenn Adams. <a href="http://dev.w3.org/csswg/cssom-view/">CSSOM View Module</a>. 17 December 2013. WD. URL: <a href="http://dev.w3.org/csswg/cssom-view/">http://dev.w3.org/csswg/cssom-view/</a>
    <dt id="biblio-geometry-1"><a class="self-link" href="#biblio-geometry-1"></a>[GEOMETRY-1]
-   <dd>Simon Pieters; Dirk Schulze; Rik Cabanier. <a href="http://www.w3.org/TR/geometry-1/">Geometry Interfaces Module Level 1</a>. 25 November 2014. CR. URL: <a href="http://www.w3.org/TR/geometry-1/">http://www.w3.org/TR/geometry-1/</a>
+   <dd>Simon Pieters; Dirk Schulze; Rik Cabanier. <a href="http://dev.w3.org/fxtf/geometry/">Geometry Interfaces Module Level 1</a>. 25 November 2014. CR. URL: <a href="http://dev.w3.org/fxtf/geometry/">http://dev.w3.org/fxtf/geometry/</a>
    <dt id="biblio-rfc2119"><a class="self-link" href="#biblio-rfc2119"></a>[RFC2119]
    <dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
+  </dl>
+  <h3 class="no-num heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
+  <dl>
+   <dt id="biblio-dom-ls"><a class="self-link" href="#biblio-dom-ls"></a>[DOM-LS]
+   <dd>Document Object Model URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
   </dl>
   <h2 class="no-num heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
 <pre class="idl">callback <a href="#callbackdef-intersectionobservercallback">IntersectionObserverCallback</a> = void (sequence&lt;<a data-link-type="idl-name" href="#intersectionobserverentry">IntersectionObserverEntry</a>> <a href="#dom-intersectionobservercallback-entries">entries</a>, <a data-link-type="idl-name" href="#intersectionobserver">IntersectionObserver</a> <a href="#dom-intersectionobservercallback-observer">observer</a>)
@@ -2203,5 +2150,3 @@ dictionary <a href="#dictdef-intersectionobserverinit">IntersectionObserverInit<
    <div class="issue"> Should we use something other than 100ms as <var>timeout</var>?<a href="#issue-bf9a6e46"> ↵ </a></div>
    <div class="issue"> Should we consider making this just post a task instead?<a href="#issue-f67f2718"> ↵ </a></div>
   </div>
- </body>
-</html>
