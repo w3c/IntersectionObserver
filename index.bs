@@ -49,7 +49,7 @@ urlPrefix: https://drafts.csswg.org/css-display/
 	url: #containing-block-chain; type: dfn; text: containing block chain
 urlPrefix: http://dev.w3.org/csswg/cssom-view/
 	url: #pinch-zoom; type:dfn; text: pinch zoom
-	url: #dom-element-getboundingclientrect; type:dfn; text: getBoundingClientRect
+	url: #dom-element-getboundingclientrect; type:method; text: getBoundingClientRect(); for: Element
 urlPrefix: http://www.w3.org/TR/css-masking-1/
 	url: #propdef-clip-path; type:dfn; text: clip-path
 </pre>
@@ -310,7 +310,7 @@ is the rectangle we'll use to check against the targets.
 	<dd>it's the element's <a>content area</a>.
 
 	<dt>Otherwise,
-	<dd>it's the result of running the <a>getBoundingClientRect</a> algorithm on the <a>intersection root</a>.
+	<dd>it's the result of running the <a>getBoundingClientRect()</a> algorithm on the <a>intersection root</a>.
 </dl>
 
 For any <a>target</a> which belongs to the same <a>unit of related similar-origin browsing contexts</a>
@@ -381,7 +381,7 @@ dictionary IntersectionObserverEntryInit {
 <div dfn-type="attribute" dfn-for="IntersectionObserverEntry">
 	: <dfn>boundingClientRect</dfn>
 	::
-		A {{DOMRectReadOnly}} obtained by running the <a>getBoundingClientRect</a> algorithm
+		A {{DOMRectReadOnly}} obtained by running the <a>getBoundingClientRect()</a> algorithm
 		on the {{IntersectionObserverEntry/target}}.
 	: <dfn>intersectionRect</dfn>
 	::
@@ -455,7 +455,7 @@ dictionary IntersectionObserverInit {
 
 		Threshold values must be in the range of [0, 1.0] and represent a
 		percentage of the area of the rectangle produced
-		by running the <a>getBoundingClientRect</a> algorithm
+		by running the <a>getBoundingClientRect()</a> algorithm
 		on the <a>target</a>.
 
 		Note: 0.0 is effectively "any non-zero number of pixels".
@@ -561,7 +561,7 @@ Compute the Intersection of a Target Element and the Root</h4>
 To <dfn>compute the intersection</dfn> between a <a>target</a> and the observer's <a>intersection root</a>,
 run these steps:
 
-1. Let |intersectionRect| be the result of running the <a>getBoundingClientRect</a> algorithm on the <a>target</a>.
+1. Let |intersectionRect| be the result of running the <a>getBoundingClientRect()</a> algorithm on the <a>target</a>.
 2. Let |container| be the parent node of the <a>target</a>.
 3. While |container| is not the <a>intersection root</a>:
 	1. Map |intersectionRect| to the coordinate space of |container|.
@@ -595,7 +595,7 @@ To <dfn>run the update intersection observations steps</dfn> for an
 			and |target| is not in the same document as the <a>intersection root</a>,
 			skip further processing for |target|.
 		3. Let |targetRect| be a {{DOMRectReadOnly}} obtained
-			by running the <a>getBoundingClientRect</a> algorithm on |target|.
+			by running the <a>getBoundingClientRect()</a> algorithm on |target|.
 		4. Let |intersectionRect| be the result of running the <a>compute the intersection</a>
 			algorithm on |target|.
 		5. Let |targetArea| be |targetRect|'s area.

@@ -1670,7 +1670,7 @@ the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-ro
     <dt>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is a scrollable element, 
     <dd>it’s the element’s <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#content-area">content area</a>. 
     <dt>Otherwise, 
-    <dd>it’s the result of running the <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>. 
+    <dd>it’s the result of running the <a data-link-type="functionish" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect()</a> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>. 
    </dl>
    <p>For any <a data-link-type="dfn" href="#intersectionobserver-target">target</a> which belongs to the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a>,
 the rectangle is then expanded
@@ -1741,7 +1741,7 @@ dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="d
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-boundingclientrect">boundingClientRect<a class="self-link" href="#dom-intersectionobserverentry-boundingclientrect"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md="">
-      <p>A <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by running the <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a> algorithm
+      <p>A <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained by running the <a data-link-type="functionish" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect()</a> algorithm
 on the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target">target</a></code>.</p>
      <dt data-md="">
       <p><dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverentry-intersectionrect">intersectionRect<a class="self-link" href="#dom-intersectionobserverentry-intersectionrect"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>, readonly</span></p>
@@ -1810,7 +1810,7 @@ greater than or equal to any threshold to less than that threshold,
 and vice versa.</p>
       <p>Threshold values must be in the range of [0, 1.0] and represent a
 percentage of the area of the rectangle produced
-by running the <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a> algorithm
+by running the <a data-link-type="functionish" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect()</a> algorithm
 on the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>.</p>
       <p class="note" role="note">Note: 0.0 is effectively "any non-zero number of pixels".</p>
     </dl>
@@ -1891,7 +1891,7 @@ run these steps:</p>
 run these steps:</p>
    <ol>
     <li data-md="">
-     <p>Let <var>intersectionRect</var> be the result of running the <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>.</p>
+     <p>Let <var>intersectionRect</var> be the result of running the <a data-link-type="functionish" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect()</a> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>.</p>
     <li data-md="">
      <p>Let <var>container</var> be the parent node of the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>.</p>
     <li data-md="">
@@ -1939,7 +1939,7 @@ and <var>target</var> is not in the same document as the <a data-link-type="dfn"
 skip further processing for <var>target</var>.</p>
         <li data-md="">
          <p>Let <var>targetRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained
-by running the <a data-link-type="dfn" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect</a> algorithm on <var>target</var>.</p>
+by running the <a data-link-type="functionish" href="http://dev.w3.org/csswg/cssom-view/#dom-element-getboundingclientrect">getBoundingClientRect()</a> algorithm on <var>target</var>.</p>
         <li data-md="">
          <p>Let <var>intersectionRect</var> be the result of running the <a data-link-type="dfn" href="#compute-the-intersection">compute the intersection</a> algorithm on <var>target</var>.</p>
         <li data-md="">
