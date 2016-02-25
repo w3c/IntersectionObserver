@@ -476,7 +476,7 @@ Internal Slot Definitions</h2>
 Document</h4>
 
 Each <a>Document</a> has an
-<dfn for="browsing context">IntersectionObserverTaskQueued</dfn> flag
+<dfn for="Document">IntersectionObserverTaskQueued</dfn> flag
 which is initialized to false.
 
 <h4 id='element-private-slots'>
@@ -549,7 +549,7 @@ Queue an IntersectionObserverEntry</h4>
 
 To <dfn>queue an IntersectionObserverEntry</dfn> for an {{IntersectionObserver}} |observer|, given a
 <a>Document</a> |document|; {{DOMHighResTimeStamp}} |time|;
-{{DOMRect}}'s |rootBounds|, |boundingClientRect|, and |intersectionRect|;
+{{DOMRect}}s |rootBounds|, |boundingClientRect|, and |intersectionRect|;
 and an {{Element}} |target|;
 run these steps:
 

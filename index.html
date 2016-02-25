@@ -1295,7 +1295,7 @@
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-24">24 February 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-25">25 February 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1309,7 +1309,7 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 24 February 2016,
+In addition, as of 25 February 2016,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1762,7 +1762,7 @@ on the <a data-link-type="dfn" href="#intersectionobserver-target">target</a>.</
 the <a data-link-type="dfn" href="#intersection-observer">Intersection Observer</a> API.</p>
    <h3 class="heading settled" data-level="3.1" id="defines"><span class="secno">3.1. </span><span class="content"> Internal Slot Definitions</span><a class="self-link" href="#defines"></a></h3>
    <h4 class="heading settled" data-level="3.1.1" id="document-defines"><span class="secno">3.1.1. </span><span class="content"> Document</span><a class="self-link" href="#document-defines"></a></h4>
-   <p>Each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> has an <dfn data-dfn-for="browsing context" data-dfn-type="dfn" data-noexport="" id="browsing-context-intersectionobservertaskqueued">IntersectionObserverTaskQueued<a class="self-link" href="#browsing-context-intersectionobservertaskqueued"></a></dfn> flag
+   <p>Each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> has an <dfn data-dfn-for="Document" data-dfn-type="dfn" data-noexport="" id="document-intersectionobservertaskqueued">IntersectionObserverTaskQueued<a class="self-link" href="#document-intersectionobservertaskqueued"></a></dfn> flag
 which is initialized to false.</p>
    <h4 class="heading settled" data-level="3.1.2" id="element-private-slots"><span class="secno">3.1.2. </span><span class="content"> Element</span><a class="self-link" href="#element-private-slots"></a></h4>
    <p><code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> objects have an internal <dfn class="idl-code" data-dfn-for="Element" data-dfn-type="attribute" data-export="" id="dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]<a class="self-link" href="#dom-element-registeredintersectionobservers-slot"></a></dfn> slot,
@@ -1783,10 +1783,10 @@ which is a list of four pixel lengths or percentages.</p>
 run these steps:</p>
    <ol>
     <li data-md="">
-     <p>If <var>document</var>’s <a data-link-type="dfn" href="#browsing-context-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a> flag is set to true,
+     <p>If <var>document</var>’s <a data-link-type="dfn" href="#document-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a> flag is set to true,
 return.</p>
     <li data-md="">
-     <p>Set <var>document</var>’s <a data-link-type="dfn" href="#browsing-context-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a> flag to true.</p>
+     <p>Set <var>document</var>’s <a data-link-type="dfn" href="#document-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a> flag to true.</p>
     <li data-md="">
      <p>Enqueue a task to <a data-link-type="dfn" href="#notify-intersection-observers">notify intersection observers</a> in the <a data-link-type="dfn" href="http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks">list of idle request callbacks</a> with a <var>timeout</var> of 100.</p>
      <p class="issue" id="issue-bf9a6e46"><a class="self-link" href="#issue-bf9a6e46"></a> Should we use something other than 100ms as <var>timeout</var>?</p>
@@ -1797,7 +1797,7 @@ return.</p>
 run these steps:</p>
    <ol>
     <li data-md="">
-     <p>Set <var>document</var>’s <a data-link-type="dfn" href="#browsing-context-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a> flag to false.</p>
+     <p>Set <var>document</var>’s <a data-link-type="dfn" href="#document-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a> flag to false.</p>
     <li data-md="">
      <p>Let <var>notify list</var> be a list of all <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code>s
 whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root">root</a></code> is in the DOM tree of <var>document</var>.</p>
@@ -1818,7 +1818,7 @@ If this throws an exception, <a data-link-type="dfn" href="https://html.spec.wha
      </ol>
    </ol>
    <h4 class="heading settled" data-level="3.2.3" id="queue-intersection-observer-entry-algo"><span class="secno">3.2.3. </span><span class="content"> Queue an IntersectionObserverEntry</span><a class="self-link" href="#queue-intersection-observer-entry-algo"></a></h4>
-   <p>To <dfn data-dfn-type="dfn" data-noexport="" id="queue-an-intersectionobserverentry">queue an IntersectionObserverEntry<a class="self-link" href="#queue-an-intersectionobserverentry"></a></dfn> for an <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> <var>observer</var>, given a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> <var>document</var>; <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a></code> <var>time</var>; <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a></code>'s <var>rootBounds</var>, <var>boundingClientRect</var>, and <var>intersectionRect</var>;
+   <p>To <dfn data-dfn-type="dfn" data-noexport="" id="queue-an-intersectionobserverentry">queue an IntersectionObserverEntry<a class="self-link" href="#queue-an-intersectionobserverentry"></a></dfn> for an <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code> <var>observer</var>, given a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> <var>document</var>; <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a></code> <var>time</var>; <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a></code>s <var>rootBounds</var>, <var>boundingClientRect</var>, and <var>intersectionRect</var>;
 and an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> <var>target</var>;
 run these steps:</p>
    <ol>
@@ -1977,7 +1977,7 @@ in the in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipa
    <li><a href="#dom-intersectionobserverentry-intersectionobserverentry">IntersectionObserverEntry(intersectionObserverEntryInit)</a><span>, in §2.3</span>
    <li><a href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a><span>, in §2.4</span>
    <li><a href="#intersectionobserverregistration">IntersectionObserverRegistration</a><span>, in §3.1.2</span>
-   <li><a href="#browsing-context-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a><span>, in §3.1.1</span>
+   <li><a href="#document-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a><span>, in §3.1.1</span>
    <li><a href="#dom-intersectionobserverentry-intersectionratio">intersectionRatio</a><span>, in §2.3</span>
    <li>
     intersectionRect
