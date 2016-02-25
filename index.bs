@@ -8,7 +8,7 @@ Editor: Michael Blain, Google, mpb@google.com
 Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements ("targets") relative to a containing element or to the top-level viewport ("root"). The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
 Group: Web Performance Working Group
 Repository: WICG/IntersectionObserver
-Ignored Vars: rootMargin
+Ignored Vars: rootMargin, docs
 </pre>
 
 <pre class="anchors">
@@ -19,15 +19,21 @@ urlPrefix: http://www.w3.org/TR/hr-time/
 	type: dfn; text: time origin
 url: http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks; type: dfn; text: list of idle request callbacks
 urlPrefix: https://html.spec.whatwg.org/multipage/
+	urlPrefix: dom.html
+		url: #the-document-object; type:dfn; text: Document
 	urlPrefix: browsers.html
 		type: dfn; text: unit of related similar-origin browsing contexts
 		type: dfn; text: browsing context
 		type: dfn; text: top-level browsing context
 		type: dfn; text: nested browsing contexts
 		type: dfn; text: browsing context container
+		type: dfn; text: fully active
 	urlPrefix: webappapis.html;
 		type: dfn; text: report the exception
 		type: dfn; text: event loop
+		type: dfn; text: run the fullscreen rendering steps
+		type: dfn; text: run the animation frame callbacks
+		url: #processing-model-8; type: dfn; text: HTML Processing Model
 	urlPrefix: infrastructure.html;
 		type: dfn; text: rules for parsing dimension values
 		url: #dfn-callback-this-value; type: dfn; text: callback this value
@@ -53,8 +59,6 @@ urlPrefix: https://drafts.csswg.org/cssom-view-1/
 </pre>
 
 <pre class="link-defaults">
-spec:dom-ls
-	type:interface; text:Document
 spec: css-values-3; type: dfn
 	text: absolute length
 	text: dimension
@@ -436,7 +440,7 @@ dictionary IntersectionObserverInit {
 	::
 		Similar to the CSS 'margin' property,
 		this is a string of 1-4 components,
-		each either an absolute length or a percentage.
+		each either an <a>absolute length</a> or a percentage.
 
 		<pre class="example" highlight=js>
 			"5px"                // all margins set to 5px
@@ -468,12 +472,12 @@ the <a>Intersection Observer</a> API.
 <h3 id='defines'>
 Internal Slot Definitions</h2>
 
-<h4 id='browsing-contexts-defines'>
-Browsing Contexts</h4>
+<h4 id='document-defines'>
+Document</h4>
 
-Each <a>unit of related similar-origin browsing contexts</a> has an
-<dfn for="browsing context">IntersectionObserverTaskQueued</dfn> flag which
-is initialized to false.
+Each <a>Document</a> has an
+<dfn for="Document">IntersectionObserverTaskQueued</dfn> flag
+which is initialized to false.
 
 <h4 id='element-private-slots'>
 Element</h4>
@@ -505,12 +509,12 @@ Algorithms</h2>
 <h4 id='queue-intersection-observer-task'>
 Queue an Intersection Observer Task</h4>
 
-To <dfn>queue an intersection observer task</dfn> for a <a>unit of related
-similar-origin browsing contexts</a> |unit|, run these steps:
+To <dfn>queue an intersection observer task</dfn> for a <a>Document</a> |document|,
+run these steps:
 
-1. If |unit|'s <a>IntersectionObserverTaskQueued</a> flag is set to true,
+1. If |document|'s <a>IntersectionObserverTaskQueued</a> flag is set to true,
 	return.
-2. Set |unit|'s <a>IntersectionObserverTaskQueued</a> flag to true.
+2. Set |document|'s <a>IntersectionObserverTaskQueued</a> flag to true.
 3. Enqueue a task to <a>notify intersection observers</a>
 	in the <a>list of idle request callbacks</a>
 	with a |timeout| of 100.
@@ -522,12 +526,12 @@ similar-origin browsing contexts</a> |unit|, run these steps:
 <h4 id='notify-intersection-observers-algo'>
 Notify Intersection Observers</h4>
 
-To <dfn>notify intersection observers</dfn> for a <a>unit of related
-similar-origin browsing contexts</a> |unit|, run these steps:
+To <dfn>notify intersection observers</dfn> for a <a>Document</a> |document|,
+run these steps:
 
-1. Set |unit|'s <a>IntersectionObserverTaskQueued</a> flag to false.
+1. Set |document|'s <a>IntersectionObserverTaskQueued</a> flag to false.
 2. Let |notify list| be a list of all {{IntersectionObserver}}s
-	whose {{IntersectionObserver/root}} is in the DOM tree of a document in |unit|.
+	whose {{IntersectionObserver/root}} is in the DOM tree of |document|.
 3. For each {{IntersectionObserver}} object |observer| in |notify list|,
 	run these steps:
 
@@ -543,15 +547,16 @@ similar-origin browsing contexts</a> |unit|, run these steps:
 <h4 id='queue-intersection-observer-entry-algo'>
 Queue an IntersectionObserverEntry</h4>
 
-To <dfn>queue an IntersectionObserverEntry</dfn> for |observer|, given a
-<a>unit of related similar-origin browsing contexts</a> |unit|, |observer|,
-|time|, |rootBounds|, |boundingClientRect|, |intersectionRect| and |target|,
+To <dfn>queue an IntersectionObserverEntry</dfn> for an {{IntersectionObserver}} |observer|, given a
+<a>Document</a> |document|; {{DOMHighResTimeStamp}} |time|;
+{{DOMRect}}s |rootBounds|, |boundingClientRect|, and |intersectionRect|;
+and an {{Element}} |target|;
 run these steps:
 
 1. Construct an {{IntersectionObserverEntry}}, passing in |time|, |rootBounds|,
 	|boundingClientRect|, |intersectionRect| and |target|.
 2. Append it to |observer|'s internal {{[[QueuedEntries]]}} slot.
-3. <a>Queue an intersection observer task</a> for |unit|.
+3. <a>Queue an intersection observer task</a> for |document|.
 
 <h4 id='calculate-intersection-rect-algo'>
 Compute the Intersection of a Target Element and the Root</h4>
@@ -570,19 +575,17 @@ run these steps:
 		Otherwise, update |container| to be the parent node of |container|.
 4. Map |intersectionRect| to the coordinate space of the <a>intersection root</a>.
 5. Update |intersectionRect| by intersecting it with the <a>root intersection rectangle</a>.
-6. Map |intersectionRect| to the coordinate space of the <a>target</a>'s document.
+6. Map |intersectionRect| to the coordinate space of the viewport of the <a>Document</a> containing the <a>target</a>.
 
 <h4 id='update-intersection-observations-algo'>
 Run the Update Intersection Observations Steps</h4>
 
-To <dfn>run the update intersection observations steps</dfn> for an
-<a>event loop</a> |loop| given a timestamp |time|, run these steps:
+To <dfn>run the update intersection observations steps</dfn> for a
+<a>Document</a> |document| given a timestamp |time|, run these steps:
 
-1. Let |unit| be the <a>unit of related similar-origin browsing contexts</a> for
-	|loop|.
-2. Let |observer list| be a list of all {{IntersectionObserver}}s
-	whose {{IntersectionObserver/root}} is in the DOM tree of a document in |unit|.
-3. For each |observer| in |observer list|:
+1. Let |observer list| be a list of all {{IntersectionObserver}}s
+	whose {{IntersectionObserver/root}} is in the DOM tree of |document|.
+2. For each |observer| in |observer list|:
 	1. Let |rootBounds| be |observer|'s <a>root intersection rectangle</a>.
 	2. For each |target| in |observer|'s internal {{[[ObservationTargets]]}} slot:
 		1. If the <a>intersection root</a> is not the <a>implicit root</a>
@@ -590,7 +593,7 @@ To <dfn>run the update intersection observations steps</dfn> for an
 			in the <a>containing block chain</a>,
 			skip further processing for |target|.
 		2. If the <a>intersection root</a> is not the <a>implicit root</a>,
-			and |target| is not in the same document as the <a>intersection root</a>,
+			and |target| is not in the same <a>Document</a> as the <a>intersection root</a>,
 			skip further processing for |target|.
 		3. Let |targetRect| be a {{DOMRectReadOnly}} obtained
 			by running the {{Element/getBoundingClientRect()}} algorithm on |target|.
@@ -612,7 +615,7 @@ To <dfn>run the update intersection observations steps</dfn> for an
 		10. Let |previousThreshold| be set to
 			|intersectionObserverRegistration|'s {{IntersectionObserverRegistration/previousThreshold}} property.
 		11. If |threshold| does not equal |previousThreshold|,
-			<a>queue an IntersectionObserverEntry</a> for |unit|,
+			<a>queue an IntersectionObserverEntry</a>,
 			passing in |observer|, |time|, |rootBounds|,
 			|boundingClientRect|, |intersectionRect| and |target|.
 		12. Assign |threshold| to
@@ -646,12 +649,13 @@ External Spec Integrations</h3>
 HTML Processing Model: Event Loop</h4>
 
 An <a>Intersection Observer</a> processing step should take place
-at the end of the "<i>Update the rendering</i>" steps
-in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8">event loop
-in the HTML Processing Model.</a>
+during the "<i>Update the rendering</i>" steps,
+after step 9, <a>run the fullscreen rendering steps</a>,
+and before step 10, <a>run the animation frame callbacks</a>,
+in the in the <a>HTML Processing Model</a>.
 
 This step is:
 
-<ol start="12">
-	<li><a>Run the update intersection observations steps</a> for the <a>event loop</a> in question.</li>
+<ol start="10">
+	<li>For each <a>fully active</a> <a>Document</a> in |docs|, <a>Run the update intersection observations steps</a> for each {{IntersectionObserver}} whose {{IntersectionObserver/root}} is in the DOMtree of that <a>Document</a>.</li>
 </ol>
