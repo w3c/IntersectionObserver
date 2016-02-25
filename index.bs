@@ -45,7 +45,6 @@ urlPrefix: https://heycam.github.io/webidl/
 	urlPrefix: #dfn-; type:dfn; text: throw
 	urlPrefix: #idl-; type:interface; text: double
 	url: #hierarchyrequesterror; type: exception; text: HierarchyRequestError
-	url: #invalidstateerror; type: exception; text: InvalidStateError
 urlPrefix: https://drafts.csswg.org/css-box/
 	url: #viewport; type: dfn; text: viewport
 	url: #containing-block; type: dfn; text: containing block
@@ -637,10 +636,6 @@ An {{IntersectionObserver}} will continue observing a target until any of the fo
 	<li>The target {{Element}} is deleted.</li>
 	<li>The observer's <a>intersection root</a> is deleted.
 </ul>
-
-If an {{IntersectionObserver}}'s <a>intersection root</a> is deleted
-while there are still JavaScript references to the observer,
-calling any API method on the observer will <a>throw</a> an {{InvalidStateError}}.
 
 <h3 id='external-spec-integrations'>
 External Spec Integrations</h3>
