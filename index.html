@@ -1923,9 +1923,6 @@ passing in <var>observer</var>, <var>time</var>, <var>rootBounds</var>, <var>bou
     <li>The target <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> is deleted.
     <li>The observer’s <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is deleted. 
    </ul>
-   <p>If an <code class="idl"><a data-link-type="idl" href="#intersectionobserver">IntersectionObserver</a></code>'s <a data-link-type="dfn" href="#intersectionobserver-intersection-root">intersection root</a> is deleted
-while there are still JavaScript references to the observer,
-calling any API method on the observer will <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> an <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#invalidstateerror">InvalidStateError</a></code>.</p>
    <h3 class="heading settled" data-level="3.4" id="external-spec-integrations"><span class="secno">3.4. </span><span class="content"> External Spec Integrations</span><a class="self-link" href="#external-spec-integrations"></a></h3>
    <h4 class="heading settled" data-level="3.4.1" id="event-loop"><span class="secno">3.4.1. </span><span class="content"> HTML Processing Model: Event Loop</span><a class="self-link" href="#event-loop"></a></h4>
    <p>An <a data-link-type="dfn" href="#intersection-observer">Intersection Observer</a> processing step should take place
