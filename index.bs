@@ -40,7 +40,6 @@ urlPrefix: https://heycam.github.io/webidl/
 	urlPrefix: #idl-; type:interface; text: double
 	url: #hierarchyrequesterror; type: exception; text: HierarchyRequestError
 	url: #invalidstateerror; type: exception; text: InvalidStateError
-url: https://drafts.csswg.org/css2/box.html#content-edge; type:dfn; text: content-box
 urlPrefix: https://drafts.csswg.org/css-box/
 	url: #viewport; type: dfn; text: viewport
 	url: #containing-block; type: dfn; text: containing block
@@ -49,6 +48,8 @@ urlPrefix: https://drafts.csswg.org/css-display/
 	url: #containing-block-chain; type: dfn; text: containing block chain
 urlPrefix: http://www.w3.org/TR/css-masking-1/
 	url: #propdef-clip-path; type:dfn; text: clip-path
+urlPrefix: https://drafts.csswg.org/cssom-view-1/
+	url: #pinch-zoom; type:dfn; text: pinch zoom
 </pre>
 
 <pre class="link-defaults">
@@ -325,7 +326,7 @@ If a <a>target</a> {{Element}} is clipped by an ancestor other than the
 {{IntersectionObserver/rootMargin}}.
 
 Note: <a>Root intersection rectangle</a> is not affected by
-{{pinch zoom}} and will report the unadjusted <a>viewport</a>, consistent with the
+<a>pinch zoom</a> and will report the unadjusted <a>viewport</a>, consistent with the
 intent of pinch zooming (to act like a magnifying glass and NOT change layout.)
 
 To <dfn>parse a root margin</dfn>
