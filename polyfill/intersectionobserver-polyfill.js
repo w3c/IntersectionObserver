@@ -1,14 +1,18 @@
 (function() {
   // TODO: rootMargin are completely ignored for now
-  
+
   // Constructor
   window.IntersectionObserver = function(callback, options) {
     options = options || {};
-    
+
     if(!(callback instanceof Function)) {
       throw('callback needs to be a function');
     }
-    
+
+    if(options.root && !(options.root instanceof HTMLElement)) {
+      throw('Target needs to be an HTMLelement');
+    }
+
     this._callback = callback;
     this._root = options.root || null;
     this._rootMargin = options.rootMargin || [0, 0, 0, 0];
@@ -23,11 +27,11 @@
     get root() {
       return this._root || document;
     },
-    
+
     get rootMargin() {
       return '0';
     },
-    
+
     get thresholds() {
       // 0 means call callback on every change
       // See note at http://rawgit.com/WICG/IntersectionObserver/master/index.html#intersection-observer-init
@@ -39,35 +43,35 @@
       }
       return [this._thresholds];
     },
-    
+
     observe: function(target) {
       if(!(target instanceof HTMLElement)) {
         throw('Target needs to be an HTMLelement');
       }
-      
+
       var root = this.root;
       var ancestor = target.parentNode;
       while (ancestor != root) {
         if (!ancestor) {
           throw('Target must be decendant of root');
         }
-        ancestor = ancestor.parentNode;   
+        ancestor = ancestor.parentNode;
       }
-      
+
       this._observationTargets.set(target, {});
     },
-    
+
     unobserve: function(target) {
       this._observationTargets.delete(target);
     },
-    
+
     disconnect: function() {
       this._observationTargets.clear();
       this.root.removeEventListener('scroll', this._boundUpdate);
       window.clearInterval(this._timeoutId);
       this._descheduleCallback();
     },
-    
+
     takeRecords: function() {
       this._update();
       this._descheduleCallback();
@@ -75,7 +79,7 @@
       this._queue = [];
       return copy;
     },
-    
+
     //
     // Private API
     //
@@ -86,7 +90,7 @@
       this._intervalId = window.setInterval(this._boundUpdate, 100);
       this._queue = [];
     },
-    
+
     _update: function() {
       var rootRect = this._rootRect();
       this._observationTargets.forEach(function(oldIntersectionEntry, target) {
@@ -115,7 +119,7 @@
         this._observationTargets.set(target, intersectionEntry);
       }.bind(this));
     },
-    
+
     _scheduleCallback: function() {
       if(this._idleCallbackId) {
         return;
@@ -126,7 +130,7 @@
         this._queue = [];
       }.bind(this), {timeout: 100});
     },
-    
+
     _descheduleCallback: function() {
       if(!this._idleCallbackId) {
         return;
@@ -134,7 +138,7 @@
       window.cancelIdleCallback(this._idleCallbackId);
       this._idleCallbackId = null;
     },
-    
+
     _rootRect: function() {
       if(this._root) {
         return this.root.getBoundingClientRect();
@@ -148,7 +152,7 @@
         height: window.innerHeight
       };
     },
-    
+
     // FIXME: so hack, much performance, very JSON
     _hasCrossedThreshold: function(oldRatio, newRatio) {
       if(this.thresholds === 0) {
