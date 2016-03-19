@@ -53,7 +53,7 @@
       var ancestor = target.parentNode;
       while (ancestor != root) {
         if (!ancestor) {
-          throw('Target must be decendant of root');
+          throw('Target must be descendant of root');
         }
         ancestor = ancestor.parentNode;
       }
