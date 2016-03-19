@@ -149,7 +149,7 @@ test(()=>{
   child.style.top = "-20px";
 
   io.observe(child);
-  
+
   var records = io.takeRecords();
   io.disconnect();
   return assert(records.length === 1 && records[0].intersectionRatio === 0);
@@ -191,7 +191,7 @@ test(()=>{
 
   child.style.top = "-10px";
   var records = io.takeRecords();
-  output.push(assert(records.length == 0));
+  output.push(assert(records.length == 1 && records[0].intersectionRatio === 0.5));
 
   io.disconnect();
   return output.join('\n');
@@ -230,7 +230,7 @@ test(()=>{
   child.style.top = "-11px";
   var records = io.takeRecords();
   output.push(assert(records.length == 1 && records[0].intersectionRatio <= 0.5 && records[0].intersectionRatio >= 0.25));
-  
+
   child.style.top = "-16px";
   var records = io.takeRecords();
   output.push(assert(records.length == 1 && records[0].intersectionRatio <= 0.25));
@@ -238,11 +238,11 @@ test(()=>{
   child.style.top = "-17px";
   var records = io.takeRecords();
   output.push(assert(records.length == 0));
-  
+
   child.style.top = "-15px";
   var records = io.takeRecords();
-  output.push(assert(records.length == 0));
-  
+  output.push(assert(records.length == 1 && records[0].intersectionRatio === 0.25));
+
   io.disconnect();
   return output.join('\n');
 }, 'multiple thresholds')
