@@ -86,7 +86,7 @@
     _init: function() {
       this._observationTargets = new Map();
       this._boundUpdate = this._update.bind(this);
-      this.root.addEventListener('scroll', this._boundUpdate);
+      this.root.addEventListener('scroll', debounce(this._boundUpdate, 100));
       this._intervalId = window.setInterval(this._boundUpdate, 100);
       this._queue = [];
     },
@@ -189,4 +189,19 @@
     }
     return intersectionRect;
   };
+
+  var debounce = function(fn, delay) {
+  var timer = null;
+  return function () {
+    if(timer) {
+      return;
+    }
+    var context = this, args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      timer = null;
+      fn.apply(context, args);
+    }, delay);
+  };
+}
 })();
