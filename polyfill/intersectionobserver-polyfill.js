@@ -58,6 +58,12 @@
         ancestor = ancestor.parentNode;
       }
 
+      this._mutationObserver.observe(target, {
+        attributes: true,
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
       this._observationTargets.set(target, {});
     },
 
@@ -68,7 +74,7 @@
     disconnect: function() {
       this._observationTargets.clear();
       this.root.removeEventListener('scroll', this._boundUpdate);
-      window.clearInterval(this._timeoutId);
+      this._mutationObserver.disconnect();
       this._descheduleCallback();
     },
 
@@ -87,7 +93,7 @@
       this._observationTargets = new Map();
       this._boundUpdate = this._update.bind(this);
       this.root.addEventListener('scroll', debounce(this._boundUpdate, 100));
-      this._intervalId = window.setInterval(this._boundUpdate, 100);
+      this._mutationObserver = new MutationObserver(debounce(this._boundUpdate, 100));
       this._queue = [];
     },
 
