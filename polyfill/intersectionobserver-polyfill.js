@@ -112,7 +112,7 @@ limitations under the License.
     _update: function() {
       var rootRect = this._rootRect();
       this._observationTargets.forEach(function(oldIntersectionEntry, target) {
-        var targetRect = target.getBoundingClientRect();
+        var targetRect = augmentRect(target.getBoundingClientRect());
         var intersectionRect = intersectRects(rootRect, targetRect);
         if(!intersectionRect) {
           return;
@@ -159,7 +159,7 @@ limitations under the License.
 
     _rootRect: function() {
       if(this._root) {
-        return this.root.getBoundingClientRect();
+        return augmentRect(this.root.getBoundingClientRect());
       }
       return {
         top: 0,
@@ -221,5 +221,11 @@ limitations under the License.
         fn.apply(context, args);
       }, delay);
     };
+  };
+
+  var augmentRect = function(r) {
+    r.width = r.width || r.right - r.left;
+    r.height = r.height || r.bottom - r.top;
+    return r;
   };
 })();
