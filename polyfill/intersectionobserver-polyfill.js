@@ -215,7 +215,7 @@ limitations under the License.
       if (timer) {
         return;
       }
-      callback.apply(this, arguments);
+      fn.apply(this, arguments);
       timer = setTimeout(function () {
         timer = null;
       }, int);
