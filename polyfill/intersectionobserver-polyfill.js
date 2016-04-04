@@ -10,11 +10,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-(function() {
+(function(scope) {
   // TODO: rootMargin are completely ignored for now
 
+  var POLL_INTERVAL = 100;
+
   // Constructor
-  window.IntersectionObserver = function(callback, options) {
+  var IntersectionObserver = function(callback, options) {
     options = options || {};
 
     if(!(callback instanceof Function)) {
@@ -22,7 +24,7 @@ limitations under the License.
     }
 
     if(options.root && !(options.root instanceof HTMLElement)) {
-      throw('Target needs to be an HTMLelement');
+      throw('Root needs to be an HTMLElement');
     }
 
     this._callback = callback;
@@ -32,7 +34,7 @@ limitations under the License.
     this._init();
   };
 
-  window.IntersectionObserver.prototype = {
+  IntersectionObserver.prototype = {
     //
     // Public API
     //
@@ -63,11 +65,8 @@ limitations under the License.
 
       var root = this.root;
       var ancestor = target.parentNode;
-      while (ancestor != root) {
-        if (!ancestor) {
-          throw('Target must be descendant of root');
-        }
-        ancestor = ancestor.parentNode;
+      if(!root.contains(target)) {
+        throw('Target must be descendant of root');
       }
 
       this._mutationObserver.observe(target, {
@@ -103,16 +102,16 @@ limitations under the License.
     //
     _init: function() {
       this._observationTargets = new Map();
-      this._boundUpdate = this._update.bind(this);
-      this.root.addEventListener('scroll', debounce(this._boundUpdate, 100));
-      this._mutationObserver = new MutationObserver(debounce(this._boundUpdate, 100));
+      this._boundUpdate = throttle(this._update.bind(this), POLL_INTERVAL);
+      this.root.addEventListener('scroll', this._boundUpdate);
+      this._mutationObserver = new MutationObserver(this._boundUpdate);
       this._queue = [];
     },
 
     _update: function() {
       var rootRect = this._rootRect();
       this._observationTargets.forEach(function(oldIntersectionEntry, target) {
-        var targetRect = augmentRect(target.getBoundingClientRect());
+        var targetRect = getBoundingClientRect(target);
         var intersectionRect = intersectRects(rootRect, targetRect);
         if(!intersectionRect) {
           return;
@@ -124,7 +123,7 @@ limitations under the License.
           return;
         }
         var intersectionEntry = {
-          time: window.performance.now(),
+          time: scope.performance.now(),
           rootBounds: rootRect,
           boundingClientRect: targetRect,
           intersectionRect: intersectionRect,
@@ -139,35 +138,35 @@ limitations under the License.
     },
 
     _scheduleCallback: function() {
-      if(this._idleCallbackId) {
+      if(this._timeoutId) {
         return;
       }
-      this._idleCallbackId = window.requestIdleCallback(function() {
+      this._timeoutId = scope.setTimeout(function() {
         this._descheduleCallback();
         this._callback(this._queue, this);
         this._queue = [];
-      }.bind(this), {timeout: 100});
+      }.bind(this), POLL_INTERVAL);
     },
 
     _descheduleCallback: function() {
-      if(!this._idleCallbackId) {
+      if(!this._timeoutId) {
         return;
       }
-      window.cancelIdleCallback(this._idleCallbackId);
-      this._idleCallbackId = null;
+      scope.clearTimeout(this._timeoutId);
+      this._timeoutId = null;
     },
 
     _rootRect: function() {
       if(this._root) {
-        return augmentRect(this.root.getBoundingClientRect());
+        return getBoundingClientRect(this.root);
       }
       return {
         top: 0,
         left: 0,
-        right: window.innerWidth,
-        width: window.innerWidth,
-        bottom: window.innerHeight,
-        height: window.innerHeight
+        right: scope.innerWidth,
+        width: scope.innerWidth,
+        bottom: scope.innerHeight,
+        height: scope.innerHeight
       };
     },
 
@@ -208,24 +207,25 @@ limitations under the License.
     return intersectionRect;
   };
 
-  var debounce = function(fn, delay) {
+  scope.IntersectionObserver = IntersectionObserver;
+
+  var throttle = function(fn, int) {
     var timer = null;
     return function () {
-      if(timer) {
+      if (timer) {
         return;
       }
-      var context = this, args = arguments;
-      clearTimeout(timer);
+      callback.apply(this, arguments);
       timer = setTimeout(function () {
         timer = null;
-        fn.apply(context, args);
-      }, delay);
+      }, int);
     };
   };
 
-  var augmentRect = function(r) {
+  var getBoundingClientRect = function(el) {
+    var r = el.getBoundingClientRect();
     r.width = r.width || r.right - r.left;
     r.height = r.height || r.bottom - r.top;
     return r;
   };
-})();
+})(this);
