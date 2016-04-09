@@ -25,7 +25,7 @@
         function promiseAnimationFrame() {
             return new Promise(function(resolve) {
                 requestAnimationFrame(function() {
-                   resolve();
+                    resolve();
                 });
             });
         }
@@ -193,51 +193,58 @@
 
             var callCounter = 0;
             io = new IntersectionObserver(
-                function(records) {
-                    if(callCounter <= 4) {
+                  function(records) {
+                    if(callCounter <= 6) {
                       expect(records.length).to.be(1);
                     } else {
                       throw new Error("Too many calls");
                     }
                     callCounter++;
-                },
-                {root: rootEl, threshold: [0.5, 0.25]}
+                  },
+                {root: rootEl, margin: "5px 10% 10% 15px"}
             );
 
             io.observe(childEl);
 
-            childEl.style.top = "-25px";
+            childEl.style.top = "-15px";
             promiseAnimationFrame()
-            .then(await(function(){return callCounter == 0;}, 500))
-            .then(function() {
-              childEl.style.top = "-10px";
-            })
             .then(await(function(){return callCounter == 1;}, 500))
             .then(function() {
-              childEl.style.top = "90px";
-            })
-            .then(await(function(){return callCounter == 1;}, 500))
-            .then(function() {
-              childEl.style.top = "96px";
+              childEl.style.top = "-14px";
             })
             .then(await(function(){return callCounter == 2;}, 500))
             .then(function() {
-              childEl.style.top = "0px";
-              childEl.style.left = "-35px";
-            })
-            .then(await(function(){return callCounter == 2;}, 500))
-            .then(function() {
-              childEl.style.left = "-15px";
+              childEl.style.top = "86px";
             })
             .then(await(function(){return callCounter == 3;}, 500))
             .then(function() {
-              childEl.style.left = "-10px";
+              childEl.style.top = "87px";
+            })
+            .then(promiseAnimationFrame)
+            .then(await(function(){return callCounter == 3;}, 500))
+            .then(function() {
+              childEl.style.top = "0px";
+              childEl.style.left = "0px";
             })
             .then(await(function(){return callCounter == 4;}, 500))
             .then(function() {
-              childEl.style.left = "110px";
+              childEl.style.left = "-1px";
             })
+            .then(promiseAnimationFrame)
             .then(await(function(){return callCounter == 4;}, 500))
+            .then(function() {
+              childEl.style.left = "1px";
+            })
+            .then(await(function(){return callCounter == 5;}, 500))
+            .then(function() {
+              childEl.style.left = "180px";
+            })
+            .then(await(function(){return callCounter == 6;}, 500))
+            .then(function() {
+              childEl.style.left = "181px";
+            })
+            .then(promiseAnimationFrame)
+            .then(await(function(){return callCounter == 6;}, 500))
             .then(done);
         });
         mocha.run();
