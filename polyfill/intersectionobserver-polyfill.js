@@ -59,6 +59,9 @@ limitations under the License.
     },
 
     observe: function(target) {
+      if(this._observationTargets.has(target)) {
+        return;
+      }
       if(!(target instanceof HTMLElement)) {
         throw('Target needs to be an HTMLelement');
       }
@@ -68,7 +71,6 @@ limitations under the License.
       if(!root.contains(target)) {
         throw('Target must be descendant of root');
       }
-
       this._mutationObserver.observe(target, {
         attributes: true,
         childList: true,
@@ -76,6 +78,7 @@ limitations under the License.
         subtree: true
       });
       this._observationTargets.set(target, {});
+      this._update();
     },
 
     unobserve: function(target) {
@@ -105,6 +108,12 @@ limitations under the License.
       this._boundUpdate = throttle(this._update.bind(this), POLL_INTERVAL);
       this.root.addEventListener('scroll', this._boundUpdate);
       this._mutationObserver = new MutationObserver(this._boundUpdate);
+      this._mutationObserver.observe(this.root, {
+        attributes: true,
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
       this._queue = [];
     },
 
@@ -207,7 +216,7 @@ limitations under the License.
     return intersectionRect;
   };
 
-  scope.IntersectionObserver = IntersectionObserver;
+  scope.IntersectionObserver = scope.IntersectionObserver || IntersectionObserver;
 
   var throttle = function(fn, int) {
     var timer = null;
@@ -215,10 +224,10 @@ limitations under the License.
       if (timer) {
         return;
       }
-      fn.apply(this, arguments);
       timer = setTimeout(function () {
+        fn.apply(this, arguments);
         timer = null;
-      }, int);
+      }.bind(this), int);
     };
   };
 
