@@ -92,7 +92,7 @@ function visibleTimerCallback(element, observer) {
   delete element.visibleTimeout;
   // Process any pending observations
   processChanges(observer.takeRecords());
-  if (element.isVisible) {
+  if ('isVisible' in element) {
     delete element.isVisible;
     logImpressionToServer();
     observer.unobserve(element);
@@ -103,12 +103,12 @@ function processChanges(changes) {
   changes.forEach(function(changeRecord) {
     var element = changeRecord.target;
     element.isVisible = isVisible(changeRecord.boundingClientRect, changeRecord.intersectionRect);
-    if (element.isVisible) {
+    if ('isVisible' in element) {
       // Transitioned from hidden to visible
       element.visibleTimeout = setTimeout(visibleTimerCallback, 1000, element, observer);
     } else {
       // Transitioned from visible to hidden
-      if (element.visibleTimeout) {
+      if ('visibleTimeout' in element) {
         clearTimeout(element.visibleTimeout);
         delete element.visibleTimeout;
       }
