@@ -1,4 +1,4 @@
 # Intersection Observers
 [Explainer Doc](./explainer.md)
 
-[Draft Spec](http://rawgit.com/WICG/IntersectionObserver/master/index.html)
+[Draft Spec](https://wicg.github.io/IntersectionObserver/)
