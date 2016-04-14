@@ -30,7 +30,7 @@ limitations under the License.
     this._callback = callback;
     this._root = options.root || null;
     this._rootMargin = options.rootMargin || [0, 0, 0, 0];
-    this._thresholds = options.threshold || 0;
+    this._thresholds = options.threshold || [0];
     this._init();
   };
 
@@ -47,11 +47,6 @@ limitations under the License.
     },
 
     get thresholds() {
-      // 0 means call callback on every change
-      // See note at http://rawgit.com/WICG/IntersectionObserver/master/index.html#intersection-observer-init
-      if(this._thresholds === 0) {
-        return 0;
-      }
       if(this._thresholds instanceof Array) {
         return this._thresholds;
       }
@@ -71,7 +66,7 @@ limitations under the License.
       if(!root.contains(target)) {
         throw('Target must be descendant of root');
       }
-      this._mutationObserver.observe(target, {
+      this._mutationObserver.observe(target.parentNode, {
         attributes: true,
         childList: true,
         characterData: true,
@@ -128,7 +123,8 @@ limitations under the License.
         var targetArea = targetRect.width * targetRect.height;
         var intersectionArea = intersectionRect.width * intersectionRect.height;
         var intersectionRatio = intersectionArea / targetArea;
-        if(!this._hasCrossedThreshold(oldIntersectionEntry.intersectionRatio, intersectionRatio)) {
+        console.log(intersectionRatio);
+        if(!this._hasCrossedThreshold(oldIntersectionEntry.intersectionRatio || 0, intersectionRatio)) {
           return;
         }
         var intersectionEntry = {
@@ -179,18 +175,22 @@ limitations under the License.
       };
     },
 
-    // FIXME: so hack, much performance, very JSON
     _hasCrossedThreshold: function(oldRatio, newRatio) {
-      if(this.thresholds === 0) {
-        return newRatio != oldRatio;
+      if(oldRatio === newRatio) {
+        return;
       }
+      var isOnBoundary = this.thresholds.map(function(threshold) {
+        return threshold == newRatio;
+      }).indexOf(true) !== -1;
+
       var b1 = this.thresholds.map(function(threshold) {
-        return threshold <= oldRatio;
+        return threshold < oldRatio;
       });
       var b2 = this.thresholds.map(function(threshold) {
-        return threshold <= newRatio;
+        return threshold < newRatio;
       });
-      return JSON.stringify(b1) !== JSON.stringify(b2);
+      var hasCrossedThreshold = b1.map((_, idx) => b1[idx] !== b2[idx]).indexOf(true) !== -1;
+      return isOnBoundary || hasCrossedThreshold;
     }
   };
 
@@ -233,6 +233,7 @@ limitations under the License.
 
   var getBoundingClientRect = function(el) {
     var r = el.getBoundingClientRect();
+    // Older IE
     r.width = r.width || r.right - r.left;
     r.height = r.height || r.bottom - r.top;
     return r;
