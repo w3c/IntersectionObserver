@@ -71,7 +71,7 @@
     io = new IntersectionObserver(
       function(records) {
         expect(records.length).to.be(1);
-        // expect(records[0].intersectionRatio).to.be(1);
+        expect(records[0].intersectionRatio).to.be(1);
         done();
       },
       {root: rootEl}
@@ -90,15 +90,15 @@
         switch(callCounter) {
           case 0:
           expect(records.length).to.be(1);
-          // expect(records[0].intersectionRatio).to.be(1);
+          expect(records[0].intersectionRatio).to.be(1);
           break;
           case 1:
           expect(records.length).to.be(1);
-          // expect(records[0].intersectionRatio).to.be.lessThan(0.5);
+          expect(records[0].intersectionRatio).to.be.lessThan(0.5);
           break;
           case 2:
           expect(records.length).to.be(1);
-          // expect(records[0].intersectionRatio).to.be(0.5);
+          expect(records[0].intersectionRatio).to.be.greaterThan(0.5);
           break;
           default:
           throw new Error("Too many calls");
@@ -139,20 +139,20 @@
         switch(callCounter) {
           case 0:
           expect(records.length).to.be(1);
-          // expect(records[0].intersectionRatio).to.be(1);
+          expect(records[0].intersectionRatio).to.be(1);
           break;
           case 1:
           expect(records.length).to.be(1);
-          // expect(records[0].intersectionRatio).to.be.lessThan(0.5);
-          // expect(records[0].intersectionRatio).to.be.greaterThan(0.25);
+          expect(records[0].intersectionRatio).to.be.lessThan(0.5);
+          expect(records[0].intersectionRatio).to.be.greaterThan(0.25);
           break;
           case 2:
           expect(records.length).to.be(1);
-          // expect(records[0].intersectionRatio).to.be.lessThan(0.25);
+          expect(records[0].intersectionRatio).to.be.lessThan(0.25);
           break;
           case 3:
           expect(records.length).to.be(1);
-          // expect(records[0].intersectionRatio).to.be(0.25);
+          expect(records[0].intersectionRatio).to.be(0.25);
           break;
           default:
           throw new Error("Too many calls");
