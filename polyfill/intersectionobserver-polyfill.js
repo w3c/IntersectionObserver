@@ -86,6 +86,7 @@ limitations under the License.
     disconnect: function() {
       this._observationTargets.clear();
       this.root.removeEventListener('scroll', this._boundUpdate);
+      scope.removeEventListener('resize', this._boundUpdate);
       this._mutationObserver.disconnect();
       this._descheduleCallback();
     },
