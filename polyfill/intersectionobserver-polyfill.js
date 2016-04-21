@@ -10,8 +10,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+// TODO: rootMargin are completely ignored for now
 (function(scope) {
-  // TODO: rootMargin are completely ignored for now
+  if('IntersectionObserver' in window) {
+    return;
+  }
 
   var POLL_INTERVAL = 100;
 
@@ -102,6 +105,7 @@ limitations under the License.
       this._observationTargets = new Map();
       this._boundUpdate = throttle(this._update.bind(this), POLL_INTERVAL);
       this.root.addEventListener('scroll', this._boundUpdate);
+      scope.addEventListener('resize', this._boundUpdate);
       this._mutationObserver = new MutationObserver(this._boundUpdate);
       this._mutationObserver.observe(this.root, {
         attributes: true,
@@ -123,7 +127,6 @@ limitations under the License.
         var targetArea = targetRect.width * targetRect.height;
         var intersectionArea = intersectionRect.width * intersectionRect.height;
         var intersectionRatio = intersectionArea / targetArea;
-        console.log(intersectionRatio);
         if(!this._hasCrossedThreshold(oldIntersectionEntry.intersectionRatio || 0, intersectionRatio)) {
           return;
         }
@@ -189,7 +192,9 @@ limitations under the License.
       var b2 = this.thresholds.map(function(threshold) {
         return threshold < newRatio;
       });
-      var hasCrossedThreshold = b1.map((_, idx) => b1[idx] !== b2[idx]).indexOf(true) !== -1;
+      var hasCrossedThreshold = b1.map(function(_, idx) {
+        return b1[idx] !== b2[idx]
+      }).indexOf(true) !== -1;
       return isOnBoundary || hasCrossedThreshold;
     }
   };
@@ -204,8 +209,8 @@ limitations under the License.
       bottom: bottom,
       left: left,
       right: right,
-      width: right-left,
-      height: bottom-top
+      width: right - left,
+      height: bottom - top
     };
     if(top > bottom) {
       intersectionRect.height = 0;
@@ -216,7 +221,7 @@ limitations under the License.
     return intersectionRect;
   };
 
-  scope.IntersectionObserver = scope.IntersectionObserver || IntersectionObserver;
+  scope.IntersectionObserver = IntersectionObserver;
 
   var throttle = function(fn, int) {
     var timer = null;
@@ -233,6 +238,9 @@ limitations under the License.
 
   var getBoundingClientRect = function(el) {
     var r = el.getBoundingClientRect();
+    if(!r) {
+      return null;
+    }
     // Older IE
     r.width = r.width || r.right - r.left;
     r.height = r.height || r.bottom - r.top;
