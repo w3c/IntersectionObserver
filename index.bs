@@ -469,7 +469,7 @@ This section outlines the steps the user agent must take when implementing
 the <a>Intersection Observer</a> API.
 
 <h3 id='defines'>
-Internal Slot Definitions</h2>
+Internal Slot Definitions</h3>
 
 <h4 id='document-defines'>
 Document</h4>
