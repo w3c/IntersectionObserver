@@ -80,6 +80,22 @@
       io.observe(childEl);
     });
 
+    it("does not trigger if elements do not intersect when observing begins", function(done) {
+      rootEl.appendChild(childEl);
+      document.body.appendChild(rootEl);
+
+      io = new IntersectionObserver(
+        function(records) {
+          expect().fail('should not trigger');
+        },
+        {root: rootEl}
+      );
+
+      childEl.style.top = "-50px";
+      io.observe(childEl);
+      setTimeout(done, 200);
+    });
+
     it("reports at threshold correctly", function(done) {
       rootEl.appendChild(childEl);
       document.body.appendChild(rootEl);
