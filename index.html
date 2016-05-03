@@ -1497,7 +1497,7 @@ These lists are a central mobile interaction idiom.</p>
     <li data-md="">
      <p>Calculating element visibility.
 In particular, <a href="http://www.iab.net/iablog/2014/03/viewability-has-arrived-what-you-need-to-know-to-see-through-this-sea-change.html"> ad networks now require reporting of ad "visibility" for monetizing impressions</a>. This has led to many sites abusing scroll handlers
-(causing jank on scroll), <a href="http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html"> synchronous layout invoking readbacks</a> (causing unneccessary critical work in rAF loops),
+(causing jank on scroll), <a href="http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html"> synchronous layout invoking readbacks</a> (causing unnecessary critical work in rAF loops),
 and resorting to exotic plugin-based solutions for computing "true" element visibility (with all the associated overhead of the plugin architecture).</p>
    </ul>
    <p>These use-cases have several common properties:</p>
@@ -1522,7 +1522,7 @@ in the face of filters, webgl, and other features).
 In all of these scenarios the information is useful
 even when delivered at a slight delay
 and without perfect compositing-result data.</p>
-   <p>The Intersersection Observer API addresses the above issues
+   <p>The Intersection Observer API addresses the above issues
 by giving developers a new method to asynchronously query the position of an element
 with respect to other elements or the global viewport.
 The asynchronous delivery eliminates the need for costly DOM and style queries,
