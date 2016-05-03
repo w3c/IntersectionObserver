@@ -39,6 +39,7 @@
   }
 
   var rootEl, childEl, io;
+  describe('IntersectionObserver', function() {
 
   beforeEach(function() {
     io = null;
@@ -237,6 +238,8 @@
     .then(await(function(){return callCounter == 6;}, 500))
     .then(done);
   });
+  });
+
   window.onload = function() {
   mocha.run();
   };
