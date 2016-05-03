@@ -2,9 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-</head>
-<body>
-  <div id="mocha"></div>
 
   <!-- Test libraries -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/1.21.5/mocha.css" />
@@ -240,7 +237,13 @@
     .then(await(function(){return callCounter == 6;}, 500))
     .then(done);
   });
+  window.onload = function() {
   mocha.run();
+  };
+
   </script>
+</head>
+<body>
+  <div id="mocha"></div>
 </body>
 </html>
