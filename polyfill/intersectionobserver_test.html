@@ -6,8 +6,10 @@
 <body>
   <script src="intersectionobserver-polyfill.js"></script>
   <div id="mocha"></div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.4.5/mocha.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/expect.js/0.2.0/expect.min.js"></script>
+
+  <!-- Test libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/1.21.5/mocha.min.js"></script>
+  <script src="test/expect-0.3.1.js"></script>
   <script>mocha.setup('bdd')</script>
   <script>
   function promiseAnimationFrame() {
