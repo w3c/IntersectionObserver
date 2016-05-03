@@ -85,7 +85,7 @@ however, including (but not limited to):
 	(causing jank on scroll),
 	<a href="http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html">
 	synchronous layout invoking readbacks</a>
-	(causing unneccessary critical work in rAF loops),
+	(causing unnecessary critical work in rAF loops),
 	and resorting to exotic plugin-based solutions for computing "true" element visibility (with all the associated overhead of the plugin architecture).
 
 These use-cases have several common properties:
@@ -108,7 +108,7 @@ In all of these scenarios the information is useful
 even when delivered at a slight delay
 and without perfect compositing-result data.
 
-The Intersersection Observer API addresses the above issues
+The Intersection Observer API addresses the above issues
 by giving developers a new method to asynchronously query the position of an element
 with respect to other elements or the global viewport.
 The asynchronous delivery eliminates the need for costly DOM and style queries,
