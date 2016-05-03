@@ -165,8 +165,8 @@ We can use an `IntersectionObserver` on child elements of a parent scrolling ele
   }
 </style>
 
-<div id="container">
-  <div id="inner-scroll-surface">
+<div class="container">
+  <div class="inner-scroll-surface">
     <div class="scroll-item" style="top: 0em;">item 1</div>
     <div class="scroll-item" style="top: 2em;">item 2</div>
     <div class="scroll-item" style="top: 4em;">item 3</div>
@@ -186,7 +186,7 @@ function init() {
   // Notify when a scroll-item gets within, or moves beyond, 500px from the visible scroll surface.
   var opts = { 
     root: document.querySelector(".container"),
-    rootMargin: "500px 0" 
+    rootMargin: "500px 0px" 
   };
   var observer = new IntersectionObserver(manageItemPositionChanges, opts);
   // Set up observer on the items
