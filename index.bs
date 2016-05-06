@@ -5,7 +5,7 @@ ED: https://github.com/WICG/IntersectionObserver/
 Shortname: intersection-observer
 Level: 1
 Editor: Michael Blain, Google, mpb@google.com
-Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements ("targets") relative to a containing element or to the top-level viewport ("root"). The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
+Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements ("targets") relative to a containing element or to the top-level visual viewport ("root"). The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
 Group: Web Performance Working Group
 Repository: WICG/IntersectionObserver
 Ignored Vars: rootMargin, docs
@@ -93,7 +93,7 @@ These use-cases have several common properties:
 1. They can be represented as passive "queries"
 	about the state of individual elements
 	with respect to some other element
-	(or the global viewport).
+	(or the global visual viewport).
 2. They do not impose hard latency requirements;
 	that is to say, the information can be delivered asynchronously
 	(e.g. from another thread)
@@ -110,7 +110,7 @@ and without perfect compositing-result data.
 
 The Intersection Observer API addresses the above issues
 by giving developers a new method to asynchronously query the position of an element
-with respect to other elements or the global viewport.
+with respect to other elements or the global visual viewport.
 The asynchronous delivery eliminates the need for costly DOM and style queries,
 continuous polling,
 and use of custom plugins.
@@ -270,8 +270,8 @@ interface IntersectionObserver {
 		observer uses the <a>implicit root</a>.
 	: <dfn>rootMargin</dfn>
 	::
-		Offsets applied to the <a>intersection root's</a> bounding box,
-		effectively growing or shrinking the box that is used to calculate intersections.
+		Offsets applied to the <a>intersection root's</a> bounding box, in the <a>intersection root's</a>
+		coordinate space, effectively growing or shrinking the box that is used to calculate intersections.
 		Note that {{IntersectionObserver/rootMargin}} is only applied
 		for <a>targets</a> which belong to the same <a>unit of related similar-origin browsing contexts</a>
 		as the <a>intersection root</a>.
@@ -295,7 +295,7 @@ interface IntersectionObserver {
 
 The <dfn for="IntersectionObserver">intersection root</dfn>
 for an {{IntersectionObserver}} is the value of its {{IntersectionObserver/root}} attribute,
-or else the <a>top-level browsing context</a>'s <a>viewport</a>
+or else the <a>top-level browsing context</a>'s visual <a>viewport</a>
 (referred to as the <dfn for="IntersectionObserver">implicit root</dfn>) if
 the {{IntersectionObserver/root}} attribute is <code>null</code>.
 
@@ -305,7 +305,7 @@ is the rectangle we'll use to check against the targets.
 
 <dl class=switch>
 	<dt>If the <a>intersection root</a> is the <a>implicit root</a>,
-	<dd>it's the viewport's size.
+	<dd>it's the visual viewport's size.
 
 	<dt>If the <a>intersection root</a> is a scrollable element,
 	<dd>it's the element's <a>content area</a>.
@@ -327,10 +327,6 @@ Note: {{IntersectionObserver/rootMargin}} only applies to the <a>intersection ro
 If a <a>target</a> {{Element}} is clipped by an ancestor other than the
 <a>intersection root</a>, that clipping is unaffected by
 {{IntersectionObserver/rootMargin}}.
-
-Note: <a>Root intersection rectangle</a> is not affected by
-<a>pinch zoom</a> and will report the unadjusted <a>viewport</a>, consistent with the
-intent of pinch zooming (to act like a magnifying glass and NOT change layout.)
 
 To <dfn>parse a root margin</dfn>
 from an input string |marginString|,
@@ -574,7 +570,7 @@ run these steps:
 		Otherwise, update |container| to be the parent node of |container|.
 4. Map |intersectionRect| to the coordinate space of the <a>intersection root</a>.
 5. Update |intersectionRect| by intersecting it with the <a>root intersection rectangle</a>.
-6. Map |intersectionRect| to the coordinate space of the viewport of the <a>Document</a> containing the <a>target</a>.
+6. Map |intersectionRect| to the coordinate space of the visual viewport of the <a>Document</a> containing the <a>target</a>.
 
 <h4 id='update-intersection-observations-algo'>
 Run the Update Intersection Observations Steps</h4>
