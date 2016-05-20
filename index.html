@@ -1974,7 +1974,7 @@ whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-
       <li data-md="">
        <p>Let <var>rootBounds</var> be <var>observer</var>’s <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle-6">root intersection rectangle</a>.</p>
       <li data-md="">
-       <p>For each <var>target</var> in <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot" id="ref-for-dom-intersectionobserver-observationtargets-slot-6">[[ObservationTargets]]</a></code> slot:</p>
+       <p>For each <var>target</var> in <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot" id="ref-for-dom-intersectionobserver-observationtargets-slot-6">[[ObservationTargets]]</a></code> slot, processed in the same order that <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observe" id="ref-for-dom-intersectionobserver-observe-4">observe()</a></code> was called on each <var>target</var>:</p>
        <ol>
         <li data-md="">
          <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-18">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root" id="ref-for-intersectionobserver-implicit-root-5">implicit root</a> and <var>target</var> is not a descendant of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-19">intersection root</a> in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain">containing block chain</a>,
@@ -2441,6 +2441,8 @@ IntersectionObserver</a>
    <ul>
     <li><a href="#ref-for-dom-intersectionobserver-observe-1">2.2. 
 The IntersectionObserver interface</a> <a href="#ref-for-dom-intersectionobserver-observe-2">(2)</a> <a href="#ref-for-dom-intersectionobserver-observe-3">(3)</a>
+    <li><a href="#ref-for-dom-intersectionobserver-observe-4">3.2.5. 
+Run the Update Intersection Observations Steps</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-intersectionobserver-unobserve">
