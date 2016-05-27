@@ -15,7 +15,9 @@
  */
 
 
-var POLL_INTERVAL = 200;
+// Sets the timeout to three times the poll interval to ensure all updates
+// happen (especially in slower browsers).
+var ASYNC_TIMEOUT = IntersectionObserver.prototype.POLL_INTERVAL * 3;
 
 
 var io;
@@ -183,7 +185,7 @@ describe('IntersectionObserver', function() {
       setTimeout(function() {
         expect(spy.callCount).to.be(0);
         done();
-      }, POLL_INTERVAL);
+      }, ASYNC_TIMEOUT);
     });
 
 
@@ -202,7 +204,7 @@ describe('IntersectionObserver', function() {
             expect(records.length).to.be(1);
             expect(records[0].intersectionRatio).to.be(1);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           targetEl1.style.left = '-40px';
@@ -212,7 +214,7 @@ describe('IntersectionObserver', function() {
             expect(records.length).to.be(1);
             expect(records[0].intersectionRatio).to.be(0);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           parentEl.style.overflow = 'visible';
@@ -222,7 +224,7 @@ describe('IntersectionObserver', function() {
             expect(records.length).to.be(1);
             expect(records[0].intersectionRatio).to.be(1);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         }
       ], done);
     });
@@ -243,7 +245,7 @@ describe('IntersectionObserver', function() {
             expect(records.length).to.be(1);
             expect(records[0].intersectionRatio).to.be.greaterThan(0.5);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           targetEl1.style.left = '-15px';
@@ -253,14 +255,14 @@ describe('IntersectionObserver', function() {
             expect(records.length).to.be(1);
             expect(records[0].intersectionRatio).to.be.lessThan(0.5);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           targetEl1.style.left = '-25px';
           setTimeout(function() {
             expect(spy.callCount).to.be(2);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           targetEl1.style.left = '-10px';
@@ -270,7 +272,7 @@ describe('IntersectionObserver', function() {
             expect(records.length).to.be(1);
             expect(records[0].intersectionRatio).to.be(0.5);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         }
       ], done);
 
@@ -306,7 +308,7 @@ describe('IntersectionObserver', function() {
             expect(records[1].target).to.be(targetEl2);
             expect(records[1].intersectionRatio).to.be(0.75);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           targetEl1.style.top = '0px';
@@ -326,7 +328,7 @@ describe('IntersectionObserver', function() {
             expect(records[2].target).to.be(targetEl3);
             expect(records[2].intersectionRatio).to.be(0.25);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           targetEl1.style.top = '0px';
@@ -346,7 +348,7 @@ describe('IntersectionObserver', function() {
             expect(records[2].target).to.be(targetEl3);
             expect(records[2].intersectionRatio).to.be(0.75);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           targetEl1.style.top = '0px';
@@ -362,7 +364,7 @@ describe('IntersectionObserver', function() {
             expect(records[0].target).to.be(targetEl3);
             expect(records[0].intersectionRatio).to.be(1);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         }
       ], done);
     });
@@ -493,7 +495,7 @@ describe('IntersectionObserver', function() {
             expect(records[0].intersectionRatio).to.be(0);
             expect(records[0].target).to.be(targetEl2);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           targetEl1.style.top = '0px';
@@ -509,7 +511,7 @@ describe('IntersectionObserver', function() {
             expect(records[1].intersectionRatio).to.be(0);
             expect(records[1].target).to.be(targetEl2);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           targetEl1.style.top = '-20px';
@@ -524,7 +526,7 @@ describe('IntersectionObserver', function() {
             expect(records[0].intersectionRatio).to.be(0);
             expect(records[0].target).to.be(targetEl2);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         }
       ], done);
 
@@ -562,14 +564,14 @@ describe('IntersectionObserver', function() {
           setTimeout(function() {
             expect(spy.callCount).to.be(0);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           document.getElementById('fixtures').appendChild(rootEl);
           setTimeout(function() {
             expect(spy.callCount).to.be(0);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           parentEl.insertBefore(targetEl1, targetEl2);
@@ -580,7 +582,7 @@ describe('IntersectionObserver', function() {
             expect(records[0].intersectionRatio).to.be(1);
             expect(records[0].target).to.be(targetEl1);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           grandParentEl.parentNode.removeChild(grandParentEl);
@@ -591,7 +593,7 @@ describe('IntersectionObserver', function() {
             expect(records[0].intersectionRatio).to.be(0);
             expect(records[0].target).to.be(targetEl1);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           rootEl.appendChild(targetEl1);
@@ -602,7 +604,7 @@ describe('IntersectionObserver', function() {
             expect(records[0].intersectionRatio).to.be(1);
             expect(records[0].target).to.be(targetEl1);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           rootEl.parentNode.removeChild(rootEl);
@@ -613,7 +615,7 @@ describe('IntersectionObserver', function() {
             expect(records[0].intersectionRatio).to.be(0);
             expect(records[0].target).to.be(targetEl1);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         }
       ], done);
     });
@@ -652,14 +654,19 @@ describe('IntersectionObserver', function() {
 
 
     it('uses the viewport when no root is specified', function(done) {
+      var viewportWidth =
+          window.innerWidth || document.documentElement.clientWidth;
+      var viewportHeight =
+          window.innerHeight || document.documentElement.clientHeight;
+
       io = new IntersectionObserver(function(records) {
         expect(records.length).to.be(1);
         expect(records[0].rootBounds.top).to.be(0);
         expect(records[0].rootBounds.left).to.be(0);
-        expect(records[0].rootBounds.right).to.be(window.innerWidth);
-        expect(records[0].rootBounds.width).to.be(window.innerWidth);
-        expect(records[0].rootBounds.bottom).to.be(window.innerHeight);
-        expect(records[0].rootBounds.height).to.be(window.innerHeight);
+        expect(records[0].rootBounds.right).to.be(viewportWidth);
+        expect(records[0].rootBounds.width).to.be(viewportWidth);
+        expect(records[0].rootBounds.bottom).to.be(viewportHeight);
+        expect(records[0].rootBounds.height).to.be(viewportHeight);
         done();
       });
       io.observe(targetEl1);
@@ -670,9 +677,6 @@ describe('IntersectionObserver', function() {
 
   describe('takeRecords', function() {
 
-    // TODO(philipwalton): figure out a better way to test this that
-    // ensures takeRecords is returning records at least once.
-    // https://github.com/WICG/IntersectionObserver/issues/133
     it('supports getting records before the callback is invoked',
         function(done) {
 
@@ -690,7 +694,7 @@ describe('IntersectionObserver', function() {
         expect(lastestRecords.length).to.be(1);
         expect(lastestRecords[0].intersectionRatio).to.be(1);
         done();
-      }, POLL_INTERVAL);
+      }, ASYNC_TIMEOUT);
     });
 
   });
@@ -718,7 +722,7 @@ describe('IntersectionObserver', function() {
             expect(records[1].target).to.be(targetEl2);
             expect(records[1].intersectionRatio).to.be(1);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           io.unobserve(targetEl1);
@@ -731,7 +735,7 @@ describe('IntersectionObserver', function() {
             expect(records[0].target).to.be(targetEl2);
             expect(records[0].intersectionRatio).to.be(0);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           io.unobserve(targetEl2);
@@ -740,7 +744,7 @@ describe('IntersectionObserver', function() {
           setTimeout(function() {
             expect(spy.callCount).to.be(2);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         }
       ], done);
 
@@ -770,7 +774,7 @@ describe('IntersectionObserver', function() {
             expect(records[1].target).to.be(targetEl2);
             expect(records[1].intersectionRatio).to.be(1);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         },
         function(done) {
           io.disconnect();
@@ -779,7 +783,7 @@ describe('IntersectionObserver', function() {
           setTimeout(function() {
             expect(spy.callCount).to.be(1);
             done();
-          }, POLL_INTERVAL);
+          }, ASYNC_TIMEOUT);
         }
       ], done);
 

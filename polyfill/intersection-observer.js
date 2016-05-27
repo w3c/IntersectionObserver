@@ -14,47 +14,38 @@
  * limitations under the License.
  */
 
-(function(window) {
+(function(window, document) {
 
 
-if (!('IntersectionObserverEntry' in window)) {
-  /**
-   * Creates the global IntersectionObserverEntry constructor.
-   * https://wicg.github.io/IntersectionObserver/#intersection-observer-entry
-   * @param {Object} entryInit A dictionary of instance properties.
-   * @constructor
-   */
-  window.IntersectionObserverEntry =
-      function IntersectionObserverEntry(entryInit) {
-
-    this.time = entryInit.time;
-    this.rootBounds = entryInit.rootBounds;
-    this.boundingClientRect = entryInit.boundingClientRect;
-    this.intersectionRect = entryInit.intersectionRect;
-    this.target = entryInit.target;
-  };
+// Exits early if all IntersectionObserver and IntersectionObserverEntry
+// features are natively supported.
+if ('IntersectionObserver' in window &&
+    'IntersectionObserverEntry' in window &&
+    'intersectionRatio' in IntersectionObserverEntry.prototype) {
+  return;
 }
 
 
-if (!('intersectionRatio' in IntersectionObserverEntry.prototype)) {
-  // Polyfills `IntersectionObserverEntry.prototype.intersectionRatio`
-  // in browsers that support the older version of the spec.
-  Object.defineProperty(
-      IntersectionObserverEntry.prototype, 'intersectionRatio', {
+/**
+ * Creates the global IntersectionObserverEntry constructor.
+ * https://wicg.github.io/IntersectionObserver/#intersection-observer-entry
+ * @param {Object} entry A dictionary of instance properties.
+ * @constructor
+ */
+function IntersectionObserverEntry(entry) {
+  this.time = entry.time;
+  this.rootBounds = entry.rootBounds;
+  this.boundingClientRect = entry.boundingClientRect;
+  this.intersectionRect = entry.intersectionRect;
+  this.target = entry.target;
 
-    get: function() {
-      var targetRect = this.boundingClientRect;
-      var targetArea = targetRect.width * targetRect.height;
-      var intersectionRect = this.intersectionRect;
-      var intersectionArea = intersectionRect.width * intersectionRect.height;
-      return (intersectionArea / targetArea) || 0;
-    }
-  });
-}
-
-
-// Exits early if IntersectionObserver is natively supported.
-if ('IntersectionObserver' in window) return;
+  // Calculates the intersection ratio. Sets it to 0 if the target area is 0.
+  var targetRect = this.boundingClientRect;
+  var targetArea = targetRect.width * targetRect.height;
+  var intersectionRect = this.intersectionRect;
+  var intersectionArea = intersectionRect.width * intersectionRect.height;
+  this.intersectionRatio = targetArea ? (intersectionArea / targetArea) : 0;
+};
 
 
 /**
@@ -66,8 +57,7 @@ if ('IntersectionObserver' in window) return;
  * @param {Object=} opt_options Optional configuration options.
  * @constructor
  */
-window.IntersectionObserver =
-    function IntersectionObserver(callback, opt_options) {
+function IntersectionObserver(callback, opt_options) {
 
   var options = opt_options || {};
 
@@ -79,57 +69,24 @@ window.IntersectionObserver =
     throw new Error('root must be an Element');
   }
 
+  // Bound methods.
+  this._checkForIntersections = this._checkForIntersections.bind(this);
+  this._handlePageVisibilityChanges =
+      this._handlePageVisibilityChanges.bind(this);
+
+  // Private properties.
   this._callback = callback;
-  this._root = options.root;
-  this._rootMargin = this._parseRootMargin(options.rootMargin);
-  this._thresholds = this._initThresholds(options.threshold);
   this._observationTargets = [];
   this._queuedEntries = [];
+  this._rootMarginValues = this._parseRootMargin(options.rootMargin);
 
-  // Binds methods
-  this._checkForIntersections = this._checkForIntersections.bind(this);
+  // Public properties.
+  this.thresholds = this._initThresholds(options.threshold);
+  this.root = options.root || null;
+  this.rootMargin = this._rootMarginValues.map(function(margin) {
+    return margin.value + margin.unit;
+  }).join(' ');
 };
-
-
-Object.defineProperties(IntersectionObserver.prototype, {
-
-  /**
-   * Returns the root element or null. Null implies the root is the
-   * viewport or the "implicit root".
-   * @return {?Element}
-   */
-  root: {
-    get: function root() {
-      return this._root || null;
-    }
-  },
-
-
-  /**
-   * Returns the parsed rootMargin value as a space-separated list of four
-   * CSS pixel or percent lengths. By default this is "0px 0px 0px 0px".
-   * @return {string}
-   */
-  rootMargin: {
-    get: function rootMargin() {
-      return this._rootMargin.map(function(margin) {
-        return margin.value + margin.unit;
-      }).join(' ');
-    }
-  },
-
-
-  /**
-   * Returns the sorted list of unique threshold values to observe.
-   * By default this is [0].
-   * @return {Array<number>}
-   */
-  thresholds: {
-    get: function thresholds() {
-      return this._thresholds;
-    }
-  }
-});
 
 
 /**
@@ -290,16 +247,7 @@ IntersectionObserver.prototype._unmonitorIntersections = function() {
  */
 IntersectionObserver.prototype._monitorPageVisiblityChanges = function() {
   if (!this._handlePageVisibilityChanges) {
-    this._handlePageVisibilityChanges = function() {
-      if (this._observationTargets.length &&
-          getPageVisibilityState() == 'visible') {
-        this._monitorIntersections();
-      } else {
-        this._unmonitorIntersections();
-      }
-    }.bind(this);
-
-    document.addEventListener(
+    document.addEventListener && document.addEventListener(
         'visibilitychange', this._handlePageVisibilityChanges);
   }
 };
@@ -310,10 +258,25 @@ IntersectionObserver.prototype._monitorPageVisiblityChanges = function() {
  * @private
  */
 IntersectionObserver.prototype._unmonitorPageVisibilityChanges = function() {
-  document.removeEventListener(
+  document.removeEventListener && document.removeEventListener(
       'visibilitychange', this._handlePageVisibilityChanges);
 
   this._handlePageVisibilityChanges = null;
+};
+
+
+/**
+ * Handles changes to the page visibility state. If the state changes to not
+ * visible, monitoring for interesection changes stops. It starts up again if
+ * the visibility state changes back to visible.
+ */
+IntersectionObserver.prototype._handlePageVisibilityChanges = function() {
+  if (this._observationTargets.length &&
+      getPageVisibilityState() == 'visible') {
+    this._monitorIntersections();
+  } else {
+    this._unmonitorIntersections();
+  }
 };
 
 
@@ -450,14 +413,20 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
  * @private
  */
 IntersectionObserver.prototype._getRootRect = function() {
-  var rootRect = this.root ? getBoundingClientRect(this.root) : {
-    top: 0,
-    left: 0,
-    right: window.innerWidth,
-    width: window.innerWidth,
-    bottom: window.innerHeight,
-    height: window.innerHeight
-  };
+  var rootRect;
+  if (this.root) {
+    rootRect = getBoundingClientRect(this.root);
+  } else {
+    var html = document.documentElement;
+    rootRect = {
+      top: 0,
+      left: 0,
+      right: window.innerWidth || html.clientWidth,
+      width: window.innerWidth || html.clientWidth,
+      bottom: window.innerHeight || html.clientHeight,
+      height: window.innerHeight || html.clientHeight
+    };
+  }
   return this._expandRectByRootMargin(rootRect);
 };
 
@@ -469,7 +438,7 @@ IntersectionObserver.prototype._getRootRect = function() {
  * @private
  */
 IntersectionObserver.prototype._expandRectByRootMargin = function(rect) {
-  var margins = this._rootMargin.map(function(margin, i) {
+  var margins = this._rootMarginValues.map(function(margin, i) {
     return margin.unit == 'px' ? margin.value :
         margin.value * (i % 2 ? rect.width : rect.height) / 100;
   });
@@ -611,13 +580,21 @@ function hasIntersection(opt_rect) {
  * @return {Object} The (possibly shimmed) rect of the element.
  */
 function getBoundingClientRect(el) {
-  var r = el.getBoundingClientRect();
-  if (!r) return null;
+  var rect = el.getBoundingClientRect();
+  if (!rect) return;
 
   // Older IE
-  r.width = r.width || r.right - r.left;
-  r.height = r.height || r.bottom - r.top;
-  return r;
+  if (!rect.width || !rect.height) {
+    rect = {
+      top: rect.top,
+      right: rect.right,
+      bottom: rect.bottom,
+      left: rect.left,
+      width: rect.right - rect.left,
+      height: rect.bottom - rect.top
+    }
+  }
+  return rect;
 }
 
 
@@ -663,4 +640,8 @@ function isArray(value) {
 }
 
 
-}(window));
+// Exposes the constructors globally.
+window.IntersectionObserver = IntersectionObserver;
+window.IntersectionObserverEntry = IntersectionObserverEntry;
+
+}(window, document));
