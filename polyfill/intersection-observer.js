@@ -21,7 +21,7 @@
 // features are natively supported.
 if ('IntersectionObserver' in window &&
     'IntersectionObserverEntry' in window &&
-    'intersectionRatio' in IntersectionObserverEntry.prototype) {
+    'intersectionRatio' in window.IntersectionObserverEntry.prototype) {
   return;
 }
 
@@ -417,14 +417,15 @@ IntersectionObserver.prototype._getRootRect = function() {
   if (this.root) {
     rootRect = getBoundingClientRect(this.root);
   } else {
+    // Use <html> intead of window for since scroll bars affect size.
     var html = document.documentElement;
     rootRect = {
       top: 0,
       left: 0,
-      right: window.innerWidth || html.clientWidth,
-      width: window.innerWidth || html.clientWidth,
-      bottom: window.innerHeight || html.clientHeight,
-      height: window.innerHeight || html.clientHeight
+      right: html.clientWidth,
+      width: html.clientWidth,
+      bottom: html.clientHeight,
+      height: html.clientHeight
     };
   }
   return this._expandRectByRootMargin(rootRect);

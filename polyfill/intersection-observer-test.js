@@ -16,8 +16,9 @@
 
 
 // Sets the timeout to three times the poll interval to ensure all updates
-// happen (especially in slower browsers).
-var ASYNC_TIMEOUT = IntersectionObserver.prototype.POLL_INTERVAL * 3;
+// happen (especially in slower browsers). Native implementations get the
+// standard 100ms timeout defined in the spec.
+var ASYNC_TIMEOUT = IntersectionObserver.prototype.POLL_INTERVAL * 3 || 100;
 
 
 var io;
@@ -654,10 +655,8 @@ describe('IntersectionObserver', function() {
 
 
     it('uses the viewport when no root is specified', function(done) {
-      var viewportWidth =
-          window.innerWidth || document.documentElement.clientWidth;
-      var viewportHeight =
-          window.innerHeight || document.documentElement.clientHeight;
+      var viewportWidth = document.documentElement.clientWidth;
+      var viewportHeight = document.documentElement.clientHeight;
 
       io = new IntersectionObserver(function(records) {
         expect(records.length).to.be(1);
