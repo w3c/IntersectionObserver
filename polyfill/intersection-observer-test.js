@@ -120,6 +120,10 @@ describe('IntersectionObserver', function() {
 
 
     it('instantiates thresholds correctly', function() {
+      // Chrome implementation in version 51 doesn't include the thresholds
+      // property, but versions 52+ do.
+      if (!('thresholds' in IntersectionObserver.prototype)) this.skip();
+
       io = new IntersectionObserver(noop);
       expect(io.thresholds).to.eql([0]);
 
