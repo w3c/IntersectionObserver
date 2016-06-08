@@ -417,7 +417,7 @@ IntersectionObserver.prototype._getRootRect = function() {
   if (this.root) {
     rootRect = getBoundingClientRect(this.root);
   } else {
-    // Use <html> intead of window for since scroll bars affect size.
+    // Use <html> intead of window since scroll bars affect size.
     var html = document.documentElement;
     rootRect = {
       top: 0,
