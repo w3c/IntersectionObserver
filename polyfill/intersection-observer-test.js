@@ -22,6 +22,11 @@ var ASYNC_TIMEOUT = IntersectionObserver.prototype.POLL_INTERVAL * 3 || 100;
 
 
 var io;
+var noop = function() {};
+
+
+// References to DOM elements, which are accessible to any test
+// and reset prior to each test so state isn't shared.
 var rootEl;
 var grandParentEl;
 var parentEl;
@@ -29,38 +34,22 @@ var targetEl1;
 var targetEl2;
 var targetEl3;
 var targetEl4;
-var noop = function() {};
 
 
 describe('IntersectionObserver', function() {
 
   beforeEach(function() {
-    document.getElementById('fixtures').innerHTML =
-        '<div id="root">' +
-        '  <div id="grand-parent">' +
-        '    <div id="parent">' +
-        '      <div id="target1"></div>' +
-        '      <div id="target2"></div>' +
-        '      <div id="target3"></div>' +
-        '      <div id="target4"></div>' +
-        '    </div>' +
-        '  </div>' +
-        '</div>';
-
-    rootEl = document.getElementById('root');
-    grandParentEl = document.getElementById('grand-parent');
-    parentEl = document.getElementById('parent');
-    targetEl1 = document.getElementById('target1');
-    targetEl2 = document.getElementById('target2');
-    targetEl3 = document.getElementById('target3');
-    targetEl4 = document.getElementById('target4');
+    addStyles();
+    addFixtures();
   });
 
 
   afterEach(function() {
     if (io && 'disconnect' in io) io.disconnect();
     io = null;
-    document.getElementById('fixtures').innerHTML = '';
+
+    removeStyles();
+    removeFixtures();
   });
 
 
@@ -119,23 +108,23 @@ describe('IntersectionObserver', function() {
     });
 
 
-    it('instantiates thresholds correctly', function() {
-      // Chrome implementation in version 51 doesn't include the thresholds
-      // property, but versions 52+ do.
-      if (!('thresholds' in IntersectionObserver.prototype)) this.skip();
+    // Chrome's implementation in version 51 doesn't include the thresholds
+    // property, but versions 52+ do.
+    if ('thresholds' in IntersectionObserver.prototype) {
+      it('instantiates thresholds correctly', function() {
+        io = new IntersectionObserver(noop);
+        expect(io.thresholds).to.eql([0]);
 
-      io = new IntersectionObserver(noop);
-      expect(io.thresholds).to.eql([0]);
+        io = new IntersectionObserver(noop, {threshold: 0.5});
+        expect(io.thresholds).to.eql([0.5]);
 
-      io = new IntersectionObserver(noop, {threshold: 0.5});
-      expect(io.thresholds).to.eql([0.5]);
+        io = new IntersectionObserver(noop, {threshold: [0.25, 0.5, 0.75]});
+        expect(io.thresholds).to.eql([0.25, 0.5, 0.75]);
 
-      io = new IntersectionObserver(noop, {threshold: [0.25, 0.5, 0.75]});
-      expect(io.thresholds).to.eql([0.25, 0.5, 0.75]);
-
-      io = new IntersectionObserver(noop, {threshold: [1, .5, 0]});
-      expect(io.thresholds).to.eql([0, .5, 1]);
-    });
+        io = new IntersectionObserver(noop, {threshold: [1, .5, 0]});
+        expect(io.thresholds).to.eql([0, .5, 1]);
+      });
+    }
 
 
     it('throws when a threshold value is not between 0 and 1', function() {
@@ -640,22 +629,26 @@ describe('IntersectionObserver', function() {
     });
 
 
-    it('supports CSS transitions and transforms', function(done) {
-      if (!('transition' in document.body.style)) this.skip();
+    // Only run this test in browsers that support CSS transitions.
+    if ('transition' in document.documentElement.style) {
+      it('supports CSS transitions and transforms', function(done) {
+        targetEl1.style.top = '220px';
+        targetEl1.style.left = '220px';
 
-      io = new IntersectionObserver(function(records) {
-        expect(records.length).to.be(1);
-        expect(records[0].intersectionRatio).to.be(1);
-        done();
-      }, {root: rootEl, threshold: [1]});
+        io = new IntersectionObserver(function(records) {
+          expect(records.length).to.be(1);
+          // Chrome's native implementation sometimes incorrectly reports
+          // the intersection ratio as a number > 1.
+          expect(records[0].intersectionRatio >= 1);
+          done();
+        }, {root: rootEl, threshold: [1]});
 
-      io.observe(targetEl1);
-      setTimeout(function() {
-        targetEl1.style.top = '200px';
-        targetEl1.style.left = '200px';
-        targetEl1.style.transform = 'translateX(-40px) translateY(-40px)';
-      }, 0);
-    });
+        io.observe(targetEl1);
+        setTimeout(function() {
+          targetEl1.style.transform = 'translateX(-40px) translateY(-40px)';
+        }, 0);
+      });
+    }
 
 
     it('uses the viewport when no root is specified', function(done) {
@@ -844,4 +837,112 @@ function sortRecords(entries) {
     });
   }
   return entries;
+}
+
+
+/**
+ * Adds the common styles used by all tests to the page.
+ */
+function addStyles() {
+  var styles = document.createElement('style');
+  styles.id = 'styles';
+  document.documentElement.appendChild(styles);
+
+  var cssText =
+      '#root {' +
+      '  position: relative;' +
+      '  width: 400px;' +
+      '  height: 200px;' +
+      '  background: #eee' +
+      '}' +
+      '#grand-parent {' +
+      '  position: relative;' +
+      '  width: 200px;' +
+      '  height: 200px;' +
+      '}' +
+      '#parent {' +
+      '  position: absolute;' +
+      '  top: 0px;' +
+      '  left: 200px;' +
+      '  overflow: hidden;' +
+      '  width: 200px;' +
+      '  height: 200px;' +
+      '  background: #ddd;' +
+      '}' +
+      '#target1, #target2, #target3, #target4 {' +
+      '  position: absolute;' +
+      '  top: 0px;' +
+      '  left: 0px;' +
+      '  width: 20px;' +
+      '  height: 20px;' +
+      '  transform: translateX(0px) translateY(0px);' +
+      '  transition: transform .5s;' +
+      '  background: #f00;' +
+      '}';
+
+  // IE8 doesn't allow setting innerHTML on a <style> element.
+  if (styles.styleSheet) {
+    styles.styleSheet.cssText = cssText;
+  }
+  else {
+    styles.innerHTML = cssText;
+  }
+}
+
+
+/**
+ * Adds the DOM fixtures used by all tests to the page and assigns them to
+ * global variables so they can be referenced within the tests.
+ */
+function addFixtures() {
+  var fixtures = document.createElement('div');
+  fixtures.id = 'fixtures';
+
+  fixtures.innerHTML =
+      '<div id="root">' +
+      '  <div id="grand-parent">' +
+      '    <div id="parent">' +
+      '      <div id="target1"></div>' +
+      '      <div id="target2"></div>' +
+      '      <div id="target3"></div>' +
+      '      <div id="target4"></div>' +
+      '    </div>' +
+      '  </div>' +
+      '</div>';
+
+  document.body.appendChild(fixtures);
+
+  rootEl = document.getElementById('root');
+  grandParentEl = document.getElementById('grand-parent');
+  parentEl = document.getElementById('parent');
+  targetEl1 = document.getElementById('target1');
+  targetEl2 = document.getElementById('target2');
+  targetEl3 = document.getElementById('target3');
+  targetEl4 = document.getElementById('target4');
+}
+
+
+/**
+ * Removes the common styles from the page.
+ */
+function removeStyles() {
+  var styles = document.getElementById('styles');
+  styles.parentNode.removeChild(styles);
+}
+
+
+/**
+ * Removes the DOM fixtures from the page and resets the global references.
+ */
+function removeFixtures() {
+  var fixtures = document.getElementById('fixtures');
+  fixtures.parentNode.removeChild(fixtures);
+
+  rootEl = null;
+  grandParentEl = null;
+  parentEl = null;
+  targetEl1 = null;
+  targetEl2 = null;
+  targetEl3 = null;
+  targetEl4 = null;
 }

@@ -37,40 +37,6 @@ limitations under the License.
   }
   </script>
 
-  <!-- Styles required for tests -->
-  <style>
-  #root {
-    position: relative;
-    width: 400px;
-    height: 200px;
-    background: #eee
-  }
-  #grand-parent {
-    position: relative;
-    width: 200px;
-    height: 200px;
-  }
-  #parent {
-    position: absolute;
-    top: 0px;
-    left: 200px;
-    overflow: hidden;
-    width: 200px;
-    height: 200px;
-    background: #ddd;
-  }
-  #target1, #target2, #target3, #target4 {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 20px;
-    height: 20px;
-    transform: translateX(0px) translateY(0px);
-    transition: transform .5s;
-    background: #f00;
-  }
-  </style>
-
   <!-- Setup -->
   <script>
   mocha.setup({
@@ -91,6 +57,5 @@ limitations under the License.
 </head>
 <body>
   <div id="mocha"></div>
-  <div id="fixtures"></div>
 </body>
 </html>
