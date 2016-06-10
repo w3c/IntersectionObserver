@@ -681,6 +681,13 @@ describe('IntersectionObserver', function() {
         expect(records[0].rootBounds.height).to.be(viewportHeight);
         done();
       });
+
+      // Ensures targetEl1 is visible in the viewport before observing.
+      window.scrollTo(0, 0);
+      rootEl.style.position = 'absolute';
+      rootEl.style.top = '0px';
+      rootEl.style.left = '0px';
+
       io.observe(targetEl1);
     });
 
