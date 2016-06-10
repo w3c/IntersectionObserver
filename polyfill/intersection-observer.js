@@ -45,7 +45,7 @@ function IntersectionObserverEntry(entry) {
   var intersectionRect = this.intersectionRect;
   var intersectionArea = intersectionRect.width * intersectionRect.height;
   this.intersectionRatio = targetArea ? (intersectionArea / targetArea) : 0;
-};
+}
 
 
 /**
@@ -85,7 +85,7 @@ function IntersectionObserver(callback, opt_options) {
   this.rootMargin = this._rootMarginValues.map(function(margin) {
     return margin.value + margin.unit;
   }).join(' ');
-};
+}
 
 
 /**
@@ -322,8 +322,6 @@ IntersectionObserver.prototype._checkForIntersections = function() {
     this._callback(this.takeRecords(), this);
   }
 };
-
-
 
 
 /**
@@ -607,7 +605,7 @@ function getBoundingClientRect(el) {
       left: rect.left,
       width: rect.right - rect.left,
       height: rect.bottom - rect.top
-    }
+    };
   }
   return rect;
 }
