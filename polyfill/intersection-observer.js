@@ -115,9 +115,7 @@ IntersectionObserver.prototype.observe = function(target) {
   }
 
   this._observationTargets.push({element: target, entry: {}});
-
   this._monitorIntersections();
-  this._monitorPageVisiblityChanges();
 };
 
 
@@ -133,7 +131,6 @@ IntersectionObserver.prototype.unobserve = function(target) {
   });
   if (!this._observationTargets.length) {
     this._unmonitorIntersections();
-    this._unmonitorPageVisibilityChanges();
   }
 };
 
@@ -144,7 +141,6 @@ IntersectionObserver.prototype.unobserve = function(target) {
 IntersectionObserver.prototype.disconnect = function() {
   this._observationTargets = [];
   this._unmonitorIntersections();
-  this._unmonitorPageVisibilityChanges();
 };
 
 
@@ -220,7 +216,7 @@ IntersectionObserver.prototype._parseRootMargin = function(opt_rootMargin) {
  * @private
  */
 IntersectionObserver.prototype._monitorIntersections = function() {
-  if (!this._monitoringInterval && getPageVisibilityState() == 'visible') {
+  if (!this._monitoringInterval) {
 
     this._monitoringInterval = window.setInterval(
         this._checkForIntersections, this.POLL_INTERVAL);
@@ -238,44 +234,6 @@ IntersectionObserver.prototype._unmonitorIntersections = function() {
 };
 
 
-/**
- * Adds an event listener for page visiblity changes if the event
- * listener has not already been added. When the visiblity changes to
- * visible, polling is started. And polling is stopped if visibility
- * changes to anything other than visible.
- * @private
- */
-IntersectionObserver.prototype._monitorPageVisiblityChanges = function() {
-  if (!this._handlePageVisibilityChanges) {
-    document.addEventListener && document.addEventListener(
-        'visibilitychange', this._handlePageVisibilityChanges);
-  }
-};
-
-
-/**
- * Removes the page visibility event listener.
- * @private
- */
-IntersectionObserver.prototype._unmonitorPageVisibilityChanges = function() {
-  document.removeEventListener && document.removeEventListener(
-      'visibilitychange', this._handlePageVisibilityChanges);
-
-  this._handlePageVisibilityChanges = null;
-};
-
-
-/**
- * Handles changes to the page visibility state. If the state changes to not
- * visible, monitoring for interesection changes stops. It starts up again if
- * the visibility state changes back to visible.
- */
-IntersectionObserver.prototype._handlePageVisibilityChanges = function() {
-  if (this._observationTargets.length &&
-      getPageVisibilityState() == 'visible') {
-    this._monitorIntersections();
-  } else {
-    this._unmonitorIntersections();
   }
 };
 
@@ -511,16 +469,6 @@ IntersectionObserver.prototype._rootIsInDom = function() {
 IntersectionObserver.prototype._rootContainsTarget = function(target) {
   return contains(this.root || document, target);
 };
-
-
-/**
- * Gets the visibility state of the document. Defaults to "visible" on
- * browsers that doen't support the Page Visibility API.
- * @return {string} The document.visibilityState value or "visible".
- */
-function getPageVisibilityState() {
-  return document.visibilityState || 'visible';
-}
 
 
 /**
