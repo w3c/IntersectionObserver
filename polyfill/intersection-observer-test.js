@@ -18,7 +18,7 @@
 // Sets the timeout to three times the poll interval to ensure all updates
 // happen (especially in slower browsers). Native implementations get the
 // standard 100ms timeout defined in the spec.
-var ASYNC_TIMEOUT = IntersectionObserver.prototype.POLL_INTERVAL * 3 || 100;
+var ASYNC_TIMEOUT = IntersectionObserver.prototype.THROTTLE_TIMEOUT * 3 || 100;
 
 
 var io;
@@ -37,6 +37,16 @@ var targetEl4;
 
 
 describe('IntersectionObserver', function() {
+
+  before(function() {
+    // If the browser running the tests doesn't support MutationObserver,
+    // fall back to polling.
+    if (!('MutationObserver' in window)) {
+      IntersectionObserver.prototype.POLL_INTERVAL =
+          IntersectionObserver.prototype.THROTTLE_TIMEOUT || 100;
+    }
+  });
+
 
   beforeEach(function() {
     addStyles();
@@ -642,6 +652,12 @@ describe('IntersectionObserver', function() {
           expect(records[0].intersectionRatio >= 1);
           done();
         }, {root: rootEl, threshold: [1]});
+
+        // CSS transitions that are slower than the default throttle timeout
+        // require polling to detect, which can be set on a per-instance basis.
+        if (!supportsNativeIntersectionObserver()) {
+          io.POLL_INTERVAL = 100;
+        }
 
         io.observe(targetEl1);
         setTimeout(function() {
