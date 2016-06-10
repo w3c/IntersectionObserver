@@ -27,15 +27,7 @@ limitations under the License.
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sinon.js/1.15.4/sinon.min.js"></script>
 
   <!-- Polyfills for IE8 -->
-  <script>
-  if (!('getComputedStyle' in window && 'bind' in Function.prototype)) {
-    document.write(
-        '<script src="https://cdnjs.cloudflare.com/ajax/libs/' +
-        'es5-shim/4.5.8/es5-shim.min.js"><\/script>' +
-        '<script src="https://cdn.rawgit.com/Financial-Times/polyfill-' +
-        'service/master/polyfills/getComputedStyle/polyfill.js"><\/script>');
-  }
-  </script>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=es5,getComputedStyle"></script>
 
   <!-- Setup -->
   <script>
