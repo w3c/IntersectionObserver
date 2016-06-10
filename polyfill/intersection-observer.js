@@ -158,7 +158,6 @@ IntersectionObserver.prototype.disconnect = function() {
  */
 IntersectionObserver.prototype.takeRecords = function() {
   var records = this._queuedEntries.slice();
-  this._descheduleCallback();
   this._queuedEntries = [];
   return records;
 };
@@ -319,37 +318,12 @@ IntersectionObserver.prototype._checkForIntersections = function() {
   }.bind(this));
 
   if (this._queuedEntries.length) {
-    this._scheduleCallback();
+
+    this._callback(this.takeRecords(), this);
   }
 };
 
 
-/**
- * Adds a timeout to run the user callback with the current entries in
- * the queue. A timeout is only added if one isn't already scheduled.
- * @private
- */
-IntersectionObserver.prototype._scheduleCallback = function() {
-  if (this._callbackScheduled) return;
-
-  this._callbackScheduled = window.setTimeout(function() {
-    this._descheduleCallback();
-    this._callback(this._queuedEntries, this);
-    this._queuedEntries = [];
-  }.bind(this), this.POLL_INTERVAL / 2);
-};
-
-
-/**
- * Clears the timeout added in the scheduleCallback function.
- * @private
- */
-IntersectionObserver.prototype._descheduleCallback = function() {
-  if (!this._callbackScheduled) return;
-
-  window.clearTimeout(this._callbackScheduled);
-  this._callbackScheduled = null;
-};
 
 
 /**
