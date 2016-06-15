@@ -31,10 +31,7 @@ limitations under the License.
 
   <!-- Setup -->
   <script>
-  mocha.setup({
-    ui: 'bdd',
-    timeout: 10000
-  });
+  mocha.setup('bdd');
   window.onload = function() {
     mocha.run();
   };
