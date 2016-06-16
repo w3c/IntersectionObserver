@@ -637,8 +637,11 @@ describe('IntersectionObserver', function() {
 
 
     // Only run this test in browsers that support CSS transitions.
-    if ('transition' in document.documentElement.style) {
+    if ('transform' in document.documentElement.style &&
+        'transform' in document.documentElement.style) {
+
       it('supports CSS transitions and transforms', function(done) {
+
         targetEl1.style.top = '220px';
         targetEl1.style.left = '220px';
 
@@ -665,10 +668,10 @@ describe('IntersectionObserver', function() {
 
 
     it('uses the viewport when no root is specified', function(done) {
-      var viewportWidth = document.documentElement.clientWidth;
-      var viewportHeight = document.documentElement.clientHeight;
-
       io = new IntersectionObserver(function(records) {
+        var viewportWidth = document.documentElement.clientWidth;
+        var viewportHeight = document.documentElement.clientHeight;
+
         expect(records.length).to.be(1);
         expect(records[0].rootBounds.top).to.be(0);
         expect(records[0].rootBounds.left).to.be(0);
