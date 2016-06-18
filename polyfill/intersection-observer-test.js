@@ -638,7 +638,7 @@ describe('IntersectionObserver', function() {
 
     // Only run this test in browsers that support CSS transitions.
     if ('transform' in document.documentElement.style &&
-        'transform' in document.documentElement.style) {
+        'transition' in document.documentElement.style) {
 
       it('supports CSS transitions and transforms', function(done) {
 
