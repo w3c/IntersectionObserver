@@ -6,7 +6,7 @@ This repo outlines an API that can be used to understand movement of DOM element
 
 ## Observing Position
 
-The web's traditional position calculation mechanisms rely on explicit queries of DOM state that are known to cause style recalcuation and layout and, frequently, are redundant thanks to the requirement that scripts poll for this information.
+The web's traditional position calculation mechanisms rely on explicit queries of DOM state. Some of these are known to cause style recalcuation and layout and, frequently, are redundant thanks to the requirement that scripts poll for this information.
 
 A body of common practice has evolved that relies on these behaviors, however, including (but not limited to):
 
@@ -16,8 +16,8 @@ A body of common practice has evolved that relies on these behaviors, however, i
 
 These use-cases have several common properties:
 
-  1. They can be represented as passive "queries" about the state of individual elements with respect to some other element (or the global viewport)
-  1. They do not impose hard latency requirements; that is to say, the information can be delayed somewhat asynchronously (e.g. from another thread) without penalty
+  1. They can be represented as passive "queries" about the state of individual elements with respect to some other element (or the global viewport).
+  1. They do not impose hard latency requirements; that is to say, the information can be delayed somewhat asynchronously (e.g. from another thread) without penalty.
   1. They are poorly supported by nearly all combinations of existing web platform features, requiring extraordinary developer effort despite their widespread use.
 
 A notable non-goal is pixel-accurate information about what was actually displayed (which can be quite difficult to obtain efficiently in certain browser architectures in the face of filters, webgl, and other features). In all of these scenarios the information is useful even when delivered at a slight delay and without perfect compositing-result data.
@@ -179,18 +179,21 @@ As the user moves the `container`, the children can be observed and as they cros
 
 ```js
 function query(selector) {
-  return Array.prototype.slice.apply(document.querySelectorAll(selector));
+  return Array.from(document.querySelectorAll(selector));
 }
 
 function init() {
   // Notify when a scroll-item gets within, or moves beyond, 500px from the visible scroll surface.
-  var observer = new IntersectionObserver(manageItemPositionChanges,
-    { root: document.querySelector(".container"),
-      rootMargin: "500px 0" });
+  var opts = { 
+    root: document.querySelector(".container"),
+    rootMargin: "500px 0" 
+  };
+  var observer = new IntersectionObserver(manageItemPositionChanges, opts);
   // Set up observer on the items
-  query(".inner-scroll-surface > .scroll-item").forEach(function(scrollItem) {
-    observer.observe(scrollItem);
-  });
+  query(".inner-scroll-surface > .scroll-item")
+    .forEach(function(scrollItem) {
+      observer.observe(scrollItem);
+    });
 }
 
 function manageItemPositionChanges(changes) {
@@ -215,10 +218,10 @@ Many sites like to avoid loading certain resources until they're near the viewpo
 
 ```js
 function query(selector) {
-  return Array.prototype.slice.apply(document.querySelectorAll(selector));
+  return Array.from(document.querySelectorAll(selector));
 }
 
-var observer = new IntersectionObserver({
+var observer = new IntersectionObserver(
   // Pre-load items that are within 2 multiples of the visible viewport height.
   function(changes) {
     changes.forEach(function(change) {
