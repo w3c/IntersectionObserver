@@ -27,6 +27,15 @@ if ('IntersectionObserver' in window &&
 
 
 /**
+ * An IntersectionObserver registry. This registry exists to hold a strong
+ * reference to IntersectionObserver instances currently observering a target
+ * element. Without this registry, instances without another reference may be
+ * garbage collected.
+ */
+var registry = [];
+
+
+/**
  * Creates the global IntersectionObserverEntry constructor.
  * https://wicg.github.io/IntersectionObserver/#intersection-observer-entry
  * @param {Object} entry A dictionary of instance properties.
@@ -120,6 +129,7 @@ IntersectionObserver.prototype.observe = function(target) {
     throw new Error('target must be an Element');
   }
 
+  this._registerInstance();
   this._observationTargets.push({element: target, entry: {}});
   this._monitorIntersections();
 };
@@ -137,6 +147,7 @@ IntersectionObserver.prototype.unobserve = function(target) {
   });
   if (!this._observationTargets.length) {
     this._unmonitorIntersections();
+    this._unregisterInstance();
   }
 };
 
@@ -147,6 +158,7 @@ IntersectionObserver.prototype.unobserve = function(target) {
 IntersectionObserver.prototype.disconnect = function() {
   this._observationTargets = [];
   this._unmonitorIntersections();
+  this._unregisterInstance();
 };
 
 
@@ -476,6 +488,29 @@ IntersectionObserver.prototype._rootIsInDom = function() {
  */
 IntersectionObserver.prototype._rootContainsTarget = function(target) {
   return contains(this.root || document, target);
+};
+
+
+/**
+ * Adds the instance to the global IntersectionObserver registry if it isn't
+ * already present.
+ * @private
+ */
+IntersectionObserver.prototype._registerInstance = function() {
+  if (registry.indexOf(this) < 0) {
+    registry.push(this);
+  }
+};
+
+
+/**
+ * Removes the instance from the global IntersectionObserver registry.
+ * @private
+ */
+IntersectionObserver.prototype._unregisterInstance = function() {
+  registry = registry.filter(function(instance) {
+    return instance !== this;
+  }.bind(this));
 };
 
 
