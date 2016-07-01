@@ -669,8 +669,10 @@ describe('IntersectionObserver', function() {
 
     it('uses the viewport when no root is specified', function(done) {
       io = new IntersectionObserver(function(records) {
-        var viewportWidth = document.documentElement.clientWidth || document.body.clientWidth;
-        var viewportHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        var viewportWidth =
+            document.documentElement.clientWidth || document.body.clientWidth;
+        var viewportHeight =
+            document.documentElement.clientHeight || document.body.clientHeight;
 
         expect(records.length).to.be(1);
         expect(records[0].rootBounds.top).to.be(0);
