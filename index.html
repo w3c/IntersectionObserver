@@ -408,15 +408,18 @@
 	}
 
 	/* Style for algorithms */
-	ol.algorithm ol:not(.algorithm) {
+	ol.algorithm ol:not(.algorithm),
+	.algorithm > ol ol:not(.algorithm) {
 	 border-left: 0.5em solid #DEF;
 	}
 
 	/* Style for switch/case <dl>s */
-	dl.switch > dd > ol.only {
+	dl.switch > dd > ol.only,
+	dl.switch > dd > .only > ol {
 	 margin-left: 0;
 	}
-	dl.switch > dd > ol.algorithm {
+	dl.switch > dd > ol.algorithm,
+	dl.switch > dd > .algorithm > ol {
 	 margin-left: -2em;
 	}
 	dl.switch {
@@ -962,10 +965,9 @@ Possible extra rowspan handling
 	/* ToC not indented until third level, but font style & margins show hierarchy */
 	.toc > li             { font-weight: bold;   }
 	.toc > li li          { font-weight: normal; }
-	.toc > li li li       { font-style:  italic; }
-	.toc > li li li li    { font-style:  normal; }
-	.toc > li li li li li { font-style:  italic;
-	                        font-size:   85%;    }
+	.toc > li li li       { font-size:   95%;    }
+	.toc > li li li li    { font-size:   90%;    }
+	.toc > li li li li li { font-size:   85%;    }
 
 	.toc > li             { margin: 1.5rem 0;    }
 	.toc > li li          { margin: 0.3rem 0;    }
@@ -1229,7 +1231,7 @@ Possible extra rowspan handling
                 content: "Invalid Example" counter(example);
             }
 
-            figure {
+            figcaption {
                 counter-increment: figure;
             }
             figcaption:not(.no-marker)::before {
@@ -1335,71 +1337,68 @@ Possible extra rowspan handling
         .dfn-paneled { cursor: pointer; }
         </style>
 <style>/* style-syntax-highlighting */
-.highlight .hll { background-color: #ffffcc }
-.highlight  { background: #ffffff; }
-.highlight .c { color: #708090 } /* Comment */
-.highlight .k { color: #990055 } /* Keyword */
-.highlight .l { color: #000000 } /* Literal */
-.highlight .n { color: #0077aa } /* Name */
-.highlight .o { color: #999999 } /* Operator */
-.highlight .p { color: #999999 } /* Punctuation */
-.highlight .ch { color: #708090 } /* Comment.Hashbang */
-.highlight .cm { color: #708090 } /* Comment.Multiline */
-.highlight .cp { color: #708090 } /* Comment.Preproc */
-.highlight .cpf { color: #708090 } /* Comment.PreprocFile */
-.highlight .c1 { color: #708090 } /* Comment.Single */
-.highlight .cs { color: #708090 } /* Comment.Special */
-.highlight .kc { color: #990055 } /* Keyword.Constant */
-.highlight .kd { color: #990055 } /* Keyword.Declaration */
-.highlight .kn { color: #990055 } /* Keyword.Namespace */
-.highlight .kp { color: #990055 } /* Keyword.Pseudo */
-.highlight .kr { color: #990055 } /* Keyword.Reserved */
-.highlight .kt { color: #990055 } /* Keyword.Type */
-.highlight .ld { color: #000000 } /* Literal.Date */
-.highlight .m { color: #000000 } /* Literal.Number */
-.highlight .s { color: #a67f59 } /* Literal.String */
-.highlight .na { color: #0077aa } /* Name.Attribute */
-.highlight .nc { color: #0077aa } /* Name.Class */
-.highlight .no { color: #0077aa } /* Name.Constant */
-.highlight .nd { color: #0077aa } /* Name.Decorator */
-.highlight .ni { color: #0077aa } /* Name.Entity */
-.highlight .ne { color: #0077aa } /* Name.Exception */
-.highlight .nf { color: #0077aa } /* Name.Function */
-.highlight .nl { color: #0077aa } /* Name.Label */
-.highlight .nn { color: #0077aa } /* Name.Namespace */
-.highlight .py { color: #0077aa } /* Name.Property */
-.highlight .nt { color: #669900 } /* Name.Tag */
-.highlight .nv { color: #0077aa } /* Name.Variable */
-.highlight .ow { color: #999999 } /* Operator.Word */
-.highlight .mb { color: #000000 } /* Literal.Number.Bin */
-.highlight .mf { color: #000000 } /* Literal.Number.Float */
-.highlight .mh { color: #000000 } /* Literal.Number.Hex */
-.highlight .mi { color: #000000 } /* Literal.Number.Integer */
-.highlight .mo { color: #000000 } /* Literal.Number.Oct */
-.highlight .sb { color: #a67f59 } /* Literal.String.Backtick */
-.highlight .sc { color: #a67f59 } /* Literal.String.Char */
-.highlight .sd { color: #a67f59 } /* Literal.String.Doc */
-.highlight .s2 { color: #a67f59 } /* Literal.String.Double */
-.highlight .se { color: #a67f59 } /* Literal.String.Escape */
-.highlight .sh { color: #a67f59 } /* Literal.String.Heredoc */
-.highlight .si { color: #a67f59 } /* Literal.String.Interpol */
-.highlight .sx { color: #a67f59 } /* Literal.String.Other */
-.highlight .sr { color: #a67f59 } /* Literal.String.Regex */
-.highlight .s1 { color: #a67f59 } /* Literal.String.Single */
-.highlight .ss { color: #a67f59 } /* Literal.String.Symbol */
-.highlight .vc { color: #0077aa } /* Name.Variable.Class */
-.highlight .vg { color: #0077aa } /* Name.Variable.Global */
-.highlight .vi { color: #0077aa } /* Name.Variable.Instance */
-.highlight .il { color: #000000 } /* Literal.Number.Integer.Long */
-        .highlight { background: hsl(24, 20%, 95%); }
+pre.idl.highlight { color: #708090; }
+        .highlight:not(.idl) { background: hsl(24, 20%, 95%); }
         code.highlight { padding: .1em; border-radius: .3em; }
-        xmp.highlight, pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
+        pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
+        .highlight .c { color: #708090 } /* Comment */
+        .highlight .k { color: #990055 } /* Keyword */
+        .highlight .l { color: #000000 } /* Literal */
+        .highlight .n { color: #0077aa } /* Name */
+        .highlight .o { color: #999999 } /* Operator */
+        .highlight .p { color: #999999 } /* Punctuation */
+        .highlight .cm { color: #708090 } /* Comment.Multiline */
+        .highlight .cp { color: #708090 } /* Comment.Preproc */
+        .highlight .c1 { color: #708090 } /* Comment.Single */
+        .highlight .cs { color: #708090 } /* Comment.Special */
+        .highlight .kc { color: #990055 } /* Keyword.Constant */
+        .highlight .kd { color: #990055 } /* Keyword.Declaration */
+        .highlight .kn { color: #990055 } /* Keyword.Namespace */
+        .highlight .kp { color: #990055 } /* Keyword.Pseudo */
+        .highlight .kr { color: #990055 } /* Keyword.Reserved */
+        .highlight .kt { color: #990055 } /* Keyword.Type */
+        .highlight .ld { color: #000000 } /* Literal.Date */
+        .highlight .m { color: #000000 } /* Literal.Number */
+        .highlight .s { color: #a67f59 } /* Literal.String */
+        .highlight .na { color: #0077aa } /* Name.Attribute */
+        .highlight .nc { color: #0077aa } /* Name.Class */
+        .highlight .no { color: #0077aa } /* Name.Constant */
+        .highlight .nd { color: #0077aa } /* Name.Decorator */
+        .highlight .ni { color: #0077aa } /* Name.Entity */
+        .highlight .ne { color: #0077aa } /* Name.Exception */
+        .highlight .nf { color: #0077aa } /* Name.Function */
+        .highlight .nl { color: #0077aa } /* Name.Label */
+        .highlight .nn { color: #0077aa } /* Name.Namespace */
+        .highlight .py { color: #0077aa } /* Name.Property */
+        .highlight .nt { color: #669900 } /* Name.Tag */
+        .highlight .nv { color: #222222 } /* Name.Variable */
+        .highlight .ow { color: #999999 } /* Operator.Word */
+        .highlight .mb { color: #000000 } /* Literal.Number.Bin */
+        .highlight .mf { color: #000000 } /* Literal.Number.Float */
+        .highlight .mh { color: #000000 } /* Literal.Number.Hex */
+        .highlight .mi { color: #000000 } /* Literal.Number.Integer */
+        .highlight .mo { color: #000000 } /* Literal.Number.Oct */
+        .highlight .sb { color: #a67f59 } /* Literal.String.Backtick */
+        .highlight .sc { color: #a67f59 } /* Literal.String.Char */
+        .highlight .sd { color: #a67f59 } /* Literal.String.Doc */
+        .highlight .s2 { color: #a67f59 } /* Literal.String.Double */
+        .highlight .se { color: #a67f59 } /* Literal.String.Escape */
+        .highlight .sh { color: #a67f59 } /* Literal.String.Heredoc */
+        .highlight .si { color: #a67f59 } /* Literal.String.Interpol */
+        .highlight .sx { color: #a67f59 } /* Literal.String.Other */
+        .highlight .sr { color: #a67f59 } /* Literal.String.Regex */
+        .highlight .s1 { color: #a67f59 } /* Literal.String.Single */
+        .highlight .ss { color: #a67f59 } /* Literal.String.Symbol */
+        .highlight .vc { color: #0077aa } /* Name.Variable.Class */
+        .highlight .vg { color: #0077aa } /* Name.Variable.Global */
+        .highlight .vi { color: #0077aa } /* Name.Variable.Instance */
+        .highlight .il { color: #000000 } /* Literal.Number.Integer.Long */
         </style>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-05-20">20 May 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-07-06">6 July 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1414,7 +1413,7 @@ Possible extra rowspan handling
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 20 May 2016,
+In addition, as of 6 July 2016,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1443,7 +1442,7 @@ Parts of this work may be from another specification document.  If so, those par
       <li>
        <a href="#defines"><span class="secno">3.1</span> <span class="content"> Internal Slot Definitions</span></a>
        <ol class="toc">
-        <li><a href="#browsing-contexts-defines"><span class="secno">3.1.1</span> <span class="content"> Browsing Contexts</span></a>
+        <li><a href="#document-defines"><span class="secno">3.1.1</span> <span class="content"> Document</span></a>
         <li><a href="#element-private-slots"><span class="secno">3.1.2</span> <span class="content"> Element</span></a>
         <li><a href="#intersection-observer-private-slots"><span class="secno">3.1.3</span> <span class="content"> IntersectionObserver</span></a>
        </ol>
@@ -1498,7 +1497,7 @@ These lists are a central mobile interaction idiom.</p>
     <li data-md="">
      <p>Calculating element visibility.
 In particular, <a href="http://www.iab.net/iablog/2014/03/viewability-has-arrived-what-you-need-to-know-to-see-through-this-sea-change.html"> ad networks now require reporting of ad "visibility" for monetizing impressions</a>. This has led to many sites abusing scroll handlers
-(causing jank on scroll), <a href="http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html"> synchronous layout invoking readbacks</a> (causing unneccessary critical work in rAF loops),
+(causing jank on scroll), <a href="http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html"> synchronous layout invoking readbacks</a> (causing unnecessary critical work in rAF loops),
 and resorting to exotic plugin-based solutions for computing "true" element visibility (with all the associated overhead of the plugin architecture).</p>
    </ul>
    <p>These use-cases have several common properties:</p>
@@ -1523,7 +1522,7 @@ in the face of filters, webgl, and other features).
 In all of these scenarios the information is useful
 even when delivered at a slight delay
 and without perfect compositing-result data.</p>
-   <p>The Intersersection Observer API addresses the above issues
+   <p>The Intersection Observer API addresses the above issues
 by giving developers a new method to asynchronously query the position of an element
 with respect to other elements or the global viewport.
 The asynchronous delivery eliminates the need for costly DOM and style queries,
@@ -1531,16 +1530,16 @@ continuous polling,
 and use of custom plugins.
 By removing the need for these methods
 it allows applications to significantly reduce their CPU, GPU and energy costs.</p>
-   <div class="example" id="example-f53b9bf9">
-    <a class="self-link" href="#example-f53b9bf9"></a> 
-<pre class="highlight"><span class="kd">var</span> <span class="nx">observer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">IntersectionObserver</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">time</span><span class="p">);</span>               <span class="c1">// Timestamp when the change occurred</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">rootBounds</span><span class="p">);</span>         <span class="c1">// Unclipped area of root</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">boundingClientRect</span><span class="p">);</span> <span class="c1">// target.boundingClientRect()</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">intersectionRect</span><span class="p">);</span>   <span class="c1">// boundingClientRect, clipped by its containing block ancestors, and intersected with rootBounds</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">intersectionRatio</span><span class="p">);</span>  <span class="c1">// Ratio of intersectionRect area to boundingClientRect area</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">changes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">target</span><span class="p">);</span>             <span class="c1">// the Element target</span>
+   <div class="example" id="example-dfb36139">
+    <a class="self-link" href="#example-dfb36139"></a> 
+<pre class="highlight"><span class="kd">var</span> <span class="nx">observer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">IntersectionObserver</span><span class="p">(</span><span class="nx">changes</span> <span class="o">=></span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kr">const</span> <span class="nx">change</span> <span class="k">of</span> <span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">change</span><span class="p">.</span><span class="nx">time</span><span class="p">);</span>               <span class="c1">// Timestamp when the change occurred</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">change</span><span class="p">.</span><span class="nx">rootBounds</span><span class="p">);</span>         <span class="c1">// Unclipped area of root</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">change</span><span class="p">.</span><span class="nx">boundingClientRect</span><span class="p">);</span> <span class="c1">// target.boundingClientRect()</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">change</span><span class="p">.</span><span class="nx">intersectionRect</span><span class="p">);</span>   <span class="c1">// boundingClientRect, clipped by its containing block ancestors, and intersected with rootBounds</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">change</span><span class="p">.</span><span class="nx">intersectionRatio</span><span class="p">);</span>  <span class="c1">// Ratio of intersectionRect area to boundingClientRect area</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">change</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>             <span class="c1">// the Element target</span>
   <span class="p">}</span>
 <span class="p">},</span> <span class="p">{});</span>
 
@@ -1551,14 +1550,15 @@ it allows applications to significantly reduce their CPU, GPU and energy costs.<
 <span class="nx">observer</span><span class="p">.</span><span class="nx">unobserve</span><span class="p">(</span><span class="nx">target</span><span class="p">);</span>
 
 <span class="c1">// Stop observing threshold events on all target elements.</span>
-<span class="nx">observer</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">();</span></pre>
+<span class="nx">observer</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">();</span>
+</pre>
    </div>
    <h2 class="heading settled" data-level="2" id="intersection-observer-api"><span class="secno">2. </span><span class="content">Intersection Observer</span><a class="self-link" href="#intersection-observer-api"></a></h2>
    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="intersection-observer">Intersection Observer</dfn> API enables developers to understand the
 visibility and position of <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-target">target</dfn> DOM
 elements relative to an <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-1">intersection root</a>.</p>
    <h3 class="heading settled" data-level="2.1" id="intersection-observer-callback"><span class="secno">2.1. </span><span class="content"> The IntersectionObserverCallback</span><a class="self-link" href="#intersection-observer-callback"></a></h3>
-<pre class="idl def">callback <dfn class="dfn-paneled idl-code" data-dfn-type="callback" data-export="" id="callbackdef-intersectionobservercallback">IntersectionObserverCallback</dfn> = void (sequence&lt;<a data-link-type="idl-name" href="#intersectionobserverentry" id="ref-for-intersectionobserverentry-1">IntersectionObserverEntry</a>> <dfn class="idl-code" data-dfn-for="IntersectionObserverCallback" data-dfn-type="argument" data-export="" id="dom-intersectionobservercallback-entries">entries<a class="self-link" href="#dom-intersectionobservercallback-entries"></a></dfn>, <a data-link-type="idl-name" href="#intersectionobserver" id="ref-for-intersectionobserver-1">IntersectionObserver</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverCallback" data-dfn-type="argument" data-export="" id="dom-intersectionobservercallback-observer">observer<a class="self-link" href="#dom-intersectionobservercallback-observer"></a></dfn>)
+<pre class="idl highlight def"><span class="kt">callback</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="callback" data-export="" id="callbackdef-intersectionobservercallback">IntersectionObserverCallback</dfn> = <span class="kt">void</span> (<span class="kt">sequence</span>&lt;<a class="n" data-link-type="idl-name" href="#intersectionobserverentry" id="ref-for-intersectionobserverentry-1">IntersectionObserverEntry</a>> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverCallback" data-dfn-type="argument" data-export="" id="dom-intersectionobservercallback-entries">entries<a class="self-link" href="#dom-intersectionobservercallback-entries"></a></dfn>, <a class="n" data-link-type="idl-name" href="#intersectionobserver" id="ref-for-intersectionobserver-1">IntersectionObserver</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverCallback" data-dfn-type="argument" data-export="" id="dom-intersectionobservercallback-observer">observer<a class="self-link" href="#dom-intersectionobservercallback-observer"></a></dfn>)
 </pre>
    <p>This callback will be invoked when there are changes to <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target-1">target</a>’s
 intersection with the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-2">intersection root</a>, as per the <a data-link-type="dfn" href="#intersection-observer-processing-model" id="ref-for-intersection-observer-processing-model-1">processing model</a>.</p>
@@ -1577,16 +1577,16 @@ observer for each tracked target.</p>
    <p><code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-rootmargin" id="ref-for-dom-intersectionobserverinit-rootmargin-1">rootMargin</a></code> or <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-threshold" id="ref-for-dom-intersectionobserverinit-threshold-1">threshold</a></code> values for each <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target-5">target</a> seems to introduce more complexity without solving additional
 use-cases. Per-<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observe" id="ref-for-dom-intersectionobserver-observe-1">observe()</a></code> options could be provided in the future if V2
 introduces a need for it.</p>
-<pre class="idl def">[<a class="idl-code" data-link-type="constructor" href="#dom-intersectionobserver-intersectionobserver" id="ref-for-dom-intersectionobserver-intersectionobserver-1">Constructor</a>(<a data-link-type="idl-name" href="#callbackdef-intersectionobservercallback" id="ref-for-callbackdef-intersectionobservercallback-1">IntersectionObserverCallback</a> <dfn class="idl-code" data-dfn-for="IntersectionObserver/IntersectionObserver(callback, options)" data-dfn-type="argument" data-export="" id="dom-intersectionobserver-intersectionobserver-callback-options-callback">callback<a class="self-link" href="#dom-intersectionobserver-intersectionobserver-callback-options-callback"></a></dfn>, optional <a data-link-type="idl-name" href="#dictdef-intersectionobserverinit" id="ref-for-dictdef-intersectionobserverinit-1">IntersectionObserverInit</a> <dfn class="idl-code" data-dfn-for="IntersectionObserver/IntersectionObserver(callback, options)" data-dfn-type="argument" data-export="" id="dom-intersectionobserver-intersectionobserver-callback-options-options">options<a class="self-link" href="#dom-intersectionobserver-intersectionobserver-callback-options-options"></a></dfn>),
- Exposed=Window]
-interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="intersectionobserver">IntersectionObserver</dfn> {
-  readonly attribute <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>? <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Element?" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root-4">root</a>;
-  readonly attribute DOMString <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString" href="#dom-intersectionobserver-rootmargin" id="ref-for-dom-intersectionobserver-rootmargin-1">rootMargin</a>;
-  readonly attribute sequence&lt;double> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="sequence<double>" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds-1">thresholds</a>;
-  void <a class="idl-code" data-link-type="method" href="#dom-intersectionobserver-observe" id="ref-for-dom-intersectionobserver-observe-2">observe</a>(<a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <dfn class="idl-code" data-dfn-for="IntersectionObserver/observe(target)" data-dfn-type="argument" data-export="" id="dom-intersectionobserver-observe-target-target">target<a class="self-link" href="#dom-intersectionobserver-observe-target-target"></a></dfn>);
-  void <a class="idl-code" data-link-type="method" href="#dom-intersectionobserver-unobserve" id="ref-for-dom-intersectionobserver-unobserve-1">unobserve</a>(<a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <dfn class="idl-code" data-dfn-for="IntersectionObserver/unobserve(target)" data-dfn-type="argument" data-export="" id="dom-intersectionobserver-unobserve-target-target">target<a class="self-link" href="#dom-intersectionobserver-unobserve-target-target"></a></dfn>);
-  void <a class="idl-code" data-link-type="method" href="#dom-intersectionobserver-disconnect" id="ref-for-dom-intersectionobserver-disconnect-1">disconnect</a>();
-  sequence&lt;<a data-link-type="idl-name" href="#intersectionobserverentry" id="ref-for-intersectionobserverentry-2">IntersectionObserverEntry</a>> <a class="idl-code" data-link-type="method" href="#dom-intersectionobserver-takerecords" id="ref-for-dom-intersectionobserver-takerecords-1">takeRecords</a>();
+<pre class="idl highlight def">[<a class="nv idl-code" data-link-type="constructor" href="#dom-intersectionobserver-intersectionobserver" id="ref-for-dom-intersectionobserver-intersectionobserver-1">Constructor</a>(<a class="n" data-link-type="idl-name" href="#callbackdef-intersectionobservercallback" id="ref-for-callbackdef-intersectionobservercallback-1">IntersectionObserverCallback</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserver/IntersectionObserver(callback, options)" data-dfn-type="argument" data-export="" id="dom-intersectionobserver-intersectionobserver-callback-options-callback">callback<a class="self-link" href="#dom-intersectionobserver-intersectionobserver-callback-options-callback"></a></dfn>, <span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-intersectionobserverinit" id="ref-for-dictdef-intersectionobserverinit-1">IntersectionObserverInit</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserver/IntersectionObserver(callback, options)" data-dfn-type="argument" data-export="" id="dom-intersectionobserver-intersectionobserver-callback-options-options">options<a class="self-link" href="#dom-intersectionobserver-intersectionobserver-callback-options-options"></a></dfn>),
+ <a class="nv idl-code" data-link-type="extended-attribute">Exposed</a>=<span class="n">Window</span>]
+<span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="intersectionobserver">IntersectionObserver</dfn> {
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>? <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="Element?" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root-4">root</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">DOMString</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString" href="#dom-intersectionobserver-rootmargin" id="ref-for-dom-intersectionobserver-rootmargin-1">rootMargin</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">sequence</span>&lt;<span class="kt">double</span>> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="sequence<double>" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds-1">thresholds</a>;
+  <span class="kt">void</span> <a class="nv idl-code" data-link-type="method" href="#dom-intersectionobserver-observe" id="ref-for-dom-intersectionobserver-observe-2">observe</a>(<a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserver/observe(target)" data-dfn-type="argument" data-export="" id="dom-intersectionobserver-observe-target-target">target<a class="self-link" href="#dom-intersectionobserver-observe-target-target"></a></dfn>);
+  <span class="kt">void</span> <a class="nv idl-code" data-link-type="method" href="#dom-intersectionobserver-unobserve" id="ref-for-dom-intersectionobserver-unobserve-1">unobserve</a>(<a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserver/unobserve(target)" data-dfn-type="argument" data-export="" id="dom-intersectionobserver-unobserve-target-target">target<a class="self-link" href="#dom-intersectionobserver-unobserve-target-target"></a></dfn>);
+  <span class="kt">void</span> <a class="nv idl-code" data-link-type="method" href="#dom-intersectionobserver-disconnect" id="ref-for-dom-intersectionobserver-disconnect-1">disconnect</a>();
+  <span class="kt">sequence</span>&lt;<a class="n" data-link-type="idl-name" href="#intersectionobserverentry" id="ref-for-intersectionobserverentry-2">IntersectionObserverEntry</a>> <a class="nv idl-code" data-link-type="method" href="#dom-intersectionobserver-takerecords" id="ref-for-dom-intersectionobserver-takerecords-1">takeRecords</a>();
 };
 </pre>
    <div>
@@ -1727,7 +1727,7 @@ with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle.</p>
    <p class="note" role="note">Note: <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin" id="ref-for-dom-intersectionobserver-rootmargin-3">rootMargin</a></code> only applies to the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-10">intersection root</a> itself.
 If a <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target-8">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> is clipped by an ancestor other than the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-11">intersection root</a>, that clipping is unaffected by <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin" id="ref-for-dom-intersectionobserver-rootmargin-4">rootMargin</a></code>.</p>
-   <p class="note" role="note">Note: <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle-1">Root intersection rectangle</a> is not affected by <code class="idl"><a data-link-type="idl">pinch zoom</a></code> and will report the unadjusted <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a>, consistent with the
+   <p class="note" role="note">Note: <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle-1">Root intersection rectangle</a> is not affected by <a data-link-type="dfn" href="https://drafts.csswg.org/cssom-view-1/#pinch-zoom">pinch zoom</a> and will report the unadjusted <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a>, consistent with the
 intent of pinch zooming (to act like a magnifying glass and NOT change layout.)</p>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="parse-a-root-margin">parse a root margin</dfn> from an input string <var>marginString</var>,
 returning either a list of 4 pixel lengths or percentages,
@@ -1764,22 +1764,22 @@ append a duplicate of the second element to <var>tokens</var>.</p>
      <p>Return <var>tokens</var>.</p>
    </ol>
    <h3 class="heading settled" data-level="2.3" id="intersection-observer-entry"><span class="secno">2.3. </span><span class="content"> The IntersectionObserverEntry interface</span><a class="self-link" href="#intersection-observer-entry"></a></h3>
-<pre class="idl def">[<dfn class="idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="constructor" data-export="" data-lt="IntersectionObserverEntry(intersectionObserverEntryInit)" id="dom-intersectionobserverentry-intersectionobserverentry">Constructor<a class="self-link" href="#dom-intersectionobserverentry-intersectionobserverentry"></a></dfn>(<a data-link-type="idl-name" href="#dictdef-intersectionobserverentryinit" id="ref-for-dictdef-intersectionobserverentryinit-1">IntersectionObserverEntryInit</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverEntry/IntersectionObserverEntry(intersectionObserverEntryInit)" data-dfn-type="argument" data-export="" id="dom-intersectionobserverentry-intersectionobserverentry-intersectionobserverentryinit-intersectionobserverentryinit">intersectionObserverEntryInit<a class="self-link" href="#dom-intersectionobserverentry-intersectionobserverentry-intersectionobserverentryinit-intersectionobserverentryinit"></a></dfn>)]
-interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="intersectionobserverentry">IntersectionObserverEntry</dfn> {
-  readonly attribute <a data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMHighResTimeStamp" href="#dom-intersectionobserverentry-time" id="ref-for-dom-intersectionobserverentry-time-1">time</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly" href="#dom-intersectionobserverentry-rootbounds" id="ref-for-dom-intersectionobserverentry-rootbounds-1">rootBounds</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly" href="#dom-intersectionobserverentry-boundingclientrect" id="ref-for-dom-intersectionobserverentry-boundingclientrect-1">boundingClientRect</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly" href="#dom-intersectionobserverentry-intersectionrect" id="ref-for-dom-intersectionobserverentry-intersectionrect-1">intersectionRect</a>;
-  readonly attribute double <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="double" href="#dom-intersectionobserverentry-intersectionratio" id="ref-for-dom-intersectionobserverentry-intersectionratio-1">intersectionRatio</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Element" href="#dom-intersectionobserverentry-target" id="ref-for-dom-intersectionobserverentry-target-1">target</a>;
+<pre class="idl highlight def">[<dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="constructor" data-export="" data-lt="IntersectionObserverEntry(intersectionObserverEntryInit)" id="dom-intersectionobserverentry-intersectionobserverentry">Constructor<a class="self-link" href="#dom-intersectionobserverentry-intersectionobserverentry"></a></dfn>(<a class="n" data-link-type="idl-name" href="#dictdef-intersectionobserverentryinit" id="ref-for-dictdef-intersectionobserverentryinit-1">IntersectionObserverEntryInit</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntry/IntersectionObserverEntry(intersectionObserverEntryInit)" data-dfn-type="argument" data-export="" id="dom-intersectionobserverentry-intersectionobserverentry-intersectionobserverentryinit-intersectionobserverentryinit">intersectionObserverEntryInit<a class="self-link" href="#dom-intersectionobserverentry-intersectionobserverentry-intersectionobserverentryinit-intersectionobserverentryinit"></a></dfn>)]
+<span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="intersectionobserverentry">IntersectionObserverEntry</dfn> {
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMHighResTimeStamp" href="#dom-intersectionobserverentry-time" id="ref-for-dom-intersectionobserverentry-time-1">time</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly" href="#dom-intersectionobserverentry-rootbounds" id="ref-for-dom-intersectionobserverentry-rootbounds-1">rootBounds</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly" href="#dom-intersectionobserverentry-boundingclientrect" id="ref-for-dom-intersectionobserverentry-boundingclientrect-1">boundingClientRect</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly" href="#dom-intersectionobserverentry-intersectionrect" id="ref-for-dom-intersectionobserverentry-intersectionrect-1">intersectionRect</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">double</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="double" href="#dom-intersectionobserverentry-intersectionratio" id="ref-for-dom-intersectionobserverentry-intersectionratio-1">intersectionRatio</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="Element" href="#dom-intersectionobserverentry-target" id="ref-for-dom-intersectionobserverentry-target-1">target</a>;
 };
 
-dictionary <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-intersectionobserverentryinit">IntersectionObserverEntryInit</dfn> {
-  required <a data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMHighResTimeStamp " id="dom-intersectionobserverentryinit-time">time<a class="self-link" href="#dom-intersectionobserverentryinit-time"></a></dfn>;
-  required <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-rootbounds">rootBounds<a class="self-link" href="#dom-intersectionobserverentryinit-rootbounds"></a></dfn>;
-  required <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-boundingclientrect">boundingClientRect<a class="self-link" href="#dom-intersectionobserverentryinit-boundingclientrect"></a></dfn>;
-  required <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-intersectionrect">intersectionRect<a class="self-link" href="#dom-intersectionobserverentryinit-intersectionrect"></a></dfn>;
-  required <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <dfn class="idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="Element " id="dom-intersectionobserverentryinit-target">target<a class="self-link" href="#dom-intersectionobserverentryinit-target"></a></dfn>;
+<span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-intersectionobserverentryinit">IntersectionObserverEntryInit</dfn> {
+  <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMHighResTimeStamp " id="dom-intersectionobserverentryinit-time">time<a class="self-link" href="#dom-intersectionobserverentryinit-time"></a></dfn>;
+  <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-rootbounds">rootBounds<a class="self-link" href="#dom-intersectionobserverentryinit-rootbounds"></a></dfn>;
+  <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-boundingclientrect">boundingClientRect<a class="self-link" href="#dom-intersectionobserverentryinit-boundingclientrect"></a></dfn>;
+  <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-intersectionrect">intersectionRect<a class="self-link" href="#dom-intersectionobserverentryinit-intersectionrect"></a></dfn>;
+  <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="Element " id="dom-intersectionobserverentryinit-target">target<a class="self-link" href="#dom-intersectionobserverentryinit-target"></a></dfn>;
 };
 </pre>
    <div>
@@ -1823,10 +1823,10 @@ that generated the notification.</p>
     </dl>
    </div>
    <h3 class="heading settled" data-level="2.4" id="intersection-observer-init"><span class="secno">2.4. </span><span class="content"> The IntersectionObserverInit dictionary</span><a class="self-link" href="#intersection-observer-init"></a></h3>
-<pre class="idl def">dictionary <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-intersectionobserverinit">IntersectionObserverInit</dfn> {
-  <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>?  <a class="idl-code" data-default="null" data-link-type="dict-member" data-type="Element?  " href="#dom-intersectionobserverinit-root" id="ref-for-dom-intersectionobserverinit-root-1">root</a> = null;
-  DOMString <a class="idl-code" data-default="&quot;0px&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-rootmargin" id="ref-for-dom-intersectionobserverinit-rootmargin-4">rootMargin</a> = "0px";
-  (double or sequence&lt;double>) <a class="idl-code" data-default="0" data-link-type="dict-member" data-type="(double or sequence<double>) " href="#dom-intersectionobserverinit-threshold" id="ref-for-dom-intersectionobserverinit-threshold-3">threshold</a> = 0;
+<pre class="idl highlight def"><span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-intersectionobserverinit">IntersectionObserverInit</dfn> {
+  <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>?  <a class="nv idl-code" data-default="null" data-link-type="dict-member" data-type="Element?  " href="#dom-intersectionobserverinit-root" id="ref-for-dom-intersectionobserverinit-root-1">root</a> = <span class="kt">null</span>;
+  <span class="kt">DOMString</span> <a class="nv idl-code" data-default="&quot;0px&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-rootmargin" id="ref-for-dom-intersectionobserverinit-rootmargin-4">rootMargin</a> = "0px";
+  (<span class="kt">double</span> <span class="kt">or</span> <span class="kt">sequence</span>&lt;<span class="kt">double</span>>) <a class="nv idl-code" data-default="0" data-link-type="dict-member" data-type="(double or sequence<double>) " href="#dom-intersectionobserverinit-threshold" id="ref-for-dom-intersectionobserverinit-threshold-3">threshold</a> = 0;
 };
 </pre>
    <div>
@@ -1841,11 +1841,11 @@ If not provided, use the <a data-link-type="dfn" href="#intersectionobserver-imp
      <dd data-md="">
       <p>Similar to the CSS <a class="property" data-link-type="propdesc" href="https://drafts.csswg.org/css2/box.html#propdef-margin">margin</a> property,
 this is a string of 1-4 components,
-each either an absolute length or a percentage.</p>
-<pre class="example" id="example-825b82c7"><a class="self-link" href="#example-825b82c7"></a>"5px"                // all margins set to 5px
-"5px 10px"           // top &amp; bottom = 5px, right &amp; left = 10px
-"-10px 5px 8px"      // top = -10px, right &amp; left = 5px, bottom = 8px
-"-10px -5px 5px 8px" // top = -10px, right = -5px, bottom = 5px, left = 8px
+each either an <a data-link-type="dfn" href="https://drafts.csswg.org/css-values-3/#absolute-length">absolute length</a> or a percentage.</p>
+<pre class="example highlight" id="example-825b82c7"><a class="self-link" href="#example-825b82c7"></a><span class="s2">"5px"</span>                <span class="c1">// all margins set to 5px</span>
+<span class="s2">"5px 10px"</span>           <span class="c1">// top &amp; bottom = 5px, right &amp; left = 10px</span>
+<span class="s2">"-10px 5px 8px"</span>      <span class="c1">// top = -10px, right &amp; left = 5px, bottom = 8px</span>
+<span class="s2">"-10px -5px 5px 8px"</span> <span class="c1">// top = -10px, right = -5px, bottom = 5px, left = 8px</span>
 </pre>
      <dt data-md="">
       <p><dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserverInit" data-dfn-type="dict-member" data-export="" id="dom-intersectionobserverinit-threshold">threshold</dfn>, <span> of type <code class="idl-code">(double or sequence&lt;double>)</code>, defaulting to <code>0</code></span></p>
@@ -1865,9 +1865,9 @@ on the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-i
    <p>This section outlines the steps the user agent must take when implementing
 the <a data-link-type="dfn" href="#intersection-observer" id="ref-for-intersection-observer-1">Intersection Observer</a> API.</p>
    <h3 class="heading settled" data-level="3.1" id="defines"><span class="secno">3.1. </span><span class="content"> Internal Slot Definitions</span><a class="self-link" href="#defines"></a></h3>
-   <h4 class="heading settled" data-level="3.1.1" id="browsing-contexts-defines"><span class="secno">3.1.1. </span><span class="content"> Browsing Contexts</span><a class="self-link" href="#browsing-contexts-defines"></a></h4>
-   <p>Each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> has an <dfn class="dfn-paneled" data-dfn-for="browsing context" data-dfn-type="dfn" data-noexport="" id="browsing-context-intersectionobservertaskqueued">IntersectionObserverTaskQueued</dfn> flag which
-is initialized to false.</p>
+   <h4 class="heading settled" data-level="3.1.1" id="document-defines"><span class="secno">3.1.1. </span><span class="content"> Document</span><a class="self-link" href="#document-defines"></a></h4>
+   <p>Each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> has an <dfn class="dfn-paneled" data-dfn-for="Document" data-dfn-type="dfn" data-noexport="" id="document-intersectionobservertaskqueued">IntersectionObserverTaskQueued</dfn> flag
+which is initialized to false.</p>
    <h4 class="heading settled" data-level="3.1.2" id="element-private-slots"><span class="secno">3.1.2. </span><span class="content"> Element</span><a class="self-link" href="#element-private-slots"></a></h4>
    <p><code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> objects have an internal <dfn class="dfn-paneled idl-code" data-dfn-for="Element" data-dfn-type="attribute" data-export="" id="dom-element-registeredintersectionobservers-slot">[[RegisteredIntersectionObservers]]</dfn> slot,
 which is initialized to an empty list.
@@ -1883,28 +1883,28 @@ They also have an internal <dfn class="dfn-paneled idl-code" data-dfn-for="Inter
 which is a list of four pixel lengths or percentages.</p>
    <h3 class="heading settled" data-level="3.2" id="algorithms"><span class="secno">3.2. </span><span class="content"> Algorithms</span><a class="self-link" href="#algorithms"></a></h3>
    <h4 class="heading settled" data-level="3.2.1" id="queue-intersection-observer-task"><span class="secno">3.2.1. </span><span class="content"> Queue an Intersection Observer Task</span><a class="self-link" href="#queue-intersection-observer-task"></a></h4>
-   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="queue-an-intersection-observer-task">queue an intersection observer task</dfn> for a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related
-similar-origin browsing contexts</a> <var>unit</var>, run these steps:</p>
+   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="queue-an-intersection-observer-task">queue an intersection observer task</dfn> for a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> <var>document</var>,
+run these steps:</p>
    <ol>
     <li data-md="">
-     <p>If <var>unit</var>’s <a data-link-type="dfn" href="#browsing-context-intersectionobservertaskqueued" id="ref-for-browsing-context-intersectionobservertaskqueued-1">IntersectionObserverTaskQueued</a> flag is set to true,
+     <p>If <var>document</var>’s <a data-link-type="dfn" href="#document-intersectionobservertaskqueued" id="ref-for-document-intersectionobservertaskqueued-1">IntersectionObserverTaskQueued</a> flag is set to true,
 return.</p>
     <li data-md="">
-     <p>Set <var>unit</var>’s <a data-link-type="dfn" href="#browsing-context-intersectionobservertaskqueued" id="ref-for-browsing-context-intersectionobservertaskqueued-2">IntersectionObserverTaskQueued</a> flag to true.</p>
+     <p>Set <var>document</var>’s <a data-link-type="dfn" href="#document-intersectionobservertaskqueued" id="ref-for-document-intersectionobservertaskqueued-2">IntersectionObserverTaskQueued</a> flag to true.</p>
     <li data-md="">
      <p>Enqueue a task to <a data-link-type="dfn" href="#notify-intersection-observers" id="ref-for-notify-intersection-observers-1">notify intersection observers</a> in the <a data-link-type="dfn" href="http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks">list of idle request callbacks</a> with a <var>timeout</var> of 100.</p>
      <p class="issue" id="issue-bf9a6e46"><a class="self-link" href="#issue-bf9a6e46"></a> Should we use something other than 100ms as <var>timeout</var>?</p>
      <p class="issue" id="issue-f67f2718"><a class="self-link" href="#issue-f67f2718"></a> Should we consider making this just post a task instead?</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.2" id="notify-intersection-observers-algo"><span class="secno">3.2.2. </span><span class="content"> Notify Intersection Observers</span><a class="self-link" href="#notify-intersection-observers-algo"></a></h4>
-   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="notify-intersection-observers">notify intersection observers</dfn> for a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related
-similar-origin browsing contexts</a> <var>unit</var>, run these steps:</p>
+   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="notify-intersection-observers">notify intersection observers</dfn> for a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> <var>document</var>,
+run these steps:</p>
    <ol>
     <li data-md="">
-     <p>Set <var>unit</var>’s <a data-link-type="dfn" href="#browsing-context-intersectionobservertaskqueued" id="ref-for-browsing-context-intersectionobservertaskqueued-3">IntersectionObserverTaskQueued</a> flag to false.</p>
+     <p>Set <var>document</var>’s <a data-link-type="dfn" href="#document-intersectionobservertaskqueued" id="ref-for-document-intersectionobservertaskqueued-3">IntersectionObserverTaskQueued</a> flag to false.</p>
     <li data-md="">
      <p>Let <var>notify list</var> be a list of all <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-18">IntersectionObserver</a></code>s
-whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root-9">root</a></code> is in the DOM tree of a document in <var>unit</var>.</p>
+whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root-9">root</a></code> is in the DOM tree of <var>document</var>.</p>
     <li data-md="">
      <p>For each <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-19">IntersectionObserver</a></code> object <var>observer</var> in <var>notify list</var>,
 run these steps:</p>
@@ -1922,7 +1922,8 @@ If this throws an exception, <a data-link-type="dfn" href="https://html.spec.wha
      </ol>
    </ol>
    <h4 class="heading settled" data-level="3.2.3" id="queue-intersection-observer-entry-algo"><span class="secno">3.2.3. </span><span class="content"> Queue an IntersectionObserverEntry</span><a class="self-link" href="#queue-intersection-observer-entry-algo"></a></h4>
-   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</dfn> for <var>observer</var>, given a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> <var>unit</var>, <var>observer</var>, <var>time</var>, <var>rootBounds</var>, <var>boundingClientRect</var>, <var>intersectionRect</var> and <var>target</var>,
+   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</dfn> for an <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-20">IntersectionObserver</a></code> <var>observer</var>, given a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> <var>document</var>; <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a></code> <var>time</var>; <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a></code>s <var>rootBounds</var>, <var>boundingClientRect</var>, and <var>intersectionRect</var>;
+and an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> <var>target</var>;
 run these steps:</p>
    <ol>
     <li data-md="">
@@ -1930,7 +1931,7 @@ run these steps:</p>
     <li data-md="">
      <p>Append it to <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-queuedentries-slot" id="ref-for-dom-intersectionobserver-queuedentries-slot-6">[[QueuedEntries]]</a></code> slot.</p>
     <li data-md="">
-     <p><a data-link-type="dfn" href="#queue-an-intersection-observer-task" id="ref-for-queue-an-intersection-observer-task-1">Queue an intersection observer task</a> for <var>unit</var>.</p>
+     <p><a data-link-type="dfn" href="#queue-an-intersection-observer-task" id="ref-for-queue-an-intersection-observer-task-1">Queue an intersection observer task</a> for <var>document</var>.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.4" id="calculate-intersection-rect-algo"><span class="secno">3.2.4. </span><span class="content"> Compute the Intersection of a Target Element and the Root</span><a class="self-link" href="#calculate-intersection-rect-algo"></a></h4>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="compute-the-intersection">compute the intersection</dfn> between a <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target-10">target</a> and the observer’s <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-15">intersection root</a>,
@@ -1958,30 +1959,28 @@ Otherwise, update <var>container</var> to be the parent node of <var>container</
     <li data-md="">
      <p>Update <var>intersectionRect</var> by intersecting it with the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle-5">root intersection rectangle</a>.</p>
     <li data-md="">
-     <p>Map <var>intersectionRect</var> to the coordinate space of the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target-13">target</a>’s document.</p>
+     <p>Map <var>intersectionRect</var> to the coordinate space of the viewport of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> containing the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target-13">target</a>.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.5" id="update-intersection-observations-algo"><span class="secno">3.2.5. </span><span class="content"> Run the Update Intersection Observations Steps</span><a class="self-link" href="#update-intersection-observations-algo"></a></h4>
-   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="run-the-update-intersection-observations-steps">run the update intersection observations steps</dfn> for an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop">event loop</a> <var>loop</var> given a timestamp <var>time</var>, run these steps:</p>
+   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="run-the-update-intersection-observations-steps">run the update intersection observations steps</dfn> for a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> <var>document</var> given a timestamp <var>time</var>, run these steps:</p>
    <ol>
     <li data-md="">
-     <p>Let <var>unit</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin browsing contexts</a> for <var>loop</var>.</p>
-    <li data-md="">
-     <p>Let <var>observer list</var> be a list of all <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-20">IntersectionObserver</a></code>s
-whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root-10">root</a></code> is in the DOM tree of a document in <var>unit</var>.</p>
+     <p>Let <var>observer list</var> be a list of all <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-21">IntersectionObserver</a></code>s
+whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root-10">root</a></code> is in the DOM tree of <var>document</var>.</p>
     <li data-md="">
      <p>For each <var>observer</var> in <var>observer list</var>:</p>
      <ol>
       <li data-md="">
        <p>Let <var>rootBounds</var> be <var>observer</var>’s <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle-6">root intersection rectangle</a>.</p>
       <li data-md="">
-       <p>For each <var>target</var> in <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot" id="ref-for-dom-intersectionobserver-observationtargets-slot-6">[[ObservationTargets]]</a></code> slot:</p>
+       <p>For each <var>target</var> in <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot" id="ref-for-dom-intersectionobserver-observationtargets-slot-6">[[ObservationTargets]]</a></code> slot, processed in the same order that <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observe" id="ref-for-dom-intersectionobserver-observe-4">observe()</a></code> was called on each <var>target</var>:</p>
        <ol>
         <li data-md="">
          <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-18">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root" id="ref-for-intersectionobserver-implicit-root-5">implicit root</a> and <var>target</var> is not a descendant of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-19">intersection root</a> in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain">containing block chain</a>,
 skip further processing for <var>target</var>.</p>
         <li data-md="">
          <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-20">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root" id="ref-for-intersectionobserver-implicit-root-6">implicit root</a>,
-and <var>target</var> is not in the same document as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-21">intersection root</a>,
+and <var>target</var> is not in the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-21">intersection root</a>,
 skip further processing for <var>target</var>.</p>
         <li data-md="">
          <p>Let <var>targetRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a></code> obtained
@@ -2008,7 +2007,7 @@ whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverr
         <li data-md="">
          <p>Let <var>previousThreshold</var> be set to <var>intersectionObserverRegistration</var>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousthreshold" id="ref-for-dom-intersectionobserverregistration-previousthreshold-2">previousThreshold</a></code> property.</p>
         <li data-md="">
-         <p>If <var>threshold</var> does not equal <var>previousThreshold</var>, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry" id="ref-for-queue-an-intersectionobserverentry-1">queue an IntersectionObserverEntry</a> for <var>unit</var>,
+         <p>If <var>threshold</var> does not equal <var>previousThreshold</var>, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry" id="ref-for-queue-an-intersectionobserverentry-1">queue an IntersectionObserverEntry</a>,
 passing in <var>observer</var>, <var>time</var>, <var>rootBounds</var>, <var>boundingClientRect</var>, <var>intersectionRect</var> and <var>target</var>.</p>
         <li data-md="">
          <p>Assign <var>threshold</var> to <var>intersectionObserverRegistration</var>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousthreshold" id="ref-for-dom-intersectionobserverregistration-previousthreshold-3">previousThreshold</a></code> property.</p>
@@ -2016,30 +2015,28 @@ passing in <var>observer</var>, <var>time</var>, <var>rootBounds</var>, <var>bou
      </ol>
    </ol>
    <h3 class="heading settled" data-level="3.3" id="lifetime"><span class="secno">3.3. </span><span class="content"> IntersectionObserver Lifetime</span><a class="self-link" href="#lifetime"></a></h3>
-   <p>An <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-21">IntersectionObserver</a></code> will remain alive until both of these conditions hold:</p>
+   <p>An <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-22">IntersectionObserver</a></code> will remain alive until both of these conditions hold:</p>
    <ul>
     <li>There are no scripting references to the observer.
     <li>The observer is not observing any targets. 
    </ul>
-   <p>An <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-22">IntersectionObserver</a></code> will continue observing a target until any of the following occurs:</p>
+   <p>An <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-23">IntersectionObserver</a></code> will continue observing a target until any of the following occurs:</p>
    <ul>
     <li><code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-unobserve" id="ref-for-dom-intersectionobserver-unobserve-4">unobserve(target)</a></code> is called on the target.
     <li><code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-disconnect" id="ref-for-dom-intersectionobserver-disconnect-3">disconnect()</a></code> is called.
     <li>The target <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code> is deleted.
     <li>The observer’s <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-22">intersection root</a> is deleted. 
    </ul>
-   <p>If an <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-23">IntersectionObserver</a></code>'s <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-23">intersection root</a> is deleted
-while there are still JavaScript references to the observer,
-calling any API method on the observer will <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> an <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#invalidstateerror">InvalidStateError</a></code>.</p>
    <h3 class="heading settled" data-level="3.4" id="external-spec-integrations"><span class="secno">3.4. </span><span class="content"> External Spec Integrations</span><a class="self-link" href="#external-spec-integrations"></a></h3>
    <h4 class="heading settled" data-level="3.4.1" id="event-loop"><span class="secno">3.4.1. </span><span class="content"> HTML Processing Model: Event Loop</span><a class="self-link" href="#event-loop"></a></h4>
    <p>An <a data-link-type="dfn" href="#intersection-observer" id="ref-for-intersection-observer-2">Intersection Observer</a> processing step should take place
-at the end of the "<i>Update the rendering</i>" steps
-in the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8">event loop
-in the HTML Processing Model.</a></p>
+during the "<i>Update the rendering</i>" steps,
+after step 9, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#run-the-fullscreen-rendering-steps">run the fullscreen rendering steps</a>,
+and before step 10, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#run-the-animation-frame-callbacks">run the animation frame callbacks</a>,
+in the in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#processing-model-8">HTML Processing Model</a>.</p>
    <p>This step is:</p>
-   <ol start="12">
-    <li><a data-link-type="dfn" href="#run-the-update-intersection-observations-steps" id="ref-for-run-the-update-intersection-observations-steps-1">Run the update intersection observations steps</a> for the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop">event loop</a> in question.
+   <ol start="10">
+    <li>For each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#fully-active">fully active</a> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> in <var>docs</var>, <a data-link-type="dfn" href="#run-the-update-intersection-observations-steps" id="ref-for-run-the-update-intersection-observations-steps-1">Run the update intersection observations steps</a> for each <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-24">IntersectionObserver</a></code> whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root-11">root</a></code> is in the DOMtree of that <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a>.
    </ol>
   </main>
   <div data-fill-with="conformance">
@@ -2210,7 +2207,7 @@ in the HTML Processing Model.</a></p>
    <li><a href="#dom-intersectionobserverentry-intersectionobserverentry">IntersectionObserverEntry(intersectionObserverEntryInit)</a><span>, in §2.3</span>
    <li><a href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a><span>, in §2.4</span>
    <li><a href="#intersectionobserverregistration">IntersectionObserverRegistration</a><span>, in §3.1.2</span>
-   <li><a href="#browsing-context-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a><span>, in §3.1.1</span>
+   <li><a href="#document-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a><span>, in §3.1.1</span>
    <li><a href="#dom-intersectionobserverentry-intersectionratio">intersectionRatio</a><span>, in §2.3</span>
    <li>
     intersectionRect
@@ -2305,6 +2302,7 @@ in the HTML Processing Model.</a></p>
    <li>
     <a data-link-type="biblio">[geometry-1]</a> defines the following terms:
     <ul>
+     <li><a href="https://drafts.fxtf.org/geometry-1/#domrect">DOMRect</a>
      <li><a href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a>
      <li><a href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a>
     </ul>
@@ -2322,7 +2320,7 @@ in the HTML Processing Model.</a></p>
    <dt id="biblio-css-values">[CSS-VALUES]
    <dd>Tab Atkins Jr.; Elika Etemad. <a href="http://dev.w3.org/csswg/css-values/">CSS Values and Units Module Level 3</a>. 11 June 2015. CR. URL: <a href="http://dev.w3.org/csswg/css-values/">http://dev.w3.org/csswg/css-values/</a>
    <dt id="biblio-css2">[CSS2]
-   <dd>Bert Bos; et al. <a href="http://www.w3.org/TR/CSS2">Cascading Style Sheets Level 2 Revision 1 (CSS 2.1) Specification</a>. 7 June 2011. REC. URL: <a href="http://www.w3.org/TR/CSS2">http://www.w3.org/TR/CSS2</a>
+   <dd>Bert Bos; et al. <a href="https://www.w3.org/TR/CSS2">Cascading Style Sheets Level 2 Revision 1 (CSS 2.1) Specification</a>. 7 June 2011. REC. URL: <a href="https://www.w3.org/TR/CSS2">https://www.w3.org/TR/CSS2</a>
    <dt id="biblio-cssom-view-1">[CSSOM-VIEW-1]
    <dd>Simon Pieters. <a href="https://drafts.csswg.org/cssom-view/">CSSOM View Module</a>. 17 March 2016. WD. URL: <a href="https://drafts.csswg.org/cssom-view/">https://drafts.csswg.org/cssom-view/</a>
    <dt id="biblio-geometry-1">[GEOMETRY-1]
@@ -2335,42 +2333,42 @@ in the HTML Processing Model.</a></p>
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/">DOM Standard</a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
   </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
-<pre class="idl def">callback <a href="#callbackdef-intersectionobservercallback">IntersectionObserverCallback</a> = void (sequence&lt;<a data-link-type="idl-name" href="#intersectionobserverentry">IntersectionObserverEntry</a>> <a href="#dom-intersectionobservercallback-entries">entries</a>, <a data-link-type="idl-name" href="#intersectionobserver">IntersectionObserver</a> <a href="#dom-intersectionobservercallback-observer">observer</a>)
+<pre class="idl def"><span class="kt">callback</span> <a class="nv" href="#callbackdef-intersectionobservercallback">IntersectionObserverCallback</a> = <span class="kt">void</span> (<span class="kt">sequence</span>&lt;<a class="n" data-link-type="idl-name" href="#intersectionobserverentry">IntersectionObserverEntry</a>> <a class="nv" href="#dom-intersectionobservercallback-entries">entries</a>, <a class="n" data-link-type="idl-name" href="#intersectionobserver">IntersectionObserver</a> <a class="nv" href="#dom-intersectionobservercallback-observer">observer</a>)
 
-[<a class="idl-code" data-link-type="constructor" href="#dom-intersectionobserver-intersectionobserver">Constructor</a>(<a data-link-type="idl-name" href="#callbackdef-intersectionobservercallback">IntersectionObserverCallback</a> <a href="#dom-intersectionobserver-intersectionobserver-callback-options-callback">callback</a>, optional <a data-link-type="idl-name" href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a> <a href="#dom-intersectionobserver-intersectionobserver-callback-options-options">options</a>),
- Exposed=Window]
-interface <a href="#intersectionobserver">IntersectionObserver</a> {
-  readonly attribute <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>? <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Element?" href="#dom-intersectionobserver-root">root</a>;
-  readonly attribute DOMString <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString" href="#dom-intersectionobserver-rootmargin">rootMargin</a>;
-  readonly attribute sequence&lt;double> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="sequence<double>" href="#dom-intersectionobserver-thresholds">thresholds</a>;
-  void <a class="idl-code" data-link-type="method" href="#dom-intersectionobserver-observe">observe</a>(<a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a href="#dom-intersectionobserver-observe-target-target">target</a>);
-  void <a class="idl-code" data-link-type="method" href="#dom-intersectionobserver-unobserve">unobserve</a>(<a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a href="#dom-intersectionobserver-unobserve-target-target">target</a>);
-  void <a class="idl-code" data-link-type="method" href="#dom-intersectionobserver-disconnect">disconnect</a>();
-  sequence&lt;<a data-link-type="idl-name" href="#intersectionobserverentry">IntersectionObserverEntry</a>> <a class="idl-code" data-link-type="method" href="#dom-intersectionobserver-takerecords">takeRecords</a>();
+[<a class="nv idl-code" data-link-type="constructor" href="#dom-intersectionobserver-intersectionobserver">Constructor</a>(<a class="n" data-link-type="idl-name" href="#callbackdef-intersectionobservercallback">IntersectionObserverCallback</a> <a class="nv" href="#dom-intersectionobserver-intersectionobserver-callback-options-callback">callback</a>, <span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a> <a class="nv" href="#dom-intersectionobserver-intersectionobserver-callback-options-options">options</a>),
+ <a class="nv idl-code" data-link-type="extended-attribute">Exposed</a>=<span class="n">Window</span>]
+<span class="kt">interface</span> <a class="nv" href="#intersectionobserver">IntersectionObserver</a> {
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>? <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="Element?" href="#dom-intersectionobserver-root">root</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">DOMString</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString" href="#dom-intersectionobserver-rootmargin">rootMargin</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">sequence</span>&lt;<span class="kt">double</span>> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="sequence<double>" href="#dom-intersectionobserver-thresholds">thresholds</a>;
+  <span class="kt">void</span> <a class="nv idl-code" data-link-type="method" href="#dom-intersectionobserver-observe">observe</a>(<a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="nv" href="#dom-intersectionobserver-observe-target-target">target</a>);
+  <span class="kt">void</span> <a class="nv idl-code" data-link-type="method" href="#dom-intersectionobserver-unobserve">unobserve</a>(<a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="nv" href="#dom-intersectionobserver-unobserve-target-target">target</a>);
+  <span class="kt">void</span> <a class="nv idl-code" data-link-type="method" href="#dom-intersectionobserver-disconnect">disconnect</a>();
+  <span class="kt">sequence</span>&lt;<a class="n" data-link-type="idl-name" href="#intersectionobserverentry">IntersectionObserverEntry</a>> <a class="nv idl-code" data-link-type="method" href="#dom-intersectionobserver-takerecords">takeRecords</a>();
 };
 
-[<a href="#dom-intersectionobserverentry-intersectionobserverentry">Constructor</a>(<a data-link-type="idl-name" href="#dictdef-intersectionobserverentryinit">IntersectionObserverEntryInit</a> <a href="#dom-intersectionobserverentry-intersectionobserverentry-intersectionobserverentryinit-intersectionobserverentryinit">intersectionObserverEntryInit</a>)]
-interface <a href="#intersectionobserverentry">IntersectionObserverEntry</a> {
-  readonly attribute <a data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMHighResTimeStamp" href="#dom-intersectionobserverentry-time">time</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly" href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly" href="#dom-intersectionobserverentry-intersectionrect">intersectionRect</a>;
-  readonly attribute double <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="double" href="#dom-intersectionobserverentry-intersectionratio">intersectionRatio</a>;
-  readonly attribute <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Element" href="#dom-intersectionobserverentry-target">target</a>;
+[<a class="nv" href="#dom-intersectionobserverentry-intersectionobserverentry">Constructor</a>(<a class="n" data-link-type="idl-name" href="#dictdef-intersectionobserverentryinit">IntersectionObserverEntryInit</a> <a class="nv" href="#dom-intersectionobserverentry-intersectionobserverentry-intersectionobserverentryinit-intersectionobserverentryinit">intersectionObserverEntryInit</a>)]
+<span class="kt">interface</span> <a class="nv" href="#intersectionobserverentry">IntersectionObserverEntry</a> {
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMHighResTimeStamp" href="#dom-intersectionobserverentry-time">time</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly" href="#dom-intersectionobserverentry-rootbounds">rootBounds</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly" href="#dom-intersectionobserverentry-boundingclientrect">boundingClientRect</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly">DOMRectReadOnly</a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMRectReadOnly" href="#dom-intersectionobserverentry-intersectionrect">intersectionRect</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">double</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="double" href="#dom-intersectionobserverentry-intersectionratio">intersectionRatio</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="Element" href="#dom-intersectionobserverentry-target">target</a>;
 };
 
-dictionary <a href="#dictdef-intersectionobserverentryinit">IntersectionObserverEntryInit</a> {
-  required <a data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <a data-type="DOMHighResTimeStamp " href="#dom-intersectionobserverentryinit-time">time</a>;
-  required <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-rootbounds">rootBounds</a>;
-  required <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-boundingclientrect">boundingClientRect</a>;
-  required <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-intersectionrect">intersectionRect</a>;
-  required <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a data-type="Element " href="#dom-intersectionobserverentryinit-target">target</a>;
+<span class="kt">dictionary</span> <a class="nv" href="#dictdef-intersectionobserverentryinit">IntersectionObserverEntryInit</a> {
+  <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <a class="nv" data-type="DOMHighResTimeStamp " href="#dom-intersectionobserverentryinit-time">time</a>;
+  <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a class="nv" data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-rootbounds">rootBounds</a>;
+  <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a class="nv" data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-boundingclientrect">boundingClientRect</a>;
+  <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a class="nv" data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-intersectionrect">intersectionRect</a>;
+  <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="nv" data-type="Element " href="#dom-intersectionobserverentryinit-target">target</a>;
 };
 
-dictionary <a href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a> {
-  <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>?  <a class="idl-code" data-default="null" data-link-type="dict-member" data-type="Element?  " href="#dom-intersectionobserverinit-root">root</a> = null;
-  DOMString <a class="idl-code" data-default="&quot;0px&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-rootmargin">rootMargin</a> = "0px";
-  (double or sequence&lt;double>) <a class="idl-code" data-default="0" data-link-type="dict-member" data-type="(double or sequence<double>) " href="#dom-intersectionobserverinit-threshold">threshold</a> = 0;
+<span class="kt">dictionary</span> <a class="nv" href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a> {
+  <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a>?  <a class="nv idl-code" data-default="null" data-link-type="dict-member" data-type="Element?  " href="#dom-intersectionobserverinit-root">root</a> = <span class="kt">null</span>;
+  <span class="kt">DOMString</span> <a class="nv idl-code" data-default="&quot;0px&quot;" data-link-type="dict-member" data-type="DOMString " href="#dom-intersectionobserverinit-rootmargin">rootMargin</a> = "0px";
+  (<span class="kt">double</span> <span class="kt">or</span> <span class="kt">sequence</span>&lt;<span class="kt">double</span>>) <a class="nv idl-code" data-default="0" data-link-type="dict-member" data-type="(double or sequence<double>) " href="#dom-intersectionobserverinit-threshold">threshold</a> = 0;
 };
 
 </pre>
@@ -2421,10 +2419,14 @@ Element</a>
 IntersectionObserver</a>
     <li><a href="#ref-for-intersectionobserver-18">3.2.2. 
 Notify Intersection Observers</a> <a href="#ref-for-intersectionobserver-19">(2)</a>
-    <li><a href="#ref-for-intersectionobserver-20">3.2.5. 
+    <li><a href="#ref-for-intersectionobserver-20">3.2.3. 
+Queue an IntersectionObserverEntry</a>
+    <li><a href="#ref-for-intersectionobserver-21">3.2.5. 
 Run the Update Intersection Observations Steps</a>
-    <li><a href="#ref-for-intersectionobserver-21">3.3. 
-IntersectionObserver Lifetime</a> <a href="#ref-for-intersectionobserver-22">(2)</a> <a href="#ref-for-intersectionobserver-23">(3)</a>
+    <li><a href="#ref-for-intersectionobserver-22">3.3. 
+IntersectionObserver Lifetime</a> <a href="#ref-for-intersectionobserver-23">(2)</a>
+    <li><a href="#ref-for-intersectionobserver-24">3.4.1. 
+HTML Processing Model: Event Loop</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-intersectionobserver-intersectionobserver">
@@ -2441,6 +2443,8 @@ IntersectionObserver</a>
    <ul>
     <li><a href="#ref-for-dom-intersectionobserver-observe-1">2.2. 
 The IntersectionObserver interface</a> <a href="#ref-for-dom-intersectionobserver-observe-2">(2)</a> <a href="#ref-for-dom-intersectionobserver-observe-3">(3)</a>
+    <li><a href="#ref-for-dom-intersectionobserver-observe-4">3.2.5. 
+Run the Update Intersection Observations Steps</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-intersectionobserver-unobserve">
@@ -2479,6 +2483,8 @@ The IntersectionObserverEntry interface</a>
 Notify Intersection Observers</a>
     <li><a href="#ref-for-dom-intersectionobserver-root-10">3.2.5. 
 Run the Update Intersection Observations Steps</a>
+    <li><a href="#ref-for-dom-intersectionobserver-root-11">3.4.1. 
+HTML Processing Model: Event Loop</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-intersectionobserver-rootmargin">
@@ -2514,7 +2520,7 @@ Compute the Intersection of a Target Element and the Root</a> <a href="#ref-for-
     <li><a href="#ref-for-intersectionobserver-intersection-root-18">3.2.5. 
 Run the Update Intersection Observations Steps</a> <a href="#ref-for-intersectionobserver-intersection-root-19">(2)</a> <a href="#ref-for-intersectionobserver-intersection-root-20">(3)</a> <a href="#ref-for-intersectionobserver-intersection-root-21">(4)</a>
     <li><a href="#ref-for-intersectionobserver-intersection-root-22">3.3. 
-IntersectionObserver Lifetime</a> <a href="#ref-for-intersectionobserver-intersection-root-23">(2)</a>
+IntersectionObserver Lifetime</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="intersectionobserver-implicit-root">
@@ -2647,12 +2653,12 @@ The IntersectionObserverInit dictionary</a>
 The IntersectionObserverCallback</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="browsing-context-intersectionobservertaskqueued">
-   <b><a href="#browsing-context-intersectionobservertaskqueued">#browsing-context-intersectionobservertaskqueued</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="document-intersectionobservertaskqueued">
+   <b><a href="#document-intersectionobservertaskqueued">#document-intersectionobservertaskqueued</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-browsing-context-intersectionobservertaskqueued-1">3.2.1. 
-Queue an Intersection Observer Task</a> <a href="#ref-for-browsing-context-intersectionobservertaskqueued-2">(2)</a>
-    <li><a href="#ref-for-browsing-context-intersectionobservertaskqueued-3">3.2.2. 
+    <li><a href="#ref-for-document-intersectionobservertaskqueued-1">3.2.1. 
+Queue an Intersection Observer Task</a> <a href="#ref-for-document-intersectionobservertaskqueued-2">(2)</a>
+    <li><a href="#ref-for-document-intersectionobservertaskqueued-3">3.2.2. 
 Notify Intersection Observers</a>
    </ul>
   </aside>
