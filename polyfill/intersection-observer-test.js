@@ -137,6 +137,17 @@ describe('IntersectionObserver', function() {
     }
 
 
+    // TODO(philipwalton) Only test this in the polyfill until the following
+    // patch is released: https://codereview.chromium.org/2132863002
+    if (!supportsNativeIntersectionObserver()) {
+      it('throws when a threshold is not a number', function() {
+        expect(function() {
+          io = new IntersectionObserver(noop, {threshold: ['foo']});
+        }).to.throwException(/threshold/i);
+      });
+    }
+
+
     it('throws when a threshold value is not between 0 and 1', function() {
       expect(function() {
         io = new IntersectionObserver(noop, {threshold: [0, -1]});
