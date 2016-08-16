@@ -15,6 +15,7 @@
  */
 
 (function(window, document) {
+'use strict';
 
 
 // Exits early if all IntersectionObserver and IntersectionObserverEntry
