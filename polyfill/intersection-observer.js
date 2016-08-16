@@ -186,7 +186,7 @@ IntersectionObserver.prototype.takeRecords = function() {
  */
 IntersectionObserver.prototype._initThresholds = function(opt_threshold) {
   var threshold = opt_threshold || [0];
-  if (!isArray(threshold)) threshold = [threshold];
+  if (!Array.isArray(threshold)) threshold = [threshold];
 
   return threshold.sort().filter(function(t, i, a) {
     if (typeof t != 'number' || isNaN(t) || t < 0 || t > 1) {
@@ -656,16 +656,6 @@ function getEmptyRect() {
     width: 0,
     height: 0
   };
-}
-
-
-/**
- * Determins if a value is a JavaScript array.
- * @param {*} value Any JavaScript value.
- * @return {boolean} True if the passed value is an array.
- */
-function isArray(value) {
-  return Object.prototype.toString.call(value) == '[object Array]';
 }
 
 
