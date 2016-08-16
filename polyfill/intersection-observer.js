@@ -27,6 +27,11 @@ if ('IntersectionObserver' in window &&
 }
 
 
+// Use :root element of the document for .contains() calls because older IEs
+// support Node.prototype.contains only on Element nodes.
+var docElement = document.documentElement;
+
+
 /**
  * An IntersectionObserver registry. This registry exists to hold a strong
  * reference to IntersectionObserver instances currently observering a target
@@ -474,7 +479,7 @@ IntersectionObserver.prototype._hasCrossedThreshold =
  * @private
  */
 IntersectionObserver.prototype._rootIsInDom = function() {
-  return !this.root || document.contains(this.root);
+  return !this.root || docElement.contains(this.root);
 };
 
 
@@ -485,7 +490,7 @@ IntersectionObserver.prototype._rootIsInDom = function() {
  * @private
  */
 IntersectionObserver.prototype._rootContainsTarget = function(target) {
-  return (this.root || document).contains(target);
+  return (this.root || docElement).contains(target);
 };
 
 
