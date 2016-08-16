@@ -506,9 +506,8 @@ IntersectionObserver.prototype._registerInstance = function() {
  * @private
  */
 IntersectionObserver.prototype._unregisterInstance = function() {
-  registry = registry.filter(function(instance) {
-    return instance !== this;
-  }, this);
+  var index = registry.indexOf(this);
+  if (index != -1) registry.splice(index, 1);
 };
 
 
