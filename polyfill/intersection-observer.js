@@ -324,7 +324,7 @@ IntersectionObserver.prototype._checkForIntersections = function() {
         this._queuedEntries.push(newEntry);
       }
     }
-  }.bind(this));
+  }, this);
 
   if (this._queuedEntries.length) {
     this._callback(this.takeRecords(), this);
@@ -508,7 +508,7 @@ IntersectionObserver.prototype._registerInstance = function() {
 IntersectionObserver.prototype._unregisterInstance = function() {
   registry = registry.filter(function(instance) {
     return instance !== this;
-  }.bind(this));
+  }, this);
 };
 
 
