@@ -473,7 +473,7 @@ IntersectionObserver.prototype._hasCrossedThreshold =
  * @private
  */
 IntersectionObserver.prototype._rootIsInDom = function() {
-  return !this.root || contains(document, this.root);
+  return !this.root || document.contains(this.root);
 };
 
 
@@ -484,7 +484,7 @@ IntersectionObserver.prototype._rootIsInDom = function() {
  * @private
  */
 IntersectionObserver.prototype._rootContainsTarget = function(target) {
-  return contains(this.root || document, target);
+  return (this.root || document).contains(target);
 };
 
 
@@ -656,21 +656,6 @@ function getEmptyRect() {
     width: 0,
     height: 0
   };
-}
-
-
-/**
- * Determines if a root elements contains a target element as a descendant.
- * @param {Element} root The root element.
- * @param {Element} target The target to check.
- * @return {boolean} True if the target is a descendant of root.
- */
-function contains(root, target) {
-  var parent = target.parentNode;
-  while (parent) {
-    if (root == parent) return true;
-    parent = parent.parentNode;
-  }
 }
 
 
