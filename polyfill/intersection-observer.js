@@ -15,6 +15,7 @@
  */
 
 (function(window, document) {
+'use strict';
 
 
 // Exits early if all IntersectionObserver and IntersectionObserverEntry
@@ -24,6 +25,11 @@ if ('IntersectionObserver' in window &&
     'intersectionRatio' in window.IntersectionObserverEntry.prototype) {
   return;
 }
+
+
+// Use :root element of the document for .contains() calls because older IEs
+// support Node.prototype.contains only on Element nodes.
+var docElement = document.documentElement;
 
 
 /**
@@ -186,7 +192,7 @@ IntersectionObserver.prototype.takeRecords = function() {
  */
 IntersectionObserver.prototype._initThresholds = function(opt_threshold) {
   var threshold = opt_threshold || [0];
-  if (!isArray(threshold)) threshold = [threshold];
+  if (!Array.isArray(threshold)) threshold = [threshold];
 
   return threshold.sort().filter(function(t, i, a) {
     if (typeof t != 'number' || isNaN(t) || t < 0 || t > 1) {
@@ -323,7 +329,7 @@ IntersectionObserver.prototype._checkForIntersections = function() {
         this._queuedEntries.push(newEntry);
       }
     }
-  }.bind(this));
+  }, this);
 
   if (this._queuedEntries.length) {
     this._callback(this.takeRecords(), this);
@@ -473,7 +479,7 @@ IntersectionObserver.prototype._hasCrossedThreshold =
  * @private
  */
 IntersectionObserver.prototype._rootIsInDom = function() {
-  return !this.root || contains(document, this.root);
+  return !this.root || docElement.contains(this.root);
 };
 
 
@@ -484,7 +490,7 @@ IntersectionObserver.prototype._rootIsInDom = function() {
  * @private
  */
 IntersectionObserver.prototype._rootContainsTarget = function(target) {
-  return contains(this.root || document, target);
+  return (this.root || docElement).contains(target);
 };
 
 
@@ -505,9 +511,8 @@ IntersectionObserver.prototype._registerInstance = function() {
  * @private
  */
 IntersectionObserver.prototype._unregisterInstance = function() {
-  registry = registry.filter(function(instance) {
-    return instance !== this;
-  }.bind(this));
+  var index = registry.indexOf(this);
+  if (index != -1) registry.splice(index, 1);
 };
 
 
@@ -656,31 +661,6 @@ function getEmptyRect() {
     width: 0,
     height: 0
   };
-}
-
-
-/**
- * Determines if a root elements contains a target element as a descendant.
- * @param {Element} root The root element.
- * @param {Element} target The target to check.
- * @return {boolean} True if the target is a descendant of root.
- */
-function contains(root, target) {
-  var parent = target.parentNode;
-  while (parent) {
-    if (root == parent) return true;
-    parent = parent.parentNode;
-  }
-}
-
-
-/**
- * Determins if a value is a JavaScript array.
- * @param {*} value Any JavaScript value.
- * @return {boolean} True if the passed value is an array.
- */
-function isArray(value) {
-  return Object.prototype.toString.call(value) == '[object Array]';
 }
 
 
