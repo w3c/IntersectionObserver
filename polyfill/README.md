@@ -23,7 +23,7 @@ The examples below show various ways to add the `IntersectionObserver` polyfill 
 
 ```html
 <!-- Load the polyfill first. -->
-<script src="path/to/intersectin-observer.js"></script>
+<script src="path/to/intersection-observer.js"></script>
 
 <!-- Load all other JavaScript. -->
 <script src="app.js"></script>
