@@ -565,6 +565,47 @@ describe('IntersectionObserver', function() {
     });
 
 
+    it('handles elements with display set to none', function(done) {
+
+      var spy = sinon.spy();
+      io = new IntersectionObserver(spy);
+
+      runSequence([
+        function(done) {
+          rootEl.style.position = 'absolute';
+          rootEl.style.top = '0px';
+          rootEl.style.left = '0px';
+          rootEl.style.width = '0px';
+          rootEl.style.height = '0px';
+          rootEl.style.display = 'none';
+          io.observe(rootEl);
+          setTimeout(function() {
+            expect(spy.callCount).to.be(0);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          rootEl.style.display = 'block';
+          setTimeout(function() {
+            expect(spy.callCount).to.be(1);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          rootEl.style.display = 'none';
+          setTimeout(function() {
+            expect(spy.callCount).to.be(2);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            done();
+          }, ASYNC_TIMEOUT);
+        }
+      ], done);
+    });
+
+
     it('handles root/target elements not yet in the DOM', function(done) {
 
       rootEl.parentNode.removeChild(rootEl);
