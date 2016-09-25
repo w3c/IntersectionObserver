@@ -575,7 +575,7 @@ function addEvent(node, event, fn, opt_useCapture) {
  */
 function removeEvent(node, event, fn, opt_useCapture) {
   if (typeof node.removeEventListener == 'function') {
-    node.addEventListener(event, fn, opt_useCapture || false);
+    node.removeEventListener(event, fn, opt_useCapture || false);
   }
   else if (typeof node.detatchEvent == 'function') {
     node.detatchEvent('on' + event, fn);
