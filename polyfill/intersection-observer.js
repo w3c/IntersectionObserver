@@ -560,7 +560,7 @@ function addEvent(node, event, fn, opt_useCapture) {
     node.addEventListener(event, fn, opt_useCapture || false);
   }
   else if (typeof node.attachEvent == 'function') {
-    node.attachEvent(event, fn);
+    node.attachEvent('on' + event, fn);
   }
 }
 
@@ -578,7 +578,7 @@ function removeEvent(node, event, fn, opt_useCapture) {
     node.addEventListener(event, fn, opt_useCapture || false);
   }
   else if (typeof node.detatchEvent == 'function') {
-    node.detatchEvent(event, fn);
+    node.detatchEvent('on' + event, fn);
   }
 }
 
