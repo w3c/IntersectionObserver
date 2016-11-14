@@ -6,7 +6,7 @@ Shortname: intersection-observer
 Level: 1
 Editor: Michael Blain, Google, mpb@google.com
 Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements ("targets") relative to a containing element or to the top-level viewport ("root"). The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
-Group: Web Performance Working Group
+Group: webperf
 Repository: WICG/IntersectionObserver
 Ignored Vars: rootMargin, docs
 </pre>
