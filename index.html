@@ -650,6 +650,7 @@ append a duplicate of the second element to <var>tokens</var>.</p>
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-rootbounds">rootBounds<a class="self-link" href="#dom-intersectionobserverentryinit-rootbounds"></a></dfn>;
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-boundingclientrect">boundingClientRect<a class="self-link" href="#dom-intersectionobserverentryinit-boundingclientrect"></a></dfn>;
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-intersectionrect">intersectionRect<a class="self-link" href="#dom-intersectionobserverentryinit-intersectionrect"></a></dfn>;
+  <span class="kt">required</span> <span class="kt">double</span> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="double " id="dom-intersectionobserverentryinit-intersectionratio">intersectionRatio<a class="self-link" href="#dom-intersectionobserverentryinit-intersectionratio"></a></dfn>;
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="Element " id="dom-intersectionobserverentryinit-target">target<a class="self-link" href="#dom-intersectionobserverentryinit-target"></a></dfn>;
 };
 </pre>
@@ -934,7 +935,12 @@ in the in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipa
    <li><a href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a><span>, in §2.4</span>
    <li><a href="#intersectionobserverregistration">IntersectionObserverRegistration</a><span>, in §3.1.2</span>
    <li><a href="#document-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a><span>, in §3.1.1</span>
-   <li><a href="#dom-intersectionobserverentry-intersectionratio">intersectionRatio</a><span>, in §2.3</span>
+   <li>
+    intersectionRatio
+    <ul>
+     <li><a href="#dom-intersectionobserverentryinit-intersectionratio">dict-member for IntersectionObserverEntryInit</a><span>, in §2.3</span>
+     <li><a href="#dom-intersectionobserverentry-intersectionratio">attribute for IntersectionObserverEntry</a><span>, in §2.3</span>
+    </ul>
    <li>
     intersectionRect
     <ul>
@@ -1087,6 +1093,7 @@ in the in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipa
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a class="nv" data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-rootbounds">rootBounds</a>;
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a class="nv" data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-boundingclientrect">boundingClientRect</a>;
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a class="nv" data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-intersectionrect">intersectionRect</a>;
+  <span class="kt">required</span> <span class="kt">double</span> <a class="nv" data-type="double " href="#dom-intersectionobserverentryinit-intersectionratio">intersectionRatio</a>;
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="nv" data-type="Element " href="#dom-intersectionobserverentryinit-target">target</a>;
 };
 

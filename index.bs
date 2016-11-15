@@ -375,6 +375,7 @@ dictionary IntersectionObserverEntryInit {
 	required DOMRectInit rootBounds;
 	required DOMRectInit boundingClientRect;
 	required DOMRectInit intersectionRect;
+	required double intersectionRatio;
 	required Element target;
 };
 </pre>
