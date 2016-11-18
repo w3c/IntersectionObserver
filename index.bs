@@ -307,7 +307,7 @@ is the rectangle we'll use to check against the targets.
 	<dt>If the <a>intersection root</a> is the <a>implicit root</a>,
 	<dd>it's the viewport's size.
 
-	<dt>If the <a>intersection root</a> is a scrollable element,
+	<dt>If the <a>intersection root</a> has an overflow clip,
 	<dd>it's the element's <a>content area</a>.
 
 	<dt>Otherwise,
