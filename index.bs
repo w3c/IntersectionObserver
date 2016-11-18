@@ -295,7 +295,7 @@ interface IntersectionObserver {
 
 The <dfn for="IntersectionObserver">intersection root</dfn>
 for an {{IntersectionObserver}} is the value of its {{IntersectionObserver/root}} attribute,
-or else the <a>top-level browsing context</a>'s <a>viewport</a>
+or else the <a>top-level browsing context</a>'s <a>document</a> node
 (referred to as the <dfn for="IntersectionObserver">implicit root</dfn>) if
 the {{IntersectionObserver/root}} attribute is <code>null</code>.
 

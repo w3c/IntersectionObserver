@@ -5,7 +5,7 @@
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet" type="text/css">
-  <meta content="Bikeshed version 0aa2eb3dddf45f17630f6cfecbc54207812ef9db" name="generator">
+  <meta content="Bikeshed version 645534c1532bca4fdb4f3859efc66268a218d7c8" name="generator">
 <style>/* style-md-lists */
 
             /* This is a weird hack for me not yet following the commonmark spec
@@ -253,7 +253,7 @@ pre.idl.highlight { color: #708090; }
    <header>
     <p data-fill-with="logo"><a href="https://www.w3.org/"><img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"></a> </p>
     <h1 class="p-name no-ref" id="title">Intersection Observer 1</h1>
-    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-11-14">14 November 2016</time></span></h2>
+    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-11-18">18 November 2016</time></span></h2>
    </header>
    <div data-fill-with="spec-metadata">
     <dl>
@@ -578,7 +578,8 @@ If no <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-in
     </dl>
    </div>
    <p>The <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-intersection-root">intersection root</dfn> for an <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-13">IntersectionObserver</a></code> is the value of its <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root-6">root</a></code> attribute,
-or else the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>’s <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a> (referred to as the <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-implicit-root">implicit root</dfn>) if
+or else the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">document</a> node
+(referred to as the <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-implicit-root">implicit root</dfn>) if
 the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root-7">root</a></code> attribute is <code>null</code>.</p>
    <p>The <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-root-intersection-rectangle">root intersection rectangle</dfn> for an <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-14">IntersectionObserver</a></code> is the rectangle we’ll use to check against the targets.</p>
    <dl class="switch">
