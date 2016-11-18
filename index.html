@@ -5,7 +5,7 @@
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet" type="text/css">
-  <meta content="Bikeshed version 0aa2eb3dddf45f17630f6cfecbc54207812ef9db" name="generator">
+  <meta content="Bikeshed version 645534c1532bca4fdb4f3859efc66268a218d7c8" name="generator">
 <style>/* style-md-lists */
 
             /* This is a weird hack for me not yet following the commonmark spec
@@ -253,7 +253,7 @@ pre.idl.highlight { color: #708090; }
    <header>
     <p data-fill-with="logo"><a href="https://www.w3.org/"><img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"></a> </p>
     <h1 class="p-name no-ref" id="title">Intersection Observer 1</h1>
-    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-11-14">14 November 2016</time></span></h2>
+    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-11-18">18 November 2016</time></span></h2>
    </header>
    <div data-fill-with="spec-metadata">
     <dl>
@@ -811,7 +811,7 @@ run these steps:</p>
     <li data-md="">
      <p>Let <var>intersectionRect</var> be the result of running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target-11">target</a>.</p>
     <li data-md="">
-     <p>Let <var>container</var> be the parent node of the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target-12">target</a>.</p>
+     <p>Let <var>container</var> be the <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#containing-block">containing block</a> of the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target-12">target</a>.</p>
     <li data-md="">
      <p>While <var>container</var> is not the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-16">intersection root</a>:</p>
      <ol>
@@ -822,8 +822,9 @@ run these steps:</p>
 update <var>intersectionRect</var> by applying <var>container</var>’s clip.</p>
       <li data-md="">
        <p>If <var>container</var> is the root element of a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-contexts">nested browsing context</a>,
-update <var>container</var> to be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context-container">browsing context container</a> of <var>container</var>.
-Otherwise, update <var>container</var> to be the parent node of <var>container</var>.</p>
+update <var>container</var> to be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context-container">browsing context container</a> of <var>container</var>,
+and update <var>intersectionRect</var> by clipping to the <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a> of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-contexts">nested browsing context</a>.
+Otherwise, update <var>container</var> to be the <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#containing-block">containing block</a> of <var>container</var>.</p>
      </ol>
     <li data-md="">
      <p>Map <var>intersectionRect</var> to the coordinate space of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-17">intersection root</a>.</p>
