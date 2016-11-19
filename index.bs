@@ -17,7 +17,6 @@ urlPrefix: https://dom.spec.whatwg.org/
 urlPrefix: http://www.w3.org/TR/hr-time/
 	type: typedef; text: DOMHighResTimeStamp
 	type: dfn; text: time origin
-url: http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks; type: dfn; text: list of idle request callbacks
 urlPrefix: https://html.spec.whatwg.org/multipage/
 	urlPrefix: dom.html
 		url: #the-document-object; type:dfn; text: Document
@@ -31,6 +30,7 @@ urlPrefix: https://html.spec.whatwg.org/multipage/
 	urlPrefix: webappapis.html;
 		type: dfn; text: report the exception
 		type: dfn; text: event loop
+		type: dfn; text: queue a task
 		type: dfn; text: run the fullscreen rendering steps
 		type: dfn; text: run the animation frame callbacks
 		url: #processing-model-8; type: dfn; text: HTML Processing Model
@@ -514,13 +514,7 @@ run these steps:
 1. If |document|'s <a>IntersectionObserverTaskQueued</a> flag is set to true,
 	return.
 2. Set |document|'s <a>IntersectionObserverTaskQueued</a> flag to true.
-3. Enqueue a task to <a>notify intersection observers</a>
-	in the <a>list of idle request callbacks</a>
-	with a |timeout| of 100.
-
-	Issue: Should we use something other than 100ms as |timeout|?
-
-	Issue: Should we consider making this just post a task instead?
+3. <a>Queue a task</a> to the <a>document</a>'s <a>event loop</a> to <a>notify intersection observers</a>.
 
 <h4 id='notify-intersection-observers-algo'>
 Notify Intersection Observers</h4>
