@@ -228,7 +228,7 @@ interface IntersectionObserver {
 		2. Let |intersectionObserverRegistration| be
 			an {{IntersectionObserverRegistration}} record
 			with an {{IntersectionObserverRegistration/observer}} property set to |this|
-			and a {{IntersectionObserverRegistration/previousThreshold}} property set to <code>0</code>.
+			and a {{IntersectionObserverRegistration/previousThresholdIndex}} property set to <code>0</code>.
 		3. Append |intersectionObserverRegistration|
 			to |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
 		4. Add |target| to |this|'s internal {{[[ObservationTargets]]}} slot.
@@ -488,7 +488,7 @@ which is initialized to an empty list.
 This list holds <dfn interface>IntersectionObserverRegistration</dfn> records,
 which have an <dfn attribute for=IntersectionObserverRegistration>observer</dfn> property
 holding an {{IntersectionObserver}}
-and a <dfn attribute for=IntersectionObserverRegistration>previousThreshold</dfn> property
+and a <dfn attribute for=IntersectionObserverRegistration>previousThresholdIndex</dfn> property
 holding a number between 0 and the length of the observer's {{IntersectionObserver/thresholds}} property (inclusive).
 
 <h4 id='intersection-observer-private-slots'>
@@ -597,25 +597,23 @@ To <dfn>run the update intersection observations steps</dfn> for a
 			algorithm on |target|.
 		5. Let |targetArea| be |targetRect|'s area.
 		6. Let |intersectionArea| be |intersectionRect|'s area.
-		7. Let |intersectionRatio| be |intersectionArea| divided by |targetArea| if |targetArea| is non-zero,
-			and <code>0</code> otherwise.
-		8. If |intersectionRatio| is equal to <code>0</code>,
-			let |threshold| be <code>0</code>.
-			If |intersectionRatio| is equal to <code>1</code>,
-			let |threshold| be the length of |observer|.{{thresholds}}.
-			Otherwise, let |threshold| be the index of the first entry in |observer|.{{thresholds}}
-			whose value is greater than |intersectionRatio|.
-		9. Let |intersectionObserverRegistration| be the {{IntersectionObserverRegistration}} record 
+		7. Let |doesIntersect| be true if |targetRect| and |rootBounds| intersect or are edge-adjacent,
+			even if the intersection has zero area (because |rootBounds| or |targetRect| have
+			zero area); otherwise, let |doesIntersect| be false.
+		8. If |targetArea| is non-zero, let |intersectionRatio| be |intersectionArea| divided by |targetArea|.<br>
+			Otherwise, let |intersectionRatio| be <code>1</code> if |doesIntersect| is true, or <code>0</code> if |doesIntersect| is false.
+		9. Let |thresholdIndex| be the index of the first entry in |observer|.{{thresholds}} whose value is greater than |intersectionRatio|, or the length of |observer|.{{thresholds}} if |intersectionRatio| is greater than the last entry in |observer|.{{thresholds}}.
+		10. Let |intersectionObserverRegistration| be the {{IntersectionObserverRegistration}} record 
 			in |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot
 			whose {{IntersectionObserverRegistration/observer}} property is equal to |observer|.
-		10. Let |previousThreshold| be set to
-			|intersectionObserverRegistration|'s {{IntersectionObserverRegistration/previousThreshold}} property.
-		11. If |threshold| does not equal |previousThreshold|,
+		11. Let |previousThresholdIndex| be the |intersectionObserverRegistration|'s
+		    {{IntersectionObserverRegistration/previousThresholdIndex}} property.
+		12. If |thresholdIndex| does not equal |previousThresholdIndex|,
 			<a>queue an IntersectionObserverEntry</a>,
 			passing in |observer|, |time|, |rootBounds|,
 			|boundingClientRect|, |intersectionRect| and |target|.
-		12. Assign |threshold| to
-			|intersectionObserverRegistration|'s {{IntersectionObserverRegistration/previousThreshold}} property.
+		13. Assign |threshold| to |intersectionObserverRegistration|'s
+		    {{IntersectionObserverRegistration/previousThresholdIndex}} property.
 
 <h3 id='lifetime'>
 IntersectionObserver Lifetime</h2>
