@@ -253,7 +253,7 @@ pre.idl.highlight { color: #708090; }
    <header>
     <p data-fill-with="logo"><a href="https://www.w3.org/"><img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"></a> </p>
     <h1 class="p-name no-ref" id="title">Intersection Observer 1</h1>
-    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-11-18">18 November 2016</time></span></h2>
+    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-11-29">29 November 2016</time></span></h2>
    </header>
    <div data-fill-with="spec-metadata">
     <dl>
@@ -261,7 +261,6 @@ pre.idl.highlight { color: #708090; }
      <dd><a class="u-url" href="https://github.com/WICG/IntersectionObserver/">https://github.com/WICG/IntersectionObserver/</a>
      <dt>Issue Tracking:
      <dd><a href="https://github.com/WICG/IntersectionObserver/issues/">GitHub</a>
-     <dd><a href="#issues-index">Inline In Spec</a>
      <dt class="editor">Editor:
      <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:mpb@google.com">Michael Blain</a> (<span class="p-org org">Google</span>)
     </dl>
@@ -346,7 +345,6 @@ pre.idl.highlight { color: #708090; }
       <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
      </ol>
     <li><a href="#idl-index"><span class="secno"></span> <span class="content">IDL Index</span></a>
-    <li><a href="#issues-index"><span class="secno"></span> <span class="content">Issues Index</span></a>
    </ol>
   </nav>
   <main>
@@ -578,13 +576,14 @@ If no <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-in
     </dl>
    </div>
    <p>The <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-intersection-root">intersection root</dfn> for an <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-13">IntersectionObserver</a></code> is the value of its <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root-6">root</a></code> attribute,
-or else the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>’s <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a> (referred to as the <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-implicit-root">implicit root</dfn>) if
+or else the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">document</a> node
+(referred to as the <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-implicit-root">implicit root</dfn>) if
 the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root-7">root</a></code> attribute is <code>null</code>.</p>
    <p>The <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport="" id="intersectionobserver-root-intersection-rectangle">root intersection rectangle</dfn> for an <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-14">IntersectionObserver</a></code> is the rectangle we’ll use to check against the targets.</p>
    <dl class="switch">
     <dt>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-6">intersection root</a> is the <a data-link-type="dfn" href="#intersectionobserver-implicit-root" id="ref-for-intersectionobserver-implicit-root-3">implicit root</a>, 
     <dd>it’s the viewport’s size. 
-    <dt>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-7">intersection root</a> is a scrollable element, 
+    <dt>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-7">intersection root</a> has an overflow clip, 
     <dd>it’s the element’s <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#content-area">content area</a>. 
     <dt>Otherwise, 
     <dd>it’s the result of running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-8">intersection root</a>. 
@@ -650,6 +649,7 @@ append a duplicate of the second element to <var>tokens</var>.</p>
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-rootbounds">rootBounds<a class="self-link" href="#dom-intersectionobserverentryinit-rootbounds"></a></dfn>;
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-boundingclientrect">boundingClientRect<a class="self-link" href="#dom-intersectionobserverentryinit-boundingclientrect"></a></dfn>;
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="DOMRectInit " id="dom-intersectionobserverentryinit-intersectionrect">intersectionRect<a class="self-link" href="#dom-intersectionobserverentryinit-intersectionrect"></a></dfn>;
+  <span class="kt">required</span> <span class="kt">double</span> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="double " id="dom-intersectionobserverentryinit-intersectionratio">intersectionRatio<a class="self-link" href="#dom-intersectionobserverentryinit-intersectionratio"></a></dfn>;
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <dfn class="nv idl-code" data-dfn-for="IntersectionObserverEntryInit" data-dfn-type="dict-member" data-export="" data-type="Element " id="dom-intersectionobserverentryinit-target">target<a class="self-link" href="#dom-intersectionobserverentryinit-target"></a></dfn>;
 };
 </pre>
@@ -763,9 +763,7 @@ return.</p>
     <li data-md="">
      <p>Set <var>document</var>’s <a data-link-type="dfn" href="#document-intersectionobservertaskqueued" id="ref-for-document-intersectionobservertaskqueued-2">IntersectionObserverTaskQueued</a> flag to true.</p>
     <li data-md="">
-     <p>Enqueue a task to <a data-link-type="dfn" href="#notify-intersection-observers" id="ref-for-notify-intersection-observers-1">notify intersection observers</a> in the <a data-link-type="dfn" href="http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks">list of idle request callbacks</a> with a <var>timeout</var> of 100.</p>
-     <p class="issue" id="issue-bf9a6e46"><a class="self-link" href="#issue-bf9a6e46"></a> Should we use something other than 100ms as <var>timeout</var>?</p>
-     <p class="issue" id="issue-f67f2718"><a class="self-link" href="#issue-f67f2718"></a> Should we consider making this just post a task instead?</p>
+     <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task">Queue a task</a> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">document</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop">event loop</a> to <a data-link-type="dfn" href="#notify-intersection-observers" id="ref-for-notify-intersection-observers-1">notify intersection observers</a>.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.2" id="notify-intersection-observers-algo"><span class="secno">3.2.2. </span><span class="content"> Notify Intersection Observers</span><a class="self-link" href="#notify-intersection-observers-algo"></a></h4>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="notify-intersection-observers">notify intersection observers</dfn> for a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> <var>document</var>,
@@ -811,7 +809,7 @@ run these steps:</p>
     <li data-md="">
      <p>Let <var>intersectionRect</var> be the result of running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">getBoundingClientRect()</a></code> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target-11">target</a>.</p>
     <li data-md="">
-     <p>Let <var>container</var> be the parent node of the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target-12">target</a>.</p>
+     <p>Let <var>container</var> be the <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#containing-block">containing block</a> of the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target-12">target</a>.</p>
     <li data-md="">
      <p>While <var>container</var> is not the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-16">intersection root</a>:</p>
      <ol>
@@ -822,8 +820,9 @@ run these steps:</p>
 update <var>intersectionRect</var> by applying <var>container</var>’s clip.</p>
       <li data-md="">
        <p>If <var>container</var> is the root element of a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-contexts">nested browsing context</a>,
-update <var>container</var> to be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context-container">browsing context container</a> of <var>container</var>.
-Otherwise, update <var>container</var> to be the parent node of <var>container</var>.</p>
+update <var>container</var> to be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context-container">browsing context container</a> of <var>container</var>,
+and update <var>intersectionRect</var> by clipping to the <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#viewport">viewport</a> of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-contexts">nested browsing context</a>.
+Otherwise, update <var>container</var> to be the <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#containing-block">containing block</a> of <var>container</var>.</p>
      </ol>
     <li data-md="">
      <p>Map <var>intersectionRect</var> to the coordinate space of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root-17">intersection root</a>.</p>
@@ -934,7 +933,12 @@ in the in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipa
    <li><a href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a><span>, in §2.4</span>
    <li><a href="#intersectionobserverregistration">IntersectionObserverRegistration</a><span>, in §3.1.2</span>
    <li><a href="#document-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a><span>, in §3.1.1</span>
-   <li><a href="#dom-intersectionobserverentry-intersectionratio">intersectionRatio</a><span>, in §2.3</span>
+   <li>
+    intersectionRatio
+    <ul>
+     <li><a href="#dom-intersectionobserverentryinit-intersectionratio">dict-member for IntersectionObserverEntryInit</a><span>, in §2.3</span>
+     <li><a href="#dom-intersectionobserverentry-intersectionratio">attribute for IntersectionObserverEntry</a><span>, in §2.3</span>
+    </ul>
    <li>
     intersectionRect
     <ul>
@@ -1087,6 +1091,7 @@ in the in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipa
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a class="nv" data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-rootbounds">rootBounds</a>;
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a class="nv" data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-boundingclientrect">boundingClientRect</a>;
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#dictdef-domrectinit">DOMRectInit</a> <a class="nv" data-type="DOMRectInit " href="#dom-intersectionobserverentryinit-intersectionrect">intersectionRect</a>;
+  <span class="kt">required</span> <span class="kt">double</span> <a class="nv" data-type="double " href="#dom-intersectionobserverentryinit-intersectionratio">intersectionRatio</a>;
   <span class="kt">required</span> <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element">Element</a> <a class="nv" data-type="Element " href="#dom-intersectionobserverentryinit-target">target</a>;
 };
 
@@ -1097,11 +1102,6 @@ in the in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipa
 };
 
 </pre>
-  <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
-  <div style="counter-reset:issue">
-   <div class="issue"> Should we use something other than 100ms as <var>timeout</var>?<a href="#issue-bf9a6e46"> ↵ </a></div>
-   <div class="issue"> Should we consider making this just post a task instead?<a href="#issue-f67f2718"> ↵ </a></div>
-  </div>
   <aside class="dfn-panel" data-for="intersection-observer">
    <b><a href="#intersection-observer">#intersection-observer</a></b><b>Referenced in:</b>
    <ul>
