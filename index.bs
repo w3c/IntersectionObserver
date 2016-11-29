@@ -295,7 +295,7 @@ interface IntersectionObserver {
 
 The <dfn for="IntersectionObserver">intersection root</dfn>
 for an {{IntersectionObserver}} is the value of its {{IntersectionObserver/root}} attribute,
-or else the <a>top-level browsing context</a>'s <a>viewport</a>
+or else the <a>top-level browsing context</a>'s <a>document</a> node
 (referred to as the <dfn for="IntersectionObserver">implicit root</dfn>) if
 the {{IntersectionObserver/root}} attribute is <code>null</code>.
 
@@ -307,7 +307,7 @@ is the rectangle we'll use to check against the targets.
 	<dt>If the <a>intersection root</a> is the <a>implicit root</a>,
 	<dd>it's the viewport's size.
 
-	<dt>If the <a>intersection root</a> is a scrollable element,
+	<dt>If the <a>intersection root</a> has an overflow clip,
 	<dd>it's the element's <a>content area</a>.
 
 	<dt>Otherwise,
@@ -375,6 +375,7 @@ dictionary IntersectionObserverEntryInit {
 	required DOMRectInit rootBounds;
 	required DOMRectInit boundingClientRect;
 	required DOMRectInit intersectionRect;
+	required double intersectionRatio;
 	required Element target;
 };
 </pre>
@@ -463,7 +464,7 @@ dictionary IntersectionObserverInit {
 </div>
 
 <h2 dfn id='intersection-observer-processing-model'>
-Processing Model</h3>
+Processing Model</h2>
 
 This section outlines the steps the user agent must take when implementing
 the <a>Intersection Observer</a> API.
@@ -558,14 +559,16 @@ To <dfn>compute the intersection</dfn> between a <a>target</a> and the observer'
 run these steps:
 
 1. Let |intersectionRect| be the result of running the {{Element/getBoundingClientRect()}} algorithm on the <a>target</a>.
-2. Let |container| be the parent node of the <a>target</a>.
+2. Let |container| be the <a>containing block</a> of the <a>target</a>.
 3. While |container| is not the <a>intersection root</a>:
 	1. Map |intersectionRect| to the coordinate space of |container|.
 	2. If |container| has overflow clipping or a css <a>clip-path</a> property,
 		update |intersectionRect| by applying |container|'s clip.
 	3. If |container| is the root element of a <a>nested browsing context</a>,
-		update |container| to be the <a>browsing context container</a> of |container|.
-		Otherwise, update |container| to be the parent node of |container|.
+		update |container| to be the <a>browsing context container</a> of |container|,
+		and update |intersectionRect| by clipping to the <a>viewport</a> of the
+		<a>nested browsing context</a>.
+		Otherwise, update |container| to be the <a>containing block</a> of |container|.
 4. Map |intersectionRect| to the coordinate space of the <a>intersection root</a>.
 5. Update |intersectionRect| by intersecting it with the <a>root intersection rectangle</a>.
 6. Map |intersectionRect| to the coordinate space of the viewport of the <a>Document</a> containing the <a>target</a>.

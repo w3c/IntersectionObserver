@@ -65,7 +65,7 @@ interface IntersectionObserver {
 };
 ```
 
-The expected use of this API is that you create one IntersectionObserver, optionally giving it a root element, and then observe one or more of the root element descendants. The callback includes change records for all elements that have crossed the threshold of the root element since the last callback. Conceptually, this gives you a rectangle  (based at the root element) that calls a callback whenever a given point in each element crosses the threshold.
+The expected use of this API is that you create one IntersectionObserver, giving it a list of thresholds, and optionally giving it a root element; then observe one or more of the root element's descendants.  The callback will be fired whenever any of the observed elements' ratio of (area of observed element's intersection with root / total area of observed element) crosses any of the observer's thresholds (i.e., transitions from less the the threshold to greater, or vice versa).  The callback includes change records for all observed elements for which a threshold crossing has occurred since the last callback.
 
 ## Element Visibility
 
