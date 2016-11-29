@@ -253,7 +253,7 @@ pre.idl.highlight { color: #708090; }
    <header>
     <p data-fill-with="logo"><a href="https://www.w3.org/"><img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"></a> </p>
     <h1 class="p-name no-ref" id="title">Intersection Observer 1</h1>
-    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-11-18">18 November 2016</time></span></h2>
+    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-11-29">29 November 2016</time></span></h2>
    </header>
    <div data-fill-with="spec-metadata">
     <dl>
@@ -261,7 +261,6 @@ pre.idl.highlight { color: #708090; }
      <dd><a class="u-url" href="https://github.com/WICG/IntersectionObserver/">https://github.com/WICG/IntersectionObserver/</a>
      <dt>Issue Tracking:
      <dd><a href="https://github.com/WICG/IntersectionObserver/issues/">GitHub</a>
-     <dd><a href="#issues-index">Inline In Spec</a>
      <dt class="editor">Editor:
      <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:mpb@google.com">Michael Blain</a> (<span class="p-org org">Google</span>)
     </dl>
@@ -346,7 +345,6 @@ pre.idl.highlight { color: #708090; }
       <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
      </ol>
     <li><a href="#idl-index"><span class="secno"></span> <span class="content">IDL Index</span></a>
-    <li><a href="#issues-index"><span class="secno"></span> <span class="content">Issues Index</span></a>
    </ol>
   </nav>
   <main>
@@ -765,9 +763,7 @@ return.</p>
     <li data-md="">
      <p>Set <var>document</var>’s <a data-link-type="dfn" href="#document-intersectionobservertaskqueued" id="ref-for-document-intersectionobservertaskqueued-2">IntersectionObserverTaskQueued</a> flag to true.</p>
     <li data-md="">
-     <p>Enqueue a task to <a data-link-type="dfn" href="#notify-intersection-observers" id="ref-for-notify-intersection-observers-1">notify intersection observers</a> in the <a data-link-type="dfn" href="http://w3c.github.io/requestidlecallback/#dfn-list-of-idle-request-callbacks">list of idle request callbacks</a> with a <var>timeout</var> of 100.</p>
-     <p class="issue" id="issue-bf9a6e46"><a class="self-link" href="#issue-bf9a6e46"></a> Should we use something other than 100ms as <var>timeout</var>?</p>
-     <p class="issue" id="issue-f67f2718"><a class="self-link" href="#issue-f67f2718"></a> Should we consider making this just post a task instead?</p>
+     <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task">Queue a task</a> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">document</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop">event loop</a> to <a data-link-type="dfn" href="#notify-intersection-observers" id="ref-for-notify-intersection-observers-1">notify intersection observers</a>.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.2" id="notify-intersection-observers-algo"><span class="secno">3.2.2. </span><span class="content"> Notify Intersection Observers</span><a class="self-link" href="#notify-intersection-observers-algo"></a></h4>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="notify-intersection-observers">notify intersection observers</dfn> for a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object">Document</a> <var>document</var>,
@@ -1106,11 +1102,6 @@ in the in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipa
 };
 
 </pre>
-  <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
-  <div style="counter-reset:issue">
-   <div class="issue"> Should we use something other than 100ms as <var>timeout</var>?<a href="#issue-bf9a6e46"> ↵ </a></div>
-   <div class="issue"> Should we consider making this just post a task instead?<a href="#issue-f67f2718"> ↵ </a></div>
-  </div>
   <aside class="dfn-panel" data-for="intersection-observer">
    <b><a href="#intersection-observer">#intersection-observer</a></b><b>Referenced in:</b>
    <ul>
