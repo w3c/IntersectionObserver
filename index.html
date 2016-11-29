@@ -862,14 +862,13 @@ by running the <code class="idl"><a data-link-type="idl" href="https://drafts.cs
         <li data-md="">
          <p>Let <var>intersectionArea</var> be <var>intersectionRect</var>’s area.</p>
         <li data-md="">
-         <p>Let <var>intersectionRatio</var> be <var>intersectionArea</var> divided by <var>targetArea</var> if <var>targetArea</var> is non-zero,
-and <code>0</code> otherwise.</p>
-        <li data-md="">
          <p>Let <var>doesIntersect</var> be true if <var>targetRect</var> and <var>rootBounds</var> intersect or are edge-adjacent,
 even if the intersection has zero area (because <var>rootBounds</var> or <var>targetRect</var> have
 zero area); otherwise, let <var>doesIntersect</var> be false.</p>
         <li data-md="">
-         <p>If <var>doesIntersect</var> is false, let <var>thresholdIndex</var> be <code>0</code>.<br> Otherwise, if <var>targetRect</var> has zero area, let <var>thresholdIndex</var> be <code>1</code>.<br> Otherwise, let <var>thresholdIndex</var> be the index of the first entry in <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds-3">thresholds</a></code> whose value is greater than <var>intersectionRatio</var>, or the length of <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds-4">thresholds</a></code> if <var>intersectionRatio</var> is greater than the last entry in <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds-5">thresholds</a></code>.</p>
+         <p>If <var>targetArea</var> is non-zero, let <var>intersectionRatio</var> be <var>intersectionArea</var> divided by <var>targetArea</var>.<br> Otherwise, let <var>intersectionRatio</var> be <code>1</code> if <var>doesIntersect</var> is true, or <code>0</code> if <var>doesIntersect</var> is false.</p>
+        <li data-md="">
+         <p>Let <var>thresholdIndex</var> be the index of the first entry in <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds-3">thresholds</a></code> whose value is greater than <var>intersectionRatio</var>, or the length of <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds-4">thresholds</a></code> if <var>intersectionRatio</var> is greater than the last entry in <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds-5">thresholds</a></code>.</p>
         <li data-md="">
          <p>Let <var>intersectionObserverRegistration</var> be the <code class="idl"><a data-link-type="idl" href="#intersectionobserverregistration" id="ref-for-intersectionobserverregistration-4">IntersectionObserverRegistration</a></code> record
 in <var>target</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot" id="ref-for-dom-element-registeredintersectionobservers-slot-4">[[RegisteredIntersectionObservers]]</a></code> slot

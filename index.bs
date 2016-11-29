@@ -597,15 +597,12 @@ To <dfn>run the update intersection observations steps</dfn> for a
 			algorithm on |target|.
 		5. Let |targetArea| be |targetRect|'s area.
 		6. Let |intersectionArea| be |intersectionRect|'s area.
-		7. Let |intersectionRatio| be |intersectionArea| divided by |targetArea|
-			if |targetArea| is non-zero,
-			and <code>0</code> otherwise.
-		8. Let |doesIntersect| be true if |targetRect| and |rootBounds| intersect or are edge-adjacent,
+		7. Let |doesIntersect| be true if |targetRect| and |rootBounds| intersect or are edge-adjacent,
 			even if the intersection has zero area (because |rootBounds| or |targetRect| have
 			zero area); otherwise, let |doesIntersect| be false.
-		9. If |doesIntersect| is false, let |thresholdIndex| be <code>0</code>.<br>
-			Otherwise, if |targetRect| has zero area, let |thresholdIndex| be <code>1</code>.<br>
-			Otherwise, let |thresholdIndex| be the index of the first entry in |observer|.{{thresholds}} whose value is greater than |intersectionRatio|, or the length of |observer|.{{thresholds}} if |intersectionRatio| is greater than the last entry in |observer|.{{thresholds}}.
+		8. If |targetArea| is non-zero, let |intersectionRatio| be |intersectionArea| divided by |targetArea|.<br>
+			Otherwise, let |intersectionRatio| be <code>1</code> if |doesIntersect| is true, or <code>0</code> if |doesIntersect| is false.
+		9. Let |thresholdIndex| be the index of the first entry in |observer|.{{thresholds}} whose value is greater than |intersectionRatio|, or the length of |observer|.{{thresholds}} if |intersectionRatio| is greater than the last entry in |observer|.{{thresholds}}.
 		10. Let |intersectionObserverRegistration| be the {{IntersectionObserverRegistration}} record 
 			in |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot
 			whose {{IntersectionObserverRegistration/observer}} property is equal to |observer|.
