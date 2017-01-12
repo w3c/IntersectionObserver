@@ -49,10 +49,11 @@ var registry = [];
  */
 function IntersectionObserverEntry(entry) {
   this.time = entry.time;
+  this.target = entry.target;
   this.rootBounds = entry.rootBounds;
   this.boundingClientRect = entry.boundingClientRect;
-  this.intersectionRect = entry.intersectionRect;
-  this.target = entry.target;
+  this.intersectionRect = entry.intersectionRect || getEmptyRect();
+  this.isIntersecting = !!entry.intersectionRect;
 
   // Calculates the intersection ratio. Sets it to 0 if the target area is 0.
   var targetRect = this.boundingClientRect;
@@ -305,14 +306,15 @@ IntersectionObserver.prototype._checkForIntersections = function() {
     var targetRect = getBoundingClientRect(target);
     var rootContainsTarget = this._rootContainsTarget(target);
     var oldEntry = item.entry;
+    var intersectionRect = rootIsInDom && rootContainsTarget &&
+        this._computeTargetAndRootIntersection(target, rootRect);
+
     var newEntry = item.entry = new IntersectionObserverEntry({
       time: now(),
       target: target,
       boundingClientRect: targetRect,
       rootBounds: rootRect,
-      intersectionRect: (rootIsInDom && rootContainsTarget) ?
-          this._computeTargetAndRootIntersection(target, rootRect) :
-          getEmptyRect()
+      intersectionRect: intersectionRect
     });
 
     if (rootIsInDom && rootContainsTarget) {
@@ -325,7 +327,7 @@ IntersectionObserver.prototype._checkForIntersections = function() {
       // If the root is not in the DOM or target is not contained within
       // root but the previous entry for this target had an intersection,
       // add a new record indicating removal.
-      if (oldEntry && hasIntersection(oldEntry.intersectionRect)) {
+      if (oldEntry && oldEntry.isIntersecting) {
         this._queuedEntries.push(newEntry);
       }
     }
@@ -345,11 +347,15 @@ IntersectionObserver.prototype._checkForIntersections = function() {
  * @param {Element} target The target DOM element
  * @param {Object} rootRect The bounding rect of the root after being
  *     expanded by the rootMargin value.
- * @return {Object} The final intersection rect object.
+ * @return {?Object} The final intersection rect object or undefined if no
+ *     intersection is found.
  * @private
  */
 IntersectionObserver.prototype._computeTargetAndRootIntersection =
     function(target, rootRect) {
+
+  // If the element isn't displayed, an intersection can't happen.
+  if (window.getComputedStyle(target).display == 'none') return;
 
   var targetRect = getBoundingClientRect(target);
   var intersectionRect = targetRect;
@@ -368,18 +374,16 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
     // Otherwise check to see if the parent element hides overflow,
     // and if so update parentRect.
     else {
-      var style = window.getComputedStyle(parent);
-      if (style.overflow != 'visible') {
+      if (window.getComputedStyle(parent).overflow != 'visible') {
         parentRect = getBoundingClientRect(parent);
       }
     }
     // If either of the above conditionals set a new parentRect,
     // calculate new intersection data.
     if (parentRect) {
-      intersectionRect = computeRectIntersection(
-          parentRect, intersectionRect);
+      intersectionRect = computeRectIntersection(parentRect, intersectionRect);
 
-      if (!hasIntersection(intersectionRect)) break;
+      if (!intersectionRect) break;
     }
     parent = parent.parentNode;
   }
@@ -450,11 +454,11 @@ IntersectionObserver.prototype._expandRectByRootMargin = function(rect) {
 IntersectionObserver.prototype._hasCrossedThreshold =
     function(oldEntry, newEntry) {
 
-  // To make comparing easier, a entry that has a ratio of 0
+  // To make comparing easier, an entry that has a ratio of 0
   // but does not actually intersect is given a value of -1
-  var oldRatio = oldEntry && hasIntersection(oldEntry.intersectionRect) ?
+  var oldRatio = oldEntry && oldEntry.isIntersecting ?
       oldEntry.intersectionRatio || 0 : -1;
-  var newRatio = hasIntersection(newEntry.intersectionRect) ?
+  var newRatio = newEntry.isIntersecting ?
       newEntry.intersectionRatio || 0 : -1;
 
   // Ignore unchanged ratios
@@ -587,7 +591,8 @@ function removeEvent(node, event, fn, opt_useCapture) {
  * Returns the intersection between two rect objects.
  * @param {Object} rect1 The first rect.
  * @param {Object} rect2 The second rect.
- * @return {Object} The intersection rect.
+ * @return {?Object} The intersection rect or undefined if no intersection
+ *     is found.
  */
 function computeRectIntersection(rect1, rect2) {
   var top = Math.max(rect1.top, rect2.top);
@@ -597,8 +602,7 @@ function computeRectIntersection(rect1, rect2) {
   var width = right - left;
   var height = bottom - top;
 
-  // Returns the intersection or an emptry rect if no intersection is found.
-  return (width < 0 || height < 0) ? getEmptyRect() : {
+  return (width >= 0 && height >= 0) && {
     top: top,
     bottom: bottom,
     left: left,
@@ -606,20 +610,6 @@ function computeRectIntersection(rect1, rect2) {
     width: width,
     height: height
   };
-}
-
-
-/**
- * Returns true if an rect was passed and any of its properties are not zero.
- * TODO(philipwalton): the current native implementation sets the
- * intersectionRect value of a change entry to (0, 0, 0, 0) when no
- * intersection is detected. This may change in the future:
- * https://github.com/WICG/IntersectionObserver/issues/142
- * @param {Object} rect The intersection rect to check.
- * @return {boolean} True if an intersection exists, false otherwise.
- */
-function hasIntersection(rect) {
-  return rect.top > 0 || rect.bottom > 0 || rect.left > 0 || rect.right > 0;
 }
 
 
