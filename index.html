@@ -253,7 +253,7 @@ pre.idl.highlight { color: #708090; }
    <header>
     <p data-fill-with="logo"><a href="https://www.w3.org/"><img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"></a> </p>
     <h1 class="p-name no-ref" id="title">Intersection Observer 1</h1>
-    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-01-19">19 January 2017</time></span></h2>
+    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-01-20">20 January 2017</time></span></h2>
    </header>
    <div data-fill-with="spec-metadata">
     <dl>
@@ -499,7 +499,7 @@ return.</p>
        <li data-md="">
         <p>Let <var>intersectionObserverRegistration</var> be
 an <code class="idl"><a data-link-type="idl" href="#intersectionobserverregistration" id="ref-for-intersectionobserverregistration-1">IntersectionObserverRegistration</a></code> record
-with an <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-observer" id="ref-for-dom-intersectionobserverregistration-observer-1">observer</a></code> property set to <var>this</var> and a <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousthresholdindex" id="ref-for-dom-intersectionobserverregistration-previousthresholdindex-1">previousThresholdIndex</a></code> property set to <code>0</code>.</p>
+with an <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-observer" id="ref-for-dom-intersectionobserverregistration-observer-1">observer</a></code> property set to <var>this</var> and a <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousthresholdindex" id="ref-for-dom-intersectionobserverregistration-previousthresholdindex-1">previousThresholdIndex</a></code> property set to <code>-1</code>.</p>
        <li data-md="">
         <p>Append <var>intersectionObserverRegistration</var> to <var>target</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot" id="ref-for-dom-element-registeredintersectionobservers-slot-1">[[RegisteredIntersectionObservers]]</a></code> slot.</p>
        <li data-md="">
@@ -745,7 +745,7 @@ which is initialized to an empty list.
 This list holds <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="intersectionobserverregistration">IntersectionObserverRegistration</dfn> records,
 which have an <dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserverRegistration" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverregistration-observer">observer</dfn> property
 holding an <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-16">IntersectionObserver</a></code> and a <dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserverRegistration" data-dfn-type="attribute" data-export="" id="dom-intersectionobserverregistration-previousthresholdindex">previousThresholdIndex</dfn> property
-holding a number between 0 and the length of the observer’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds-2">thresholds</a></code> property (inclusive).</p>
+holding a number between -1 and the length of the observer’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds-2">thresholds</a></code> property (inclusive).</p>
    <h4 class="heading settled" data-level="3.1.3" id="intersection-observer-private-slots"><span class="secno">3.1.3. </span><span class="content"> IntersectionObserver</span><a class="self-link" href="#intersection-observer-private-slots"></a></h4>
    <p><code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver-17">IntersectionObserver</a></code> objects have internal <dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-queuedentries-slot">[[QueuedEntries]]</dfn> and <dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-observationtargets-slot">[[ObservationTargets]]</dfn> slots,
 which are initialized to empty lists and an internal <dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export="" id="dom-intersectionobserver-callback-slot">[[callback]]</dfn> slot
