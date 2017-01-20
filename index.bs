@@ -366,6 +366,7 @@ interface IntersectionObserverEntry {
 	readonly attribute DOMRectReadOnly rootBounds;
 	readonly attribute DOMRectReadOnly boundingClientRect;
 	readonly attribute DOMRectReadOnly intersectionRect;
+	readonly attribute boolean isIntersecting;
 	readonly attribute double intersectionRatio;
 	readonly attribute Element target;
 };
@@ -375,6 +376,7 @@ dictionary IntersectionObserverEntryInit {
 	required DOMRectInit rootBounds;
 	required DOMRectInit boundingClientRect;
 	required DOMRectInit intersectionRect;
+	required boolean isIntersecting;
 	required double intersectionRatio;
 	required Element target;
 };
@@ -394,10 +396,22 @@ dictionary IntersectionObserverEntryInit {
 		This value represents the portion of
 		{{IntersectionObserverEntry/target}} actually visible
 		within the <a>root intersection rectangle</a>.
+	: <dfn>isIntersecting</dfn>
+	::
+		True if the {{IntersectionObserverEntry/target}} intersects with the
+		{{IntersectionObserver/root}}; false otherwise.  This flag makes it
+		possible to distinguish between an {{IntersectionObserverEntry}} signalling
+		the transition from intersecting to not-intersecting; and an
+		{{IntersectionObserverEntry}} signalling a transition from not-intersecting
+		to intersecting with a zero-area intersection rect (as will happen with
+		edge-adjacent intersections, or when the {{IntersectionObserverEntry/boundingClientRect}}
+		has zero area).
 	: <dfn>intersectionRatio</dfn>
 	::
-		Ratio of {{IntersectionObserverEntry/intersectionRect}} area to
-		{{IntersectionObserverEntry/boundingClientRect}} area.
+		If the {{IntersectionObserverEntry/boundingClientRect}} has non-zero area,
+		this will be the ratio of {{IntersectionObserverEntry/intersectionRect}} area to
+		{{IntersectionObserverEntry/boundingClientRect}} area.  Otherwise, this will be
+		1 if the {{IntersectionObserverEntry/isIntersecting}} is true, and 0 if not.
 	: <dfn>rootBounds</dfn>
 	::
 		If {{IntersectionObserverEntry/target}} belongs to the same
@@ -543,12 +557,12 @@ Queue an IntersectionObserverEntry</h4>
 
 To <dfn>queue an IntersectionObserverEntry</dfn> for an {{IntersectionObserver}} |observer|, given a
 <a>Document</a> |document|; {{DOMHighResTimeStamp}} |time|;
-{{DOMRect}}s |rootBounds|, |boundingClientRect|, and |intersectionRect|;
+{{DOMRect}}s |rootBounds|, |boundingClientRect|, |intersectionRect|, and |isIntersecting| flag;
 and an {{Element}} |target|;
 run these steps:
 
 1. Construct an {{IntersectionObserverEntry}}, passing in |time|, |rootBounds|,
-	|boundingClientRect|, |intersectionRect| and |target|.
+	|boundingClientRect|, |intersectionRect|, |isIntersecting|, and |target|.
 2. Append it to |observer|'s internal {{[[QueuedEntries]]}} slot.
 3. <a>Queue an intersection observer task</a> for |document|.
 
@@ -597,11 +611,11 @@ To <dfn>run the update intersection observations steps</dfn> for a
 			algorithm on |target|.
 		5. Let |targetArea| be |targetRect|'s area.
 		6. Let |intersectionArea| be |intersectionRect|'s area.
-		7. Let |doesIntersect| be true if |targetRect| and |rootBounds| intersect or are edge-adjacent,
+		7. Let |isIntersecting| be true if |targetRect| and |rootBounds| intersect or are edge-adjacent,
 			even if the intersection has zero area (because |rootBounds| or |targetRect| have
-			zero area); otherwise, let |doesIntersect| be false.
+			zero area); otherwise, let |isIntersecting| be false.
 		8. If |targetArea| is non-zero, let |intersectionRatio| be |intersectionArea| divided by |targetArea|.<br>
-			Otherwise, let |intersectionRatio| be <code>1</code> if |doesIntersect| is true, or <code>0</code> if |doesIntersect| is false.
+			Otherwise, let |intersectionRatio| be <code>1</code> if |isIntersecting| is true, or <code>0</code> if |isIntersecting| is false.
 		9. Let |thresholdIndex| be the index of the first entry in |observer|.{{thresholds}} whose value is greater than |intersectionRatio|, or the length of |observer|.{{thresholds}} if |intersectionRatio| is greater than the last entry in |observer|.{{thresholds}}.
 		10. Let |intersectionObserverRegistration| be the {{IntersectionObserverRegistration}} record 
 			in |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot
@@ -611,7 +625,7 @@ To <dfn>run the update intersection observations steps</dfn> for a
 		12. If |thresholdIndex| does not equal |previousThresholdIndex|,
 			<a>queue an IntersectionObserverEntry</a>,
 			passing in |observer|, |time|, |rootBounds|,
-			|boundingClientRect|, |intersectionRect| and |target|.
+			|boundingClientRect|, |intersectionRect|, |isIntersecting|, and |target|.
 		13. Assign |threshold| to |intersectionObserverRegistration|'s
 		    {{IntersectionObserverRegistration/previousThresholdIndex}} property.
 
