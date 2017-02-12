@@ -125,10 +125,11 @@ IntersectionObserver.prototype.POLL_INTERVAL = null;
  * @param {Element} target The DOM element to observe.
  */
 IntersectionObserver.prototype.observe = function(target) {
-  // If the target is already being observed, do nothing.
-  if (this._observationTargets.some(function(item) {
+  var isTargetAlreadyObserved = this._observationTargets.some(function(item) {
     return item.element == target;
-  })) {
+  });
+
+  if (isTargetAlreadyObserved) {
     return;
   }
 
