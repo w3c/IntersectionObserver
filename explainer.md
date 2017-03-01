@@ -27,45 +27,23 @@ Given the opportunity to reduce CPU use, increase battery life, and eliminate ja
 ### Proposed API
 
 ```js
-[Exposed=Window]
-interface IntersectionObserverEntry {
-  readonly attribute double time;
-  readonly attribute DOMRect rootBounds;
-  readonly attribute DOMRect boundingClientRect;
-  readonly attribute DOMRectReadOnly intersectionRect;
-  readonly attribute Element target;
+function callback(entries) {
+  entries.forEach(function(entry) {
+    if (isInterseting(entry.intersectionRect))
+      doSomething();
+  });
 };
-
-callback IntersectionCallback = void (sequence<IntersectionRecord> records, IntersectionObserver observer);
-
-dictionary IntersectionObserverInit {
-  // The root to use for intersection. If not provided, use the top-level document’s viewport.
-  Element root = null;
-  // Same as margin, can be 1, 2, 3 or 4 components, possibly negative lengths.  If an explicit
-  // root element is specified, components may be percentages of the root element size.  If no
-  // explicit root element is specified, using a percentage here is an error.
-  // "5px"
-  // "10% 20%"
-  // "-10px 5px 5px"
-  // "-10px -10px 5px 5px"
-  DOMString rootMargin = "0px";
-  // Threshold(s) at which to trigger callback, specified as a ratio, or list of ratios,
-  // of (visible area / total area) of the observed element (hence all entries must be
-  // in the range [0, 1]).  Callback will be invoked when the visible ratio of the observed
-  // element crosses a threshold in the list.
-  (double or sequence<double>) threshold = [0];
+var root = document.getElementById('root');
+var target = document.getElementById('target');
+var options_dict = {
+  thresholds: [0.0, 0.3, 0.7, 1.0],
+  root: root
 };
-
-[Constructor(IntersectionCallback callback, IntersectionObserverInit options)]
-interface IntersectionObserver {
-  void observe(Element target);
-  void unobserve(Element target);
-  void disconnect();
-  sequence<IntersectionObserverEntry> takeRecords ();
-};
+var observer = new IntersectionObserver(callback, options_dict);
+observer.observe(target);
 ```
 
-The expected use of this API is that you create one IntersectionObserver, giving it a list of thresholds, and optionally giving it a root element; then observe one or more of the root element's descendants.  The callback will be fired whenever any of the observed elements' ratio of (area of observed element's intersection with root / total area of observed element) crosses any of the observer's thresholds (i.e., transitions from less the the threshold to greater, or vice versa).  The callback includes change records for all observed elements for which a threshold crossing has occurred since the last callback.
+The expected use of this API is that you create an IntersectionObserver with a root element; then observe one or more elements that are descendants of the root.  The callback will be fired whenever any of the observed elements' ratio of (area of observed element's intersection with root / total area of observed element) crosses any of the observer's thresholds (i.e., transitions from less than the threshold to greater, or vice versa).  The callback includes change records for all observed elements for which a threshold crossing has occurred since the last callback.
 
 ## Element Visibility
 
