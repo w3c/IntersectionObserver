@@ -553,7 +553,7 @@ describe('IntersectionObserver', function() {
 
       io = new IntersectionObserver(function(records) {
         expect(records.length).to.be(1);
-        expect(records[0].intersectionRatio).to.be(0);
+        expect(records[0].intersectionRatio).to.be(1);
         done();
       }, {root: rootEl});
 
