@@ -127,12 +127,12 @@ IntersectionObserver.prototype.POLL_INTERVAL = null;
 IntersectionObserver.prototype.observe = function(target) {
   // If the target is already being observed, do nothing.
   if (this._observationTargets.some(function(item) {
-    return item.element == target;
+    return item.element === target;
   })) {
     return;
   }
 
-  if (!(target && target.nodeType == 1)) {
+  if (!(target && target.nodeType === 1)) {
     throw new Error('target must be an Element');
   }
 
@@ -355,7 +355,7 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
     function(target, rootRect) {
 
   // If the element isn't displayed, an intersection can't happen.
-  if (window.getComputedStyle(target).display == 'none') return;
+  if (window.getComputedStyle(target).display === 'none') return;
 
   var targetRect = getBoundingClientRect(target);
   var intersectionRect = targetRect;
@@ -367,14 +367,14 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
 
     // If we're at the root element, set parentRect to the already
     // calculated rootRect.
-    if (parent == this.root || parent.nodeType != 1) {
+    if (parent === this.root || parent.nodeType !== 1) {
       atRoot = true;
       parentRect = rootRect;
     }
     // Otherwise check to see if the parent element hides overflow,
     // and if so update parentRect.
     else {
-      if (window.getComputedStyle(parent).overflow != 'visible') {
+      if (window.getComputedStyle(parent).overflow !== 'visible') {
         parentRect = getBoundingClientRect(parent);
       }
     }
@@ -425,7 +425,7 @@ IntersectionObserver.prototype._getRootRect = function() {
  */
 IntersectionObserver.prototype._expandRectByRootMargin = function(rect) {
   var margins = this._rootMarginValues.map(function(margin, i) {
-    return margin.unit == 'px' ? margin.value :
+    return margin.unit === 'px' ? margin.value :
         margin.value * (i % 2 ? rect.width : rect.height) / 100;
   });
   var newRect = {
@@ -469,7 +469,7 @@ IntersectionObserver.prototype._hasCrossedThreshold =
 
     // Return true if an entry matches a threshold or if the new ratio
     // and the old ratio are on the opposite sides of a threshold.
-    if (threshold == oldRatio || threshold == newRatio ||
+    if (threshold === oldRatio || threshold === newRatio ||
         threshold < oldRatio !== threshold < newRatio) {
       return true;
     }
@@ -560,10 +560,10 @@ function throttle(fn, timeout) {
  *     phase. Note: this only works in modern browsers.
  */
 function addEvent(node, event, fn, opt_useCapture) {
-  if (typeof node.addEventListener == 'function') {
+  if (typeof node.addEventListener === 'function') {
     node.addEventListener(event, fn, opt_useCapture || false);
   }
-  else if (typeof node.attachEvent == 'function') {
+  else if (typeof node.attachEvent === 'function') {
     node.attachEvent('on' + event, fn);
   }
 }
@@ -578,10 +578,10 @@ function addEvent(node, event, fn, opt_useCapture) {
  *     flag set to true, it should be set to true here in order to remove it.
  */
 function removeEvent(node, event, fn, opt_useCapture) {
-  if (typeof node.removeEventListener == 'function') {
+  if (typeof node.removeEventListener === 'function') {
     node.removeEventListener(event, fn, opt_useCapture || false);
   }
-  else if (typeof node.detatchEvent == 'function') {
+  else if (typeof node.detatchEvent === 'function') {
     node.detatchEvent('on' + event, fn);
   }
 }
