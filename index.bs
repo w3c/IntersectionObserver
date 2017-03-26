@@ -154,7 +154,7 @@ elements relative to an <a>intersection root</a>.
 The IntersectionObserverCallback</h3>
 
 <pre class="idl">
-	callback IntersectionObserverCallback = void (sequence&lt;IntersectionObserverEntry> entries, IntersectionObserver observer)
+	callback IntersectionObserverCallback = void (sequence&lt;IntersectionObserverEntry> entries, IntersectionObserver observer);
 </pre>
 
 This callback will be invoked when there are changes to <a>target</a>'s
