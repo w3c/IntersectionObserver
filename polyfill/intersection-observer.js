@@ -55,12 +55,12 @@ function IntersectionObserverEntry(entry) {
   this.intersectionRect = entry.intersectionRect || getEmptyRect();
   this.isIntersecting = !!entry.intersectionRect;
 
-  // Calculates the intersection ratio. Sets it to 0 if the target area is 0.
+  // Calculates the intersection ratio. Sets it to 1 if the target area is 0.
   var targetRect = this.boundingClientRect;
   var targetArea = targetRect.width * targetRect.height;
   var intersectionRect = this.intersectionRect;
   var intersectionArea = intersectionRect.width * intersectionRect.height;
-  this.intersectionRatio = targetArea ? (intersectionArea / targetArea) : 0;
+  this.intersectionRatio = targetArea ? (intersectionArea / targetArea) : 1;
 }
 
 
