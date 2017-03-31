@@ -623,8 +623,15 @@ function computeRectIntersection(rect1, rect2) {
  * @return {Object} The (possibly shimmed) rect of the element.
  */
 function getBoundingClientRect(el) {
-  var rect = el.getBoundingClientRect();
-  if (!rect) return;
+  var rect;
+
+  try {
+      rect = el.getBoundingClientRect();
+  } catch (e) {/* ignore Windows 7 IE11 "Unspecified error" */}
+
+  if (!rect) {
+      return getEmptyRect();
+  }
 
   // Older IE
   if (!rect.width || !rect.height) {
