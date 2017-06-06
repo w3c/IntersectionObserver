@@ -27,11 +27,6 @@ if ('IntersectionObserver' in window &&
 }
 
 
-// Use :root element of the document for .contains() calls because older IEs
-// support Node.prototype.contains only on Element nodes.
-var docElement = document.documentElement;
-
-
 /**
  * An IntersectionObserver registry. This registry exists to hold a strong
  * reference to IntersectionObserver instances currently observering a target
@@ -492,7 +487,7 @@ IntersectionObserver.prototype._hasCrossedThreshold =
  * @private
  */
 IntersectionObserver.prototype._rootIsInDom = function() {
-  return !this.root || docElement.contains(this.root);
+  return !this.root || containsDeep(document, this.root);
 };
 
 
@@ -503,7 +498,7 @@ IntersectionObserver.prototype._rootIsInDom = function() {
  * @private
  */
 IntersectionObserver.prototype._rootContainsTarget = function(target) {
-  return (this.root || docElement).contains(target);
+  return containsDeep(this.root || document, target);
 };
 
 
@@ -660,6 +655,28 @@ function getEmptyRect() {
     width: 0,
     height: 0
   };
+}
+
+/**
+ * Checks to see if a node contains another node (including shadow DOM).
+ * @param {Node} parent
+ * @param {Node} child
+ * @return {boolean} True if the parent node contains the child node.
+ */
+function containsDeep(parent, child) {
+  var node = child;
+  while (node) {
+    // Check if the node is a shadow root, if it is get the host.
+    if (node.nodeType == 11 && node.host) {
+      node = node.host;
+    }
+
+    if (node == parent) return true;
+
+    // Traverse upwards in the DOM.
+    node = node.parentNode;
+  }
+  return false;
 }
 
 
