@@ -68,7 +68,7 @@ describe('IntersectionObserver', function() {
     it('throws when callback is not a function', function() {
       expect(function() {
         io = new IntersectionObserver(null);
-      }).to.throwException(/function/i);
+      }).to.throwException();
     });
 
 
@@ -84,7 +84,7 @@ describe('IntersectionObserver', function() {
     it('throws when root is not an Element', function() {
       expect(function() {
         io = new IntersectionObserver(noop, {root: 'foo'});
-      }).to.throwException(/element/i);
+      }).to.throwException();
     });
 
 
@@ -111,11 +111,13 @@ describe('IntersectionObserver', function() {
     });
 
 
-    it('throws when rootMargin is not in pixels or pecernt', function() {
-      expect(function() {
-        io = new IntersectionObserver(noop, {rootMargin: '0'});
-      }).to.throwException(/pixels.*percent/i);
-    });
+    // TODO(philipwalton): this doesn't throw in FF, consider readding once
+    // expected behavior is clarified.
+    // it('throws when rootMargin is not in pixels or pecernt', function() {
+    //   expect(function() {
+    //     io = new IntersectionObserver(noop, {rootMargin: '0'});
+    //   }).to.throwException();
+    // });
 
 
     // Chrome's implementation in version 51 doesn't include the thresholds
@@ -137,15 +139,11 @@ describe('IntersectionObserver', function() {
     }
 
 
-    // TODO(philipwalton) Only test this in the polyfill until the following
-    // patch is released: https://codereview.chromium.org/2132863002
-    if (!supportsNativeIntersectionObserver()) {
-      it('throws when a threshold is not a number', function() {
-        expect(function() {
-          io = new IntersectionObserver(noop, {threshold: ['foo']});
-        }).to.throwException(/threshold/i);
-      });
-    }
+    it('throws when a threshold is not a number', function() {
+      expect(function() {
+        io = new IntersectionObserver(noop, {threshold: ['foo']});
+      }).to.throwException(/threshold/i);
+    });
 
 
     it('throws when a threshold value is not between 0 and 1', function() {
@@ -167,40 +165,33 @@ describe('IntersectionObserver', function() {
     });
 
 
-    it('triggers if target intersects when observing begins', function(done) {
+    it('triggers for all targets when observing begins', function(done) {
       io = new IntersectionObserver(function(records) {
-        expect(records.length).to.be(1);
+        expect(records.length).to.be(2);
         expect(records[0].intersectionRatio).to.be(1);
+        expect(records[1].intersectionRatio).to.be(0);
         done();
       }, {root: rootEl});
+
+      targetEl2.style.top = '-40px';
       io.observe(targetEl1);
+      io.observe(targetEl2);
     });
 
 
     it('triggers with the correct arguments', function(done) {
       io = new IntersectionObserver(function(records, observer) {
-        expect(records.length).to.be(1);
+        expect(records.length).to.be(2);
         expect(records[0] instanceof IntersectionObserverEntry).to.be.ok();
+        expect(records[1] instanceof IntersectionObserverEntry).to.be.ok();
         expect(observer).to.be(io);
         expect(this).to.be(io);
         done();
       }, {root: rootEl});
-      io.observe(targetEl1);
-    });
-
-
-    it('does not trigger if target does not intersect when observing begins',
-        function(done) {
-
-      var spy = sinon.spy();
-      io = new IntersectionObserver(spy, {root: rootEl});
 
       targetEl2.style.top = '-40px';
+      io.observe(targetEl1);
       io.observe(targetEl2);
-      setTimeout(function() {
-        expect(spy.callCount).to.be(0);
-        done();
-      }, ASYNC_TIMEOUT);
     });
 
 
@@ -317,11 +308,13 @@ describe('IntersectionObserver', function() {
           setTimeout(function() {
             expect(spy.callCount).to.be(1);
             var records = sortRecords(spy.lastCall.args[0]);
-            expect(records.length).to.be(2);
+            expect(records.length).to.be(3);
             expect(records[0].target).to.be(targetEl1);
             expect(records[0].intersectionRatio).to.be(0.25);
             expect(records[1].target).to.be(targetEl2);
             expect(records[1].intersectionRatio).to.be(0.75);
+            expect(records[2].target).to.be(targetEl3);
+            expect(records[2].intersectionRatio).to.be(0);
             done();
           }, ASYNC_TIMEOUT);
         },
@@ -418,20 +411,20 @@ describe('IntersectionObserver', function() {
           io.observe(targetEl2);
           io.observe(targetEl3);
           io.observe(targetEl4);
-
-          // Force a new frame to fix https://crbug.com/612323
-          window.requestAnimationFrame && requestAnimationFrame(function(){});
         },
         function(done) {
           io = new IntersectionObserver(function(records) {
             records = sortRecords(records);
-            expect(records.length).to.be(3);
+            expect(records.length).to.be(4);
             expect(records[0].target).to.be(targetEl1);
             expect(records[0].intersectionRatio).to.be(0.5);
-            expect(records[1].target).to.be(targetEl3);
-            expect(records[1].intersectionRatio).to.be(0.5);
-            expect(records[2].target).to.be(targetEl4);
+            expect(records[1].target).to.be(targetEl2);
+            expect(records[1].intersectionRatio).to.be(0);
+            expect(records[2].target).to.be(targetEl3);
             expect(records[2].intersectionRatio).to.be(0.5);
+            expect(records[3].target).to.be(targetEl4);
+            expect(records[3].intersectionRatio).to.be(0.5);
+
             io.disconnect();
             done();
           }, {root: rootEl, rootMargin: '-10px 10%'});
@@ -440,18 +433,19 @@ describe('IntersectionObserver', function() {
           io.observe(targetEl2);
           io.observe(targetEl3);
           io.observe(targetEl4);
-
-          // Force a new frame to fix https://crbug.com/612323
-          window.requestAnimationFrame && requestAnimationFrame(function(){});
         },
         function(done) {
           io = new IntersectionObserver(function(records) {
             records = sortRecords(records);
-            expect(records.length).to.be(2);
+            expect(records.length).to.be(4);
             expect(records[0].target).to.be(targetEl1);
             expect(records[0].intersectionRatio).to.be(0.5);
-            expect(records[1].target).to.be(targetEl4);
-            expect(records[1].intersectionRatio).to.be(0.5);
+            expect(records[1].target).to.be(targetEl2);
+            expect(records[1].intersectionRatio).to.be(0);
+            expect(records[2].target).to.be(targetEl3);
+            expect(records[2].intersectionRatio).to.be(0);
+            expect(records[3].target).to.be(targetEl4);
+            expect(records[3].intersectionRatio).to.be(0.5);
             io.disconnect();
             done();
           }, {root: rootEl, rootMargin: '-5% -2.5% 0px'});
@@ -460,20 +454,19 @@ describe('IntersectionObserver', function() {
           io.observe(targetEl2);
           io.observe(targetEl3);
           io.observe(targetEl4);
-
-          // Force a new frame to fix https://crbug.com/612323
-          window.requestAnimationFrame && requestAnimationFrame(function(){});
         },
         function(done) {
           io = new IntersectionObserver(function(records) {
             records = sortRecords(records);
-            expect(records.length).to.be(3);
+            expect(records.length).to.be(4);
             expect(records[0].target).to.be(targetEl1);
             expect(records[0].intersectionRatio).to.be(0.5);
             expect(records[1].target).to.be(targetEl2);
             expect(records[1].intersectionRatio).to.be(0.5);
-            expect(records[2].target).to.be(targetEl4);
-            expect(records[2].intersectionRatio).to.be(0.25);
+            expect(records[2].target).to.be(targetEl3);
+            expect(records[2].intersectionRatio).to.be(0);
+            expect(records[3].target).to.be(targetEl4);
+            expect(records[3].intersectionRatio).to.be(0.25);
             io.disconnect();
             done();
           }, {root: rootEl, rootMargin: '5% -2.5% -10px -190px'});
@@ -482,9 +475,6 @@ describe('IntersectionObserver', function() {
           io.observe(targetEl2);
           io.observe(targetEl3);
           io.observe(targetEl4);
-
-          // Force a new frame to fix https://crbug.com/612323
-          window.requestAnimationFrame && requestAnimationFrame(function(){});
         }
       ], done);
     });
@@ -506,9 +496,13 @@ describe('IntersectionObserver', function() {
           setTimeout(function() {
             expect(spy.callCount).to.be(1);
             var records = sortRecords(spy.lastCall.args[0]);
-            expect(records.length).to.be(1);
+            expect(records.length).to.be(2);
             expect(records[0].intersectionRatio).to.be(0);
-            expect(records[0].target).to.be(targetEl2);
+            expect(records[0].target).to.be(targetEl1);
+            expect(records[0].isIntersecting).to.be(false);
+            expect(records[1].intersectionRatio).to.be(0);
+            expect(records[1].target).to.be(targetEl2);
+            expect(records[1].isIntersecting).to.be(true);
             done();
           }, ASYNC_TIMEOUT);
         },
@@ -553,6 +547,7 @@ describe('IntersectionObserver', function() {
 
       io = new IntersectionObserver(function(records) {
         expect(records.length).to.be(1);
+        expect(records[0].isIntersecting).to.be(true);
         expect(records[0].intersectionRatio).to.be(1);
         done();
       }, {root: rootEl});
@@ -580,25 +575,33 @@ describe('IntersectionObserver', function() {
           rootEl.style.display = 'none';
           io.observe(rootEl);
           setTimeout(function() {
-            expect(spy.callCount).to.be(0);
+            expect(spy.callCount).to.be(1);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            expect(records[0].isIntersecting).to.be(false);
+            expect(records[0].intersectionRatio).to.be(0);
             done();
           }, ASYNC_TIMEOUT);
         },
         function(done) {
           rootEl.style.display = 'block';
           setTimeout(function() {
-            expect(spy.callCount).to.be(1);
+            expect(spy.callCount).to.be(2);
             var records = sortRecords(spy.lastCall.args[0]);
             expect(records.length).to.be(1);
+            expect(records[0].isIntersecting).to.be(true);
+            expect(records[0].intersectionRatio).to.be(1);
             done();
           }, ASYNC_TIMEOUT);
         },
         function(done) {
           rootEl.style.display = 'none';
           setTimeout(function() {
-            expect(spy.callCount).to.be(2);
+            expect(spy.callCount).to.be(3);
             var records = sortRecords(spy.lastCall.args[0]);
             expect(records.length).to.be(1);
+            expect(records[0].isIntersecting).to.be(false);
+            expect(records[0].intersectionRatio).to.be(0);
             done();
           }, ASYNC_TIMEOUT);
         }
@@ -617,52 +620,69 @@ describe('IntersectionObserver', function() {
       runSequence([
         function(done) {
           io.observe(targetEl1);
-          setTimeout(done, 0);
-        },
-        function(done) {
-          document.getElementById('fixtures').appendChild(rootEl);
-          setTimeout(function() {
-            expect(spy.callCount).to.be(0);
-            done();
-          }, ASYNC_TIMEOUT);
-        },
-        function(done) {
-          parentEl.insertBefore(targetEl1, targetEl2);
           setTimeout(function() {
             expect(spy.callCount).to.be(1);
             var records = sortRecords(spy.lastCall.args[0]);
             expect(records.length).to.be(1);
-            expect(records[0].intersectionRatio).to.be(1);
-            expect(records[0].target).to.be(targetEl1);
-            done();
-          }, ASYNC_TIMEOUT);
-        },
-        function(done) {
-          grandParentEl.parentNode.removeChild(grandParentEl);
-          setTimeout(function() {
-            expect(spy.callCount).to.be(2);
-            var records = sortRecords(spy.lastCall.args[0]);
-            expect(records.length).to.be(1);
+            expect(records[0].isIntersecting).to.be(false);
             expect(records[0].intersectionRatio).to.be(0);
             expect(records[0].target).to.be(targetEl1);
             done();
           }, ASYNC_TIMEOUT);
         },
         function(done) {
-          rootEl.appendChild(targetEl1);
+          // Adding rootEl without targetEl1 in it should trigger nothing.
+          document.getElementById('fixtures').appendChild(rootEl);
           setTimeout(function() {
-            expect(spy.callCount).to.be(3);
+            expect(spy.callCount).to.be(1);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          // Adding targetEl1 inside rootEl should trigger.
+          parentEl.insertBefore(targetEl1, targetEl2);
+          setTimeout(function() {
+            expect(spy.callCount).to.be(2);
             var records = sortRecords(spy.lastCall.args[0]);
             expect(records.length).to.be(1);
+            expect(records[0].isIntersecting).to.be(true);
             expect(records[0].intersectionRatio).to.be(1);
             expect(records[0].target).to.be(targetEl1);
             done();
           }, ASYNC_TIMEOUT);
         },
         function(done) {
-          rootEl.parentNode.removeChild(rootEl);
+          // Removing an ancestor of targetEl1 should trigger.
+          grandParentEl.parentNode.removeChild(grandParentEl);
+          setTimeout(function() {
+            expect(spy.callCount).to.be(3);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            expect(records[0].isIntersecting).to.be(false);
+            expect(records[0].intersectionRatio).to.be(0);
+            expect(records[0].target).to.be(targetEl1);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          // Adding the previously removed targetEl1 (via grandParentEl) back
+          // directly inside rootEl should trigger.
+          rootEl.appendChild(targetEl1);
           setTimeout(function() {
             expect(spy.callCount).to.be(4);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            expect(records[0].isIntersecting).to.be(true);
+            expect(records[0].intersectionRatio).to.be(1);
+            expect(records[0].target).to.be(targetEl1);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          // Removing rootEl should trigger.
+          rootEl.parentNode.removeChild(rootEl);
+          setTimeout(function() {
+            expect(spy.callCount).to.be(5);
             var records = sortRecords(spy.lastCall.args[0]);
             expect(records.length).to.be(1);
             expect(records[0].intersectionRatio).to.be(0);

@@ -324,7 +324,9 @@ IntersectionObserver.prototype._checkForIntersections = function() {
       intersectionRect: intersectionRect
     });
 
-    if (rootIsInDom && rootContainsTarget) {
+    if (!oldEntry) {
+      this._queuedEntries.push(newEntry);
+    } else if (rootIsInDom && rootContainsTarget) {
       // If the new entry intersection ratio has crossed any of the
       // thresholds, add a new entry.
       if (this._hasCrossedThreshold(oldEntry, newEntry)) {
