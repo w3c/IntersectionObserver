@@ -658,9 +658,10 @@ function getEmptyRect() {
 }
 
 /**
- * Checks to see if a node contains another node (including shadow DOM).
- * @param {Node} parent
- * @param {Node} child
+ * Checks to see if a parent element contains a child elemnt (including inside
+ * shadow DOM).
+ * @param {Node} parent The parent element.
+ * @param {Node} child The child element.
  * @return {boolean} True if the parent node contains the child node.
  */
 function containsDeep(parent, child) {
