@@ -694,6 +694,22 @@ describe('IntersectionObserver', function() {
     });
 
 
+    if ('attachShadow' in Element.prototype) {
+      it('handles targets in shadow DOM', function(done) {
+        grandParentEl.attachShadow({mode: 'open'});
+        grandParentEl.shadowRoot.appendChild(parentEl);
+
+        io = new IntersectionObserver(function(records) {
+          expect(records.length).to.be(1);
+          expect(records[0].intersectionRatio).to.be(1);
+          done();
+        }, {root: rootEl});
+
+        io.observe(targetEl1);
+      });
+    }
+
+
     it('handles sub-root element scrolling', function(done) {
       io = new IntersectionObserver(function(records) {
         expect(records.length).to.be(1);
