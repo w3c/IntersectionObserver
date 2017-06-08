@@ -609,7 +609,72 @@ describe('IntersectionObserver', function() {
     });
 
 
-    it('handles root/target elements not yet in the DOM', function(done) {
+    it('handles target elements not yet added to the DOM', function(done) {
+      var spy = sinon.spy();
+      io = new IntersectionObserver(spy, {root: rootEl});
+
+      var targetElNotInDom = document.createElement('div');
+      targetElNotInDom.setAttribute('id', 'target5');
+
+      runSequence([
+        function(done) {
+          io.observe(targetElNotInDom);
+          setTimeout(done, 0);
+        },
+        function(done) {
+          setTimeout(function() {
+            expect(spy.callCount).to.be(0);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          parentEl.insertBefore(targetElNotInDom, targetEl2);
+          setTimeout(function() {
+            expect(spy.callCount).to.be(1);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            expect(records[0].intersectionRatio).to.be(1);
+            expect(records[0].target).to.be(targetElNotInDom);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          grandParentEl.parentNode.removeChild(grandParentEl);
+          setTimeout(function() {
+            expect(spy.callCount).to.be(2);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            expect(records[0].intersectionRatio).to.be(0);
+            expect(records[0].target).to.be(targetElNotInDom);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          rootEl.appendChild(targetElNotInDom);
+          setTimeout(function() {
+            expect(spy.callCount).to.be(3);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            expect(records[0].intersectionRatio).to.be(1);
+            expect(records[0].target).to.be(targetElNotInDom);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          rootEl.parentNode.removeChild(rootEl);
+          setTimeout(function() {
+            expect(spy.callCount).to.be(4);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            expect(records[0].intersectionRatio).to.be(0);
+            expect(records[0].target).to.be(targetElNotInDom);
+            done();
+          }, ASYNC_TIMEOUT);
+        }
+      ], done);
+    });
+
+    it('handles root/target elements not in the DOM', function(done) {
 
       rootEl.parentNode.removeChild(rootEl);
       targetEl1.parentNode.removeChild(targetEl1);
@@ -982,7 +1047,7 @@ function addStyles() {
       '  height: 200px;' +
       '  background: #ddd;' +
       '}' +
-      '#target1, #target2, #target3, #target4 {' +
+      '#target1, #target2, #target3, #target4, #target5 {' +
       '  position: absolute;' +
       '  top: 0px;' +
       '  left: 0px;' +
