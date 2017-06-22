@@ -613,133 +613,61 @@ describe('IntersectionObserver', function() {
       var spy = sinon.spy();
       io = new IntersectionObserver(spy, {root: rootEl});
 
-      var targetElNotInDom = document.createElement('div');
-      targetElNotInDom.setAttribute('id', 'target5');
+      // targetEl5 is initially not in the DOM. Note that this element must be
+      // created outside of the addFixtures() function to catch the IE11 error
+      // described here: https://github.com/WICG/IntersectionObserver/pull/205
+      var targetEl5 = document.createElement('div');
+      targetEl5.setAttribute('id', 'target5');
 
       runSequence([
         function(done) {
-          io.observe(targetElNotInDom);
-          setTimeout(done, 0);
-        },
-        function(done) {
+          io.observe(targetEl5);
           setTimeout(function() {
-            expect(spy.callCount).to.be(0);
-            done();
-          }, ASYNC_TIMEOUT);
-        },
-        function(done) {
-          parentEl.insertBefore(targetElNotInDom, targetEl2);
-          setTimeout(function() {
-            expect(spy.callCount).to.be(1);
-            var records = sortRecords(spy.lastCall.args[0]);
-            expect(records.length).to.be(1);
-            expect(records[0].intersectionRatio).to.be(1);
-            expect(records[0].target).to.be(targetElNotInDom);
-            done();
-          }, ASYNC_TIMEOUT);
-        },
-        function(done) {
-          grandParentEl.parentNode.removeChild(grandParentEl);
-          setTimeout(function() {
-            expect(spy.callCount).to.be(2);
-            var records = sortRecords(spy.lastCall.args[0]);
-            expect(records.length).to.be(1);
-            expect(records[0].intersectionRatio).to.be(0);
-            expect(records[0].target).to.be(targetElNotInDom);
-            done();
-          }, ASYNC_TIMEOUT);
-        },
-        function(done) {
-          rootEl.appendChild(targetElNotInDom);
-          setTimeout(function() {
-            expect(spy.callCount).to.be(3);
-            var records = sortRecords(spy.lastCall.args[0]);
-            expect(records.length).to.be(1);
-            expect(records[0].intersectionRatio).to.be(1);
-            expect(records[0].target).to.be(targetElNotInDom);
-            done();
-          }, ASYNC_TIMEOUT);
-        },
-        function(done) {
-          rootEl.parentNode.removeChild(rootEl);
-          setTimeout(function() {
-            expect(spy.callCount).to.be(4);
-            var records = sortRecords(spy.lastCall.args[0]);
-            expect(records.length).to.be(1);
-            expect(records[0].intersectionRatio).to.be(0);
-            expect(records[0].target).to.be(targetElNotInDom);
-            done();
-          }, ASYNC_TIMEOUT);
-        }
-      ], done);
-    });
-
-    it('handles root/target elements not in the DOM', function(done) {
-
-      rootEl.parentNode.removeChild(rootEl);
-      targetEl1.parentNode.removeChild(targetEl1);
-
-      var spy = sinon.spy();
-      io = new IntersectionObserver(spy, {root: rootEl});
-
-      runSequence([
-        function(done) {
-          io.observe(targetEl1);
-          setTimeout(function() {
+            // Initial observe should trigger with no intersections since
+            // targetEl5 is not yet in the DOM.
             expect(spy.callCount).to.be(1);
             var records = sortRecords(spy.lastCall.args[0]);
             expect(records.length).to.be(1);
             expect(records[0].isIntersecting).to.be(false);
             expect(records[0].intersectionRatio).to.be(0);
-            expect(records[0].target).to.be(targetEl1);
+            expect(records[0].target).to.be(targetEl5);
             done();
           }, ASYNC_TIMEOUT);
         },
         function(done) {
-          // Adding rootEl without targetEl1 in it should trigger nothing.
-          document.getElementById('fixtures').appendChild(rootEl);
-          setTimeout(function() {
-            expect(spy.callCount).to.be(1);
-            done();
-          }, ASYNC_TIMEOUT);
-        },
-        function(done) {
-          // Adding targetEl1 inside rootEl should trigger.
-          parentEl.insertBefore(targetEl1, targetEl2);
+          // Adding targetEl5 inside rootEl should trigger.
+          parentEl.insertBefore(targetEl5, targetEl2);
           setTimeout(function() {
             expect(spy.callCount).to.be(2);
             var records = sortRecords(spy.lastCall.args[0]);
             expect(records.length).to.be(1);
-            expect(records[0].isIntersecting).to.be(true);
             expect(records[0].intersectionRatio).to.be(1);
-            expect(records[0].target).to.be(targetEl1);
+            expect(records[0].target).to.be(targetEl5);
             done();
           }, ASYNC_TIMEOUT);
         },
         function(done) {
-          // Removing an ancestor of targetEl1 should trigger.
+          // Removing an ancestor of targetEl5 should trigger.
           grandParentEl.parentNode.removeChild(grandParentEl);
           setTimeout(function() {
             expect(spy.callCount).to.be(3);
             var records = sortRecords(spy.lastCall.args[0]);
             expect(records.length).to.be(1);
-            expect(records[0].isIntersecting).to.be(false);
             expect(records[0].intersectionRatio).to.be(0);
-            expect(records[0].target).to.be(targetEl1);
+            expect(records[0].target).to.be(targetEl5);
             done();
           }, ASYNC_TIMEOUT);
         },
         function(done) {
-          // Adding the previously removed targetEl1 (via grandParentEl) back
-          // directly inside rootEl should trigger.
-          rootEl.appendChild(targetEl1);
+          // Adding the previously removed targetEl5 (via grandParentEl)
+          // back directly inside rootEl should trigger.
+          rootEl.appendChild(targetEl5);
           setTimeout(function() {
             expect(spy.callCount).to.be(4);
             var records = sortRecords(spy.lastCall.args[0]);
             expect(records.length).to.be(1);
-            expect(records[0].isIntersecting).to.be(true);
             expect(records[0].intersectionRatio).to.be(1);
-            expect(records[0].target).to.be(targetEl1);
+            expect(records[0].target).to.be(targetEl5);
             done();
           }, ASYNC_TIMEOUT);
         },
@@ -751,7 +679,7 @@ describe('IntersectionObserver', function() {
             var records = sortRecords(spy.lastCall.args[0]);
             expect(records.length).to.be(1);
             expect(records[0].intersectionRatio).to.be(0);
-            expect(records[0].target).to.be(targetEl1);
+            expect(records[0].target).to.be(targetEl5);
             done();
           }, ASYNC_TIMEOUT);
         }
