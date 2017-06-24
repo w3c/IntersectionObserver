@@ -370,8 +370,12 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
     var parentRect = null;
 
     // If we're at the root element, set parentRect to the already
-    // calculated rootRect.
-    if (parent == this.root || parent.nodeType != 1) {
+    // calculated rootRect. And since <body> and <html> cannot be clipped
+    // to a rect that's not also the document rect, consider them root too.
+    if (parent == this.root ||
+        parent == document.body ||
+        parent == document.documentElement ||
+        parent.nodeType != 1) {
       atRoot = true;
       parentRect = rootRect;
     }
