@@ -209,7 +209,7 @@ var observer = new IntersectionObserver(
       observer.unobserve(container);
     });
   },
-  { rootMargin: "200% 0" }
+  { rootMargin: "200% 0%" }
 );
 
 // Set up lazy loading
