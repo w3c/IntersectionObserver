@@ -563,17 +563,12 @@ describe('IntersectionObserver', function() {
     it('handles elements with display set to none', function(done) {
 
       var spy = sinon.spy();
-      io = new IntersectionObserver(spy);
+      io = new IntersectionObserver(spy, {root: rootEl});
 
       runSequence([
         function(done) {
-          rootEl.style.position = 'absolute';
-          rootEl.style.top = '0px';
-          rootEl.style.left = '0px';
-          rootEl.style.width = '0px';
-          rootEl.style.height = '0px';
           rootEl.style.display = 'none';
-          io.observe(rootEl);
+          io.observe(targetEl1);
           setTimeout(function() {
             expect(spy.callCount).to.be(1);
             var records = sortRecords(spy.lastCall.args[0]);
@@ -595,9 +590,31 @@ describe('IntersectionObserver', function() {
           }, ASYNC_TIMEOUT);
         },
         function(done) {
-          rootEl.style.display = 'none';
+          parentEl.style.display = 'none';
           setTimeout(function() {
             expect(spy.callCount).to.be(3);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            expect(records[0].isIntersecting).to.be(false);
+            expect(records[0].intersectionRatio).to.be(0);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          parentEl.style.display = 'block';
+          setTimeout(function() {
+            expect(spy.callCount).to.be(4);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            expect(records[0].isIntersecting).to.be(true);
+            expect(records[0].intersectionRatio).to.be(1);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          targetEl1.style.display = 'none';
+          setTimeout(function() {
+            expect(spy.callCount).to.be(5);
             var records = sortRecords(spy.lastCall.args[0]);
             expect(records.length).to.be(1);
             expect(records[0].isIntersecting).to.be(false);

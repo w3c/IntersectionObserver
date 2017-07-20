@@ -368,6 +368,10 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
 
   while (!atRoot) {
     var parentRect = null;
+    var parentComputedStyle = window.getComputedStyle(parent);
+
+    // If the parent isn't displayed, an intersection can't happen.
+    if (parentComputedStyle.display == 'none') return;
 
     // If we're at the root element, set parentRect to the already
     // calculated rootRect. And since <body> and <html> cannot be clipped
@@ -382,7 +386,7 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
     // Otherwise check to see if the parent element hides overflow,
     // and if so update parentRect.
     else {
-      if (window.getComputedStyle(parent).overflow != 'visible') {
+      if (parentComputedStyle.overflow != 'visible') {
         parentRect = getBoundingClientRect(parent);
       }
     }
@@ -630,15 +634,16 @@ function getBoundingClientRect(el) {
   var rect;
 
   try {
-      rect = el.getBoundingClientRect();
-  } catch (e) {/* ignore Windows 7 IE11 "Unspecified error" */}
-
-  if (!rect) {
-      return getEmptyRect();
+    rect = el.getBoundingClientRect();
+  } catch (err) {
+    // Ignore Windows 7 IE11 "Unspecified error"
+    // https://github.com/WICG/IntersectionObserver/pull/205
   }
 
+  if (!rect) return getEmptyRect();
+
   // Older IE
-  if (!rect.width || !rect.height) {
+  if (!(rect.width && rect.height)) {
     rect = {
       top: rect.top,
       right: rect.right,
