@@ -363,33 +363,32 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
 
   var targetRect = getBoundingClientRect(target);
   var intersectionRect = targetRect;
-  var parent = target.parentNode;
+  var parent = getParentNode(target);
   var atRoot = false;
 
   while (!atRoot) {
     var parentRect = null;
-    var parentComputedStyle = window.getComputedStyle(parent);
+    var parentComputedStyle = parent.nodeType == 1 ?
+        window.getComputedStyle(parent) : {};
 
     // If the parent isn't displayed, an intersection can't happen.
     if (parentComputedStyle.display == 'none') return;
 
-    // If we're at the root element, set parentRect to the already
-    // calculated rootRect. And since <body> and <html> cannot be clipped
-    // to a rect that's not also the document rect, consider them root too.
-    if (parent == this.root ||
-        parent == document.body ||
-        parent == document.documentElement ||
-        parent.nodeType != 1) {
+    if (parent == this.root || parent == document) {
       atRoot = true;
       parentRect = rootRect;
-    }
-    // Otherwise check to see if the parent element hides overflow,
-    // and if so update parentRect.
-    else {
-      if (parentComputedStyle.overflow != 'visible') {
+    } else {
+      // If the element has a non-visible overflow, and it's not the <body>
+      // or <html> element, update the intersection rect.
+      // Note: <body> and <html> cannot be clipped to a rect that's not also
+      // the document rect, so no need to compute a new intersection.
+      if (parent != document.body &&
+          parent != document.documentElement &&
+          parentComputedStyle.overflow != 'visible') {
         parentRect = getBoundingClientRect(parent);
       }
     }
+
     // If either of the above conditionals set a new parentRect,
     // calculate new intersection data.
     if (parentRect) {
@@ -397,7 +396,7 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
 
       if (!intersectionRect) break;
     }
-    parent = parent.parentNode;
+    parent = getParentNode(parent);
   }
   return intersectionRect;
 };
@@ -683,17 +682,28 @@ function getEmptyRect() {
 function containsDeep(parent, child) {
   var node = child;
   while (node) {
-    // Check if the node is a shadow root, if it is get the host.
-    if (node.nodeType == 11 && node.host) {
-      node = node.host;
-    }
-
     if (node == parent) return true;
 
-    // Traverse upwards in the DOM.
-    node = node.parentNode;
+    node = getParentNode(node);
   }
   return false;
+}
+
+
+/**
+ * Gets the parent node of an element or its host element if the parent node
+ * is a shadow root.
+ * @param {Node} node The node whose parent to get.
+ * @return {Node|null} The parent node or null if no parent exists.
+ */
+function getParentNode(node) {
+  var parent = node.parentNode;
+
+  if (parent && parent.nodeType == 11 && parent.host) {
+    // If the parent is a shadow root, return the host element.
+    return parent.host;
+  }
+  return parent;
 }
 
 
