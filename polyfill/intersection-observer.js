@@ -22,7 +22,7 @@
 // features are natively supported.
 if ('IntersectionObserver' in window &&
     'IntersectionObserverEntry' in window &&
-    'intersectionRatio' in IntersectionObserverEntry.prototype) {
+    'intersectionRatio' in window.IntersectionObserverEntry.prototype) {
 
   // Minimal polyfill for Edge 15's lack of `isIntersecting`
   // See: https://github.com/WICG/IntersectionObserver/issues/211
