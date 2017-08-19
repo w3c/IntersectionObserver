@@ -152,6 +152,7 @@ IntersectionObserver.prototype.observe = function(target) {
   this._registerInstance();
   this._observationTargets.push({element: target, entry: null});
   this._monitorIntersections();
+  this._checkForIntersections();
 };
 
 
