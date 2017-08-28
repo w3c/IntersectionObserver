@@ -8,6 +8,6 @@ Implementation status:
 
 [Explainer Doc](./explainer.md)
 
-[Draft Spec](https://wicg.github.io/IntersectionObserver/)
+[Draft Spec](https://w3c.github.io/IntersectionObserver/)
 
 [Polyfill](./polyfill/)
