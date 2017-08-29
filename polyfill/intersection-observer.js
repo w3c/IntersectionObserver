@@ -257,8 +257,6 @@ IntersectionObserver.prototype._monitorIntersections = function() {
   if (!this._monitoringIntersections) {
     this._monitoringIntersections = true;
 
-    this._checkForIntersections();
-
     // If a poll interval is set, use polling instead of listening to
     // resize and scroll events or DOM mutations.
     if (this.POLL_INTERVAL) {
