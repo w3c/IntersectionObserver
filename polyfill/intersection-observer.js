@@ -552,7 +552,7 @@ function now() {
 
 
 /**
- * Throttles a function and delays its executiong, so it's only called at most
+ * Throttles a function and delays its execution, so it's only called at most
  * once within a given time period.
  * @param {Function} fn The function to throttle.
  * @param {number} timeout The amount of time that must pass before the
@@ -563,10 +563,16 @@ function throttle(fn, timeout) {
   var timer = null;
   return function () {
     if (!timer) {
-      timer = setTimeout(function() {
+      var callback = function() {
         fn();
         timer = null;
-      }, timeout);
+      };
+      if (timeout == 0 && window.requestAnimationFrame) {
+        timer = requestAnimationFrame(callback);
+      }
+      else {
+        timer = setTimeout(callback, timeout);
+      }
     }
   };
 }

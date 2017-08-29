@@ -805,6 +805,35 @@ describe('IntersectionObserver', function() {
       io.observe(targetEl1);
     });
 
+
+    it('uses requestAnimationFrame when timeout is 0', function(done) {
+      var rAF = window.requestAnimationFrame;
+      if (!rAF) {
+        done();
+      }
+      else {
+        var timeout = IntersectionObserver.prototype.THROTTLE_TIMEOUT;
+        var stub = sinon.stub(window, 'requestAnimationFrame').returns(1);
+
+        // without a THROTTLE_TIMEOUT of 0, setTimeout should be used
+        IntersectionObserver.prototype.THROTTLE_TIMEOUT = timeout || 100;
+        io = new IntersectionObserver(function() {}, {root: rootEl});
+        io.observe(targetEl1);
+        expect(stub.callCount).to.be(0);
+        io.disconnect();
+
+        // when THROTTLE_TIMEOUT is 0 and requestAnimationFrame is available, it should be used
+        IntersectionObserver.prototype.THROTTLE_TIMEOUT = 0;
+        io = new IntersectionObserver(function() {}, {root: rootEl});
+        io.observe(targetEl1);
+        expect(stub.callCount).to.be(1);
+
+        window.requestAnimationFrame = rAF;
+        IntersectionObserver.prototype.THROTTLE_TIMEOUT = timeout;
+        done();
+      }
+    });
+
   });
 
 
