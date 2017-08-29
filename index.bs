@@ -229,7 +229,7 @@ interface IntersectionObserver {
 			an {{IntersectionObserverRegistration}} record
 			with an {{IntersectionObserverRegistration/observer}} property set to |this|,
 			a {{IntersectionObserverRegistration/previousThresholdIndex}} property set to <code>-1</code>,
-			and a {{IntersectionObserverRegistration/previousIsIntersecting}} property set to <code>undefined</code>.
+			and a {{IntersectionObserverRegistration/previousIsIntersecting}} property set to <code>false</code>.
 		3. Append |intersectionObserverRegistration|
 			to |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
 		4. Add |target| to |this|'s internal {{[[ObservationTargets]]}} slot.
@@ -504,7 +504,7 @@ This list holds <dfn interface>IntersectionObserverRegistration</dfn> records,
 which have an <dfn attribute for=IntersectionObserverRegistration>observer</dfn> property
 holding an {{IntersectionObserver}}, a <dfn attribute for=IntersectionObserverRegistration>previousThresholdIndex</dfn> property
 holding a number between -1 and the length of the observer's {{IntersectionObserver/thresholds}} property (inclusive), and
-a <dfn attribute for=IntersectionObserverRegistration>previousIsIntersecting</dfn> property holding a boolean or <code>undefined</code>.
+a <dfn attribute for=IntersectionObserverRegistration>previousIsIntersecting</dfn> property holding a boolean.
 
 <h4 id='intersection-observer-private-slots'>
 IntersectionObserver</h4>
