@@ -152,6 +152,7 @@ IntersectionObserver.prototype.observe = function(target) {
   this._registerInstance();
   this._observationTargets.push({element: target, entry: null});
   this._monitorIntersections();
+  this._checkForIntersections();
 };
 
 
@@ -255,8 +256,6 @@ IntersectionObserver.prototype._parseRootMargin = function(opt_rootMargin) {
 IntersectionObserver.prototype._monitorIntersections = function() {
   if (!this._monitoringIntersections) {
     this._monitoringIntersections = true;
-
-    this._checkForIntersections();
 
     // If a poll interval is set, use polling instead of listening to
     // resize and scroll events or DOM mutations.
