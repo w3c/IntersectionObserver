@@ -178,6 +178,20 @@ describe('IntersectionObserver', function() {
       io.observe(targetEl2);
     });
 
+    it('triggers for existing targets when observing begins after monitoring has begun', function(done) {
+      var spy = sinon.spy();
+      io = new IntersectionObserver(spy, {root: rootEl});
+
+      io.observe(targetEl1);
+      setTimeout(function() {
+        io.observe(targetEl2);
+        setTimeout(function() {
+          expect(spy.callCount).to.be(2);
+          done();
+        }, ASYNC_TIMEOUT);
+      }, ASYNC_TIMEOUT);
+    });
+
 
     it('triggers with the correct arguments', function(done) {
       io = new IntersectionObserver(function(records, observer) {
