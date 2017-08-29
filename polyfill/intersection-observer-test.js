@@ -142,14 +142,14 @@ describe('IntersectionObserver', function() {
     it('throws when a threshold is not a number', function() {
       expect(function() {
         io = new IntersectionObserver(noop, {threshold: ['foo']});
-      }).to.throwException(/threshold/i);
+      }).to.throwException();
     });
 
 
     it('throws when a threshold value is not between 0 and 1', function() {
       expect(function() {
         io = new IntersectionObserver(noop, {threshold: [0, -1]});
-      }).to.throwException(/threshold/i);
+      }).to.throwException();
     });
 
   });
@@ -161,7 +161,7 @@ describe('IntersectionObserver', function() {
       expect(function() {
         io = new IntersectionObserver(noop);
         io.observe(null);
-      }).to.throwException(/element/i);
+      }).to.throwException();
     });
 
 
