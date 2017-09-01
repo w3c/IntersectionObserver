@@ -1,13 +1,14 @@
 <pre class='metadata'>
 Title: Intersection Observer
 Status: ED
-ED: https://github.com/WICG/IntersectionObserver/
+ED: https://w3c.github.io/IntersectionObserver/
 Shortname: intersection-observer
 Level: 1
-Editor: Michael Blain, Google, mpb@google.com
+Editor: Stefan Zager, Google, szager@google.com
+Former Editor: Michael Blain, Google, mpb@google.com
 Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements ("targets") relative to a containing element or to the top-level viewport ("root"). The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
-Group: webperf
-Repository: WICG/IntersectionObserver
+Group: webplatform
+Repository: W3C/IntersectionObserver
 Ignored Vars: rootMargin, docs
 </pre>
 
@@ -669,3 +670,10 @@ This step is:
 <ol start="10">
 	<li>For each <a>fully active</a> <a>Document</a> in |docs|, <a>Run the update intersection observations steps</a> for each {{IntersectionObserver}} whose {{IntersectionObserver/root}} is in the DOMtree of that <a>Document</a>.</li>
 </ol>
+
+<!-- ============================================================ -->
+<h2 id=acknowledgements>Acknowledgements</h2>
+<!-- ============================================================ -->
+
+Special thanks to <a href="https://github.com/w3c/IntersectionObserver/graphs/contributors">all the contributors</a> for their technical input and suggestions that led to improvements to this
+specification.
