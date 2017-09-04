@@ -25,7 +25,7 @@ if ('IntersectionObserver' in window &&
     'intersectionRatio' in window.IntersectionObserverEntry.prototype) {
 
   // Minimal polyfill for Edge 15's lack of `isIntersecting`
-  // See: https://github.com/WICG/IntersectionObserver/issues/211
+  // See: https://github.com/w3c/IntersectionObserver/issues/211
   if (!('isIntersecting' in window.IntersectionObserverEntry.prototype)) {
     Object.defineProperty(window.IntersectionObserverEntry.prototype,
       'isIntersecting', {
@@ -49,7 +49,7 @@ var registry = [];
 
 /**
  * Creates the global IntersectionObserverEntry constructor.
- * https://wicg.github.io/IntersectionObserver/#intersection-observer-entry
+ * https://w3c.github.io/IntersectionObserver/#intersection-observer-entry
  * @param {Object} entry A dictionary of instance properties.
  * @constructor
  */
@@ -79,7 +79,7 @@ function IntersectionObserverEntry(entry) {
 
 /**
  * Creates the global IntersectionObserver constructor.
- * https://wicg.github.io/IntersectionObserver/#intersection-observer-interface
+ * https://w3c.github.io/IntersectionObserver/#intersection-observer-interface
  * @param {Function} callback The function to be invoked after intersection
  *     changes have queued. The function is not invoked if the queue has
  *     been emptied by calling the `takeRecords` method.
@@ -357,7 +357,7 @@ IntersectionObserver.prototype._checkForIntersections = function() {
  * Accepts a target and root rect computes the intersection between then
  * following the algorithm in the spec.
  * TODO(philipwalton): at this time clip-path is not considered.
- * https://wicg.github.io/IntersectionObserver/#calculate-intersection-rect-algo
+ * https://w3c.github.io/IntersectionObserver/#calculate-intersection-rect-algo
  * @param {Element} target The target DOM element
  * @param {Object} rootRect The bounding rect of the root after being
  *     expanded by the rootMargin value.
@@ -646,7 +646,7 @@ function getBoundingClientRect(el) {
     rect = el.getBoundingClientRect();
   } catch (err) {
     // Ignore Windows 7 IE11 "Unspecified error"
-    // https://github.com/WICG/IntersectionObserver/pull/205
+    // https://github.com/w3c/IntersectionObserver/pull/205
   }
 
   if (!rect) return getEmptyRect();
