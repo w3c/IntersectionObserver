@@ -646,7 +646,7 @@ describe('IntersectionObserver', function() {
 
       // targetEl5 is initially not in the DOM. Note that this element must be
       // created outside of the addFixtures() function to catch the IE11 error
-      // described here: https://github.com/WICG/IntersectionObserver/pull/205
+      // described here: https://github.com/w3c/IntersectionObserver/pull/205
       var targetEl5 = document.createElement('div');
       targetEl5.setAttribute('id', 'target5');
 

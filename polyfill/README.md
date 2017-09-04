@@ -1,6 +1,6 @@
 # `IntersectionObserver` polyfill
 
-This library polyfills the native [`IntersectionObserver`](http://wicg.github.io/IntersectionObserver/) API in unsupporting browsers. See the [API documentation](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) for usage information.
+This library polyfills the native [`IntersectionObserver`](http://w3c.github.io/IntersectionObserver/) API in unsupporting browsers. See the [API documentation](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) for usage information.
 
 - [Installation](#installation)
 - [Configuring the polyfill](#configuring-the-polyfill)
@@ -9,7 +9,7 @@ This library polyfills the native [`IntersectionObserver`](http://wicg.github.io
 
 ## Installation
 
-You can install the polyfill via npm or by downloading a [zip](https://github.com/WICG/IntersectionObserver/archive/gh-pages.zip) of this repository:
+You can install the polyfill via npm or by downloading a [zip](https://github.com/w3c/IntersectionObserver/archive/gh-pages.zip) of this repository:
 
 ```sh
 npm install intersection-observer
