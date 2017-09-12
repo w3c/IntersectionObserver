@@ -142,14 +142,14 @@ describe('IntersectionObserver', function() {
     it('throws when a threshold is not a number', function() {
       expect(function() {
         io = new IntersectionObserver(noop, {threshold: ['foo']});
-      }).to.throwException(/threshold/i);
+      }).to.throwException();
     });
 
 
     it('throws when a threshold value is not between 0 and 1', function() {
       expect(function() {
         io = new IntersectionObserver(noop, {threshold: [0, -1]});
-      }).to.throwException(/threshold/i);
+      }).to.throwException();
     });
 
   });
@@ -161,7 +161,7 @@ describe('IntersectionObserver', function() {
       expect(function() {
         io = new IntersectionObserver(noop);
         io.observe(null);
-      }).to.throwException(/element/i);
+      }).to.throwException();
     });
 
 
@@ -176,6 +176,20 @@ describe('IntersectionObserver', function() {
       targetEl2.style.top = '-40px';
       io.observe(targetEl1);
       io.observe(targetEl2);
+    });
+
+    it('triggers for existing targets when observing begins after monitoring has begun', function(done) {
+      var spy = sinon.spy();
+      io = new IntersectionObserver(spy, {root: rootEl});
+
+      io.observe(targetEl1);
+      setTimeout(function() {
+        io.observe(targetEl2);
+        setTimeout(function() {
+          expect(spy.callCount).to.be(2);
+          done();
+        }, ASYNC_TIMEOUT);
+      }, ASYNC_TIMEOUT);
     });
 
 
@@ -563,17 +577,12 @@ describe('IntersectionObserver', function() {
     it('handles elements with display set to none', function(done) {
 
       var spy = sinon.spy();
-      io = new IntersectionObserver(spy);
+      io = new IntersectionObserver(spy, {root: rootEl});
 
       runSequence([
         function(done) {
-          rootEl.style.position = 'absolute';
-          rootEl.style.top = '0px';
-          rootEl.style.left = '0px';
-          rootEl.style.width = '0px';
-          rootEl.style.height = '0px';
           rootEl.style.display = 'none';
-          io.observe(rootEl);
+          io.observe(targetEl1);
           setTimeout(function() {
             expect(spy.callCount).to.be(1);
             var records = sortRecords(spy.lastCall.args[0]);
@@ -595,9 +604,31 @@ describe('IntersectionObserver', function() {
           }, ASYNC_TIMEOUT);
         },
         function(done) {
-          rootEl.style.display = 'none';
+          parentEl.style.display = 'none';
           setTimeout(function() {
             expect(spy.callCount).to.be(3);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            expect(records[0].isIntersecting).to.be(false);
+            expect(records[0].intersectionRatio).to.be(0);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          parentEl.style.display = 'block';
+          setTimeout(function() {
+            expect(spy.callCount).to.be(4);
+            var records = sortRecords(spy.lastCall.args[0]);
+            expect(records.length).to.be(1);
+            expect(records[0].isIntersecting).to.be(true);
+            expect(records[0].intersectionRatio).to.be(1);
+            done();
+          }, ASYNC_TIMEOUT);
+        },
+        function(done) {
+          targetEl1.style.display = 'none';
+          setTimeout(function() {
+            expect(spy.callCount).to.be(5);
             var records = sortRecords(spy.lastCall.args[0]);
             expect(records.length).to.be(1);
             expect(records[0].isIntersecting).to.be(false);
@@ -615,7 +646,7 @@ describe('IntersectionObserver', function() {
 
       // targetEl5 is initially not in the DOM. Note that this element must be
       // created outside of the addFixtures() function to catch the IE11 error
-      // described here: https://github.com/WICG/IntersectionObserver/pull/205
+      // described here: https://github.com/w3c/IntersectionObserver/pull/205
       var targetEl5 = document.createElement('div');
       targetEl5.setAttribute('id', 'target5');
 

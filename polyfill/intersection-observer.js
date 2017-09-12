@@ -23,6 +23,17 @@
 if ('IntersectionObserver' in window &&
     'IntersectionObserverEntry' in window &&
     'intersectionRatio' in window.IntersectionObserverEntry.prototype) {
+
+  // Minimal polyfill for Edge 15's lack of `isIntersecting`
+  // See: https://github.com/w3c/IntersectionObserver/issues/211
+  if (!('isIntersecting' in window.IntersectionObserverEntry.prototype)) {
+    Object.defineProperty(window.IntersectionObserverEntry.prototype,
+      'isIntersecting', {
+      get: function () {
+        return this.intersectionRatio > 0;
+      }
+    });
+  }
   return;
 }
 
@@ -38,7 +49,7 @@ var registry = [];
 
 /**
  * Creates the global IntersectionObserverEntry constructor.
- * https://wicg.github.io/IntersectionObserver/#intersection-observer-entry
+ * https://w3c.github.io/IntersectionObserver/#intersection-observer-entry
  * @param {Object} entry A dictionary of instance properties.
  * @constructor
  */
@@ -68,7 +79,7 @@ function IntersectionObserverEntry(entry) {
 
 /**
  * Creates the global IntersectionObserver constructor.
- * https://wicg.github.io/IntersectionObserver/#intersection-observer-interface
+ * https://w3c.github.io/IntersectionObserver/#intersection-observer-interface
  * @param {Function} callback The function to be invoked after intersection
  *     changes have queued. The function is not invoked if the queue has
  *     been emptied by calling the `takeRecords` method.
@@ -141,6 +152,7 @@ IntersectionObserver.prototype.observe = function(target) {
   this._registerInstance();
   this._observationTargets.push({element: target, entry: null});
   this._monitorIntersections();
+  this._checkForIntersections();
 };
 
 
@@ -245,8 +257,6 @@ IntersectionObserver.prototype._monitorIntersections = function() {
   if (!this._monitoringIntersections) {
     this._monitoringIntersections = true;
 
-    this._checkForIntersections();
-
     // If a poll interval is set, use polling instead of listening to
     // resize and scroll events or DOM mutations.
     if (this.POLL_INTERVAL) {
@@ -347,7 +357,7 @@ IntersectionObserver.prototype._checkForIntersections = function() {
  * Accepts a target and root rect computes the intersection between then
  * following the algorithm in the spec.
  * TODO(philipwalton): at this time clip-path is not considered.
- * https://wicg.github.io/IntersectionObserver/#calculate-intersection-rect-algo
+ * https://w3c.github.io/IntersectionObserver/#calculate-intersection-rect-algo
  * @param {Element} target The target DOM element
  * @param {Object} rootRect The bounding rect of the root after being
  *     expanded by the rootMargin value.
@@ -363,29 +373,32 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
 
   var targetRect = getBoundingClientRect(target);
   var intersectionRect = targetRect;
-  var parent = target.parentNode;
+  var parent = getParentNode(target);
   var atRoot = false;
 
   while (!atRoot) {
     var parentRect = null;
+    var parentComputedStyle = parent.nodeType == 1 ?
+        window.getComputedStyle(parent) : {};
 
-    // If we're at the root element, set parentRect to the already
-    // calculated rootRect. And since <body> and <html> cannot be clipped
-    // to a rect that's not also the document rect, consider them root too.
-    if (parent == this.root ||
-        parent == document.body ||
-        parent == document.documentElement ||
-        parent.nodeType != 1) {
+    // If the parent isn't displayed, an intersection can't happen.
+    if (parentComputedStyle.display == 'none') return;
+
+    if (parent == this.root || parent == document) {
       atRoot = true;
       parentRect = rootRect;
-    }
-    // Otherwise check to see if the parent element hides overflow,
-    // and if so update parentRect.
-    else {
-      if (window.getComputedStyle(parent).overflow != 'visible') {
+    } else {
+      // If the element has a non-visible overflow, and it's not the <body>
+      // or <html> element, update the intersection rect.
+      // Note: <body> and <html> cannot be clipped to a rect that's not also
+      // the document rect, so no need to compute a new intersection.
+      if (parent != document.body &&
+          parent != document.documentElement &&
+          parentComputedStyle.overflow != 'visible') {
         parentRect = getBoundingClientRect(parent);
       }
     }
+
     // If either of the above conditionals set a new parentRect,
     // calculate new intersection data.
     if (parentRect) {
@@ -393,7 +406,7 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
 
       if (!intersectionRect) break;
     }
-    parent = parent.parentNode;
+    parent = getParentNode(parent);
   }
   return intersectionRect;
 };
@@ -630,15 +643,16 @@ function getBoundingClientRect(el) {
   var rect;
 
   try {
-      rect = el.getBoundingClientRect();
-  } catch (e) {/* ignore Windows 7 IE11 "Unspecified error" */}
-
-  if (!rect) {
-      return getEmptyRect();
+    rect = el.getBoundingClientRect();
+  } catch (err) {
+    // Ignore Windows 7 IE11 "Unspecified error"
+    // https://github.com/w3c/IntersectionObserver/pull/205
   }
 
+  if (!rect) return getEmptyRect();
+
   // Older IE
-  if (!rect.width || !rect.height) {
+  if (!(rect.width && rect.height)) {
     rect = {
       top: rect.top,
       right: rect.right,
@@ -678,17 +692,28 @@ function getEmptyRect() {
 function containsDeep(parent, child) {
   var node = child;
   while (node) {
-    // Check if the node is a shadow root, if it is get the host.
-    if (node.nodeType == 11 && node.host) {
-      node = node.host;
-    }
-
     if (node == parent) return true;
 
-    // Traverse upwards in the DOM.
-    node = node.parentNode;
+    node = getParentNode(node);
   }
   return false;
+}
+
+
+/**
+ * Gets the parent node of an element or its host element if the parent node
+ * is a shadow root.
+ * @param {Node} node The node whose parent to get.
+ * @return {Node|null} The parent node or null if no parent exists.
+ */
+function getParentNode(node) {
+  var parent = node.parentNode;
+
+  if (parent && parent.nodeType == 11 && parent.host) {
+    // If the parent is a shadow root, return the host element.
+    return parent.host;
+  }
+  return parent;
 }
 
 

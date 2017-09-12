@@ -1,13 +1,14 @@
 <pre class='metadata'>
 Title: Intersection Observer
 Status: ED
-ED: https://github.com/WICG/IntersectionObserver/
+ED: https://w3c.github.io/IntersectionObserver/
 Shortname: intersection-observer
 Level: 1
-Editor: Michael Blain, Google, mpb@google.com
+Editor: Stefan Zager, Google, szager@google.com
+Former Editor: Michael Blain, Google, mpb@google.com
 Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements ("targets") relative to a containing element or to the top-level viewport ("root"). The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
-Group: webperf
-Repository: WICG/IntersectionObserver
+Group: webplatform
+Repository: W3C/IntersectionObserver
 Ignored Vars: rootMargin, docs
 </pre>
 
@@ -227,8 +228,9 @@ interface IntersectionObserver {
 			return.
 		2. Let |intersectionObserverRegistration| be
 			an {{IntersectionObserverRegistration}} record
-			with an {{IntersectionObserverRegistration/observer}} property set to |this|
-			and a {{IntersectionObserverRegistration/previousThresholdIndex}} property set to <code>-1</code>.
+			with an {{IntersectionObserverRegistration/observer}} property set to |this|,
+			a {{IntersectionObserverRegistration/previousThresholdIndex}} property set to <code>-1</code>,
+			and a {{IntersectionObserverRegistration/previousIsIntersecting}} property set to <code>false</code>.
 		3. Append |intersectionObserverRegistration|
 			to |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
 		4. Add |target| to |this|'s internal {{[[ObservationTargets]]}} slot.
@@ -501,9 +503,9 @@ Element</h4>
 which is initialized to an empty list.
 This list holds <dfn interface>IntersectionObserverRegistration</dfn> records,
 which have an <dfn attribute for=IntersectionObserverRegistration>observer</dfn> property
-holding an {{IntersectionObserver}}
-and a <dfn attribute for=IntersectionObserverRegistration>previousThresholdIndex</dfn> property
-holding a number between -1 and the length of the observer's {{IntersectionObserver/thresholds}} property (inclusive).
+holding an {{IntersectionObserver}}, a <dfn attribute for=IntersectionObserverRegistration>previousThresholdIndex</dfn> property
+holding a number between -1 and the length of the observer's {{IntersectionObserver/thresholds}} property (inclusive), and
+a <dfn attribute for=IntersectionObserverRegistration>previousIsIntersecting</dfn> property holding a boolean.
 
 <h4 id='intersection-observer-private-slots'>
 IntersectionObserver</h4>
@@ -616,18 +618,23 @@ To <dfn>run the update intersection observations steps</dfn> for a
 			zero area); otherwise, let |isIntersecting| be false.
 		8. If |targetArea| is non-zero, let |intersectionRatio| be |intersectionArea| divided by |targetArea|.<br>
 			Otherwise, let |intersectionRatio| be <code>1</code> if |isIntersecting| is true, or <code>0</code> if |isIntersecting| is false.
-		9. Let |thresholdIndex| be the index of the first entry in |observer|.{{thresholds}} whose value is greater than |intersectionRatio|, or the length of |observer|.{{thresholds}} if |intersectionRatio| is greater than the last entry in |observer|.{{thresholds}}.
+		9. Let |thresholdIndex| be the index of the first entry in |observer|.{{thresholds}} whose value is greater than |intersectionRatio|, or the length of |observer|.{{thresholds}} if |intersectionRatio| is greater than or equal to the last entry in |observer|.{{thresholds}}.
 		10. Let |intersectionObserverRegistration| be the {{IntersectionObserverRegistration}} record 
 			in |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot
 			whose {{IntersectionObserverRegistration/observer}} property is equal to |observer|.
 		11. Let |previousThresholdIndex| be the |intersectionObserverRegistration|'s
 		    {{IntersectionObserverRegistration/previousThresholdIndex}} property.
-		12. If |thresholdIndex| does not equal |previousThresholdIndex|,
+		12. Let |previousIsIntersecting| be the |intersectionObserverRegistration|'s
+		    {{IntersectionObserverRegistration/previousIsIntersecting}} property.
+		13. If |thresholdIndex| does not equal |previousThresholdIndex| or if 
+		    |isIntersecting| does not equal |previousIsIntersecting|,
 			<a>queue an IntersectionObserverEntry</a>,
 			passing in |observer|, |time|, |rootBounds|,
 			|boundingClientRect|, |intersectionRect|, |isIntersecting|, and |target|.
-		13. Assign |threshold| to |intersectionObserverRegistration|'s
+		14. Assign |threshold| to |intersectionObserverRegistration|'s
 		    {{IntersectionObserverRegistration/previousThresholdIndex}} property.
+        15. Assign |isIntersecting| to |intersectionObserverRegistration|'s
+		    {{IntersectionObserverRegistration/previousIsIntersecting}} property.
 
 <h3 id='lifetime'>
 IntersectionObserver Lifetime</h2>
@@ -663,3 +670,10 @@ This step is:
 <ol start="10">
 	<li>For each <a>fully active</a> <a>Document</a> in |docs|, <a>Run the update intersection observations steps</a> for each {{IntersectionObserver}} whose {{IntersectionObserver/root}} is in the DOMtree of that <a>Document</a>.</li>
 </ol>
+
+<!-- ============================================================ -->
+<h2 id=acknowledgements>Acknowledgements</h2>
+<!-- ============================================================ -->
+
+Special thanks to <a href="https://github.com/w3c/IntersectionObserver/graphs/contributors">all the contributors</a> for their technical input and suggestions that led to improvements to this
+specification.

@@ -29,7 +29,7 @@ Given the opportunity to reduce CPU use, increase battery life, and eliminate ja
 ```js
 function callback(entries) {
   entries.forEach(function(entry) {
-    if (isInterseting(entry.intersectionRect))
+    if (isIntersecting(entry.intersectionRect))
       doSomething();
   });
 };
@@ -209,7 +209,7 @@ var observer = new IntersectionObserver(
       observer.unobserve(container);
     });
   },
-  { rootMargin: "200% 0" }
+  { rootMargin: "200% 0%" }
 );
 
 // Set up lazy loading
