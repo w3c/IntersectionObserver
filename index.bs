@@ -2,7 +2,6 @@
 Title: Intersection Observer
 Status: ED
 ED: https://w3c.github.io/IntersectionObserver/
-URL: https://w3c.github.io/IntersectionObserver/
 Shortname: intersection-observer
 TR: https://www.w3.org/TR/intersection-observer/
 Level: 1
