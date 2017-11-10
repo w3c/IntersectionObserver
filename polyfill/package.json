@@ -1,6 +1,6 @@
 {
   "name": "intersection-observer",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "A polyfill for IntersectionObserver",
   "main": "intersection-observer",
   "repository": {
@@ -16,7 +16,7 @@
     "email": "philip@philipwalton.com",
     "url": "http://philipwalton.com"
   },
-  "license": "Apache-2.0",
+  "license": "W3C-20150513",
   "bugs": {
     "url": "https://github.com/w3c/IntersectionObserver/issues"
   }
