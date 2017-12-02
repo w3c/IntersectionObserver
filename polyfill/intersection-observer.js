@@ -4,7 +4,7 @@
  * Licensed under the W3C SOFTWARE AND DOCUMENT NOTICE AND LICENSE.
  *
  *  https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document
- * 
+ *
  */
 
 (function(window, document) {
@@ -125,7 +125,7 @@ IntersectionObserver.prototype.THROTTLE_TIMEOUT = 100;
 IntersectionObserver.prototype.POLL_INTERVAL = null;
 
 /**
- * Use a mutation observer on the root element 
+ * Use a mutation observer on the root element
  * to detect intersection changes.
  */
 IntersectionObserver.prototype.USE_MUTATION_OBSERVER = true;
@@ -269,7 +269,7 @@ IntersectionObserver.prototype._monitorIntersections = function() {
 
       if (this.USE_MUTATION_OBSERVER && 'MutationObserver' in window) {
         this._domObserver = new MutationObserver(this._checkForIntersections);
-        this._domObserver.observe(this.root || document, {
+        this._domObserver.observe(document, {
           attributes: true,
           childList: true,
           characterData: true,
