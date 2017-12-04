@@ -83,7 +83,7 @@ io.observe(someTargetElement);
 
 **Dom changes through MutationObserver**
 
-You can also choose to not listen to the changes to the DOM with `USE_MUTATION_OBSERVER`. `[MutationObserver](https://developer.mozilla.org/fr/docs/Web/API/MutationObserver)` is used when available to listen changes to the DOM that could affect the elements intersections. But it can come with a high cost if your website / webapp contains high frequency updated elements unrelated to the intersections watched elements. If you are absolutely sure you do not need to listen to DOM changes, you can deactivate it globally or for an instance
+You can also choose to not listen to the changes to the DOM with `USE_MUTATION_OBSERVER`. [MutationObserver](https://developer.mozilla.org/fr/docs/Web/API/MutationObserver) is used when available to listen changes to the DOM that could affect the elements intersections. But it can come with a high cost if your website / webapp contains high frequency updated elements unrelated to the intersections watched elements. If you are absolutely sure you do not need to listen to DOM changes, you can deactivate it globally or for an instance
 
 ```js
 IntersectionObserver.prototype.USE_MUTATION_OBSERVER = false; // Globally
