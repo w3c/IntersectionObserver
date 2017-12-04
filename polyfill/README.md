@@ -81,9 +81,9 @@ io.observe(someTargetElement);
 
 **Note:** the `POLL_INTERVAL` property must be set prior to calling the `.observe` method, or the default configuration will be used.
 
-**Dom changes through MutationObserver**
+**Ignoring Dom changes**
 
-You can also choose to not listen to the changes to the DOM with `USE_MUTATION_OBSERVER`. [MutationObserver](https://developer.mozilla.org/fr/docs/Web/API/MutationObserver) is used when available to listen changes to the DOM that could affect the elements intersections. But it can come with a high cost if your website / webapp contains high frequency updated elements unrelated to the intersections watched elements. If you are absolutely sure you do not need to listen to DOM changes, you can deactivate it globally or for an instance
+You can also choose to not check for intersections when the DOM changes by setting an observer's `USE_MUTATION_OBSERVER` property to `false` (either globally on the prototype or per-instance)
 
 ```js
 IntersectionObserver.prototype.USE_MUTATION_OBSERVER = false; // Globally
@@ -92,6 +92,8 @@ IntersectionObserver.prototype.USE_MUTATION_OBSERVER = false; // Globally
 var io = new IntersectionObserver(callback);
 io.USE_MUTATION_OBSERVER = false;
 ```
+
+This is recommended in cases where the DOM will update frequently but you know those updates will have no affect on the position or your target elements.
 
 ## Browser support
 
