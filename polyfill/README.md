@@ -81,7 +81,7 @@ io.observe(someTargetElement);
 
 **Note:** the `POLL_INTERVAL` property must be set prior to calling the `.observe` method, or the default configuration will be used.
 
-**Ignoring Dom changes**
+**Ignoring DOM changes**
 
 You can also choose to not check for intersections when the DOM changes by setting an observer's `USE_MUTATION_OBSERVER` property to `false` (either globally on the prototype or per-instance)
 
