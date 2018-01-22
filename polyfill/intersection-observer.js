@@ -6,7 +6,7 @@
  *  https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document
  *
  */
-if (typeof window !== undefined) {
+if (typeof window !== 'undefined') {
     (function(window, document) {
     'use strict';
 
