@@ -73,6 +73,7 @@ function IntersectionObserverEntry(entry) {
  * Prevent setting the polyfill multiple times on further loads
  */
 IntersectionObserverEntry.prototype.intersectionRatio = undefined;
+IntersectionObserverEntry.prototype.isIntersecting = undefined;
 
 /**
  * Creates the global IntersectionObserver constructor.
