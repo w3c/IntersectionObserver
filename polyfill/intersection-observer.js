@@ -137,16 +137,16 @@ IntersectionObserver.prototype.USE_MUTATION_OBSERVER = true;
  * @param {Element} target The DOM element to observe.
  */
 IntersectionObserver.prototype.observe = function(target) {
+  if (!(target && target.nodeType == 1)) {
+    throw new Error('target must be an Element');
+  }
+
   var isTargetAlreadyObserved = this._observationTargets.some(function(item) {
     return item.element == target;
   });
 
   if (isTargetAlreadyObserved) {
     return;
-  }
-
-  if (!(target && target.nodeType == 1)) {
-    throw new Error('target must be an Element');
   }
 
   this._registerInstance();
@@ -161,9 +161,7 @@ IntersectionObserver.prototype.observe = function(target) {
  * @param {Element} target The DOM element to observe.
  */
 IntersectionObserver.prototype.unobserve = function(target) {
-  this._observationTargets =
-      this._observationTargets.filter(function(item) {
-
+  this._observationTargets = this._observationTargets.filter(function(item) {
     return item.element != target;
   });
   if (!this._observationTargets.length) {
