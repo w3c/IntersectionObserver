@@ -161,9 +161,7 @@ IntersectionObserver.prototype.observe = function(target) {
  * @param {Element} target The DOM element to observe.
  */
 IntersectionObserver.prototype.unobserve = function(target) {
-  this._observationTargets =
-      this._observationTargets.filter(function(item) {
-
+  this._observationTargets = this._observationTargets.filter(function(item) {
     return item.element != target;
   });
   if (!this._observationTargets.length) {
