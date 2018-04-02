@@ -137,16 +137,16 @@ IntersectionObserver.prototype.USE_MUTATION_OBSERVER = true;
  * @param {Element} target The DOM element to observe.
  */
 IntersectionObserver.prototype.observe = function(target) {
+  if (!(target && target.nodeType == 1)) {
+    throw new Error('target must be an Element');
+  }
+
   var isTargetAlreadyObserved = this._observationTargets.some(function(item) {
     return item.element == target;
   });
 
   if (isTargetAlreadyObserved) {
     return;
-  }
-
-  if (!(target && target.nodeType == 1)) {
-    throw new Error('target must be an Element');
   }
 
   this._registerInstance();
