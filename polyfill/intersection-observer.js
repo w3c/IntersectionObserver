@@ -7,8 +7,14 @@
  *
  */
 
-(function(window, document) {
+(function() {
 'use strict';
+
+var window = 'object' === typeof window && window ||
+    'object' === typeof self && self ||
+    'object' === typeof global && global || {};
+
+var document = window.document;
 
 
 // Exits early if all IntersectionObserver and IntersectionObserverEntry
@@ -721,4 +727,4 @@ function getParentNode(node) {
 window.IntersectionObserver = IntersectionObserver;
 window.IntersectionObserverEntry = IntersectionObserverEntry;
 
-}(window, document));
+}();
