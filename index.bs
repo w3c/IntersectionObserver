@@ -620,7 +620,10 @@ To <dfn>run the update intersection observations steps</dfn> for a
 			zero area); otherwise, let |isIntersecting| be false.
 		8. If |targetArea| is non-zero, let |intersectionRatio| be |intersectionArea| divided by |targetArea|.<br>
 			Otherwise, let |intersectionRatio| be <code>1</code> if |isIntersecting| is true, or <code>0</code> if |isIntersecting| is false.
-		9. Let |thresholdIndex| be the index of the first entry in |observer|.{{thresholds}} whose value is greater than |intersectionRatio|, or the length of |observer|.{{thresholds}} if |intersectionRatio| is greater than or equal to the last entry in |observer|.{{thresholds}}.
+		9. Let |thresholdIndex| be:
+			* 0 if |intersectionRatio| is less than or equal to the first value in |observer|.{{thresholds}}, or
+			* the length of |observer|.{{thresholds}} if |intersectionRatio| is greater than or equal to the last value in |observer|.{{thresholds}}, otherwise
+			* the index of the first value in |observer|.{{thresholds}} whose value is greater than |intersectionRatio|.
 		10. Let |intersectionObserverRegistration| be the {{IntersectionObserverRegistration}} record 
 			in |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot
 			whose {{IntersectionObserverRegistration/observer}} property is equal to |observer|.
@@ -628,8 +631,9 @@ To <dfn>run the update intersection observations steps</dfn> for a
 		    {{IntersectionObserverRegistration/previousThresholdIndex}} property.
 		12. Let |previousIsIntersecting| be the |intersectionObserverRegistration|'s
 		    {{IntersectionObserverRegistration/previousIsIntersecting}} property.
-		13. If |thresholdIndex| does not equal |previousThresholdIndex| or if 
-		    |isIntersecting| does not equal |previousIsIntersecting|,
+		13. If:
+				* |thresholdIndex| does not equal |previousThresholdIndex| or
+				* |isIntersecting| does not equal |previousIsIntersecting| and the first value in |observer|.{{thresholds}} is 0.
 			<a>queue an IntersectionObserverEntry</a>,
 			passing in |observer|, |time|, |rootBounds|,
 			|boundingClientRect|, |intersectionRect|, |isIntersecting|, and |target|.
