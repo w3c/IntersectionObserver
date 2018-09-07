@@ -633,7 +633,7 @@ To <dfn>run the update intersection observations steps</dfn> for a
 		    {{IntersectionObserverRegistration/previousIsIntersecting}} property.
 		13. If:
 				* |thresholdIndex| does not equal |previousThresholdIndex| or
-				* |isIntersecting| does not equal |previousIsIntersecting| and the first value in |observer|.{{thresholds}} is 0.
+				* |isIntersecting| does not equal |previousIsIntersecting| and the first value in |observer|.{{thresholds}} is 0
 			<a>queue an IntersectionObserverEntry</a>,
 			passing in |observer|, |time|, |rootBounds|,
 			|boundingClientRect|, |intersectionRect|, |isIntersecting|, and |target|.
