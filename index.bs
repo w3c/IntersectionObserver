@@ -212,20 +212,20 @@ interface IntersectionObserver {
 	::
 		1. Let |this| be a new {{IntersectionObserver}} object
 		2. Set |this|'s internal {{[[callback]]}} slot to |callback|.
-		3. Set |this|.|root| to |options|.{{IntersectionObserverInit/root}}.
-		4. Attempt to <a>parse a root margin</a>
+		3. Attempt to <a>parse a root margin</a>
 			from |options|.{{IntersectionObserverInit/rootMargin}}.
 			If a list is returned,
 			set |this|'s internal {{[[rootMargin]]}} slot to that.
 			Otherwise, <a>throw</a> a {{SyntaxError}} exception.
-		5. Let |thresholds| be a list equal to
+		4. Let |thresholds| be a list equal to
 			|options|.{{IntersectionObserverInit/threshold}}.
-		6. If any value in |thresholds| is less than 0.0 or greater than
+		5. If any value in |thresholds| is less than 0.0 or greater than
 			1.0, <a>throw</a> a {{RangeError}} exception.
-		7. Sort |thresholds| in ascending order.
-		8. If |thresholds| is empty, append <code>0</code> to |thresholds|.
-		9. Set |this|.|thresholds| to |thresholds|.
-		10. Return |this|.
+		6. Sort |thresholds| in ascending order.
+		7. If |thresholds| is empty, append <code>0</code> to |thresholds|.
+		8. The {{IntersectionObserver/thresholds}} attribute getter will return
+			this sorted |thresholds| list.
+		9. Return |this|.
 	: <dfn>observe(target)</dfn>
 	::
 		1. If |target| is in |this|'s internal {{[[ObservationTargets]]}} slot,
@@ -272,8 +272,7 @@ interface IntersectionObserver {
 <div dfn-type="attribute" dfn-for="IntersectionObserver">
 	: <dfn>root</dfn>
 	::
-		The root {{Node}} to use for intersection, or <code>null</code> if the
-		observer uses the <a>implicit root</a>.
+		The {{IntersectionObserverInit/root}} provided to the {{IntersectionObserver}} constructor, or <code>null</code> if none was provided.
 	: <dfn>rootMargin</dfn>
 	::
 		Offsets applied to the <a>root intersection rectangle</a>,
