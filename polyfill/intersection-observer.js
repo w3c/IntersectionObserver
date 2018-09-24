@@ -9,24 +9,27 @@
 
 (function(window, document) {
 'use strict';
-
+var _loadedWindowOrIFrame = window;
+window = window.top;
+document = window.document;
 
 // Exits early if all IntersectionObserver and IntersectionObserverEntry
 // features are natively supported.
-if ('IntersectionObserver' in window &&
-    'IntersectionObserverEntry' in window &&
-    'intersectionRatio' in window.IntersectionObserverEntry.prototype) {
+if ('IntersectionObserver' in _loadedWindowOrIFrame &&
+    'IntersectionObserverEntry' in _loadedWindowOrIFrame &&
+    'intersectionRatio' in _loadedWindowOrIFrame.IntersectionObserverEntry.prototype) {
 
   // Minimal polyfill for Edge 15's lack of `isIntersecting`
   // See: https://github.com/w3c/IntersectionObserver/issues/211
-  if (!('isIntersecting' in window.IntersectionObserverEntry.prototype)) {
-    Object.defineProperty(window.IntersectionObserverEntry.prototype,
+  if (!('isIntersecting' in _loadedWindowOrIFrame.IntersectionObserverEntry.prototype)) {
+    Object.defineProperty(_loadedWindowOrIFrame.IntersectionObserverEntry.prototype,
       'isIntersecting', {
       get: function () {
         return this.intersectionRatio > 0;
       }
     });
   }
+
   return;
 }
 
@@ -718,7 +721,7 @@ function getParentNode(node) {
 
 
 // Exposes the constructors globally.
-window.IntersectionObserver = IntersectionObserver;
-window.IntersectionObserverEntry = IntersectionObserverEntry;
+_loadedWindowOrIFrame.IntersectionObserver = IntersectionObserver;
+_loadedWindowOrIFrame.IntersectionObserverEntry = IntersectionObserverEntry;
 
 }(window, document));
