@@ -798,6 +798,33 @@ describe('IntersectionObserver', function() {
       io.observe(targetEl1);
     });
 
+    it('uses the root element when root is specified', function(done) {
+      var root = document.querySelector('#root');
+      io = new IntersectionObserver(function(records) {
+        var rootWidth = root.clientWidth;
+        var rootHeight = root.clientHeight;
+
+        expect(records.length).to.be(1);
+        expect(records[0].rootBounds.top).to.be(0);
+        expect(records[0].rootBounds.left).to.be(0);
+        expect(records[0].rootBounds.right).to.be(rootWidth);
+        expect(records[0].rootBounds.width).to.be(rootWidth);
+        expect(records[0].rootBounds.bottom).to.be(rootHeight);
+        expect(records[0].rootBounds.height).to.be(rootHeight);
+        done();
+    },{
+        root: root,
+    });
+
+      // Ensures targetEl1 is visible in the viewport before observing.
+      window.scrollTo(0, 0);
+      rootEl.style.position = 'absolute';
+      rootEl.style.top = '0px';
+      rootEl.style.left = '0px';
+
+      io.observe(targetEl1);
+    });
+
   });
 
 
