@@ -696,6 +696,12 @@ function containsDeep(parent, child) {
 
     node = getParentNode(node);
   }
+
+  if (parent && parent.assignedSlot) {
+    // If the parent is distributed in a <slot>, return the parent of a slot.
+    return parent.assignedSlot.parentNode;
+  }
+
   return false;
 }
 

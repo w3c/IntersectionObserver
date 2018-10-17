@@ -724,6 +724,30 @@ describe('IntersectionObserver', function() {
 
         io.observe(targetEl1);
       });
+
+      it('handles roots in shadow DOM', function(done) {
+        var shadowRoot = grandParentEl.attachShadow({mode: 'open'});
+
+        shadowRoot.innerHTML =
+        '<style>' +
+          '#slot-parent {' +
+          '  position: relative;' +
+          '  width: 400px;' +
+          '  height: 200px;' +
+          '}' +
+        '</style>' +
+        '<div id="slot-parent"><slot></slot></div>';
+
+        var slotParent = shadowRoot.getElementById('slot-parent');
+
+        io = new IntersectionObserver(function(records) {
+          expect(records.length).to.be(1);
+          expect(records[0].intersectionRatio).to.be(1);
+          done();
+        }, {root: slotParent});
+
+        io.observe(targetEl1);
+      });
     }
 
 
