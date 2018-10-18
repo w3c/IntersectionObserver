@@ -1,5 +1,10 @@
- {
-    "group":      ["83482"]
-,   "contacts":   ["siusin"]
-,   "shortName":  "IntersectionObserver"
+{
+  "group": [
+    "83482"
+  ],
+  "contacts": [
+    "siusin"
+  ],
+  "shortName": "IntersectionObserver",
+  "repo-type": "rec-track"
 }
