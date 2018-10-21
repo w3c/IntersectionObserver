@@ -62,7 +62,7 @@ function IntersectionObserverEntry(entry) {
 
   // Sets intersection ratio.
   if (targetArea) {
-    this.intersectionRatio = (intersectionArea / targetArea).toFixed(3) - 0;
+    this.intersectionRatio = Number((intersectionArea / targetArea).toFixed(4));
   } else {
     // If area is zero and is intersecting, sets to 1, otherwise to 0
     this.intersectionRatio = this.isIntersecting ? 1 : 0;
