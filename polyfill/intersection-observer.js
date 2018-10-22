@@ -33,7 +33,7 @@ if ('IntersectionObserver' in window &&
 
 /**
  * An IntersectionObserver registry. This registry exists to hold a strong
- * reference to IntersectionObserver instances currently observering a target
+ * reference to IntersectionObserver instances currently observing a target
  * element. Without this registry, instances without another reference may be
  * garbage collected.
  */
@@ -252,7 +252,7 @@ IntersectionObserver.prototype._parseRootMargin = function(opt_rootMargin) {
 
 /**
  * Starts polling for intersection changes if the polling is not already
- * happening, and if the page's visibilty state is visible.
+ * happening, and if the page's visibility state is visible.
  * @private
  */
 IntersectionObserver.prototype._monitorIntersections = function() {
@@ -554,7 +554,7 @@ function now() {
 
 
 /**
- * Throttles a function and delays its executiong, so it's only called at most
+ * Throttles a function and delays its execution, so it's only called at most
  * once within a given time period.
  * @param {Function} fn The function to throttle.
  * @param {number} timeout The amount of time that must pass before the
@@ -685,7 +685,7 @@ function getEmptyRect() {
 }
 
 /**
- * Checks to see if a parent element contains a child elemnt (including inside
+ * Checks to see if a parent element contains a child element (including inside
  * shadow DOM).
  * @param {Node} parent The parent element.
  * @param {Node} child The child element.
