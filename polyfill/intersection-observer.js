@@ -62,6 +62,8 @@ function IntersectionObserverEntry(entry) {
 
   // Sets intersection ratio.
   if (targetArea) {
+    // Round the intersection ratio to avoid floating point math issues:
+    // https://github.com/w3c/IntersectionObserver/issues/324
     this.intersectionRatio = Number((intersectionArea / targetArea).toFixed(4));
   } else {
     // If area is zero and is intersecting, sets to 1, otherwise to 0
