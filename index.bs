@@ -657,8 +657,7 @@ HTML Processing Model: Event Loop</h4>
 
 An <a>Intersection Observer</a> processing step should take place
 during the "<i>Update the rendering</i>" steps,
-after step 9, <a>run the fullscreen rendering steps</a>,
-and before step 10, <a>run the animation frame callbacks</a>,
+after step 10, <a>run the animation frame callbacks</a>,
 in the in the <a>HTML Processing Model</a>.
 
 This step is:
