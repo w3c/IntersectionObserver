@@ -266,8 +266,16 @@ IntersectionObserver.prototype._monitorIntersections = function() {
           this._checkForIntersections, this.POLL_INTERVAL);
     }
     else {
-      addEvent(window, 'resize', this._checkForIntersections, true);
-      addEvent(document, 'scroll', this._checkForIntersections, true);
+
+      addEvent(window, 'resize', this._checkForIntersections, {
+          useCapture: true,
+          passive: true
+      });
+
+      addEvent(document, 'scroll', this._checkForIntersections, {
+          useCapture: true,
+          passive: true
+      });
 
       if (this.USE_MUTATION_OBSERVER && 'MutationObserver' in window) {
         this._domObserver = new MutationObserver(this._checkForIntersections);
@@ -294,8 +302,15 @@ IntersectionObserver.prototype._unmonitorIntersections = function() {
     clearInterval(this._monitoringInterval);
     this._monitoringInterval = null;
 
-    removeEvent(window, 'resize', this._checkForIntersections, true);
-    removeEvent(document, 'scroll', this._checkForIntersections, true);
+    removeEvent(window, 'resize', this._checkForIntersections, {
+        useCapture: true,
+        passive: true
+    });
+
+    removeEvent(document, 'scroll', this._checkForIntersections, {
+        useCapture: true,
+        passive: true
+    });
 
     if (this._domObserver) {
       this._domObserver.disconnect();
@@ -579,12 +594,14 @@ function throttle(fn, timeout) {
  * @param {Node} node The DOM node to add the event handler to.
  * @param {string} event The event name.
  * @param {Function} fn The event handler to add.
- * @param {boolean} opt_useCapture Optionally adds the even to the capture
- *     phase. Note: this only works in modern browsers.
+ * @param {Object} opts The event options
  */
-function addEvent(node, event, fn, opt_useCapture) {
+function addEvent(node, event, fn, opts) {
+
+  var options = opts || {};
+
   if (typeof node.addEventListener == 'function') {
-    node.addEventListener(event, fn, opt_useCapture || false);
+    node.addEventListener(event, fn, options);
   }
   else if (typeof node.attachEvent == 'function') {
     node.attachEvent('on' + event, fn);
@@ -597,12 +614,14 @@ function addEvent(node, event, fn, opt_useCapture) {
  * @param {Node} node The DOM node to remove the event handler from.
  * @param {string} event The event name.
  * @param {Function} fn The event handler to remove.
- * @param {boolean} opt_useCapture If the event handler was added with this
- *     flag set to true, it should be set to true here in order to remove it.
+ * @param {Object} opts The event options
  */
-function removeEvent(node, event, fn, opt_useCapture) {
+function removeEvent(node, event, fn, opts) {
+
+  var options = opts || {};
+
   if (typeof node.removeEventListener == 'function') {
-    node.removeEventListener(event, fn, opt_useCapture || false);
+    node.removeEventListener(event, fn, options);
   }
   else if (typeof node.detatchEvent == 'function') {
     node.detatchEvent('on' + event, fn);
