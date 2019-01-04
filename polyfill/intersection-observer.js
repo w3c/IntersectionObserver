@@ -268,12 +268,12 @@ IntersectionObserver.prototype._monitorIntersections = function() {
     else {
 
       addEvent(window, 'resize', this._checkForIntersections, {
-          useCapture: true,
+          capture: true,
           passive: true
       });
 
       addEvent(document, 'scroll', this._checkForIntersections, {
-          useCapture: true,
+          capture: true,
           passive: true
       });
 
@@ -303,12 +303,12 @@ IntersectionObserver.prototype._unmonitorIntersections = function() {
     this._monitoringInterval = null;
 
     removeEvent(window, 'resize', this._checkForIntersections, {
-        useCapture: true,
+        capture: true,
         passive: true
     });
 
     removeEvent(document, 'scroll', this._checkForIntersections, {
-        useCapture: true,
+        capture: true,
         passive: true
     });
 
