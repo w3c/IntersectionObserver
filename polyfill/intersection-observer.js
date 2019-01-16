@@ -132,6 +132,12 @@ IntersectionObserver.prototype.POLL_INTERVAL = null;
  */
 IntersectionObserver.prototype.USE_MUTATION_OBSERVER = true;
 
+/**
+ * Indicates that IntersectionObserver has been polyfilled, allowing
+ * other code to detect the presence of the polyfilled implementation.
+ */
+IntersectionObserver.prototype.IS_POLYFILL = true;
+
 
 /**
  * Starts observing a target element for intersection changes based on
