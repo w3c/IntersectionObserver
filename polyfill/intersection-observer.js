@@ -729,4 +729,4 @@ function getParentNode(node) {
 root.IntersectionObserver = IntersectionObserver;
 root.IntersectionObserverEntry = IntersectionObserverEntry;
 
-}(this));
+}(typeof window !== "undefined" ? window : this));
