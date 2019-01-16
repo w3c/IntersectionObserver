@@ -7,20 +7,20 @@
  *
  */
 
-(function(window, document) {
+(function(root) {
 'use strict';
 
 
 // Exits early if all IntersectionObserver and IntersectionObserverEntry
 // features are natively supported.
-if ('IntersectionObserver' in window &&
-    'IntersectionObserverEntry' in window &&
-    'intersectionRatio' in window.IntersectionObserverEntry.prototype) {
+if ('IntersectionObserver' in root &&
+    'IntersectionObserverEntry' in root &&
+    'intersectionRatio' in root.IntersectionObserverEntry.prototype) {
 
   // Minimal polyfill for Edge 15's lack of `isIntersecting`
   // See: https://github.com/w3c/IntersectionObserver/issues/211
-  if (!('isIntersecting' in window.IntersectionObserverEntry.prototype)) {
-    Object.defineProperty(window.IntersectionObserverEntry.prototype,
+  if (!('isIntersecting' in root.IntersectionObserverEntry.prototype)) {
+    Object.defineProperty(root.IntersectionObserverEntry.prototype,
       'isIntersecting', {
       get: function () {
         return this.intersectionRatio > 0;
@@ -266,10 +266,10 @@ IntersectionObserver.prototype._monitorIntersections = function() {
           this._checkForIntersections, this.POLL_INTERVAL);
     }
     else {
-      addEvent(window, 'resize', this._checkForIntersections, true);
-      addEvent(document, 'scroll', this._checkForIntersections, true);
+      addEvent(root, 'resize', this._checkForIntersections, true);
+      addEvent(root.document, 'scroll', this._checkForIntersections, true);
 
-      if (this.USE_MUTATION_OBSERVER && 'MutationObserver' in window) {
+      if (this.USE_MUTATION_OBSERVER && 'MutationObserver' in root) {
         this._domObserver = new MutationObserver(this._checkForIntersections);
         this._domObserver.observe(document, {
           attributes: true,
@@ -294,8 +294,8 @@ IntersectionObserver.prototype._unmonitorIntersections = function() {
     clearInterval(this._monitoringInterval);
     this._monitoringInterval = null;
 
-    removeEvent(window, 'resize', this._checkForIntersections, true);
-    removeEvent(document, 'scroll', this._checkForIntersections, true);
+    removeEvent(root, 'resize', this._checkForIntersections, true);
+    removeEvent(root.document, 'scroll', this._checkForIntersections, true);
 
     if (this._domObserver) {
       this._domObserver.disconnect();
@@ -371,7 +371,7 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
     function(target, rootRect) {
 
   // If the element isn't displayed, an intersection can't happen.
-  if (window.getComputedStyle(target).display == 'none') return;
+  if (root.getComputedStyle(target).display == 'none') return;
 
   var targetRect = getBoundingClientRect(target);
   var intersectionRect = targetRect;
@@ -381,7 +381,7 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
   while (!atRoot) {
     var parentRect = null;
     var parentComputedStyle = parent.nodeType == 1 ?
-        window.getComputedStyle(parent) : {};
+        root.getComputedStyle(parent) : {};
 
     // If the parent isn't displayed, an intersection can't happen.
     if (parentComputedStyle.display == 'none') return;
@@ -424,7 +424,7 @@ IntersectionObserver.prototype._getRootRect = function() {
   if (this.root) {
     rootRect = getBoundingClientRect(this.root);
   } else {
-    // Use <html>/<body> instead of window since scroll bars affect size.
+    // Use <html>/<body> instead of window (i.e. `root`) since scroll bars affect size.
     var html = document.documentElement;
     var body = document.body;
     rootRect = {
@@ -549,7 +549,7 @@ IntersectionObserver.prototype._unregisterInstance = function() {
  * @return {number} The elapsed time since the page was requested.
  */
 function now() {
-  return window.performance && performance.now && performance.now();
+  return root.performance && performance.now && performance.now();
 }
 
 
@@ -726,7 +726,7 @@ function getParentNode(node) {
 
 
 // Exposes the constructors globally.
-window.IntersectionObserver = IntersectionObserver;
-window.IntersectionObserverEntry = IntersectionObserverEntry;
+root.IntersectionObserver = IntersectionObserver;
+root.IntersectionObserverEntry = IntersectionObserverEntry;
 
-}(window, document));
+}(this));
