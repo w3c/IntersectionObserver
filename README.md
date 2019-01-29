@@ -1,13 +1,10 @@
-# Intersection Observers
+# Intersection Observer V2
 
 Implementation status:
-  - Chromium: [Shipped in Chrome 51](https://www.chromestatus.com/feature/5695342691483648)
-  - Edge: [Shipped in build 14986](https://developer.microsoft.com/en-us/microsoft-edge/platform/status/intersectionobserver/)
-  - Firefox: [Shipped in Firefox 55](https://platform-status.mozilla.org/#intersection-observer)
-  - WebKit: [Under development](https://bugs.webkit.org/show_bug.cgi?id=159475)
+  - Chromium: [Shipping in Chrome 73](https://www.chromestatus.com/feature/5878481493688320)
+  - Firefox: No status
+  - WebKit: No status
 
 [Explainer Doc](./explainer.md)
 
-[Draft Spec](https://w3c.github.io/IntersectionObserver/)
-
-[Polyfill](./polyfill/)
+[Draft Spec](https://w3c.github.io/IntersectionObserver/v2)
