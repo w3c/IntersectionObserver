@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet" type="text/css">
   <meta content="Bikeshed version eee3e9e7543e2188fb60d183a6cf3fe3a7d971c1" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="0af67f7d03d127c71e57dacbd6c6252888599823" name="document-revision">
+  <meta content="adcd940a94681b3f1efaf71682dfa105a036099b" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1462,7 +1462,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-01-30">30 January 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-02-01">1 February 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2202,8 +2202,9 @@ zero area); otherwise, let <var>isIntersecting</var> be false.</p>
 or <var>isIntersecting</var> does not equal <var>registration</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousisintersecting" id="ref-for-dom-intersectionobserverregistration-previousisintersecting">previousIsIntersecting</a></code>,
 or <var>isVisible</var> does not equal <var>registration</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousisvisible" id="ref-for-dom-intersectionobserverregistration-previousisvisible①">previousIsVisible</a></code>, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry" id="ref-for-queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</a>,
 passing in <var>observer</var>, <var>time</var>, <var>rootBounds</var>, <var>boundingClientRect</var>, <var>intersectionRect</var>, <var>isIntersecting</var>, <var>isVisible</var>, and <var>target</var>.</p>
+         <p class="note" role="note"><span>Note:</span> The initial value of <var>registration</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousthresholdindex" id="ref-for-dom-intersectionobserverregistration-previousthresholdindex②">previousThresholdIndex</a></code> is -1 but <var>thresholdIndex</var> will always be 0 or greater. This ensures an IntersectionObserverEntry is <em>always</em> queued for a new <var>target</var>.</p>
         <li data-md>
-         <p>Assign <var>threshold</var> to <var>registration</var>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousthresholdindex" id="ref-for-dom-intersectionobserverregistration-previousthresholdindex②">previousThresholdIndex</a></code> property.</p>
+         <p>Assign <var>threshold</var> to <var>registration</var>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousthresholdindex" id="ref-for-dom-intersectionobserverregistration-previousthresholdindex③">previousThresholdIndex</a></code> property.</p>
         <li data-md>
          <p>Assign <var>isIntersecting</var> to <var>registration</var>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousisintersecting" id="ref-for-dom-intersectionobserverregistration-previousisintersecting①">previousIsIntersecting</a></code> property.</p>
         <li data-md>
@@ -2598,7 +2599,7 @@ The IntersectionObserverInit dictionary</a> <a href="#ref-for-idl-long③">(2)</
    <dt id="biblio-css-syntax-3">[CSS-SYNTAX-3]
    <dd>Tab Atkins Jr.; Simon Sapin. <a href="https://www.w3.org/TR/css-syntax-3/">CSS Syntax Module Level 3</a>. 20 February 2014. CR. URL: <a href="https://www.w3.org/TR/css-syntax-3/">https://www.w3.org/TR/css-syntax-3/</a>
    <dt id="biblio-css-values-3">[CSS-VALUES-3]
-   <dd>Tab Atkins Jr.; Elika Etemad. <a href="https://www.w3.org/TR/css-values-3/">CSS Values and Units Module Level 3</a>. 14 August 2018. CR. URL: <a href="https://www.w3.org/TR/css-values-3/">https://www.w3.org/TR/css-values-3/</a>
+   <dd>Tab Atkins Jr.; Elika Etemad. <a href="https://www.w3.org/TR/css-values-3/">CSS Values and Units Module Level 3</a>. 31 January 2019. CR. URL: <a href="https://www.w3.org/TR/css-values-3/">https://www.w3.org/TR/css-values-3/</a>
    <dt id="biblio-cssom-view-1">[CSSOM-VIEW-1]
    <dd>Simon Pieters. <a href="https://www.w3.org/TR/cssom-view-1/">CSSOM View Module</a>. 17 March 2016. WD. URL: <a href="https://www.w3.org/TR/cssom-view-1/">https://www.w3.org/TR/cssom-view-1/</a>
    <dt id="biblio-dom">[DOM]
@@ -3027,7 +3028,7 @@ Run the Update Intersection Observations Steps</a>
     <li><a href="#ref-for-dom-intersectionobserverregistration-previousthresholdindex">2.2. 
 The IntersectionObserver interface</a>
     <li><a href="#ref-for-dom-intersectionobserverregistration-previousthresholdindex①">3.2.7. 
-Run the Update Intersection Observations Steps</a> <a href="#ref-for-dom-intersectionobserverregistration-previousthresholdindex②">(2)</a>
+Run the Update Intersection Observations Steps</a> <a href="#ref-for-dom-intersectionobserverregistration-previousthresholdindex②">(2)</a> <a href="#ref-for-dom-intersectionobserverregistration-previousthresholdindex③">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-intersectionobserverregistration-previousisintersecting">
