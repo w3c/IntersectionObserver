@@ -712,6 +712,9 @@ To <dfn>run the update intersection observations steps</dfn> for a
 			passing in |observer|, |time|, |rootBounds|,
 			|boundingClientRect|, |intersectionRect|, |isIntersecting|,
 			|isVisible|, and |target|.
+
+			Note: The initial value of |registration|.{{IntersectionObserverRegistration/previousThresholdIndex}} is -1 but |thresholdIndex| will always be 0 or greater. This ensures an IntersectionObserverEntry is <em>always</em> queued for a new |target|.
+
 		15. Assign |threshold| to |registration|'s
 		    	{{IntersectionObserverRegistration/previousThresholdIndex}} property.
 		16. Assign |isIntersecting| to |registration|'s
