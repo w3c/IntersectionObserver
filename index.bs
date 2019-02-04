@@ -643,6 +643,7 @@ run these steps:
 4. Map |intersectionRect| to the coordinate space of the <a>intersection root</a>.
 5. Update |intersectionRect| by intersecting it with the <a>root intersection rectangle</a>.
 6. Map |intersectionRect| to the coordinate space of the viewport of the <a>Document</a> containing the <a>target</a>.
+7. Return |intersectionRect|.
 
 <h4 id='calculate-visibility-algo'>
 Compute whether a Target is unoccluded, untransformed, unfiltered, and opaque.</h4>
