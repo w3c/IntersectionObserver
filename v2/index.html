@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet" type="text/css">
   <meta content="Bikeshed version eee3e9e7543e2188fb60d183a6cf3fe3a7d971c1" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="adcd940a94681b3f1efaf71682dfa105a036099b" name="document-revision">
+  <meta content="3f4985316f2862d0c9150b17615dc28628a9c10b" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1462,7 +1462,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-02-01">1 February 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-02-04">4 February 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2108,6 +2108,8 @@ Otherwise, update <var>container</var> to be the <a data-link-type="dfn" href="h
      <p>Update <var>intersectionRect</var> by intersecting it with the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle④">root intersection rectangle</a>.</p>
     <li data-md>
      <p>Map <var>intersectionRect</var> to the coordinate space of the viewport of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#the-document-object" id="ref-for-the-document-object⑥">Document</a> containing the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target①②">target</a>.</p>
+    <li data-md>
+     <p>Return <var>intersectionRect</var>.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.5" id="calculate-visibility-algo"><span class="secno">3.2.5. </span><span class="content"> Compute whether a Target is unoccluded, untransformed, unfiltered, and opaque.</span><a class="self-link" href="#calculate-visibility-algo"></a></h4>
    <p>To compute the <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="visibility">visibility</dfn> of a <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target①③">target</a>, run these steps:</p>
