@@ -578,7 +578,7 @@ run these steps:
 
 1. Let |intersectionRect| be the result of running the {{Element/getBoundingClientRect()}} algorithm on |target|.
 2. Let |container| be the <a>containing block</a> of |target|.
-3. While |container| is not the |root|:
+3. While |container| is not |root|:
 	1. Map |intersectionRect| to the coordinate space of |container|.
 	2. If |container| has overflow clipping or a css <a>clip-path</a> property,
 		update |intersectionRect| by applying |container|'s clip.
@@ -587,7 +587,7 @@ run these steps:
 		and update |intersectionRect| by clipping to the <a>viewport</a> of the
 		<a>nested browsing context</a>.
 		Otherwise, update |container| to be the <a>containing block</a> of |container|.
-4. Map |intersectionRect| to the coordinate space of the |root|.
+4. Map |intersectionRect| to the coordinate space of |root|.
 5. Update |intersectionRect| by intersecting it with the <a>root intersection rectangle</a>.
 6. Map |intersectionRect| to the coordinate space of the viewport of the <a>Document</a> containing |target|.
 7. Return |intersectionRect|.
