@@ -590,6 +590,7 @@ run these steps:
 4. Map |intersectionRect| to the coordinate space of the <a>intersection root</a>.
 5. Update |intersectionRect| by intersecting it with the <a>root intersection rectangle</a>.
 6. Map |intersectionRect| to the coordinate space of the viewport of the <a>Document</a> containing the <a>target</a>.
+7. Return |intersectionRect|.
 
 <h4 id='update-intersection-observations-algo'>
 Run the Update Intersection Observations Steps</h4>
@@ -612,7 +613,7 @@ To <dfn>run the update intersection observations steps</dfn> for a
 		3. Let |targetRect| be a {{DOMRectReadOnly}} obtained
 			by running the {{Element/getBoundingClientRect()}} algorithm on |target|.
 		4. Let |intersectionRect| be the result of running the <a>compute the intersection</a>
-			algorithm on |target|.
+			algorithm on |target| and <a>intersection root</a>.
 		5. Let |targetArea| be |targetRect|'s area.
 		6. Let |intersectionArea| be |intersectionRect|'s area.
 		7. Let |isIntersecting| be true if |targetRect| and |rootBounds| intersect or are edge-adjacent,
