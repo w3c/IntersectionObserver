@@ -4,6 +4,7 @@ This library polyfills the native [`IntersectionObserver`](http://w3c.github.io/
 
 - [Installation](#installation)
 - [Configuring the polyfill](#configuring-the-polyfill)
+- [Limitations](#limitations)
 - [Browser support](#browser-support)
 - [Running the tests](#running-the-tests)
 
@@ -94,6 +95,12 @@ io.USE_MUTATION_OBSERVER = false;
 ```
 
 This is recommended in cases where the DOM will update frequently but you know those updates will have no affect on the position or your target elements.
+
+## Limitations
+
+This polyfill does not attempt to report intersections across same-origin `iframe` boundaries. While supporting same-origin iframes is technically possible, it would drastically reduce performance. Since most `iframe` usage on the web is cross-origin, this polyfill chooses to optimize for performantly handling the most common use cases. (Note: neither this polyfill nor native implementations support reporting intersections across cross-origin `iframe` boundaries.)
+
+This polyfill also does not support the [proposed v2 additions](https://github.com/szager-chromium/IntersectionObserver/blob/v2/explainer.md), as these features are not currently possible to do with JavaScript and existing web APIs.
 
 ## Browser support
 
