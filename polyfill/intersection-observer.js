@@ -6,12 +6,15 @@
  *  https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document
  *
  */
-
-(function(window, document) {
+(function() {
 'use strict';
 
+// Exit early if we're not running in a browser.
+if (typeof window !== 'object') {
+  return;
+}
 
-// Exits early if all IntersectionObserver and IntersectionObserverEntry
+// Exit early if all IntersectionObserver and IntersectionObserverEntry
 // features are natively supported.
 if ('IntersectionObserver' in window &&
     'IntersectionObserverEntry' in window &&
@@ -29,6 +32,12 @@ if ('IntersectionObserver' in window &&
   }
   return;
 }
+
+
+/**
+ * A local reference to the document.
+ */
+var document = window.document;
 
 
 /**
@@ -729,4 +738,4 @@ function getParentNode(node) {
 window.IntersectionObserver = IntersectionObserver;
 window.IntersectionObserverEntry = IntersectionObserverEntry;
 
-}(window, document));
+}());
