@@ -3,6 +3,11 @@
   "version": "0.7.0",
   "description": "A polyfill for IntersectionObserver",
   "main": "intersection-observer",
+  "unpkg": "intersection-observer.min.js",
+  "scripts": {
+    "license": "cat intersection-observer.js | sed '9,100000d' > intersection-observer.min.js",
+    "min": "npm run license && uglifyjs intersection-observer.js -m -c >> intersection-observer.min.js"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:w3c/IntersectionObserver.git"
@@ -19,5 +24,8 @@
   "license": "W3C-20150513",
   "bugs": {
     "url": "https://github.com/w3c/IntersectionObserver/issues"
+  },
+  "devDependencies": {
+    "uglify-js": "^3.5.15"
   }
 }
