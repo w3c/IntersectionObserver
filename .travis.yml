@@ -13,3 +13,4 @@ env:
   global:
   - ENCRYPTION_LABEL: "781c04ca6946"
   - COMMIT_AUTHOR_EMAIL: "plh+deploy@w3.org"
+  - DECISION: "https://lists.w3.org/Archives/Public/public-webapps/2014JulSep/0627.html"
