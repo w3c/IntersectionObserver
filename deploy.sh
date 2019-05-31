@@ -72,4 +72,5 @@ ssh-add deploy_key
 # Now that we're all set up, we can push.
 ( cd "${gh_pages_dir}" &&
   git push $SSH_REPO $TARGET_BRANCH )
+git checkout $SOURCE_BRANCH
 bikeshed echidna --md-status=WD --u $USER --p $PASS --decision $DECISION --cc=marcos@marcosc.com

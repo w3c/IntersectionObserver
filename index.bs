@@ -4,6 +4,7 @@ Status: ED
 ED: https://w3c.github.io/IntersectionObserver/
 Shortname: intersection-observer
 TR: https://www.w3.org/TR/intersection-observer/
+Previous version: https://www.w3.org/TR/2019/WD-intersection-observer-20190530/
 Level: none
 Editor: Stefan Zager, Google, szager@google.com, w3cid 91208
 Former Editor: Michael Blain, Google, mpb@google.com, w3cid 73819
