@@ -106,10 +106,10 @@ This polyfill also does not support the [proposed v2 additions](https://github.c
 
 The polyfill has been tested and known to work in the latest version of all browsers.
 
-Legacy support is also possible in very old browsers by including a shim for ES5 as well as the `window.getComputedStyle` method. The easiest way to load the IntersectionObserver polyfill and have it work in the widest range of browsers is via [polyfill.io](https://cdn.polyfill.io/v2/docs/), which will automatically include dependencies where necessary:
+Legacy support is also possible in very old browsers by including a shim for ES5 as well as the `window.getComputedStyle` method. The easiest way to load the IntersectionObserver polyfill and have it work in the widest range of browsers is via [polyfill.io](https://polyfill.io/v3/api/), which will automatically include dependencies where necessary:
 
 ```html
-<script src="https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"></script>
 ```
 
 With these polyfills, `IntersectionObserver` has been tested an known to work in the following browsers:
