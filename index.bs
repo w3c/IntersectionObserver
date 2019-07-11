@@ -192,7 +192,7 @@ use-cases. Per-{{observe()}} options could be provided in the future if V2
 introduces a need for it.
 
 <pre class="idl">
-[Constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options),
+[Constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options = {}),
  Exposed=Window]
 interface IntersectionObserver {
 	readonly attribute Element? root;
