@@ -591,6 +591,7 @@ run these steps:
 4. Map |intersectionRect| to the coordinate space of the <a>intersection root</a>.
 5. Update |intersectionRect| by intersecting it with the <a>root intersection rectangle</a>.
 6. Map |intersectionRect| to the coordinate space of the viewport of the <a>Document</a> containing the <a>target</a>.
+7. Return |intersectionRect|.
 
 <h4 id='update-intersection-observations-algo'>
 Run the Update Intersection Observations Steps</h4>
