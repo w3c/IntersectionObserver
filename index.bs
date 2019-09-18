@@ -211,14 +211,14 @@ interface IntersectionObserver {
 	::
 		1. Let |this| be a new {{IntersectionObserver}} object
 		2. Set |this|'s internal {{[[callback]]}} slot to |callback|.
-		3. Set |this|.|root| to |options|.|root|.
+		3. Set |this|.|root| to |options|.{{IntersectionObserverInit/root}}.
 		4. Attempt to <a>parse a root margin</a>
-			from |options|.|rootMargin|.
+			from |options|.{{IntersectionObserverInit/rootMargin}}.
 			If a list is returned,
 			set |this|'s internal {{[[rootMargin]]}} slot to that.
 			Otherwise, <a>throw</a> a {{SyntaxError}} exception.
 		5. Let |thresholds| be a list equal to
-			|options|.|threshold|.
+			|options|.{{IntersectionObserverInit/threshold}}.
 		6. If any value in |thresholds| is less than 0.0 or greater than
 			1.0, <a>throw</a> a {{RangeError}} exception.
 		7. Sort |thresholds| in ascending order.
@@ -634,7 +634,7 @@ To <dfn>run the update intersection observations steps</dfn> for a
 			<a>queue an IntersectionObserverEntry</a>,
 			passing in |observer|, |time|, |rootBounds|,
 			|boundingClientRect|, |intersectionRect|, |isIntersecting|, and |target|.
-		14. Assign |threshold| to |intersectionObserverRegistration|'s
+		14. Assign |thresholdIndex| to |intersectionObserverRegistration|'s
 		    {{IntersectionObserverRegistration/previousThresholdIndex}} property.
         15. Assign |isIntersecting| to |intersectionObserverRegistration|'s
 		    {{IntersectionObserverRegistration/previousIsIntersecting}} property.
