@@ -49,7 +49,7 @@ click event.
 ```html
 <!DOCTYPE html>
 <!-- This is the iframe document. -->
-<button id="payButton" onclick="payButtonClicked()">Pay Money Now</button>
+<button id="payButton">Pay Money Now</button>
 ```
 
 ```js
@@ -62,7 +62,7 @@ const minimumVisibleDuration = 800;
 // Keep track of when the button transitioned to a visible state.
 let visibleSince = 0;
 
-let button = document.getElementById('payButton');
+let payButton = document.getElementById('payButton');
 payButton.addEventListener('click', event => {
   if (visibleSince && performance.now() - visibleSince >= minimumVisibleDuation) {
     acceptClick();
@@ -81,12 +81,12 @@ let observer = new IntersectionObserver(
       }
     });
   },
-  { threshold: [1.0],
-    trackVisibility: true,
-    delay: 100
+  { threshold: [1.0],  // 'isIntersecting' is true only when target is 100% inside the viewport
+    trackVisibility: true,  // Enable 'isVisible' field in notifications
+    delay: 100  // Required when 'trackVisibility' is set
   });
 );
 
 // Require that the entire iframe be visible.
-observer.observe(document.scrollingElement);
+observer.observe(document.body);
 ```
