@@ -193,16 +193,16 @@ use-cases. Per-{{observe()}} options could be provided in the future if V2
 introduces a need for it.
 
 <pre class="idl">
-[Constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options),
- Exposed=Window]
+[Exposed=Window]
 interface IntersectionObserver {
+	constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options = {});
 	readonly attribute Node? root;
 	readonly attribute DOMString rootMargin;
 	readonly attribute FrozenArray&lt;double&gt; thresholds;
 	void observe(Element target);
 	void unobserve(Element target);
 	void disconnect();
-	sequence&lt;IntersectionObserverEntry> takeRecords();
+	sequence&lt;IntersectionObserverEntry&gt; takeRecords();
 };
 </pre>
 
@@ -369,8 +369,9 @@ or failure:
 The IntersectionObserverEntry interface</h3>
 
 <pre class="idl">
-[Constructor(IntersectionObserverEntryInit intersectionObserverEntryInit)]
+[Exposed=Window]
 interface IntersectionObserverEntry {
+	constructor(IntersectionObserverEntryInit intersectionObserverEntryInit);
 	readonly attribute DOMHighResTimeStamp time;
 	readonly attribute DOMRectReadOnly? rootBounds;
 	readonly attribute DOMRectReadOnly boundingClientRect;
