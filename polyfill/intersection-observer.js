@@ -346,8 +346,8 @@ IntersectionObserver.prototype._unmonitorIntersections = function(doc) {
   var rootDoc = (this.root && this.root.ownerDocument || document);
 
   // Check if any dependent targets are still remaining.
-  var dependentTargets =
-      this._observationTargets.filter(function(item) {
+  var hasDependentTargets =
+      this._observationTargets.some(function(item) {
         var itemDoc = item.element.ownerDocument;
         // Target is in this context.
         if (itemDoc == doc) {
@@ -363,7 +363,7 @@ IntersectionObserver.prototype._unmonitorIntersections = function(doc) {
         }
         return false;
       });
-  if (dependentTargets.length > 0) {
+  if (hasDependentTargets) {
     return;
   }
 
@@ -389,7 +389,7 @@ IntersectionObserver.prototype._unmonitorIntersections = function(doc) {
  * @private
  */
 IntersectionObserver.prototype._unmonitorAllIntersections = function() {
-  var unsubscribes = [].concat(this._monitoringUnsubscribes);
+  var unsubscribes = this._monitoringUnsubscribes.slice(0);
   this._monitoringDocuments.length = 0;
   this._monitoringUnsubscribes.length = 0;
   for (var i = 0; i < unsubscribes.length; i++) {
@@ -795,7 +795,7 @@ function getEmptyRect() {
 
 
 /**
- * Inverts the intersection and bonding rect from the parent (frame) BCR to
+ * Inverts the intersection and bounding rect from the parent (frame) BCR to
  * the local BCR space.
  * @param {Object} parentBoundingRect The parent's bound client rect.
  * @param {Object} parentIntersectionRect The parent's own intersection rect.
