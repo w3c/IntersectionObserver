@@ -266,7 +266,7 @@ IntersectionObserver.prototype._parseRootMargin = function(opt_rootMargin) {
 /**
  * Starts polling for intersection changes if the polling is not already
  * happening, and if the page's visibility state is visible.
- * @param {!Window} doc
+ * @param {!Document} doc
  * @private
  */
 IntersectionObserver.prototype._monitorIntersections = function(doc) {
@@ -281,20 +281,18 @@ IntersectionObserver.prototype._monitorIntersections = function(doc) {
   }
 
   // Private state for monitoring.
-  var pollInterval = this.POLL_INTERVAL;
-  var useMutationObserver = this.USE_MUTATION_OBSERVER;
   var callback = this._checkForIntersections;
   var monitoringInterval = null;
   var domObserver = null;
 
   // If a poll interval is set, use polling instead of listening to
   // resize and scroll events or DOM mutations.
-  if (pollInterval) {
-    monitoringInterval = win.setInterval(callback, pollInterval);
+  if (this.POLL_INTERVAL) {
+    monitoringInterval = win.setInterval(callback, this.POLL_INTERVAL);
   } else {
     addEvent(win, 'resize', callback, true);
     addEvent(doc, 'scroll', callback, true);
-    if (useMutationObserver && 'MutationObserver' in win) {
+    if (this.USE_MUTATION_OBSERVER && 'MutationObserver' in win) {
       domObserver = new win.MutationObserver(callback);
       domObserver.observe(doc, {
         attributes: true,
@@ -844,7 +842,7 @@ function containsDeep(parent, child) {
 function getParentNode(node) {
   var parent = node.parentNode;
 
-  if (node.nodeType == 9) {
+  if (node.nodeType == /* DOCUMENT */ 9 && node != document) {
     // If this node is a document node, look for the embedding frame.
     return getFrameElement(node);
   }
