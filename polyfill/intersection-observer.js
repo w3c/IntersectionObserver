@@ -862,7 +862,7 @@ function getParentNode(node) {
 
 
 /**
- * Returns the embedding framem element, if any.
+ * Returns the embedding frame element, if any.
  * @param {!Document} doc
  * @return {!Element}
  */

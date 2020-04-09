@@ -945,7 +945,7 @@ describe('IntersectionObserver', function() {
     var iframe, win, doc;
     var iframeTargetEl1, iframeTargetEl2;
 
-    beforeEach(function() {
+    beforeEach(function(done) {
       iframe = document.createElement('iframe');
       iframe.setAttribute('frameborder', '0');
       iframe.setAttribute('scrolling', 'yes');
@@ -959,15 +959,13 @@ describe('IntersectionObserver', function() {
         'body {margin: 0}' +
         ' .target {height: 200px; margin-bottom: 2px; background: blue;}' +
         '</style>';
-      return new Promise(function(resolve, reject) {
-        iframe.onload = resolve;
-        iframe.onerror = reject;
-        // Clear out rootEl and use iframe.
-        rootEl.appendChild(iframe);
-      }).then(function() {
+      iframe.onerror = function() {
+        done(new Error('iframe initialization failed'));
+      };
+      iframe.onload = function() {
         iframeWin = iframe.contentWindow;
         iframeDoc = iframeWin.document;
-      }).then(function() {
+
         function createTarget(id, bg) {
           var target = iframeDoc.createElement('div');
           target.id = id;
@@ -978,7 +976,9 @@ describe('IntersectionObserver', function() {
         }
         iframeTargetEl1 = createTarget('target1', 'blue');
         iframeTargetEl2 = createTarget('target2', 'green');
-      });
+        done();
+      };
+      rootEl.appendChild(iframe);
     });
 
     afterEach(function() {
