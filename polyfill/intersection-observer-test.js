@@ -953,18 +953,19 @@ describe('IntersectionObserver', function() {
       iframe.style.top = '0px';
       iframe.style.width = '100px';
       iframe.style.height = '200px';
-      iframe.srcdoc =
-        '<!DOCTYPE html><html><body>' +
-        '<style>' +
-        'body {margin: 0}' +
-        ' .target {height: 200px; margin-bottom: 2px; background: blue;}' +
-        '</style>';
       iframe.onerror = function() {
         done(new Error('iframe initialization failed'));
       };
       iframe.onload = function() {
         iframeWin = iframe.contentWindow;
         iframeDoc = iframeWin.document;
+        iframeDoc.open();
+        iframeDoc.write('<!DOCTYPE html><html><body>');
+        iframeDoc.write('<style>');
+        iframeDoc.write('body {margin: 0}');
+        iframeDoc.write('.target {height: 200px; margin-bottom: 2px; background: blue;}');
+        iframeDoc.write('</style>');
+        iframeDoc.close();
 
         function createTarget(id, bg) {
           var target = iframeDoc.createElement('div');
@@ -978,6 +979,7 @@ describe('IntersectionObserver', function() {
         iframeTargetEl2 = createTarget('target2', 'green');
         done();
       };
+      iframe.src = 'about:blank';
       rootEl.appendChild(iframe);
     });
 
