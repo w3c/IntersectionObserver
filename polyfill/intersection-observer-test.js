@@ -944,6 +944,7 @@ describe('IntersectionObserver', function() {
   describe('same-origin iframe', function() {
     var iframe, win, doc;
     var iframeTargetEl1, iframeTargetEl2;
+    var bodyWidth;
 
     beforeEach(function(done) {
       iframe = document.createElement('iframe');
@@ -978,6 +979,7 @@ describe('IntersectionObserver', function() {
         }
         iframeTargetEl1 = createTarget('target1', 'blue');
         iframeTargetEl2 = createTarget('target2', 'green');
+        bodyWidth = iframeDoc.body.clientWidth;
         done();
       };
       iframe.src = 'about:blank';
@@ -1075,7 +1077,7 @@ describe('IntersectionObserver', function() {
         var clientRect1 = rect({
           top: 0,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           height: 200
         });
         expect(rect(records[0].boundingClientRect)).to.eql(clientRect1);
@@ -1087,13 +1089,13 @@ describe('IntersectionObserver', function() {
         var clientRect2 = rect({
           top: 202,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           height: 200
         });
         var intersectRect2 = rect({
           top: 202,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           // The bottom is clipped off.
           bottom: 300
         });
@@ -1122,7 +1124,7 @@ describe('IntersectionObserver', function() {
         var clientRect1 = rect({
           top: 0,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           height: 200
         });
         expect(rect(records[0].boundingClientRect)).to.eql(clientRect1);
@@ -1134,13 +1136,13 @@ describe('IntersectionObserver', function() {
         var clientRect2 = rect({
           top: 202,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           height: 200
         });
         var intersectRect2 = rect({
           top: 202,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           // The bottom is clipped off.
           bottom: 300
         });
@@ -1169,12 +1171,12 @@ describe('IntersectionObserver', function() {
         var clientRect1 = rect({
           top: 0,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           height: 200
         });
         var intersectRect1 = rect({
           left: 0,
-          width: 100,
+          width: bodyWidth,
           // Top is clipped.
           top: 10,
           height: 200 - 10
@@ -1188,13 +1190,13 @@ describe('IntersectionObserver', function() {
         var clientRect2 = rect({
           top: 202,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           height: 200
         });
         var intersectRect2 = rect({
           top: 202,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           // The bottom is clipped off.
           bottom: 300
         });
@@ -1224,7 +1226,7 @@ describe('IntersectionObserver', function() {
         var clientRect1 = rect({
           top: 0,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           height: 200
         });
         expect(rect(records[0].boundingClientRect)).to.eql(clientRect1);
@@ -1236,13 +1238,13 @@ describe('IntersectionObserver', function() {
         var clientRect2 = rect({
           top: 202,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           height: 200
         });
         var intersectRect2 = rect({
           top: 202,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           // The bottom is clipped off.
           bottom: 300 - 10
         });
@@ -1272,13 +1274,13 @@ describe('IntersectionObserver', function() {
         var clientRect1 = rect({
           top: -10,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           height: 200
         });
         var intersectRect1 = rect({
           top: 0,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           // Height is only for the visible area.
           height: 200 - 10
         });
@@ -1291,13 +1293,13 @@ describe('IntersectionObserver', function() {
         var clientRect2 = rect({
           top: 202 - 10,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           height: 200
         });
         var intersectRect2 = rect({
           top: 202 - 10,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           // The bottom is clipped off.
           bottom: 300
         });
@@ -1327,12 +1329,12 @@ describe('IntersectionObserver', function() {
         var clientRect1 = rect({
           top: -10,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           height: 200
         });
         var intersectRect1 = rect({
           left: 0,
-          width: 100,
+          width: bodyWidth,
           // Top is clipped.
           top: 10,
           // The height is less by both: offset and scroll.
@@ -1347,13 +1349,13 @@ describe('IntersectionObserver', function() {
         var clientRect2 = rect({
           top: 202 - 10,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           height: 200
         });
         var intersectRect2 = rect({
           top: 202 - 10,
           left: 0,
-          width: 100,
+          width: bodyWidth,
           // The bottom is clipped off.
           bottom: 300
         });
