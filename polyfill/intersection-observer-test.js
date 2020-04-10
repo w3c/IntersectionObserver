@@ -957,6 +957,7 @@ describe('IntersectionObserver', function() {
         done(new Error('iframe initialization failed'));
       };
       iframe.onload = function() {
+        iframe.onload = null;
         iframeWin = iframe.contentWindow;
         iframeDoc = iframeWin.document;
         iframeDoc.open();
