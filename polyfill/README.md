@@ -96,6 +96,63 @@ io.USE_MUTATION_OBSERVER = false;
 
 This is recommended in cases where the DOM will update frequently but you know those updates will have no affect on the position or your target elements.
 
+
+## IFRAME support
+
+### Same-origin iframes
+
+Same-origin iframes are supported by the polyfill out of the box.
+
+
+### Cross-origin iframes
+
+Additional code and configuration are required to support cross-origin iframes,
+both on the iframe and host sides.
+
+The setup is as following:
+
+1. The host and iframe will establish a messaging channel.
+2. The host will setup its own IntersectionObserver instance for the
+cross-orgin iframe element. It can either use the this polyfill or any other
+approach. For each IntersectionObserverEntry for the iframe it will forward
+intersection data to the iframe via messaging.
+3. The iframe will load the polyfill and configure it by calling the
+`polyfillSetupCrossOriginUpdater()` method. It will call the provided callback
+whenever it receives the intersection data from the the parent via messsaging.
+
+A hypothetical host code:
+
+```javascript
+function forwardIntersectionToIframe(iframe) {
+  createMessagingChannel(iframe, function(port) {
+    var io = new IntersectionObserver(function() {
+      port.postMessage({
+        boundingClientRect: serialize(boundingClientRect),
+        intersectionRect: serialize(intersectionRect)
+      });
+    });
+    io.observe(iframe);
+  });
+}
+```
+
+A hypothetical iframe code:
+
+```javascript
+createMessagingChannel(parent, function(port) {
+  if (IntersectionObserver.polyfillSetupCrossOriginUpdater) {
+    var crossOriginUpdater = IntersectionObserver.polyfillSetupCrossOriginUpdater();
+    port.onmessage = function(event) {
+      crossOriginUpdater(
+        deserialize(event.data.boundingClientRect),
+        deserialize(event.data.intersectionRect)
+      );
+    };
+  }
+});
+```
+
+
 ## Limitations
 
 This polyfill does not support the [proposed v2 additions](https://github.com/szager-chromium/IntersectionObserver/blob/v2/explainer.md), as these features are not currently possible to do with JavaScript and existing web APIs.
