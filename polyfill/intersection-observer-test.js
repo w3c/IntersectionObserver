@@ -1702,7 +1702,7 @@ describe('IntersectionObserver', function() {
           expect(rect(records[0].intersectionRect)).to.eql(rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 300
           }));
           expect(records[0].isIntersecting).to.be(true);
@@ -1715,7 +1715,7 @@ describe('IntersectionObserver', function() {
           expect(rect(records[1].intersectionRect)).to.eql(rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 300
           }));
           expect(records[1].isIntersecting).to.be(true);
@@ -1726,7 +1726,7 @@ describe('IntersectionObserver', function() {
           var clientRect1 = rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 200
           });
           expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
@@ -1755,7 +1755,7 @@ describe('IntersectionObserver', function() {
           expect(rect(records[0].intersectionRect)).to.eql(rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 300
           }));
           expect(records[0].isIntersecting).to.be(true);
@@ -1768,7 +1768,7 @@ describe('IntersectionObserver', function() {
           expect(rect(records[1].intersectionRect)).to.eql(rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 300
           }));
           expect(records[1].isIntersecting).to.be(true);
@@ -1779,7 +1779,7 @@ describe('IntersectionObserver', function() {
           var clientRect1 = rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 200
           });
           expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
@@ -1808,7 +1808,7 @@ describe('IntersectionObserver', function() {
           expect(rect(records[0].intersectionRect)).to.eql(rect({
             top: 10,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 300 - 10
           }));
           expect(records[0].isIntersecting).to.be(true);
@@ -1821,7 +1821,7 @@ describe('IntersectionObserver', function() {
           expect(rect(records[1].intersectionRect)).to.eql(rect({
             top: 10,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 300 - 10
           }));
           expect(records[1].isIntersecting).to.be(true);
@@ -1832,12 +1832,12 @@ describe('IntersectionObserver', function() {
           var clientRect1 = rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 200
           });
           var intersectRect1 = rect({
             left: 0,
-            width: 100,
+            width: bodyWidth,
             // Top is clipped.
             top: 10,
             height: 200 - 10
@@ -1869,7 +1869,7 @@ describe('IntersectionObserver', function() {
           expect(rect(records[0].intersectionRect)).to.eql(rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 300 - 10
           }));
           expect(records[0].isIntersecting).to.be(true);
@@ -1882,7 +1882,7 @@ describe('IntersectionObserver', function() {
           expect(rect(records[1].intersectionRect)).to.eql(rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 300 - 10
           }));
           expect(records[1].isIntersecting).to.be(true);
@@ -1893,7 +1893,7 @@ describe('IntersectionObserver', function() {
           var clientRect1 = rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 200
           });
           expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
@@ -1909,7 +1909,7 @@ describe('IntersectionObserver', function() {
         io.observe(iframeTargetEl1);
       });
 
-      it('calculates rects for a fully visible frame and scrolled', function(done) {
+      it('calculates rects for a fully visible and scrolled frame', function(done) {
         iframeWin.scrollTo(0, 10);
         var parentRect = rect({top: 0, left: 20, height: 300, width: 100});
         var io = createObserver(function(unsortedRecords) {
@@ -1923,7 +1923,7 @@ describe('IntersectionObserver', function() {
           expect(rect(records[0].intersectionRect)).to.eql(rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 300
           }));
           expect(records[0].isIntersecting).to.be(true);
@@ -1936,7 +1936,7 @@ describe('IntersectionObserver', function() {
           expect(rect(records[1].intersectionRect)).to.eql(rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 300
           }));
           expect(records[1].isIntersecting).to.be(true);
@@ -1947,13 +1947,13 @@ describe('IntersectionObserver', function() {
           var clientRect1 = rect({
             top: -10,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 200
           });
           var intersectRect1 = rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             // Height is only for the visible area.
             height: 200 - 10
           });
@@ -1984,7 +1984,7 @@ describe('IntersectionObserver', function() {
           expect(rect(records[0].intersectionRect)).to.eql(rect({
             top: 10,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 300 - 10
           }));
           expect(records[0].isIntersecting).to.be(true);
@@ -1997,7 +1997,7 @@ describe('IntersectionObserver', function() {
           expect(rect(records[1].intersectionRect)).to.eql(rect({
             top: 10,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 300 - 10
           }));
           expect(records[1].isIntersecting).to.be(true);
@@ -2084,7 +2084,7 @@ describe('IntersectionObserver', function() {
           var clientRect1 = rect({
             top: 0,
             left: 0,
-            width: 100,
+            width: bodyWidth,
             height: 200
           });
           expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
