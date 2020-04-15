@@ -130,11 +130,15 @@ function forwardIntersectionToIframe(iframe) {
         boundingClientRect: serialize(boundingClientRect),
         intersectionRect: serialize(intersectionRect)
       });
-    });
+    }, {threshold: [0, 0.1, ..., 1]});
     io.observe(iframe);
   });
 }
 ```
+
+Notice that the host should provide a `threshold` argument for the desired
+level of precision. Otherwise, the iframe side may not update as frequently as
+desired.
 
 A hypothetical iframe code:
 
