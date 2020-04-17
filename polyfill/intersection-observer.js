@@ -49,15 +49,14 @@ var document = window.document;
 var registry = [];
 
 /**
- * The signal updater for cross-origin intersection. When available, it means
+ * The signal updater for cross-origin intersection. When not null, it means
  * that the polyfill is configured to work in a cross-origin mode.
  * @type {function(DOMRect, DOMRect)}
  */
 var crossOriginUpdater = null;
 
 /**
- * The current cross-origin intersection. Only available in the cross-origin
- * mode.
+ * The current cross-origin intersection. Only used in the cross-origin mode.
  * @type {DOMRect}
  */
 var crossOriginRect = null;
@@ -162,7 +161,7 @@ IntersectionObserver.prototype.USE_MUTATION_OBSERVER = true;
 
 
 /**
- * Set up the polyfill in the cross-origin mode. The result is the
+ * Sets up the polyfill in the cross-origin mode. The result is the
  * updater function that accepts two arguments: `boundingClientRect` and
  * `intersectionRect` - just as these fields would be available to the
  * parent via `IntersectionObserverEntry`. This function should be called

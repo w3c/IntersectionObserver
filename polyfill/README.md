@@ -97,7 +97,7 @@ io.USE_MUTATION_OBSERVER = false;
 This is recommended in cases where the DOM will update frequently but you know those updates will have no affect on the position or your target elements.
 
 
-## IFRAME support
+## iframe support
 
 ### Same-origin iframes
 
@@ -113,12 +113,12 @@ The setup is as following:
 
 1. The host and iframe will establish a messaging channel.
 2. The host will setup its own IntersectionObserver instance for the
-cross-orgin iframe element. It can either use the this polyfill or any other
+cross-origin iframe element. It can either use the this polyfill or any other
 approach. For each IntersectionObserverEntry for the iframe it will forward
 intersection data to the iframe via messaging.
 3. The iframe will load the polyfill and configure it by calling the
 `polyfillSetupCrossOriginUpdater()` method. It will call the provided callback
-whenever it receives the intersection data from the the parent via messsaging.
+whenever it receives the intersection data from the the parent via messaging.
 
 A hypothetical host code:
 
