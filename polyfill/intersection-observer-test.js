@@ -942,7 +942,7 @@ describe('IntersectionObserver', function() {
   });
 
   describe('iframe', function() {
-    var iframe, win, doc;
+    var iframe;
     var documentElement, body;
     var iframeTargetEl1, iframeTargetEl2;
     var bodyWidth;
