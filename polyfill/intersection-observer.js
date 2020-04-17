@@ -48,6 +48,19 @@ var document = window.document;
  */
 var registry = [];
 
+/**
+ * The signal updater for cross-origin intersection. When not null, it means
+ * that the polyfill is configured to work in a cross-origin mode.
+ * @type {function(DOMRect, DOMRect)}
+ */
+var crossOriginUpdater = null;
+
+/**
+ * The current cross-origin intersection. Only used in the cross-origin mode.
+ * @type {DOMRect}
+ */
+var crossOriginRect = null;
+
 
 /**
  * Creates the global IntersectionObserverEntry constructor.
@@ -145,6 +158,45 @@ IntersectionObserver.prototype.POLL_INTERVAL = null;
  * to detect intersection changes.
  */
 IntersectionObserver.prototype.USE_MUTATION_OBSERVER = true;
+
+
+/**
+ * Sets up the polyfill in the cross-origin mode. The result is the
+ * updater function that accepts two arguments: `boundingClientRect` and
+ * `intersectionRect` - just as these fields would be available to the
+ * parent via `IntersectionObserverEntry`. This function should be called
+ * each time the iframe receives intersection information from the parent
+ * window, e.g. via messaging.
+ * @return {function(DOMRect, DOMRect)}
+ */
+IntersectionObserver._setupCrossOriginUpdater = function() {
+  if (!crossOriginUpdater) {
+    /**
+     * @param {DOMRect} boundingClientRect
+     * @param {DOMRect} intersectionRect
+     */
+    crossOriginUpdater = function(boundingClientRect, intersectionRect) {
+      if (!boundingClientRect || !intersectionRect) {
+        crossOriginRect = getEmptyRect();
+      } else {
+        crossOriginRect = convertFromParentRect(boundingClientRect, intersectionRect);
+      }
+      registry.forEach(function(observer) {
+        observer._checkForIntersections();
+      });
+    };
+  }
+  return crossOriginUpdater;
+};
+
+
+/**
+ * Resets the cross-origin mode.
+ */
+IntersectionObserver._resetCrossOriginUpdater = function() {
+  crossOriginUpdater = null;
+  crossOriginRect = null;
+};
 
 
 /**
@@ -405,6 +457,11 @@ IntersectionObserver.prototype._unmonitorAllIntersections = function() {
  * @private
  */
 IntersectionObserver.prototype._checkForIntersections = function() {
+  if (!this.root && crossOriginUpdater && !crossOriginRect) {
+    // Cross origin monitoring, but no initial data available yet.
+    return;
+  }
+
   var rootIsInDom = this._rootIsInDom();
   var rootRect = rootIsInDom ? this._getRootRect() : getEmptyRect();
 
@@ -420,7 +477,7 @@ IntersectionObserver.prototype._checkForIntersections = function() {
       time: now(),
       target: target,
       boundingClientRect: targetRect,
-      rootBounds: rootRect,
+      rootBounds: crossOriginUpdater && !this.root ? null : rootRect,
       intersectionRect: intersectionRect
     });
 
@@ -481,7 +538,19 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
     if (parent == this.root || parent.nodeType == /* DOCUMENT */ 9) {
       atRoot = true;
       if (parent == this.root || parent == document) {
-        parentRect = rootRect;
+        if (crossOriginUpdater && !this.root) {
+          if (!crossOriginRect ||
+              crossOriginRect.width == 0 && crossOriginRect.height == 0) {
+            // A 0-size cross-origin intersection means no-intersection.
+            parent = null;
+            parentRect = null;
+            intersectionRect = null;
+          } else {
+            parentRect = crossOriginRect;
+          }
+        } else {
+          parentRect = rootRect;
+        }
       } else {
         // Check if there's a frame that can be navigated to.
         var frame = getParentNode(parent);
