@@ -970,7 +970,8 @@ describe('IntersectionObserver', function() {
         iframeDoc.write('</style>');
         iframeDoc.close();
 
-        // Ensure the documentElement and body are always sorted on top.
+        // Ensure the documentElement and body are always sorted on top. See
+        // `sortRecords` for more info.
         documentElement = iframeDoc.documentElement;
         body = iframeDoc.body;
         documentElement.id = 'A1';
