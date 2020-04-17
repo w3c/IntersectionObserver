@@ -169,7 +169,7 @@ IntersectionObserver.prototype.USE_MUTATION_OBSERVER = true;
  * window, e.g. via messaging.
  * @return {function(DOMRect, DOMRect)}
  */
-IntersectionObserver.polyfillSetupCrossOriginUpdater = function() {
+IntersectionObserver._setupCrossOriginUpdater = function() {
   if (!crossOriginUpdater) {
     /**
      * @param {DOMRect} boundingClientRect
@@ -193,7 +193,7 @@ IntersectionObserver.polyfillSetupCrossOriginUpdater = function() {
 /**
  * Resets the cross-origin mode.
  */
-IntersectionObserver.polyfillResetCrossOriginUpdater = function() {
+IntersectionObserver._resetCrossOriginUpdater = function() {
   crossOriginUpdater = null;
   crossOriginRect = null;
 };

@@ -1619,8 +1619,8 @@ describe('IntersectionObserver', function() {
           var script = iframeDoc.createElement('script');
           script.src = 'intersection-observer.js';
           script.onload = function() {
-            if (iframeWin.IntersectionObserver.polyfillSetupCrossOriginUpdater) {
-              crossOriginUpdater = iframeWin.IntersectionObserver.polyfillSetupCrossOriginUpdater();
+            if (iframeWin.IntersectionObserver._setupCrossOriginUpdater) {
+              crossOriginUpdater = iframeWin.IntersectionObserver._setupCrossOriginUpdater();
             }
             done();
           };
@@ -1631,8 +1631,8 @@ describe('IntersectionObserver', function() {
       });
 
       afterEach(function() {
-        if (IntersectionObserver.polyfillResetCrossOriginUpdater) {
-          IntersectionObserver.polyfillResetCrossOriginUpdater();
+        if (IntersectionObserver._resetCrossOriginUpdater) {
+          IntersectionObserver._resetCrossOriginUpdater();
         }
       });
 

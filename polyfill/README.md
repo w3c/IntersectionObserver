@@ -117,7 +117,7 @@ cross-origin iframe element. It can either use the this polyfill or any other
 approach. For each IntersectionObserverEntry for the iframe it will forward
 intersection data to the iframe via messaging.
 3. The iframe will load the polyfill and configure it by calling the
-`polyfillSetupCrossOriginUpdater()` method. It will call the provided callback
+`_setupCrossOriginUpdater()` method. It will call the provided callback
 whenever it receives the intersection data from the the parent via messaging.
 
 A hypothetical host code:
@@ -144,8 +144,8 @@ A hypothetical iframe code:
 
 ```javascript
 createMessagingChannel(parent, function(port) {
-  if (IntersectionObserver.polyfillSetupCrossOriginUpdater) {
-    var crossOriginUpdater = IntersectionObserver.polyfillSetupCrossOriginUpdater();
+  if (IntersectionObserver._setupCrossOriginUpdater) {
+    var crossOriginUpdater = IntersectionObserver._setupCrossOriginUpdater();
     port.onmessage = function(event) {
       crossOriginUpdater(
         deserialize(event.data.boundingClientRect),
