@@ -71,9 +71,9 @@ var crossOriginRect = null;
 function IntersectionObserverEntry(entry) {
   this.time = entry.time;
   this.target = entry.target;
-  this.rootBounds = entry.rootBounds;
-  this.boundingClientRect = entry.boundingClientRect;
-  this.intersectionRect = entry.intersectionRect || getEmptyRect();
+  this.rootBounds = fixDOMRect(entry.rootBounds);
+  this.boundingClientRect = fixDOMRect(entry.boundingClientRect);
+  this.intersectionRect = fixDOMRect(entry.intersectionRect || getEmptyRect());
   this.isIntersecting = !!entry.intersectionRect;
 
   // Calculates the intersection ratio.
@@ -859,6 +859,30 @@ function getEmptyRect() {
     right: 0,
     width: 0,
     height: 0
+  };
+}
+
+
+/**
+ * Ensure that the result has all of the necessary fields of the DOMRect.
+ * Specifically this ensures that `x` and `y` fields are set.
+ *
+ * @param {?DOMRect} rect
+ * @return {?DOMRect}
+ */
+function fixDOMRect(rect) {
+  if (!rect || 'x' in rect) {
+    return rect;
+  }
+  return {
+    top: rect.top,
+    y: rect.top,
+    bottom: rect.bottom,
+    left: rect.left,
+    x: rect.left,
+    right: rect.right,
+    width: rect.width,
+    height: rect.height
   };
 }
 
