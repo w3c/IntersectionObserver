@@ -51,13 +51,13 @@ var registry = [];
 /**
  * The signal updater for cross-origin intersection. When not null, it means
  * that the polyfill is configured to work in a cross-origin mode.
- * @type {function(DOMRect, DOMRect)}
+ * @type {function(DOMRect|ClientRect, DOMRect|ClientRect)}
  */
 var crossOriginUpdater = null;
 
 /**
  * The current cross-origin intersection. Only used in the cross-origin mode.
- * @type {DOMRect}
+ * @type {DOMRect|ClientRect}
  */
 var crossOriginRect = null;
 
@@ -71,9 +71,9 @@ var crossOriginRect = null;
 function IntersectionObserverEntry(entry) {
   this.time = entry.time;
   this.target = entry.target;
-  this.rootBounds = fixDOMRect(entry.rootBounds);
-  this.boundingClientRect = fixDOMRect(entry.boundingClientRect);
-  this.intersectionRect = fixDOMRect(entry.intersectionRect || getEmptyRect());
+  this.rootBounds = ensureDOMRect(entry.rootBounds);
+  this.boundingClientRect = ensureDOMRect(entry.boundingClientRect);
+  this.intersectionRect = ensureDOMRect(entry.intersectionRect || getEmptyRect());
   this.isIntersecting = !!entry.intersectionRect;
 
   // Calculates the intersection ratio.
@@ -167,13 +167,13 @@ IntersectionObserver.prototype.USE_MUTATION_OBSERVER = true;
  * parent via `IntersectionObserverEntry`. This function should be called
  * each time the iframe receives intersection information from the parent
  * window, e.g. via messaging.
- * @return {function(DOMRect, DOMRect)}
+ * @return {function(DOMRect|ClientRect, DOMRect|ClientRect)}
  */
 IntersectionObserver._setupCrossOriginUpdater = function() {
   if (!crossOriginUpdater) {
     /**
-     * @param {DOMRect} boundingClientRect
-     * @param {DOMRect} intersectionRect
+     * @param {DOMRect|ClientRect} boundingClientRect
+     * @param {DOMRect|ClientRect} intersectionRect
      */
     crossOriginUpdater = function(boundingClientRect, intersectionRect) {
       if (!boundingClientRect || !intersectionRect) {
@@ -593,7 +593,7 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
 
 /**
  * Returns the root rect after being expanded by the rootMargin value.
- * @return {Object} The expanded root rect.
+ * @return {ClientRect} The expanded root rect.
  * @private
  */
 IntersectionObserver.prototype._getRootRect = function() {
@@ -619,8 +619,8 @@ IntersectionObserver.prototype._getRootRect = function() {
 
 /**
  * Accepts a rect and expands it by the rootMargin value.
- * @param {Object} rect The rect object to expand.
- * @return {Object} The expanded rect.
+ * @param {DOMRect|ClientRect} rect The rect object to expand.
+ * @return {ClientRect} The expanded rect.
  * @private
  */
 IntersectionObserver.prototype._expandRectByRootMargin = function(rect) {
@@ -792,8 +792,8 @@ function removeEvent(node, event, fn, opt_useCapture) {
  * Returns the intersection between two rect objects.
  * @param {Object} rect1 The first rect.
  * @param {Object} rect2 The second rect.
- * @return {?Object} The intersection rect or undefined if no intersection
- *     is found.
+ * @return {?Object|?ClientRect} The intersection rect or undefined if no
+ *     intersection is found.
  */
 function computeRectIntersection(rect1, rect2) {
   var top = Math.max(rect1.top, rect2.top);
@@ -817,7 +817,7 @@ function computeRectIntersection(rect1, rect2) {
 /**
  * Shims the native getBoundingClientRect for compatibility with older IE.
  * @param {Element} el The element whose bounding rect to get.
- * @return {Object} The (possibly shimmed) rect of the element.
+ * @return {DOMRect|ClientRect} The (possibly shimmed) rect of the element.
  */
 function getBoundingClientRect(el) {
   var rect;
@@ -849,7 +849,7 @@ function getBoundingClientRect(el) {
 /**
  * Returns an empty rect object. An empty rect is returned when an element
  * is not in the DOM.
- * @return {Object} The empty rect.
+ * @return {ClientRect} The empty rect.
  */
 function getEmptyRect() {
   return {
@@ -867,13 +867,18 @@ function getEmptyRect() {
  * Ensure that the result has all of the necessary fields of the DOMRect.
  * Specifically this ensures that `x` and `y` fields are set.
  *
- * @param {?DOMRect} rect
+ * @param {?DOMRect|?ClientRect} rect
  * @return {?DOMRect}
  */
-function fixDOMRect(rect) {
+function ensureDOMRect(rect) {
+  // A `DOMRect` object has `x` and `y` fields.
   if (!rect || 'x' in rect) {
     return rect;
   }
+  // A IE's `ClientRect` type does not have `x` and `y`. The same is the case
+  // for internally calculated Rect objects. For the purposes of
+  // `IntersectionObserver`, it's sufficient to simply mirror `left` and `top`
+  // for these fields.
   return {
     top: rect.top,
     y: rect.top,
@@ -890,9 +895,9 @@ function fixDOMRect(rect) {
 /**
  * Inverts the intersection and bounding rect from the parent (frame) BCR to
  * the local BCR space.
- * @param {Object} parentBoundingRect The parent's bound client rect.
- * @param {Object} parentIntersectionRect The parent's own intersection rect.
- * @return {Object} The local root bounding rect for the parent's children.
+ * @param {DOMRect|ClientRect} parentBoundingRect The parent's bound client rect.
+ * @param {DOMRect|ClientRect} parentIntersectionRect The parent's own intersection rect.
+ * @return {ClientRect} The local root bounding rect for the parent's children.
  */
 function convertFromParentRect(parentBoundingRect, parentIntersectionRect) {
   var top = parentIntersectionRect.top - parentBoundingRect.top;
