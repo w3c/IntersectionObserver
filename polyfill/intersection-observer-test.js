@@ -157,6 +157,21 @@ describe('IntersectionObserver', function() {
       }).to.throwException();
     });
 
+    it('fills in x and y in the resulting rects', function(done) {
+      io = new IntersectionObserver(function(records) {
+        expect(records.length).to.be(1);
+        var entry = records[0];
+        expect(entry.rootBounds.x).to.be(entry.rootBounds.left);
+        expect(entry.rootBounds.y).to.be(entry.rootBounds.top);
+        expect(entry.boundingClientRect.x).to.be(entry.boundingClientRect.left);
+        expect(entry.boundingClientRect.y).to.be(entry.boundingClientRect.top);
+        expect(entry.intersectionRect.x).to.be(entry.intersectionRect.left);
+        expect(entry.intersectionRect.y).to.be(entry.intersectionRect.top);
+        done();
+      }, {root: rootEl});
+      targetEl2.style.top = '-40px';
+      io.observe(targetEl1);
+    });
 
     it('triggers for all targets when observing begins', function(done) {
       io = new IntersectionObserver(function(records) {
@@ -1000,6 +1015,8 @@ describe('IntersectionObserver', function() {
 
     function rect(r) {
       return {
+        y: typeof r.y == 'number' ? r.y : r.top,
+        x: typeof r.x == 'number' ? r.x : r.left,
         top: r.top,
         left: r.left,
         width: r.width != null ? r.width : r.right - r.left,
