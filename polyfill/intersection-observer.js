@@ -971,6 +971,10 @@ function getParentNode(node) {
   }
 
   if (parent && parent.assignedSlot) {
+    // If the parent is assigned into shadow root slot
+    if (parent.assignedSlot.parentNode.host) {
+      return parent.assignedSlot.parentNode.host;
+    }
     // If the parent is distributed in a <slot>, return the parent of a slot.
     return parent.assignedSlot.parentNode;
   }
