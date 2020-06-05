@@ -727,7 +727,7 @@ IntersectionObserver.prototype._unregisterInstance = function() {
  * @return {number} The elapsed time since the page was requested.
  */
 function now() {
-  return window.performance && performance.now && performance.now();
+  return window.performance && window.performance.now && window.performance.now();
 }
 
 
