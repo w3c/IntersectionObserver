@@ -6,7 +6,8 @@ Shortname: intersection-observer
 TR: https://www.w3.org/TR/intersection-observer/
 Previous version: https://www.w3.org/TR/2019/WD-intersection-observer-20190530/
 Level: none
-Editor: Stefan Zager, Google, szager@google.com, w3cid 91208
+Editor: none
+Former Editor: Stefan Zager, Google, szager@google.com, w3cid 91208
 Former Editor: Michael Blain, Google, mpb@google.com, w3cid 73819
 Abstract: This specification describes  an API that can be used to understand the visibility and position of DOM elements ("targets") relative to a containing element or to the top-level viewport ("root"). The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
 Group: webapps
