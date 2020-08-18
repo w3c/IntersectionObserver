@@ -156,7 +156,7 @@ elements relative to an <a>intersection root</a>.
 The IntersectionObserverCallback</h3>
 
 <pre class="idl">
-	callback IntersectionObserverCallback = void (sequence&lt;IntersectionObserverEntry> entries, IntersectionObserver observer);
+	callback IntersectionObserverCallback = undefined (sequence&lt;IntersectionObserverEntry> entries, IntersectionObserver observer);
 </pre>
 
 This callback will be invoked when there are changes to <a>target</a>'s
@@ -199,9 +199,9 @@ interface IntersectionObserver {
 	readonly attribute Node? root;
 	readonly attribute DOMString rootMargin;
 	readonly attribute FrozenArray&lt;double&gt; thresholds;
-	void observe(Element target);
-	void unobserve(Element target);
-	void disconnect();
+	undefined observe(Element target);
+	undefined unobserve(Element target);
+	undefined disconnect();
 	sequence&lt;IntersectionObserverEntry&gt; takeRecords();
 };
 </pre>
