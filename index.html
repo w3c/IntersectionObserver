@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version d91d7722, updated Thu Aug 27 14:45:47 2020 -0700" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="db6542ba1d6d4741c6012a53d84166c951f93c58" name="document-revision">
+  <meta content="989e687b3ebf6f93dc9cdccf3df410a1e495d996" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1175,6 +1175,8 @@ otherwise, update <var>container</var> to be the <a data-link-type="dfn" href="h
      <p>Update <var>intersectionRect</var> by intersecting it with the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle⑤">root intersection rectangle</a>.</p>
     <li data-md>
      <p>Map <var>intersectionRect</var> to the coordinate space of the <a data-link-type="dfn" href="https://drafts.csswg.org/css2/visuren.html#viewport" id="ref-for-viewport⑤">viewport</a> of the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①④">document</a></code> containing the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target①②">target</a>.</p>
+    <li data-md>
+     <p>Return <var>intersectionRect</var>.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.5" id="update-intersection-observations-algo"><span class="secno">3.2.5. </span><span class="content"> Run the Update Intersection Observations Steps</span><a class="self-link" href="#update-intersection-observations-algo"></a></h4>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="run-the-update-intersection-observations-steps">run the update intersection observations steps</dfn> for a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①⑤">document</a></code> <var>document</var> given a timestamp <var>time</var>, run these steps:</p>
