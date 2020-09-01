@@ -96,11 +96,70 @@ io.USE_MUTATION_OBSERVER = false;
 
 This is recommended in cases where the DOM will update frequently but you know those updates will have no affect on the position or your target elements.
 
+
+## iframe support
+
+### Same-origin iframes
+
+Same-origin iframes are supported by the polyfill out of the box.
+
+
+### Cross-origin iframes
+
+Additional code and configuration are required to support cross-origin iframes,
+both on the iframe and host sides.
+
+The setup is as following:
+
+1. The host and iframe will establish a messaging channel.
+2. The host will setup its own IntersectionObserver instance for the
+cross-origin iframe element. It can either use the this polyfill or any other
+approach. For each IntersectionObserverEntry for the iframe it will forward
+intersection data to the iframe via messaging.
+3. The iframe will load the polyfill and configure it by calling the
+`_setupCrossOriginUpdater()` method. It will call the provided callback
+whenever it receives the intersection data from the the parent via messaging.
+
+A hypothetical host code:
+
+```javascript
+function forwardIntersectionToIframe(iframe) {
+  createMessagingChannel(iframe, function(port) {
+    var io = new IntersectionObserver(function() {
+      port.postMessage({
+        boundingClientRect: serialize(boundingClientRect),
+        intersectionRect: serialize(intersectionRect)
+      });
+    }, {threshold: [0, 0.1, ..., 1]});
+    io.observe(iframe);
+  });
+}
+```
+
+Notice that the host should provide a `threshold` argument for the desired
+level of precision. Otherwise, the iframe side may not update as frequently as
+desired.
+
+A hypothetical iframe code:
+
+```javascript
+createMessagingChannel(parent, function(port) {
+  if (IntersectionObserver._setupCrossOriginUpdater) {
+    var crossOriginUpdater = IntersectionObserver._setupCrossOriginUpdater();
+    port.onmessage = function(event) {
+      crossOriginUpdater(
+        deserialize(event.data.boundingClientRect),
+        deserialize(event.data.intersectionRect)
+      );
+    };
+  }
+});
+```
+
+
 ## Limitations
 
-This polyfill does not attempt to report intersections across same-origin `iframe` boundaries. While supporting same-origin iframes is technically possible, it would drastically reduce performance. Since most `iframe` usage on the web is cross-origin, this polyfill chooses to optimize for performantly handling the most common use cases. (Note: neither this polyfill nor native implementations support reporting intersections across cross-origin `iframe` boundaries.)
-
-This polyfill also does not support the [proposed v2 additions](https://github.com/szager-chromium/IntersectionObserver/blob/v2/explainer.md), as these features are not currently possible to do with JavaScript and existing web APIs.
+This polyfill does not support the [proposed v2 additions](https://github.com/szager-chromium/IntersectionObserver/blob/v2/explainer.md), as these features are not currently possible to do with JavaScript and existing web APIs.
 
 ## Browser support
 
