@@ -12,7 +12,7 @@ A body of common practice has evolved that relies on these behaviors, however, i
 
   * Observing the location of "below the fold" sections of content in order to lazy-load content.
   * Implementing data-bound high-performance scrolling lists which load and render subsets of data sets. These lists are a central mobile interaction idiom.
-  * Calculating element visibility. In particular, [ad networks now require reporting of ad "visibility" for monetizing impressions](http://www.iab.net/iablog/2014/03/viewability-has-arrived-what-you-need-to-know-to-see-through-this-sea-change.html). This has led to many sites abusing scroll handlers, [synchronous layout invoking readbacks](http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html), and resorting to exotic plugin-based solutions for computing "true" element visibility (as a fraction of the element's intended size).
+  * Calculating element visibility. In particular, [ad networks now require reporting of ad "visibility" for monetizing impressions](https://www.iab.com/news/viewability-has-arrived-what-you-need-to-know-to-see-through-this-sea-change/). This has led to many sites abusing scroll handlers, [synchronous layout invoking readbacks](https://gist.github.com/paulirish/5d52fb081b3570c81e3a), and resorting to exotic plugin-based solutions for computing "true" element visibility (as a fraction of the element's intended size).
 
 These use-cases have several common properties:
 
