@@ -349,21 +349,23 @@ or failure:
 1. <a>Parse a list of component values</a> |marginString|,
 	storing the result as |tokens|.
 2. Remove all whitespace tokens from |tokens|.
-3. If the length of |tokens| is 0 or greater than 4,
+3. If the length of |tokens| is greater than 4,
 	return failure.
-4. Replace each |token| in |tokens|:
+4. If there are zero elements in |tokens|,
+	set |tokens| to ["0px"].
+5. Replace each |token| in |tokens|:
 	* If |token| is an <a>absolute length</a> <a>dimension</a> token,
 		replace it with a an equivalent pixel length.
 	* If |token| is a <<percentage>> token,
 		replace it with an equivalent percentage.
 	* Otherwise, return failure.
-5. If there is one element in |tokens|,
+6. If there is one element in |tokens|,
 	append three duplicates of that element to |tokens|.
-	If there is two elements are |tokens|,
+	Otherwise, if there are two elements are |tokens|,
 	append a duplicate of each element to |tokens|.
-	If there are three elements in |tokens|,
+	Otherwise, if there are three elements in |tokens|,
 	append a duplicate of the second element to |tokens|.
-6. Return |tokens|.
+7. Return |tokens|.
 
 <h3 id="intersection-observer-entry">
 The IntersectionObserverEntry interface</h3>
