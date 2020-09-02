@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version d91d7722, updated Thu Aug 27 14:45:47 2020 -0700" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="989e687b3ebf6f93dc9cdccf3df410a1e495d996" name="document-revision">
+  <meta content="7e57e90656077ce668aa54bce85853115a3e7ccc" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -309,7 +309,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-09-01">1 September 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-09-02">2 September 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -801,8 +801,11 @@ storing the result as <var>tokens</var>.</p>
     <li data-md>
      <p>Remove all whitespace tokens from <var>tokens</var>.</p>
     <li data-md>
-     <p>If the length of <var>tokens</var> is 0 or greater than 4,
+     <p>If the length of <var>tokens</var> is greater than 4,
 return failure.</p>
+    <li data-md>
+     <p>If there are zero elements in <var>tokens</var>,
+set <var>tokens</var> to ["0px"].</p>
     <li data-md>
      <p>Replace each <var>token</var> in <var>tokens</var>:</p>
      <ul>
@@ -818,9 +821,9 @@ replace it with an equivalent percentage.</p>
     <li data-md>
      <p>If there is one element in <var>tokens</var>,
 append three duplicates of that element to <var>tokens</var>.
-If there is two elements are <var>tokens</var>,
+Otherwise, if there are two elements are <var>tokens</var>,
 append a duplicate of each element to <var>tokens</var>.
-If there are three elements in <var>tokens</var>,
+Otherwise, if there are three elements in <var>tokens</var>,
 append a duplicate of the second element to <var>tokens</var>.</p>
     <li data-md>
      <p>Return <var>tokens</var>.</p>
