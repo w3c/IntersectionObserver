@@ -307,7 +307,7 @@ or else the <a>top-level browsing context</a>'s {{document}} node
 (referred to as the <dfn for="IntersectionObserver">implicit root</dfn>) if
 the {{IntersectionObserver/root}} attribute is <code>null</code>.
 
-An {{Element}} is defined as having an <dfn for="IntersectionObserver">overflow clip</dfn> if its computed style has <a>overflow properties</a> that cause its content to be clipped to the element's padding edge.
+An {{Element}} is defined as having a <dfn for="IntersectionObserver">content clip</dfn> if its computed style has <a>overflow properties</a> that cause its content to be clipped to the element's padding edge.
 
 The <dfn for=IntersectionObserver>root intersection rectangle</dfn>
 for an {{IntersectionObserver}}
@@ -320,7 +320,7 @@ is the rectangle we'll use to check against the targets.
 	<dt>If the <a>intersection root</a> is a {{document}},
 	<dd>it's the size of the {{document}}'s <a>viewport</a> (note that this processing step can only be reached if the {{document}} is <a>fully active</a>).
 
-	<dt>Otherwise, if the <a>intersection root</a> has an <a>overflow clip</a>,
+	<dt>Otherwise, if the <a>intersection root</a> has a <a>content clip</a>,
 	<dd>it's the element's <a>content area</a>.
 
 	<dt>Otherwise,
@@ -596,7 +596,7 @@ run these steps:
 		of the {{document}}, and update |container| to be
 		the <a>browsing context container</a> of |container|.
 	2. Map |intersectionRect| to the coordinate space of |container|.
-	3. If |container| has an <a>overflow clip</a> or a css <a>clip-path</a> property,
+	3. If |container| has a <a>content clip</a> or a css <a>clip-path</a> property,
 		update |intersectionRect| by applying |container|'s clip.
 	4. If |container| is the root element of a <a>browsing context</a>,
 		update |container| to be the <a>browsing context</a>'s {{document}};
