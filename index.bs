@@ -26,11 +26,11 @@ urlPrefix: https://html.spec.whatwg.org/multipage/
 	urlPrefix: dom.html
 		url: #the-document-object; type:dfn; text: Document
 	urlPrefix: browsers.html
-		type: dfn; text: unit of related similar-origin browsing contexts
 		type: dfn; text: browsing context
 		type: dfn; text: top-level browsing context
 		type: dfn; text: nested browsing contexts
 		type: dfn; text: browsing context container
+		type: dfn; text: browsing context scope origin
 		type: dfn; text: fully active
 	urlPrefix: webappapis.html;
 		type: dfn; text: report the exception
@@ -49,6 +49,7 @@ urlPrefix: https://heycam.github.io/webidl/
 		text: SyntaxError
 	urlPrefix: #dfn-; type:dfn; text: throw
 	urlPrefix: #idl-; type:interface; text: double
+	urlPrefix: #idl-; type:interface; text: undefined
 	url: #hierarchyrequesterror; type: exception; text: HierarchyRequestError
 urlPrefix: https://drafts.csswg.org/css-box/
 	url: #containing-block; type: dfn; text: containing block
@@ -278,9 +279,9 @@ interface IntersectionObserver {
 	::
 		Offsets applied to the <a>root intersection rectangle</a>,
 		effectively growing or shrinking the box that is used to calculate intersections.
-		Note that {{IntersectionObserver/rootMargin}} is only applied
-		for <a>targets</a> which belong to the same <a>unit of related similar-origin browsing contexts</a>
-		as the <a>intersection root</a>.
+		Note that for <a>implicit root</a> observers,
+		{{IntersectionObserver/rootMargin}} is only applied
+		for <a>targets</a> which have a <a>browsing context scope origin</a>.
 
 		On getting, return the result of serializing the elements of {{[[rootMargin]]}}
 		space-separated, where pixel lengths serialize as the numeric value followed by "px",
@@ -323,8 +324,9 @@ is the rectangle we'll use to check against the targets.
 	<dd>it's the result of running the {{Element/getBoundingClientRect()}} algorithm on the <a>intersection root</a>.
 </dl>
 
-For any <a>target</a> which belongs to the same <a>unit of related similar-origin browsing contexts</a>
-as the <a>intersection root</a>,
+If the <a>intersection root</a> is not the <a>implicit root</a>,
+or when calculating the <a>intersection root</a> for
+a <a>target</a> which has a <a>browsing context scope origin</a>,
 the rectangle is then expanded
 according to the offsets in the {{IntersectionObserver}}’s {{[[rootMargin]]}} slot
 in a manner similar to CSS's 'margin' property,
@@ -426,9 +428,9 @@ dictionary IntersectionObserverEntryInit {
 		1 if the {{IntersectionObserverEntry/isIntersecting}} is true, and 0 if not.
 	: <dfn>rootBounds</dfn>
 	::
-		If {{IntersectionObserverEntry/target}} belongs to the same
-		<a>unit of related similar-origin browsing contexts</a>
-		as the <a>intersection root</a>,
+		If the {{IntersectionObserver}} is not an <a>implicit root</a> observer,
+		or if the {{IntersectionObserverEntry/target}} has a
+		<a>browsing context scope origin</a>,
 		this will be the <a>root intersection rectangle</a>.
 		Otherwise, this will be <code>null</code>.
 		Note that if the target is in a different <a>browsing context</a> than the <a>intersection root</a>,
