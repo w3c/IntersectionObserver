@@ -177,15 +177,15 @@ intersection of an <a>intersection root</a> and one or more <a>target</a> {{Elem
 
 The <dfn for="IntersectionObserver">intersection root</dfn>
 for an {{IntersectionObserver}} is the value of its {{IntersectionObserver/root}} attribute
-if the attribute is non-null;
+if the attribute is non-<code>null</code>;
 otherwise, it is the <a>top-level browsing context</a>'s {{document}} node,
 referred to as the <dfn for="IntersectionObserver">implicit root</dfn>.
 
-An {{IntersectionObserver}} with a non-null {{IntersectionObserver/root}}
+An {{IntersectionObserver}} with a non-<code>null</code> {{IntersectionObserver/root}}
 is referred to as an <dfn for="IntersectionObserver">explicit root observer</dfn>,
 and it can observe any <a>target</a> {{Element}} that is a descendant of the
 {{IntersectionObserver/root}} in the <a>containing block chain</a>.
-An {{IntersectionObserver}} with a null {{IntersectionObserver/root}}
+An {{IntersectionObserver}} with a <code>null</code> {{IntersectionObserver/root}}
 is referred to as an <dfn for="IntersectionObserver">implicit root observer</dfn>.
 Valid <a>targets</a> for an <a>implicit root observer</a> include
 any {{Element}} in the <a>top-level browsing context</a>,
