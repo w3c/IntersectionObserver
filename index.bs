@@ -195,9 +195,9 @@ which is in the <a>list of the descendant browsing contexts</a> of the <a>top-le
 When dealing with <a>implicit root observers</a>, the API makes a distinction between
 a <a>target</a> whose <a>relevant settings object</a>'s <a>origin</a> is
 <a>same origin-domain</a> with the <a>top-level origin</a>, referred to as a
-<dfn for="IntersectionObserver">same-origin target</dfn>;
-as opposed to a <dfn for="IntersectionObserver">cross-origin target</dfn>.
-Any <a>target</a> of an <a>explicit root observer</a> is also a <a>same-origin target</a>,
+<dfn for="IntersectionObserver">same-origin-domain target</dfn>;
+as opposed to a <dfn for="IntersectionObserver">cross-origin-domain target</dfn>.
+Any <a>target</a> of an <a>explicit root observer</a> is also a <a>same-origin-domain target</a>,
 since the <a>target</a> must be in the same <a>document</a> as the
 <a>intersection root</a>.
 
@@ -297,8 +297,8 @@ interface IntersectionObserver {
 	::
 		Offsets applied to the <a>root intersection rectangle</a>,
 		effectively growing or shrinking the box that is used to calculate intersections.
-		<b>These offsets are only applied when handling <a>same-origin targets</a>;
-		for <a>cross-origin targets</a> they are ignored.</b>
+		<b>These offsets are only applied when handling <a>same-origin-domain targets</a>;
+		for <a>cross-origin-domain targets</a> they are ignored.</b>
 
 		On getting, return the result of serializing the elements of {{[[rootMargin]]}}
 		space-separated, where pixel lengths serialize as the numeric value followed by "px",
@@ -336,7 +336,7 @@ is the rectangle we'll use to check against the targets.
 </dl>
 
 When calculating the <a>root intersection rectangle</a> for
-a <a>same-origin target</a>, the rectangle is then expanded
+a <a>same-origin-domain target</a>, the rectangle is then expanded
 according to the offsets in the {{IntersectionObserver}}’s {{[[rootMargin]]}} slot
 in a manner similar to CSS's 'margin' property,
 with the four values indicating the amount the top, right, bottom, and left edges, respectively, are offset by,
@@ -437,7 +437,7 @@ dictionary IntersectionObserverEntryInit {
 		1 if the {{IntersectionObserverEntry/isIntersecting}} is true, and 0 if not.
 	: <dfn>rootBounds</dfn>
 	::
-		For a <a>same-origin target</a>, this will be the <a>root intersection rectangle</a>.
+		For a <a>same-origin-domain target</a>, this will be the <a>root intersection rectangle</a>.
 		Otherwise, this will be <code>null</code>.
 		Note that if the target is in a different <a>browsing context</a> than the <a>intersection root</a>,
 		this will be in a different coordinate system
