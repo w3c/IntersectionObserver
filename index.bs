@@ -14,6 +14,7 @@ Group: webapps
 Repository: W3C/IntersectionObserver
 Test Suite: http://w3c-test.org/intersection-observer/
 Ignored Vars: rootMargin, docs, now
+Markup Shorthands: markdown yes
 </pre>
 
 <pre class="anchors">
@@ -702,6 +703,14 @@ if there is at least one {{IntersectionObserver}} meeting these criteria:
 In the <a>HTML Processing Model</a>, under the "<i>Update the rendering</i>" step, the "<i>Unnecessary rendering</i>" step should be modified to add an additional requirement for skipping the rendering update:
 
 <ul>The |document| does not have <a>pending initial IntersectionObserver targets</a>.</ul>
+
+<!-- ============================================================ -->
+<h2 id=internationalization>Internationalization</h2>
+<!-- ============================================================ -->
+
+*This section is non-normative.*
+
+There are no known issues concerning internationalization.
 
 <!-- ============================================================ -->
 <h2 id=acknowledgements>Acknowledgements</h2>
