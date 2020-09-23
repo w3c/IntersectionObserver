@@ -41,9 +41,6 @@ urlPrefix: https://html.spec.whatwg.org/multipage/
 		type: dfn; text: relevant settings object
 		url: #event-loop-processing-model; type: dfn; text: HTML Processing Model
 		url: #concept-environment-top-level-origin; type: dfn; text: top-level origin
-	urlPrefix: infrastructure.html;
-		type: dfn; text: rules for parsing dimension values
-		url: #dfn-callback-this-value; type: dfn; text: callback this value
 	urlPrefix: origin.html
 		type: dfn; text: origin
 urlPrefix: https://heycam.github.io/webidl/
@@ -568,8 +565,7 @@ run these steps:
 	2. Let |queue| be a copy of |observer|'s internal {{[[QueuedEntries]]}}
 		slot.
 	3. Clear |observer|'s internal {{[[QueuedEntries]]}} slot.
-	4. Invoke |callback| with |queue| as the first argument and |observer|
-		as the second argument and <a>callback this value</a>.
+	4. Invoke |callback| with |queue| as the first argument and |observer| as the second argument.
 		If this throws an exception, <a>report the exception</a>.
 
 <h4 id='queue-intersection-observer-entry-algo'>
