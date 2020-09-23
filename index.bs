@@ -668,7 +668,7 @@ An {{IntersectionObserver}} will remain alive until both of these conditions hol
 	<li>The observer is not observing any targets.
 </ul>
 
-An {{IntersectionObserver}} will continue observing a target until either {{IntersectionObserver/unobserve(target)}} is called on the target, or {{IntersectionObserver/disconnect()}} is called on the observer.
+An {{IntersectionObserver}} will continue observing a target until either {{IntersectionObserver/unobserve(target)}} or {{IntersectionObserver/disconnect()}} is called on the observer.
 
 <h3 id='external-spec-integrations'>
 External Spec Integrations</h3>
