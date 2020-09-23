@@ -230,42 +230,14 @@ interface IntersectionObserver {
 	: <dfn constructor lt="IntersectionObserver(callback, options)">
 		new IntersectionObserver(callback, options)</dfn>
 	::
-		1. Let |this| be a new {{IntersectionObserver}} object
-		2. Set |this|'s internal {{[[callback]]}} slot to |callback|.
-		3. Attempt to <a>parse a root margin</a>
-			from |options|.{{IntersectionObserverInit/rootMargin}}.
-			If a list is returned,
-			set |this|'s internal {{[[rootMargin]]}} slot to that.
-			Otherwise, <a>throw</a> a {{SyntaxError}} exception.
-		4. Let |thresholds| be a list equal to
-			|options|.{{IntersectionObserverInit/threshold}}.
-		5. If any value in |thresholds| is less than 0.0 or greater than
-			1.0, <a>throw</a> a {{RangeError}} exception.
-		6. Sort |thresholds| in ascending order.
-		7. If |thresholds| is empty, append <code>0</code> to |thresholds|.
-		8. The {{IntersectionObserver/thresholds}} attribute getter will return
-			this sorted |thresholds| list.
-		9. Return |this|.
+		Return the result of running the <a>initialize a new IntersectionObserver</a>
+		algorithm, providing |callback| and |options|.
 	: <dfn>observe(target)</dfn>
 	::
-		1. If |target| is in |this|'s internal {{[[ObservationTargets]]}} slot,
-			return.
-		2. Let |intersectionObserverRegistration| be
-			an {{IntersectionObserverRegistration}} record
-			with an {{IntersectionObserverRegistration/observer}} property set to |this|,
-			a {{IntersectionObserverRegistration/previousThresholdIndex}} property set to <code>-1</code>,
-			and a {{IntersectionObserverRegistration/previousIsIntersecting}} property set to <code>false</code>.
-		3. Append |intersectionObserverRegistration|
-			to |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
-		4. Add |target| to |this|'s internal {{[[ObservationTargets]]}} slot.
-		5. Schedule an iteration of the <a>event loop</a>
-			in the {{IntersectionObserver/root}}'s <a>browsing context</a>.
+		Run the <a>observe a target Element</a> algorithm, providing |this| and |target|.
 	: <dfn>unobserve(target)</dfn>
 	::
-		1. Remove the {{IntersectionObserverRegistration}} record
-			whose {{IntersectionObserverRegistration/observer}} property is equal to |this|
-			from |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
-		2. Remove |target| from |this|'s internal {{[[ObservationTargets]]}} slot.
+		Run the <a>unobserve a target Element</a> algorithm, providing |this| and |target|.
 
 		Note: {{MutationObserver}} does not implement {{unobserve()}}.
 		For {{IntersectionObserver}}, {{unobserve()}} addresses the
@@ -539,6 +511,56 @@ which is a list of four pixel lengths or percentages.
 
 <h3 id='algorithms'>
 Algorithms</h2>
+
+<h4 id='initialize-new-intersection-observer'>Initialize a new IntersectionObserver</h4>
+
+To <dfn>initialize a new IntersectionObserver</dfn>, given an {{IntersectionObserverCallback}} |callback|
+and an {{IntersectionObserverInit}} dictionary |options|, run these steps:
+
+1. Let |this| be a new {{IntersectionObserver}} object
+2. Set |this|'s internal {{[[callback]]}} slot to |callback|.
+3. Attempt to <a>parse a root margin</a>
+	from |options|.{{IntersectionObserverInit/rootMargin}}.
+	If a list is returned,
+	set |this|'s internal {{[[rootMargin]]}} slot to that.
+	Otherwise, <a>throw</a> a {{SyntaxError}} exception.
+4. Let |thresholds| be a list equal to
+	|options|.{{IntersectionObserverInit/threshold}}.
+5. If any value in |thresholds| is less than 0.0 or greater than
+	1.0, <a>throw</a> a {{RangeError}} exception.
+6. Sort |thresholds| in ascending order.
+7. If |thresholds| is empty, append <code>0</code> to |thresholds|.
+8. The {{IntersectionObserver/thresholds}} attribute getter will return
+	this sorted |thresholds| list.
+9. Return |this|.
+
+<h4 id='observe-target-element'>Observe a target Element</h4>
+
+To <dfn>observe a target Element</dfn>, given an {{IntersectionObserver}} |observer|
+and an {{Element}} |target|, follow these steps:
+
+1. If |target| is in |observer|'s internal {{[[ObservationTargets]]}} slot,
+	return.
+2. Let |intersectionObserverRegistration| be
+	an {{IntersectionObserverRegistration}} record
+	with an {{IntersectionObserverRegistration/observer}} property set to |observer|,
+	a {{IntersectionObserverRegistration/previousThresholdIndex}} property set to <code>-1</code>,
+	and a {{IntersectionObserverRegistration/previousIsIntersecting}} property set to <code>false</code>.
+3. Append |intersectionObserverRegistration|
+	to |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
+4. Add |target| to |observer|'s internal {{[[ObservationTargets]]}} slot.
+5. Schedule an iteration of the <a>event loop</a>
+	in the {{IntersectionObserver/root}}'s <a>browsing context</a>.
+
+<h4 id='unobserve-target-element'>Unobserve a target Element</h4>
+
+To <dfn>unobserve a target Element</dfn>, given an {{IntersectionObserver}} |observer|
+and an {{Element}} |target|, follow these steps:
+
+1. Remove the {{IntersectionObserverRegistration}} record
+	whose {{IntersectionObserverRegistration/observer}} property is equal to |this|
+	from |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot, if present.
+2. Remove |target| from |this|'s internal {{[[ObservationTargets]]}} slot, if present
 
 <h4 id='queue-intersection-observer-task'>
 Queue an Intersection Observer Task</h4>
