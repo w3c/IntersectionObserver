@@ -319,6 +319,9 @@ IntersectionObserver.prototype._initThresholds = function(opt_threshold) {
 IntersectionObserver.prototype._parseRootMargin = function(opt_rootMargin) {
   var marginString = opt_rootMargin || '0px';
   var margins = marginString.split(/\s+/).map(function(margin) {
+    if (margin === '0') {
+      return {value: 0, unit: 'px'};
+    }
     var parts = /^(-?\d*\.?\d+)(px|%)$/.exec(margin);
     if (!parts) {
       throw new Error('rootMargin must be specified in pixels or percent');

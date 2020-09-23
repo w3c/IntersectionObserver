@@ -91,7 +91,7 @@ describe('IntersectionObserver', function() {
       io = new IntersectionObserver(noop, {rootMargin: '10px 20% 0px'});
       expect(io.rootMargin).to.be('10px 20% 0px 20%');
 
-      io = new IntersectionObserver(noop, {rootMargin: '0px 0px -5% 5px'});
+      io = new IntersectionObserver(noop, {rootMargin: '0px 0 -5% 5px'});
       expect(io.rootMargin).to.be('0px 0px -5% 5px');
 
       // TODO(philipwalton): the polyfill supports fractional pixel and
