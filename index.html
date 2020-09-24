@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version 3a4236c1, updated Thu Sep 24 13:18:10 2020 +0200" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="53c709de76d8c3b32685d04a10b1099011904957" name="document-revision">
+  <meta content="dff37444927c7b9956b70cc27c02b85eecd6057a" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1563,7 +1563,7 @@ passing in <var>observer</var>, <var>time</var>, <var>rootBounds</var>, <var>bou
     <li>There are no scripting references to the observer.
     <li>The observer is not observing any targets. 
    </ul>
-   <p>An <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver②⑦">IntersectionObserver</a></code> will continue observing a target until either <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-unobserve" id="ref-for-dom-intersectionobserver-unobserve③">unobserve(target)</a></code> is called on the target, or <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-disconnect" id="ref-for-dom-intersectionobserver-disconnect②">disconnect()</a></code> is called on the observer.</p>
+   <p>An <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver②⑦">IntersectionObserver</a></code> will continue observing a target until either the observer’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-unobserve" id="ref-for-dom-intersectionobserver-unobserve③">unobserve()</a></code> method is called with the target as argument; or the observer’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-disconnect" id="ref-for-dom-intersectionobserver-disconnect②">disconnect()</a></code> is called.</p>
    <h3 class="heading settled" data-level="3.4" id="external-spec-integrations"><span class="secno">3.4. </span><span class="content"> External Spec Integrations</span><a class="self-link" href="#external-spec-integrations"></a></h3>
    <h4 class="heading settled" data-level="3.4.1" id="event-loop"><span class="secno">3.4.1. </span><span class="content"> HTML Processing Model: Event Loop</span><a class="self-link" href="#event-loop"></a></h4>
    <p>An <a data-link-type="dfn" href="#intersection-observer" id="ref-for-intersection-observer①">Intersection Observer</a> processing step should take place
