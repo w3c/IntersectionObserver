@@ -24,7 +24,7 @@ urlPrefix: http://www.w3.org/TR/hr-time/
 	type: dfn; text: time origin
 urlPrefix: https://html.spec.whatwg.org/multipage/
 	urlPrefix: dom.html
-		url: #the-document-object; type:dfn; text: Document
+		url: #document; type:dfn; text: Document
 	urlPrefix: browsers.html
 		type: dfn; text: browsing context
 		type: dfn; text: top-level browsing context
