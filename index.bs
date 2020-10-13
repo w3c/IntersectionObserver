@@ -564,13 +564,18 @@ and an {{Element}} |target|, follow these steps:
 <h4 id='queue-intersection-observer-task'>
 Queue an Intersection Observer Task</h4>
 
+The <dfn>IntersectionObserver task source</dfn> is a [=task source=] used for
+scheduling tasks to [[#notify-intersection-observers-algo]].
+
 To <dfn>queue an intersection observer task</dfn> for a {{document}} |document|,
 run these steps:
 
 1. If |document|'s <a>IntersectionObserverTaskQueued</a> flag is set to true,
 	return.
 2. Set |document|'s <a>IntersectionObserverTaskQueued</a> flag to true.
-3. <a>Queue a task</a> to the {{document}}'s <a>event loop</a> to <a>notify intersection observers</a>.
+3. <a>Queue a task</a> on the <a>IntersectionObserver task source</a>
+	associated with the {{document}}'s <a>event loop</a>
+	to <a>notify intersection observers</a>.
 
 <h4 id='notify-intersection-observers-algo'>
 Notify Intersection Observers</h4>
@@ -589,7 +594,8 @@ run these steps:
 	2. Let |queue| be a copy of |observer|'s internal {{[[QueuedEntries]]}}
 		slot.
 	3. Clear |observer|'s internal {{[[QueuedEntries]]}} slot.
-	4. Invoke |callback| with |queue| as the first argument, |observer| as the second argument,
+	4. Let |callback| be the value of |observer|'s internal {{[[callback]]}} slot.
+	5. Invoke |callback| with |queue| as the first argument, |observer| as the second argument,
 		and |observer| as the <a>callback this value</a>.
 		If this throws an exception, <a>report the exception</a>.
 
