@@ -745,9 +745,9 @@ it may provide to code running in the context of a cross-origin iframe
 	for <a>cross-origin-domain targets</a> is to prevent such probing.
 
 It should be noted that prior to {{IntersectionObserver}}, web developers
-used other API's in very clever (and grotesque) ways to tease the information
+used other API's in very ingenious (and grotesque) ways to tease out the information
 available from {{IntersectionObserver}}. As a purely practical matter, this API
-does not reveal any information that was not already available via other means.
+does not reveal any information that was not already available by other means.
 
 Another consideration is that {{IntersectionObserver}} uses {{DOMHighResTimeStamp}},
 which has privacy and security considerations of its own. It is however unlikely that
