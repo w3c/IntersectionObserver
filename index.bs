@@ -548,8 +548,6 @@ and an {{Element}} |target|, follow these steps:
 3. Append |intersectionObserverRegistration|
 	to |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
 4. Add |target| to |observer|'s internal {{[[ObservationTargets]]}} slot.
-5. Schedule an iteration of the <a>event loop</a>
-	in the {{IntersectionObserver/root}}'s <a>browsing context</a>.
 
 <h4 id='unobserve-target-element'>Unobserve a target Element</h4>
 
