@@ -735,6 +735,19 @@ In the <a>HTML Processing Model</a>, under the "<i>Update the rendering</i>" ste
 <ul>The |document| does not have <a>pending initial IntersectionObserver targets</a>.</ul>
 
 <!-- ============================================================ -->
+<h2 id=accessibility>Accessibility Considerations</h2>
+<!-- ============================================================ -->
+
+*This section is non-normative.*
+
+There are no known accessibility considerations for the core IntersectionObserver specification (this document).
+There are, however, related specifications and proposals that leverage and refer to this spec,
+which might have their own accessibility considerations. In particular, specifications for
+[[html#lazy-loading-attributes]] and <a href="https://github.com/WICG/display-locking">display locking</a>
+may have implications for [[html#find-in-page]], [[html#the-tabindex-attribute]], and
+<a href="https://githumb.com/WICG/spatial-navigation">spatial navigation</a>.
+
+<!-- ============================================================ -->
 <h2 id=privacy>Privacy and Security</h2>
 <!-- ============================================================ -->
 
