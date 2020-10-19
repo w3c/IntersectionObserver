@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version 9ec7eb81, updated Tue Oct 13 17:24:06 2020 -0700" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="f394be9969760f2966e121dac3c3744958fa9f7e" name="document-revision">
+  <meta content="2f116826f43936febe3d857cdc11a93453c965c9" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1420,6 +1420,8 @@ whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverr
      <p>Remove <var>target</var> from <var>this</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot" id="ref-for-dom-intersectionobserver-observationtargets-slot④">[[ObservationTargets]]</a></code> slot, if present</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.4" id="queue-intersection-observer-task"><span class="secno">3.2.4. </span><span class="content"> Queue an Intersection Observer Task</span><a class="self-link" href="#queue-intersection-observer-task"></a></h4>
+   <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="intersectionobserver-task-source">IntersectionObserver task source</dfn> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#task-source" id="ref-for-task-source">task source</a> used for
+scheduling tasks to <a href="#notify-intersection-observers-algo">§ 3.2.5 Notify Intersection Observers</a>.</p>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="queue-an-intersection-observer-task">queue an intersection observer task</dfn> for a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2⑦">document</a></code> <var>document</var>,
 run these steps:</p>
    <ol>
@@ -1429,7 +1431,7 @@ return.</p>
     <li data-md>
      <p>Set <var>document</var>’s <a data-link-type="dfn" href="#document-intersectionobservertaskqueued" id="ref-for-document-intersectionobservertaskqueued①">IntersectionObserverTaskQueued</a> flag to true.</p>
     <li data-md>
-     <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> to the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2⑧">document</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop①">event loop</a> to <a data-link-type="dfn" href="#notify-intersection-observers" id="ref-for-notify-intersection-observers">notify intersection observers</a>.</p>
+     <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> on the <a data-link-type="dfn" href="#intersectionobserver-task-source" id="ref-for-intersectionobserver-task-source">IntersectionObserver task source</a> associated with the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2⑧">document</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop①">event loop</a> to <a data-link-type="dfn" href="#notify-intersection-observers" id="ref-for-notify-intersection-observers">notify intersection observers</a>.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.5" id="notify-intersection-observers-algo"><span class="secno">3.2.5. </span><span class="content"> Notify Intersection Observers</span><a class="self-link" href="#notify-intersection-observers-algo"></a></h4>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="notify-intersection-observers">notify intersection observers</dfn> for a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2⑨">document</a></code> <var>document</var>,
@@ -1451,6 +1453,8 @@ continue.</p>
        <p>Let <var>queue</var> be a copy of <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-queuedentries-slot" id="ref-for-dom-intersectionobserver-queuedentries-slot③">[[QueuedEntries]]</a></code> slot.</p>
       <li data-md>
        <p>Clear <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-queuedentries-slot" id="ref-for-dom-intersectionobserver-queuedentries-slot④">[[QueuedEntries]]</a></code> slot.</p>
+      <li data-md>
+       <p>Let <var>callback</var> be the value of <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-callback-slot" id="ref-for-dom-intersectionobserver-callback-slot①">[[callback]]</a></code> slot.</p>
       <li data-md>
        <p>Invoke <var>callback</var> with <var>queue</var> as the first argument, <var>observer</var> as the second argument,
 and <var>observer</var> as the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#dfn-callback-this-value" id="ref-for-dfn-callback-this-value">callback this value</a>.
@@ -1669,6 +1673,7 @@ specification.</p>
    <li><a href="#dictdef-intersectionobserverinit">IntersectionObserverInit</a><span>, in §2.4</span>
    <li><a href="#intersectionobserverregistration">IntersectionObserverRegistration</a><span>, in §3.1.2</span>
    <li><a href="#document-intersectionobservertaskqueued">IntersectionObserverTaskQueued</a><span>, in §3.1.1</span>
+   <li><a href="#intersectionobserver-task-source">IntersectionObserver task source</a><span>, in §3.2.4</span>
    <li>
     intersectionRatio
     <ul>
@@ -1905,6 +1910,13 @@ HTML Processing Model: Event Loop</a> <a href="#ref-for-dom-document-2①⑧">(2
 The IntersectionObserver interface</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-task-source">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#task-source">https://html.spec.whatwg.org/multipage/webappapis.html#task-source</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-task-source">3.2.4. 
+Queue an Intersection Observer Task</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMString">
    <a href="https://heycam.github.io/webidl/#idl-DOMString">https://heycam.github.io/webidl/#idl-DOMString</a><b>Referenced in:</b>
    <ul>
@@ -1994,6 +2006,7 @@ The IntersectionObserverInit dictionary</a>
     <ul>
      <li><span class="dfn-paneled" id="term-for-dom-document-2">document</span>
      <li><span class="dfn-paneled" id="term-for-same-origin-domain">same origin-domain</span>
+     <li><span class="dfn-paneled" id="term-for-task-source">task source</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WebIDL]</a> defines the following terms:
@@ -2482,6 +2495,8 @@ Run the Update Intersection Observations Steps</a>
    <b><a href="#dom-intersectionobserver-callback-slot">#dom-intersectionobserver-callback-slot</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-intersectionobserver-callback-slot">3.2.1. Initialize a new IntersectionObserver</a>
+    <li><a href="#ref-for-dom-intersectionobserver-callback-slot①">3.2.5. 
+Notify Intersection Observers</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-intersectionobserver-rootmargin-slot">
@@ -2511,6 +2526,13 @@ The IntersectionObserver interface</a>
    <ul>
     <li><a href="#ref-for-unobserve-a-target-element">2.2. 
 The IntersectionObserver interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="intersectionobserver-task-source">
+   <b><a href="#intersectionobserver-task-source">#intersectionobserver-task-source</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-intersectionobserver-task-source">3.2.4. 
+Queue an Intersection Observer Task</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="queue-an-intersection-observer-task">
