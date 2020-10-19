@@ -735,6 +735,37 @@ In the <a>HTML Processing Model</a>, under the "<i>Update the rendering</i>" ste
 <ul>The |document| does not have <a>pending initial IntersectionObserver targets</a>.</ul>
 
 <!-- ============================================================ -->
+<h2 id=privacy>Privacy and Security</h2>
+<!-- ============================================================ -->
+
+*This section is non-normative.*
+
+The main privacy concerns associated with this API relate to the information
+it may provide to code running in the context of a cross-origin iframe
+(i.e., the <a>cross-origin-domain target</a> case). In particular:
+
+ * There is no universal consensus on the privacy implications of
+	revealing whether an iframe is within the global viewport.
+
+ * There is a risk that the API may be used to probe for information
+	about the geometry of the global viewport itself,
+	which may be used to deduce the user's hardware configuration.
+	The motivation for disabling the effects of {{IntersectionObserver/rootMargin}}
+	and suppressing {{IntersectionObserverEntry/rootBounds}}
+	for <a>cross-origin-domain targets</a> is to prevent such probing.
+
+It should be noted that prior to {{IntersectionObserver}}, web developers
+used other API's in very ingenious (and grotesque) ways to tease out the information
+available from {{IntersectionObserver}}. As a purely practical matter, this API
+does not reveal any information that was not already available by other means.
+
+Another consideration is that {{IntersectionObserver}} uses {{DOMHighResTimeStamp}},
+which has privacy and security considerations of its own. It is however unlikely that
+{{IntersectionObserver}} is vulnerable to timing-related exploits. Timestamps are generated
+at most once per rendering update (see [[#event-loop]]), which is far too
+infrequent for the familiar kind of timing attack.
+
+<!-- ============================================================ -->
 <h2 id=acknowledgements>Acknowledgements</h2>
 <!-- ============================================================ -->
 
