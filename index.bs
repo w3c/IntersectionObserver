@@ -644,41 +644,45 @@ To <dfn>run the update intersection observations steps</dfn> for a
 2. For each |observer| in |observer list|:
 	1. Let |rootBounds| be |observer|'s <a>root intersection rectangle</a>.
 	2. For each |target| in |observer|'s internal {{[[ObservationTargets]]}} slot, processed in the same order that {{observe()}} was called on each |target|:
-		1. If the <a>intersection root</a> is an {{Element}},
-			and |target| is not a descendant of the <a>intersection root</a>
-			in the <a>containing block chain</a>,
-			skip further processing for |target|.
+		1. Let:
+			- |thresholdIndex| be 0.
+			- |isIntersecting| be |false|.
+			- |targetRect| be a {{DOMRectReadOnly}} with |x|, |y|, |width|, and |height| set to 0.
+			- |intersectionRect| be a {{DOMRectReadOnly}} with |x|, |y|, |width|, and |height| set to 0.
 		2. If the <a>intersection root</a> is not the <a>implicit root</a>,
 			and |target| is not in the same {{document}} as the <a>intersection root</a>,
-			skip further processing for |target|.
-		3. Let |targetRect| be a {{DOMRectReadOnly}} obtained
+			skip to step 11.
+		3. If the <a>intersection root</a> is an {{Element}},
+			and |target| is not a descendant of the <a>intersection root</a>
+			in the <a>containing block chain</a>, skip to step 11.
+		4. Set |targetRect| to the {{DOMRectReadOnly}} obtained
 			by running the {{Element/getBoundingClientRect()}} algorithm on |target|.
-		4. Let |intersectionRect| be the result of running the <a>compute the intersection</a>
+		5. Set |intersectionRect| to the result of running the <a>compute the intersection</a>
 			algorithm on |target|.
-		5. Let |targetArea| be |targetRect|'s area.
-		6. Let |intersectionArea| be |intersectionRect|'s area.
-		7. Let |isIntersecting| be true if |targetRect| and |rootBounds| intersect or are edge-adjacent,
+		6. Let |targetArea| be |targetRect|'s area.
+		7. Let |intersectionArea| be |intersectionRect|'s area.
+		8. Set |isIntersecting| to true if |targetRect| and |rootBounds| intersect or are edge-adjacent,
 			even if the intersection has zero area (because |rootBounds| or |targetRect| have
-			zero area); otherwise, let |isIntersecting| be false.
-		8. If |targetArea| is non-zero, let |intersectionRatio| be |intersectionArea| divided by |targetArea|.<br>
+			zero area).
+		9. If |targetArea| is non-zero, let |intersectionRatio| be |intersectionArea| divided by |targetArea|.<br>
 			Otherwise, let |intersectionRatio| be <code>1</code> if |isIntersecting| is true, or <code>0</code> if |isIntersecting| is false.
-		9. Let |thresholdIndex| be the index of the first entry in |observer|.{{thresholds}} whose value is greater than |intersectionRatio|, or the length of |observer|.{{thresholds}} if |intersectionRatio| is greater than or equal to the last entry in |observer|.{{thresholds}}.
-		10. Let |intersectionObserverRegistration| be the {{IntersectionObserverRegistration}} record 
+		10. Set |thresholdIndex| to the index of the first entry in |observer|.{{thresholds}} whose value is greater than |intersectionRatio|, or the length of |observer|.{{thresholds}} if |intersectionRatio| is greater than or equal to the last entry in |observer|.{{thresholds}}.
+		11. Let |intersectionObserverRegistration| be the {{IntersectionObserverRegistration}} record
 			in |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot
 			whose {{IntersectionObserverRegistration/observer}} property is equal to |observer|.
-		11. Let |previousThresholdIndex| be the |intersectionObserverRegistration|'s
+		12. Let |previousThresholdIndex| be the |intersectionObserverRegistration|'s
 		    {{IntersectionObserverRegistration/previousThresholdIndex}} property.
-		12. Let |previousIsIntersecting| be the |intersectionObserverRegistration|'s
+		13. Let |previousIsIntersecting| be the |intersectionObserverRegistration|'s
 		    {{IntersectionObserverRegistration/previousIsIntersecting}} property.
-		13. If |thresholdIndex| does not equal |previousThresholdIndex| or if 
+		14. If |thresholdIndex| does not equal |previousThresholdIndex| or if
 		    |isIntersecting| does not equal |previousIsIntersecting|,
 			<a>queue an IntersectionObserverEntry</a>,
 			passing in |observer|, |time|, |rootBounds|,
-			|boundingClientRect|, |intersectionRect|, |isIntersecting|, and |target|.
-		14. Assign |thresholdIndex| to |intersectionObserverRegistration|'s
-		    {{IntersectionObserverRegistration/previousThresholdIndex}} property.
-        15. Assign |isIntersecting| to |intersectionObserverRegistration|'s
-		    {{IntersectionObserverRegistration/previousIsIntersecting}} property.
+			|targetRect|, |intersectionRect|, |isIntersecting|, and |target|.
+		15. Assign |thresholdIndex| to |intersectionObserverRegistration|'s
+			{{IntersectionObserverRegistration/previousThresholdIndex}} property.
+		16. Assign |isIntersecting| to |intersectionObserverRegistration|'s
+			{{IntersectionObserverRegistration/previousIsIntersecting}} property.
 
 <h3 id='lifetime'>
 IntersectionObserver Lifetime</h2>
