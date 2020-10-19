@@ -743,7 +743,7 @@ In the <a>HTML Processing Model</a>, under the "<i>Update the rendering</i>" ste
 There are no known accessibility considerations for the core IntersectionObserver specification (this document).
 There are, however, related specifications and proposals that leverage and refer to this spec,
 which might have their own accessibility considerations. In particular, specifications for
-[[html#lazy-loading-attributes]] and <a href="https://github.com/WICG/display-locking">display locking</a>
+[[html#lazy-loading-attributes]] and [[css-contain-2#content-visibility]]
 may have implications for [[html#find-in-page]], [[html#the-tabindex-attribute]], and
 <a href="https://githumb.com/WICG/spatial-navigation">spatial navigation</a>.
 
