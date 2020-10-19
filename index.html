@@ -4,9 +4,9 @@
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <title>Intersection Observer</title>
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version ef401f97, updated Thu Oct 1 16:41:55 2020 +0200" name="generator">
+  <meta content="Bikeshed version 9ec7eb81, updated Tue Oct 13 17:24:06 2020 -0700" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="89aacf7d80d2cebd90749ea5f079576f1bab08ee" name="document-revision">
+  <meta content="f394be9969760f2966e121dac3c3744958fa9f7e" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -230,7 +230,7 @@ figcaption:not(.no-marker)::before {
 .dfn-panel:not(.on) { display: none; }
 .dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
 .dfn-panel > b { display: block; }
-.dfn-panel a { color: black; }
+.dfn-panel a { color: var(--dfnpanel-text); }
 .dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
 .dfn-panel > b + b { margin-top: 0.25em; }
 .dfn-panel ul { padding: 0; }
@@ -374,7 +374,7 @@ dfn > a.self-link::before      { content: "#"; }
 code.highlight { padding: .1em; border-radius: .3em; }
 pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
 
-.highlight:not(.idl) { background: #fdf6e3; }
+.highlight:not(.idl) { background: rgba(0, 0, 0, .03); }
 c-[a] { color: #990055 } /* Keyword.Declaration */
 c-[b] { color: #990055 } /* Keyword.Type */
 c-[c] { color: #708090 } /* Comment */
@@ -615,7 +615,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-10-01">1 October 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-10-19">19 October 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -654,7 +654,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    <p> Publication as an Editors Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr> Membership. This is a draft document and may
     be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite
     this document as other than work in progress. </p>
-   <p> This document was produced by a group operating under the <a href="https://www.w3.org/Consortium/Patent-Policy/"><abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/2004/01/pp-impl/114929/status" rel="disclosure">public list of any patent disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains <a href="https://www.w3.org/Consortium/Patent-Policy/#def-essential">Essential Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/Consortium/Patent-Policy/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. </p>
+   <p> This document was produced by a group operating under the <a href="https://www.w3.org/Consortium/Patent-Policy-20170801/"><abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/2004/01/pp-impl/114929/status" rel="disclosure">public list of any patent disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains <a href="https://www.w3.org/Consortium/Patent-Policy-20170801/#def-essential">Essential Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/Consortium/Patent-Policy-20170801/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. </p>
    <p>This document is governed by the <a href="https://www.w3.org/2020/Process-20200915/" id="w3c_process_revision">15 September 2020 W3C Process Document</a>. </p>
   </div>
   <div data-fill-with="at-risk"></div>
@@ -1519,30 +1519,41 @@ For the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/bro
        <p>For each <var>target</var> in <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot" id="ref-for-dom-intersectionobserver-observationtargets-slot⑤">[[ObservationTargets]]</a></code> slot, processed in the same order that <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observe" id="ref-for-dom-intersectionobserver-observe③">observe()</a></code> was called on each <var>target</var>:</p>
        <ol>
         <li data-md>
-         <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①④">intersection root</a> is an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element①⑦">Element</a></code>,
-and <var>target</var> is not a descendant of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑤">intersection root</a> in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain" id="ref-for-containing-block-chain①">containing block chain</a>,
-skip further processing for <var>target</var>.</p>
+         <p>Let:</p>
+         <ul>
+          <li data-md>
+           <p><var>thresholdIndex</var> be 0.</p>
+          <li data-md>
+           <p><var>isIntersecting</var> be <var>false</var>.</p>
+          <li data-md>
+           <p><var>targetRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly⑦">DOMRectReadOnly</a></code> with <var>x</var>, <var>y</var>, <var>width</var>, and <var>height</var> set to 0.</p>
+          <li data-md>
+           <p><var>intersectionRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly⑧">DOMRectReadOnly</a></code> with <var>x</var>, <var>y</var>, <var>width</var>, and <var>height</var> set to 0.</p>
+         </ul>
         <li data-md>
-         <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑥">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root" id="ref-for-intersectionobserver-implicit-root①">implicit root</a>,
-and <var>target</var> is not in the same <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①⑥">document</a></code> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑦">intersection root</a>,
-skip further processing for <var>target</var>.</p>
+         <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①④">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root" id="ref-for-intersectionobserver-implicit-root①">implicit root</a>,
+and <var>target</var> is not in the same <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①⑥">document</a></code> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑤">intersection root</a>,
+skip to step 11.</p>
         <li data-md>
-         <p>Let <var>targetRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly⑦">DOMRectReadOnly</a></code> obtained
+         <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑥">intersection root</a> is an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element①⑦">Element</a></code>,
+and <var>target</var> is not a descendant of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑦">intersection root</a> in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain" id="ref-for-containing-block-chain①">containing block chain</a>, skip to step 11.</p>
+        <li data-md>
+         <p>Set <var>targetRect</var> to the <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly⑨">DOMRectReadOnly</a></code> obtained
 by running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect" id="ref-for-dom-element-getboundingclientrect④">getBoundingClientRect()</a></code> algorithm on <var>target</var>.</p>
         <li data-md>
-         <p>Let <var>intersectionRect</var> be the result of running the <a data-link-type="dfn" href="#compute-the-intersection" id="ref-for-compute-the-intersection">compute the intersection</a> algorithm on <var>target</var>.</p>
+         <p>Set <var>intersectionRect</var> to the result of running the <a data-link-type="dfn" href="#compute-the-intersection" id="ref-for-compute-the-intersection">compute the intersection</a> algorithm on <var>target</var>.</p>
         <li data-md>
          <p>Let <var>targetArea</var> be <var>targetRect</var>’s area.</p>
         <li data-md>
          <p>Let <var>intersectionArea</var> be <var>intersectionRect</var>’s area.</p>
         <li data-md>
-         <p>Let <var>isIntersecting</var> be true if <var>targetRect</var> and <var>rootBounds</var> intersect or are edge-adjacent,
+         <p>Set <var>isIntersecting</var> to true if <var>targetRect</var> and <var>rootBounds</var> intersect or are edge-adjacent,
 even if the intersection has zero area (because <var>rootBounds</var> or <var>targetRect</var> have
-zero area); otherwise, let <var>isIntersecting</var> be false.</p>
+zero area).</p>
         <li data-md>
          <p>If <var>targetArea</var> is non-zero, let <var>intersectionRatio</var> be <var>intersectionArea</var> divided by <var>targetArea</var>.<br> Otherwise, let <var>intersectionRatio</var> be <code>1</code> if <var>isIntersecting</var> is true, or <code>0</code> if <var>isIntersecting</var> is false.</p>
         <li data-md>
-         <p>Let <var>thresholdIndex</var> be the index of the first entry in <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds③">thresholds</a></code> whose value is greater than <var>intersectionRatio</var>, or the length of <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds④">thresholds</a></code> if <var>intersectionRatio</var> is greater than or equal to the last entry in <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds⑤">thresholds</a></code>.</p>
+         <p>Set <var>thresholdIndex</var> to the index of the first entry in <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds③">thresholds</a></code> whose value is greater than <var>intersectionRatio</var>, or the length of <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds④">thresholds</a></code> if <var>intersectionRatio</var> is greater than or equal to the last entry in <var>observer</var>.<code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-thresholds" id="ref-for-dom-intersectionobserver-thresholds⑤">thresholds</a></code>.</p>
         <li data-md>
          <p>Let <var>intersectionObserverRegistration</var> be the <code class="idl"><a data-link-type="idl" href="#intersectionobserverregistration" id="ref-for-intersectionobserverregistration③">IntersectionObserverRegistration</a></code> record
 in <var>target</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot" id="ref-for-dom-element-registeredintersectionobservers-slot③">[[RegisteredIntersectionObservers]]</a></code> slot
@@ -1553,7 +1564,7 @@ whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverr
          <p>Let <var>previousIsIntersecting</var> be the <var>intersectionObserverRegistration</var>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousisintersecting" id="ref-for-dom-intersectionobserverregistration-previousisintersecting①">previousIsIntersecting</a></code> property.</p>
         <li data-md>
          <p>If <var>thresholdIndex</var> does not equal <var>previousThresholdIndex</var> or if <var>isIntersecting</var> does not equal <var>previousIsIntersecting</var>, <a data-link-type="dfn" href="#queue-an-intersectionobserverentry" id="ref-for-queue-an-intersectionobserverentry">queue an IntersectionObserverEntry</a>,
-passing in <var>observer</var>, <var>time</var>, <var>rootBounds</var>, <var>boundingClientRect</var>, <var>intersectionRect</var>, <var>isIntersecting</var>, and <var>target</var>.</p>
+passing in <var>observer</var>, <var>time</var>, <var>rootBounds</var>, <var>targetRect</var>, <var>intersectionRect</var>, <var>isIntersecting</var>, and <var>target</var>.</p>
         <li data-md>
          <p>Assign <var>thresholdIndex</var> to <var>intersectionObserverRegistration</var>’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverregistration-previousthresholdindex" id="ref-for-dom-intersectionobserverregistration-previousthresholdindex②">previousThresholdIndex</a></code> property.</p>
         <li data-md>
@@ -1862,7 +1873,7 @@ The IntersectionObserverEntry interface</a> <a href="#ref-for-dictdef-domrectini
     <li><a href="#ref-for-domrectreadonly">2.3. 
 The IntersectionObserverEntry interface</a> <a href="#ref-for-domrectreadonly①">(2)</a> <a href="#ref-for-domrectreadonly②">(3)</a> <a href="#ref-for-domrectreadonly③">(4)</a> <a href="#ref-for-domrectreadonly④">(5)</a> <a href="#ref-for-domrectreadonly⑤">(6)</a> <a href="#ref-for-domrectreadonly⑥">(7)</a>
     <li><a href="#ref-for-domrectreadonly⑦">3.2.8. 
-Run the Update Intersection Observations Steps</a>
+Run the Update Intersection Observations Steps</a> <a href="#ref-for-domrectreadonly⑧">(2)</a> <a href="#ref-for-domrectreadonly⑨">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-document-2">
@@ -1942,56 +1953,56 @@ The IntersectionObserverInit dictionary</a>
    <li>
     <a data-link-type="biblio">[css-box-4]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-propdef-margin" style="color:initial">margin</span>
+     <li><span class="dfn-paneled" id="term-for-propdef-margin">margin</span>
     </ul>
    <li>
     <a data-link-type="biblio">[css-syntax-3]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-parse-a-list-of-component-values" style="color:initial">parse a list of component values</span>
+     <li><span class="dfn-paneled" id="term-for-parse-a-list-of-component-values">parse a list of component values</span>
     </ul>
    <li>
     <a data-link-type="biblio">[css-values-3]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-percentage-value" style="color:initial">&lt;percentage></span>
-     <li><span class="dfn-paneled" id="term-for-absolute-length" style="color:initial">absolute length</span>
-     <li><span class="dfn-paneled" id="term-for-dimension" style="color:initial">dimension</span>
+     <li><span class="dfn-paneled" id="term-for-percentage-value">&lt;percentage></span>
+     <li><span class="dfn-paneled" id="term-for-absolute-length">absolute length</span>
+     <li><span class="dfn-paneled" id="term-for-dimension">dimension</span>
     </ul>
    <li>
     <a data-link-type="biblio">[cssom-view-1]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-dom-element-getboundingclientrect" style="color:initial">getBoundingClientRect()</span>
+     <li><span class="dfn-paneled" id="term-for-dom-element-getboundingclientrect">getBoundingClientRect()</span>
     </ul>
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-document" style="color:initial">Document</span>
-     <li><span class="dfn-paneled" id="term-for-element" style="color:initial">Element</span>
-     <li><span class="dfn-paneled" id="term-for-mutationobserver" style="color:initial">MutationObserver</span>
-     <li><span class="dfn-paneled" id="term-for-dictdef-mutationobserverinit" style="color:initial">MutationObserverInit</span>
-     <li><span class="dfn-paneled" id="term-for-node" style="color:initial">Node</span>
-     <li><span class="dfn-paneled" id="term-for-dom-mutationobserver-observe" style="color:initial">observe(target)</span>
+     <li><span class="dfn-paneled" id="term-for-document">Document</span>
+     <li><span class="dfn-paneled" id="term-for-element">Element</span>
+     <li><span class="dfn-paneled" id="term-for-mutationobserver">MutationObserver</span>
+     <li><span class="dfn-paneled" id="term-for-dictdef-mutationobserverinit">MutationObserverInit</span>
+     <li><span class="dfn-paneled" id="term-for-node">Node</span>
+     <li><span class="dfn-paneled" id="term-for-dom-mutationobserver-observe">observe(target)</span>
     </ul>
    <li>
     <a data-link-type="biblio">[geometry-1]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-domrect" style="color:initial">DOMRect</span>
-     <li><span class="dfn-paneled" id="term-for-dictdef-domrectinit" style="color:initial">DOMRectInit</span>
-     <li><span class="dfn-paneled" id="term-for-domrectreadonly" style="color:initial">DOMRectReadOnly</span>
+     <li><span class="dfn-paneled" id="term-for-domrect">DOMRect</span>
+     <li><span class="dfn-paneled" id="term-for-dictdef-domrectinit">DOMRectInit</span>
+     <li><span class="dfn-paneled" id="term-for-domrectreadonly">DOMRectReadOnly</span>
     </ul>
    <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-dom-document-2" style="color:initial">document</span>
-     <li><span class="dfn-paneled" id="term-for-same-origin-domain" style="color:initial">same origin-domain</span>
+     <li><span class="dfn-paneled" id="term-for-dom-document-2">document</span>
+     <li><span class="dfn-paneled" id="term-for-same-origin-domain">same origin-domain</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WebIDL]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-idl-DOMString" style="color:initial">DOMString</span>
-     <li><span class="dfn-paneled" id="term-for-Exposed" style="color:initial">Exposed</span>
-     <li><span class="dfn-paneled" id="term-for-idl-frozen-array" style="color:initial">FrozenArray</span>
-     <li><span class="dfn-paneled" id="term-for-idl-boolean" style="color:initial">boolean</span>
-     <li><span class="dfn-paneled" id="term-for-idl-sequence" style="color:initial">sequence</span>
+     <li><span class="dfn-paneled" id="term-for-idl-DOMString">DOMString</span>
+     <li><span class="dfn-paneled" id="term-for-Exposed">Exposed</span>
+     <li><span class="dfn-paneled" id="term-for-idl-frozen-array">FrozenArray</span>
+     <li><span class="dfn-paneled" id="term-for-idl-boolean">boolean</span>
+     <li><span class="dfn-paneled" id="term-for-idl-sequence">sequence</span>
     </ul>
   </ul>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
