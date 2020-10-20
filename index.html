@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version 9ec7eb81, updated Tue Oct 13 17:24:06 2020 -0700" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="54d5de54703539e02cbb8f763bd9d773152ce299" name="document-revision">
+  <meta content="5164ecc0012d64a6ea23e37149e1f2737496f399" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -615,7 +615,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-10-19">19 October 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-10-20">20 October 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -700,8 +700,9 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
         <li><a href="#pending-initial-observation"><span class="secno">3.4.2</span> <span class="content">Pending initial IntersectionObserver targets</span></a>
        </ol>
      </ol>
-    <li><a href="#privacy"><span class="secno">4</span> <span class="content">Privacy and Security</span></a>
-    <li><a href="#acknowledgements"><span class="secno">5</span> <span class="content">Acknowledgements</span></a>
+    <li><a href="#accessibility"><span class="secno">4</span> <span class="content">Accessibility Considerations</span></a>
+    <li><a href="#privacy"><span class="secno">5</span> <span class="content">Privacy and Security</span></a>
+    <li><a href="#acknowledgements"><span class="secno">6</span> <span class="content">Acknowledgements</span></a>
     <li>
      <a href="#conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
      <ol class="toc">
@@ -1603,7 +1604,12 @@ in the in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipa
    </ol>
    <p>In the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model" id="ref-for-event-loop-processing-model①">HTML Processing Model</a>, under the "<i>Update the rendering</i>" step, the "<i>Unnecessary rendering</i>" step should be modified to add an additional requirement for skipping the rendering update:</p>
    <ul>The <var>document</var> does not have <a data-link-type="dfn" href="#pending-initial-intersectionobserver-targets" id="ref-for-pending-initial-intersectionobserver-targets">pending initial IntersectionObserver targets</a>.</ul>
-   <h2 class="heading settled" data-level="4" id="privacy"><span class="secno">4. </span><span class="content">Privacy and Security</span><a class="self-link" href="#privacy"></a></h2>
+   <h2 class="heading settled" data-level="4" id="accessibility"><span class="secno">4. </span><span class="content">Accessibility Considerations</span><a class="self-link" href="#accessibility"></a></h2>
+   <p>*This section is non-normative.*</p>
+   <p>There are no known accessibility considerations for the core IntersectionObserver specification (this document).
+There are, however, related specifications and proposals that leverage and refer to this spec,
+which might have their own accessibility considerations. In particular, specifications for <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes">HTML 5 §2.6.7 Lazy loading attributes</a> and <a href="https://drafts.csswg.org/css-contain-2/#content-visibility">CSS Containment 2 §4 Suppressing An Element’s Contents Entirely: the content-visibility property</a> may have implications for <a href="https://html.spec.whatwg.org/multipage/interaction.html#find-in-page">HTML 5 §6.8 Find-in-page</a>, <a href="https://html.spec.whatwg.org/multipage/interaction.html#the-tabindex-attribute">HTML 5 §6.5.3 The tabindex attribute</a>, and <a href="https://githumb.com/WICG/spatial-navigation">spatial navigation</a>.</p>
+   <h2 class="heading settled" data-level="5" id="privacy"><span class="secno">5. </span><span class="content">Privacy and Security</span><a class="self-link" href="#privacy"></a></h2>
    <p>*This section is non-normative.*</p>
    <p>The main privacy concerns associated with this API relate to the information
 it may provide to code running in the context of a cross-origin iframe
@@ -1626,7 +1632,7 @@ does not reveal any information that was not already available by other means.</
 which has privacy and security considerations of its own. It is however unlikely that <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver③③">IntersectionObserver</a></code> is vulnerable to timing-related exploits. Timestamps are generated
 at most once per rendering update (see <a href="#event-loop">§ 3.4.1 HTML Processing Model: Event Loop</a>), which is far too
 infrequent for the familiar kind of timing attack.</p>
-   <h2 class="heading settled" data-level="5" id="acknowledgements"><span class="secno">5. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
+   <h2 class="heading settled" data-level="6" id="acknowledgements"><span class="secno">6. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
    <p>Special thanks to <a href="https://github.com/w3c/IntersectionObserver/graphs/contributors">all the contributors</a> for their technical input and suggestions that led to improvements to this
 specification.</p>
   </main>
@@ -2194,7 +2200,7 @@ The IntersectionObserverEntry interface</a>
    <ul>
     <li><a href="#ref-for-intersectionobserver-cross-origin-domain-target">2.2. 
 The IntersectionObserver interface</a>
-    <li><a href="#ref-for-intersectionobserver-cross-origin-domain-target①">4. Privacy and Security</a> <a href="#ref-for-intersectionobserver-cross-origin-domain-target②">(2)</a>
+    <li><a href="#ref-for-intersectionobserver-cross-origin-domain-target①">5. Privacy and Security</a> <a href="#ref-for-intersectionobserver-cross-origin-domain-target②">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="intersectionobserver">
@@ -2222,7 +2228,7 @@ Run the Update Intersection Observations Steps</a>
     <li><a href="#ref-for-intersectionobserver②⑥">3.3. 
 IntersectionObserver Lifetime</a> <a href="#ref-for-intersectionobserver②⑦">(2)</a>
     <li><a href="#ref-for-intersectionobserver②⑧">3.4.2. Pending initial IntersectionObserver targets</a> <a href="#ref-for-intersectionobserver②⑨">(2)</a>
-    <li><a href="#ref-for-intersectionobserver③⓪">4. Privacy and Security</a> <a href="#ref-for-intersectionobserver③①">(2)</a> <a href="#ref-for-intersectionobserver③②">(3)</a> <a href="#ref-for-intersectionobserver③③">(4)</a>
+    <li><a href="#ref-for-intersectionobserver③⓪">5. Privacy and Security</a> <a href="#ref-for-intersectionobserver③①">(2)</a> <a href="#ref-for-intersectionobserver③②">(3)</a> <a href="#ref-for-intersectionobserver③③">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-intersectionobserver-intersectionobserver">
@@ -2287,7 +2293,7 @@ Run the Update Intersection Observations Steps</a>
    <ul>
     <li><a href="#ref-for-dom-intersectionobserver-rootmargin">2.2. 
 The IntersectionObserver interface</a> <a href="#ref-for-dom-intersectionobserver-rootmargin①">(2)</a> <a href="#ref-for-dom-intersectionobserver-rootmargin②">(3)</a>
-    <li><a href="#ref-for-dom-intersectionobserver-rootmargin③">4. Privacy and Security</a>
+    <li><a href="#ref-for-dom-intersectionobserver-rootmargin③">5. Privacy and Security</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-intersectionobserver-thresholds">
@@ -2375,7 +2381,7 @@ The IntersectionObserverEntry interface</a>
    <ul>
     <li><a href="#ref-for-dom-intersectionobserverentry-rootbounds">2.3. 
 The IntersectionObserverEntry interface</a>
-    <li><a href="#ref-for-dom-intersectionobserverentry-rootbounds①">4. Privacy and Security</a>
+    <li><a href="#ref-for-dom-intersectionobserverentry-rootbounds①">5. Privacy and Security</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-intersectionobserverentry-target">
