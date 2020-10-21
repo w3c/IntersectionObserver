@@ -4,7 +4,7 @@ Status: ED
 ED: https://w3c.github.io/IntersectionObserver/
 Shortname: intersection-observer
 TR: https://www.w3.org/TR/intersection-observer/
-Previous version: https://www.w3.org/TR/2019/WD-intersection-observer-20190530/
+Previous version: from biblio
 Level: none
 Editor: Stefan Zager, Google, szager@google.com, w3cid 91208
 Editor: Emilio Cobos Álvarez , Mozilla, emilio@mozilla.com, w3cid 106537
@@ -732,7 +732,7 @@ if there is at least one {{IntersectionObserver}} meeting these criteria:
 
 In the <a>HTML Processing Model</a>, under the "<i>Update the rendering</i>" step, the "<i>Unnecessary rendering</i>" step should be modified to add an additional requirement for skipping the rendering update:
 
-<ul>The |document| does not have <a>pending initial IntersectionObserver targets</a>.</ul>
+<ul><li>The |document| does not have <a>pending initial IntersectionObserver targets</a>.</li></ul>
 
 <!-- ============================================================ -->
 <h2 id=accessibility>Accessibility Considerations</h2>
