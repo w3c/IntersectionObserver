@@ -4,9 +4,9 @@
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <title>Intersection Observer</title>
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version 9ec7eb81, updated Tue Oct 13 17:24:06 2020 -0700" name="generator">
+  <meta content="Bikeshed version eb6d17d1, updated Tue Oct 20 23:26:51 2020 -0700" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="5164ecc0012d64a6ea23e37149e1f2737496f399" name="document-revision">
+  <meta content="11eed835487a44eae8532a44821bac8c2a17fd2d" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -615,7 +615,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-10-20">20 October 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-10-21">21 October 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -623,7 +623,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <dt>Latest published version:
      <dd><a href="https://www.w3.org/TR/intersection-observer/">https://www.w3.org/TR/intersection-observer/</a>
      <dt>Previous Versions:
-     <dd><a href="https://www.w3.org/TR/2019/WD-intersection-observer-20190530/" rel="prev">https://www.w3.org/TR/2019/WD-intersection-observer-20190530/</a>
+     <dd><a href="https://www.w3.org/TR/2019/WD-intersection-observer-20190531/" rel="prev">https://www.w3.org/TR/2019/WD-intersection-observer-20190531/</a>
      <dt>Test Suite:
      <dd><a href="http://w3c-test.org/intersection-observer/">http://w3c-test.org/intersection-observer/</a>
      <dt>Issue Tracking:
@@ -1603,7 +1603,9 @@ in the in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipa
 		    no <code class="idl"><a data-link-type="idl" href="#intersectionobserverentry" id="ref-for-intersectionobserverentry⑤">IntersectionObserverEntry</a></code> has yet been queued. 
    </ol>
    <p>In the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model" id="ref-for-event-loop-processing-model①">HTML Processing Model</a>, under the "<i>Update the rendering</i>" step, the "<i>Unnecessary rendering</i>" step should be modified to add an additional requirement for skipping the rendering update:</p>
-   <ul>The <var>document</var> does not have <a data-link-type="dfn" href="#pending-initial-intersectionobserver-targets" id="ref-for-pending-initial-intersectionobserver-targets">pending initial IntersectionObserver targets</a>.</ul>
+   <ul>
+    <li>The <var>document</var> does not have <a data-link-type="dfn" href="#pending-initial-intersectionobserver-targets" id="ref-for-pending-initial-intersectionobserver-targets">pending initial IntersectionObserver targets</a>.
+   </ul>
    <h2 class="heading settled" data-level="4" id="accessibility"><span class="secno">4. </span><span class="content">Accessibility Considerations</span><a class="self-link" href="#accessibility"></a></h2>
    <p>*This section is non-normative.*</p>
    <p>There are no known accessibility considerations for the core IntersectionObserver specification (this document).
