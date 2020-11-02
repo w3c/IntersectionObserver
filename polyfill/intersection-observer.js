@@ -965,14 +965,14 @@ function getParentNode(node) {
     return getFrameElement(node);
   }
 
+  // If the parent has element that is assigned through shadow root slot
+  if (parent && parent.assignedSlot) {
+    parent = parent.assignedSlot.parentNode
+  }
+
   if (parent && parent.nodeType == 11 && parent.host) {
     // If the parent is a shadow root, return the host element.
     return parent.host;
-  }
-
-  if (parent && parent.assignedSlot) {
-    // If the parent is distributed in a <slot>, return the parent of a slot.
-    return parent.assignedSlot.parentNode;
   }
 
   return parent;
