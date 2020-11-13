@@ -131,8 +131,12 @@ function IntersectionObserver(callback, opt_options) {
     throw new Error('callback must be a function');
   }
 
-  if (options.root && options.root.nodeType != 1) {
-    throw new Error('root must be an Element');
+  if (
+    options.root &&
+    options.root.nodeType != 1 &&
+    options.root.nodeType !== 9
+  ) {
+    throw new Error("root must be a Document or Element");
   }
 
   // Binds and throttles `this._checkForIntersections`.

@@ -69,12 +69,15 @@ describe('IntersectionObserver', function() {
       io = new IntersectionObserver(noop);
       expect(io.root).to.be(null);
 
+      io = new IntersectionObserver(noop, {root: document});
+      expect(io.root).to.be(document);
+
       io = new IntersectionObserver(noop, {root: rootEl});
-      expect(io.root).to.be(rootEl);
+      expect(io.root).to.be(rootEl); 
     });
 
 
-    it('throws when root is not an Element', function() {
+    it('throws when root is not a Document or Element', function() {
       expect(function() {
         io = new IntersectionObserver(noop, {root: 'foo'});
       }).to.throwException();
