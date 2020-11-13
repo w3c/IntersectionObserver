@@ -1652,10 +1652,10 @@ describe('IntersectionObserver', function() {
       var ASYNC_TIMEOUT = 300;
 
       beforeEach(function(done) {
-        // /* Uncomment these lines to force polyfill inside the iframe.
+        /* Uncomment these lines to force polyfill inside the iframe.
         delete iframeWin.IntersectionObserver;
         delete iframeWin.IntersectionObserverEntry;
-        // */
+        */
 
         // Install polyfill right into the iframe.
         if (!iframeWin.IntersectionObserver) {
@@ -2315,10 +2315,10 @@ describe('IntersectionObserver', function() {
       beforeEach(function(done) {
         Object.defineProperty(iframeWin, 'frameElement', {value: null});
 
-        // /* Uncomment these lines to force polyfill inside the iframe.
+        /* Uncomment these lines to force polyfill inside the iframe.
         delete iframeWin.IntersectionObserver;
         delete iframeWin.IntersectionObserverEntry;
-        // */
+        */
 
         // Install polyfill right into the iframe.
         if (!iframeWin.IntersectionObserver) {
