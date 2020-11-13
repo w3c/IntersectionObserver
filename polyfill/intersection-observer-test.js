@@ -1406,18 +1406,8 @@ describe('IntersectionObserver', function() {
         // {root:iframeDoc} means to track the iframe viewport irrespective of toplevel viewport
         var io = new IntersectionObserver(
           function (records) {
-            var subviewportWidth =
-              iframeDoc.documentElement.clientWidth || iframeDoc.body.clientWidth;
-            var subviewportHeight =
-              iframeDoc.documentElement.clientHeight || iframeDoc.body.clientHeight;
-
             expect(records.length).to.be(1);
-            expect(records[0].rootBounds.top).to.be(0);
-            expect(records[0].rootBounds.left).to.be(0);
-            expect(records[0].rootBounds.right).to.be(subviewportWidth);
-            expect(records[0].rootBounds.width).to.be(subviewportWidth);
-            expect(records[0].rootBounds.bottom).to.be(subviewportHeight);
-            expect(records[0].rootBounds.height).to.be(subviewportHeight);
+            expect(rect(records[0].rootBounds)).to.eql(getRootRect(iframeDoc));
             done();
           },
           { root: iframeDoc }
@@ -3056,18 +3046,8 @@ describe('IntersectionObserver', function() {
         // {root:iframeDoc} means to track the iframe viewport irrespective of toplevel viewport
         var io = new IntersectionObserver(
           function (records) {
-            var subviewportWidth =
-              iframeDoc.documentElement.clientWidth || iframeDoc.body.clientWidth;
-            var subviewportHeight =
-              iframeDoc.documentElement.clientHeight || iframeDoc.body.clientHeight;
-
             expect(records.length).to.be(1);
-            expect(records[0].rootBounds.top).to.be(0);
-            expect(records[0].rootBounds.left).to.be(0);
-            expect(records[0].rootBounds.right).to.be(subviewportWidth);
-            expect(records[0].rootBounds.width).to.be(subviewportWidth);
-            expect(records[0].rootBounds.bottom).to.be(subviewportHeight);
-            expect(records[0].rootBounds.height).to.be(subviewportHeight);
+            expect(rect(records[0].rootBounds)).to.eql(getRootRect(iframeDoc));
             done();
           },
           { root: iframeDoc }

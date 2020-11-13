@@ -134,9 +134,9 @@ function IntersectionObserver(callback, opt_options) {
   if (
     options.root &&
     options.root.nodeType != 1 &&
-    options.root.nodeType !== 9
+    options.root.nodeType != 9
   ) {
-    throw new Error("root must be a Document or Element");
+    throw new Error('root must be a Document or Element');
   }
 
   // Binds and throttles `this._checkForIntersections`.
@@ -399,10 +399,9 @@ IntersectionObserver.prototype._monitorIntersections = function(doc) {
   });
 
   // Also monitor the parent.
-  if (
-    doc != ((this.root && this.root.ownerDocument) || document) &&
-    !isDoc(this.root)
-  ) {
+  var rootDoc =
+    (this.root && (this.root.ownerDocument || this.root)) || document;
+  if (doc != rootDoc) {
     var frame = getFrameElement(doc);
     if (frame) {
       this._monitorIntersections(frame.ownerDocument);
@@ -422,9 +421,8 @@ IntersectionObserver.prototype._unmonitorIntersections = function(doc) {
     return;
   }
 
-  var rootDoc = isDoc(this.root)
-    ? this.root
-    : (this.root && this.root.ownerDocument) || document;
+  var rootDoc =
+    (this.root && (this.root.ownerDocument || this.root)) || document;
 
   // Check if any dependent targets are still remaining.
   var hasDependentTargets =
@@ -631,8 +629,9 @@ IntersectionObserver.prototype._getRootRect = function() {
     rootRect = getBoundingClientRect(this.root);
   } else {
     // Use <html>/<body> instead of window since scroll bars affect size.
-    var html = document.documentElement;
-    var body = document.body;
+    var doc = isDoc(this.root) ? this.root : document;
+    var html = doc.documentElement;
+    var body = doc.body;
     rootRect = {
       top: 0,
       left: 0,
@@ -723,9 +722,10 @@ IntersectionObserver.prototype._rootIsInDom = function() {
  * @private
  */
 IntersectionObserver.prototype._rootContainsTarget = function(target) {
-  const rootDoc = isDoc(this.root) ? this.root : this.root.ownerDocument;
+  var rootDoc =
+    (this.root && (this.root.ownerDocument || this.root)) || document;
   return (
-    containsDeep(this.root || document, target) &&
+    containsDeep(this.root || rootDoc, target) &&
     (!this.root || rootDoc == target.ownerDocument)
   );
 };
