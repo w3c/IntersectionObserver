@@ -399,7 +399,10 @@ IntersectionObserver.prototype._monitorIntersections = function(doc) {
   });
 
   // Also monitor the parent.
-  if (doc != (this.root && this.root.ownerDocument || document)) {
+  if (
+    doc != ((this.root && this.root.ownerDocument) || document) &&
+    !isDoc(this.root)
+  ) {
     var frame = getFrameElement(doc);
     if (frame) {
       this._monitorIntersections(frame.ownerDocument);
@@ -419,7 +422,9 @@ IntersectionObserver.prototype._unmonitorIntersections = function(doc) {
     return;
   }
 
-  var rootDoc = (this.root && this.root.ownerDocument || document);
+  var rootDoc = isDoc(this.root)
+    ? this.root
+    : (this.root && this.root.ownerDocument) || document;
 
   // Check if any dependent targets are still remaining.
   var hasDependentTargets =
@@ -622,7 +627,7 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
  */
 IntersectionObserver.prototype._getRootRect = function() {
   var rootRect;
-  if (this.root) {
+  if (this.root && !isDoc(this.root)) {
     rootRect = getBoundingClientRect(this.root);
   } else {
     // Use <html>/<body> instead of window since scroll bars affect size.
@@ -634,7 +639,7 @@ IntersectionObserver.prototype._getRootRect = function() {
       right: html.clientWidth || body.clientWidth,
       width: html.clientWidth || body.clientWidth,
       bottom: html.clientHeight || body.clientHeight,
-      height: html.clientHeight || body.clientHeight
+      height: html.clientHeight || body.clientHeight,
     };
   }
   return this._expandRectByRootMargin(rootRect);
@@ -718,8 +723,11 @@ IntersectionObserver.prototype._rootIsInDom = function() {
  * @private
  */
 IntersectionObserver.prototype._rootContainsTarget = function(target) {
-  return containsDeep(this.root || document, target) &&
-    (!this.root || this.root.ownerDocument == target.ownerDocument);
+  const rootDoc = isDoc(this.root) ? this.root : this.root.ownerDocument;
+  return (
+    containsDeep(this.root || document, target) &&
+    (!this.root || rootDoc == target.ownerDocument)
+  );
 };
 
 
@@ -980,6 +988,10 @@ function getParentNode(node) {
   }
 
   return parent;
+}
+
+function isDoc(node) {
+  return node && node.nodeType === 9;
 }
 
 

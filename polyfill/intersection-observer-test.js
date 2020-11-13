@@ -1401,6 +1401,31 @@ describe('IntersectionObserver', function() {
         io.observe(iframeTargetEl2);
       });
 
+      it('handles tracking iframe viewport', function(done) {
+        iframe.style.height = '100px';
+        // {root:iframeDoc} means to track the iframe viewport irrespective of toplevel viewport
+        var io = new IntersectionObserver(
+          function (records) {
+            var subviewportWidth =
+              iframeDoc.documentElement.clientWidth || iframeDoc.body.clientWidth;
+            var subviewportHeight =
+              iframeDoc.documentElement.clientHeight || iframeDoc.body.clientHeight;
+
+            expect(records.length).to.be(1);
+            expect(records[0].rootBounds.top).to.be(0);
+            expect(records[0].rootBounds.left).to.be(0);
+            expect(records[0].rootBounds.right).to.be(subviewportWidth);
+            expect(records[0].rootBounds.width).to.be(subviewportWidth);
+            expect(records[0].rootBounds.bottom).to.be(subviewportHeight);
+            expect(records[0].rootBounds.height).to.be(subviewportHeight);
+            done();
+          },
+          { root: iframeDoc }
+        );
+
+        io.observe(iframeTargetEl1);
+      });
+
       it('handles style changes', function(done) {
         var spy = sinon.spy();
 
@@ -1627,10 +1652,10 @@ describe('IntersectionObserver', function() {
       var ASYNC_TIMEOUT = 300;
 
       beforeEach(function(done) {
-        /* Uncomment these lines to force polyfill inside the iframe.
+        // /* Uncomment these lines to force polyfill inside the iframe.
         delete iframeWin.IntersectionObserver;
         delete iframeWin.IntersectionObserverEntry;
-        */
+        // */
 
         // Install polyfill right into the iframe.
         if (!iframeWin.IntersectionObserver) {
@@ -2290,10 +2315,10 @@ describe('IntersectionObserver', function() {
       beforeEach(function(done) {
         Object.defineProperty(iframeWin, 'frameElement', {value: null});
 
-        /* Uncomment these lines to force polyfill inside the iframe.
+        // /* Uncomment these lines to force polyfill inside the iframe.
         delete iframeWin.IntersectionObserver;
         delete iframeWin.IntersectionObserverEntry;
-        */
+        // */
 
         // Install polyfill right into the iframe.
         if (!iframeWin.IntersectionObserver) {
@@ -3024,6 +3049,31 @@ describe('IntersectionObserver', function() {
             done();
           }
         ], done);
+      });
+
+      it('handles tracking iframe viewport', function(done) {
+        iframe.style.height = '100px';
+        // {root:iframeDoc} means to track the iframe viewport irrespective of toplevel viewport
+        var io = new IntersectionObserver(
+          function (records) {
+            var subviewportWidth =
+              iframeDoc.documentElement.clientWidth || iframeDoc.body.clientWidth;
+            var subviewportHeight =
+              iframeDoc.documentElement.clientHeight || iframeDoc.body.clientHeight;
+
+            expect(records.length).to.be(1);
+            expect(records[0].rootBounds.top).to.be(0);
+            expect(records[0].rootBounds.left).to.be(0);
+            expect(records[0].rootBounds.right).to.be(subviewportWidth);
+            expect(records[0].rootBounds.width).to.be(subviewportWidth);
+            expect(records[0].rootBounds.bottom).to.be(subviewportHeight);
+            expect(records[0].rootBounds.height).to.be(subviewportHeight);
+            done();
+          },
+          { root: iframeDoc }
+        );
+
+        io.observe(iframeTargetEl1);
       });
     });
   });
