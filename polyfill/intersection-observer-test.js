@@ -1054,6 +1054,26 @@ describe('IntersectionObserver', function() {
         io.observe(iframeTargetEl2);
       });
 
+      it.only('handles tracking iframe viewport', function(done) {
+        iframe.style.top = '100px';
+        var io = new IntersectionObserver(
+          function (records) {
+            debugger;
+            var intersectionRect = rect({
+              top: 100,
+              left: 0,
+              height: 200,
+              width: bodyWidth,
+            })
+            expect(records.length).to.be(1);
+            expect(rect(records[0].rootBounds)).to.eql(getRootRect(document));
+            expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
+            done();
+        });
+
+        io.observe(iframeTargetEl1);
+      });
+
       it('triggers for all targets in top-level root', function(done) {
         var io = new IntersectionObserver(function(unsortedRecords) {
           var records = sortRecords(unsortedRecords);
