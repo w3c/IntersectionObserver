@@ -638,7 +638,7 @@ IntersectionObserver.prototype._getRootRect = function() {
       right: html.clientWidth || body.clientWidth,
       width: html.clientWidth || body.clientWidth,
       bottom: html.clientHeight || body.clientHeight,
-      height: html.clientHeight || body.clientHeight,
+      height: html.clientHeight || body.clientHeight
     };
   }
   return this._expandRectByRootMargin(rootRect);

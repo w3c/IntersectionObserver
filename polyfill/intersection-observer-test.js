@@ -73,7 +73,7 @@ describe('IntersectionObserver', function() {
       expect(io.root).to.be(document);
 
       io = new IntersectionObserver(noop, {root: rootEl});
-      expect(io.root).to.be(rootEl); 
+      expect(io.root).to.be(rootEl);
     });
 
 
@@ -1403,11 +1403,21 @@ describe('IntersectionObserver', function() {
 
       it('handles tracking iframe viewport', function(done) {
         iframe.style.height = '100px';
+        iframe.style.top = '100px';
+        iframeWin.scrollTo(0, 110);
         // {root:iframeDoc} means to track the iframe viewport irrespective of toplevel viewport
         var io = new IntersectionObserver(
           function (records) {
+
+            var intersectionRect = rect({
+              top: 0, // if root=null, then this would be 100.
+              left: 0,
+              height: 90,
+              width: bodyWidth,
+            })
             expect(records.length).to.be(1);
             expect(rect(records[0].rootBounds)).to.eql(getRootRect(iframeDoc));
+            expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
             done();
           },
           { root: iframeDoc }
@@ -3043,11 +3053,20 @@ describe('IntersectionObserver', function() {
 
       it('handles tracking iframe viewport', function(done) {
         iframe.style.height = '100px';
+        iframe.style.top = '100px';
+        iframeWin.scrollTo(0, 110);
         // {root:iframeDoc} means to track the iframe viewport irrespective of toplevel viewport
         var io = new IntersectionObserver(
           function (records) {
+            var intersectionRect = rect({
+              top: 0, // if root=null, then this would be 100.
+              left: 0,
+              height: 90,
+              width: bodyWidth,
+            })
             expect(records.length).to.be(1);
             expect(rect(records[0].rootBounds)).to.eql(getRootRect(iframeDoc));
+            expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
             done();
           },
           { root: iframeDoc }
