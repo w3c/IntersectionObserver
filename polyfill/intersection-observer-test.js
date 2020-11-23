@@ -1408,6 +1408,7 @@ describe('IntersectionObserver', function() {
         // {root:iframeDoc} means to track the iframe viewport irrespective of toplevel viewport
         var io = new IntersectionObserver(
           function (records) {
+            io.unobserve(iframeTargetEl1);
 
             var intersectionRect = rect({
               top: 0, // if root=null, then this would be 100.
@@ -1421,6 +1422,32 @@ describe('IntersectionObserver', function() {
             done();
           },
           { root: iframeDoc }
+        );
+
+        io.observe(iframeTargetEl1);
+      });
+
+      // Current spec indicates that cross-document tracking yields
+      // an essentially empty IntersectionObserverEntry.
+      // See:
+      it('Does not track cross-document elements', function(done) {
+        var io = new IntersectionObserver(
+          function (records) {
+            io.unobserve(iframeTargetEl1)
+
+            expect(records.length).to.be(1);
+            const zeroesRect = rect({
+              top: 0,
+              left: 0,
+              width: 0,
+              height: 0
+            });
+            expect(rect(records[0].rootBounds)).to.eql(zeroesRect);
+            expect(rect(records[0].intersectionRect)).to.eql(zeroesRect);
+            expect(records.isIntersecting).false;
+            done();
+          },
+          { root: document }
         );
 
         io.observe(iframeTargetEl1);
@@ -3056,8 +3083,9 @@ describe('IntersectionObserver', function() {
         iframe.style.top = '100px';
         iframeWin.scrollTo(0, 110);
         // {root:iframeDoc} means to track the iframe viewport irrespective of toplevel viewport
-        var io = new IntersectionObserver(
+        var io = createObserver(
           function (records) {
+            io.unobserve(iframeTargetEl1);
             var intersectionRect = rect({
               top: 0, // if root=null, then this would be 100.
               left: 0,

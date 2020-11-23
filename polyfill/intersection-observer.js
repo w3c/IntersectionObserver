@@ -500,11 +500,18 @@ IntersectionObserver.prototype._checkForIntersections = function() {
     var intersectionRect = rootIsInDom && rootContainsTarget &&
         this._computeTargetAndRootIntersection(target, targetRect, rootRect);
 
+    var rootBounds = null;
+    if (!this._rootContainsTarget(target)) {
+      rootBounds = getEmptyRect();
+    } else if (!crossOriginUpdater || this.root) {
+      rootBounds = rootRect
+    }
+
     var newEntry = item.entry = new IntersectionObserverEntry({
       time: now(),
       target: target,
       boundingClientRect: targetRect,
-      rootBounds: crossOriginUpdater && !this.root ? null : rootRect,
+      rootBounds: rootBounds,
       intersectionRect: intersectionRect
     });
 
@@ -711,7 +718,9 @@ IntersectionObserver.prototype._hasCrossedThreshold =
  * @private
  */
 IntersectionObserver.prototype._rootIsInDom = function() {
-  return !this.root || containsDeep(document, this.root);
+  var rootDoc =
+    (this.root && (this.root.ownerDocument || this.root)) || document;
+  return !this.root || containsDeep(rootDoc, this.root);
 };
 
 
