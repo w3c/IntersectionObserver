@@ -4,9 +4,9 @@
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <title>Intersection Observer</title>
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version adf8655b, updated Thu Oct 29 16:15:09 2020 -0700" name="generator">
+  <meta content="Bikeshed version 9c52df2f, updated Fri Nov 20 15:39:21 2020 -0800" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="f212b238bcda529bdda06e08786f7941d6613e40" name="document-revision">
+  <meta content="293adcdc3a56d1e59693af3e3266fa3cb40f645c" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -72,17 +72,13 @@ pre .property::before, pre .property::after {
 <style>/* style-colors */
 
 /* Any --*-text not paired with a --*-bg is assumed to have a transparent bg */
-html {
-    color: black;
-    color: var(--text);
-    background-color: white;
-    background-color: var(--bg);
-}
 :root {
     color-scheme: light dark;
 
     --text: black;
     --bg: white;
+
+    --unofficial-watermark: url(https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark);
 
     --logo-bg: #1a5e9a;
     --logo-active-bg: #c00;
@@ -156,6 +152,11 @@ html {
     --warning-border: red;
     --warning-bg: hsla(40,100%,50%,0.95);
     --warning-text: var(--text);
+
+    --amendment-border: #330099;
+    --amendment-bg: #F5F0FF;
+    --amendment-text: var(--text);
+    --amendmentheading-text: #220066;
 
     --def-border: #8ccbf2;
     --def-bg: #def;
@@ -435,6 +436,8 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
         --text: #ddd;
         --bg: black;
 
+        --unofficial-watermark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cg fill='%23100808' transform='translate(200 200) rotate(-45) translate(-200 -200)' stroke='%23100808' stroke-width='3'%3E%3Ctext x='50%25' y='220' style='font: bold 70px sans-serif; text-anchor: middle; letter-spacing: 6px;'%3EUNOFFICIAL%3C/text%3E%3Ctext x='50%25' y='305' style='font: bold 70px sans-serif; text-anchor: middle; letter-spacing: 6px;'%3EDRAFT%3C/text%3E%3C/g%3E%3C/svg%3E");
+
         --logo-bg: #1a5e9a;
         --logo-active-bg: #c00;
         --logo-text: white;
@@ -509,6 +512,11 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
         --warning-border: red;
         --warning-bg: hsla(40,100%,20%,0.95);
         --warning-text: var(--text);
+
+        --amendment-border: #330099;
+        --amendment-bg: #080010;
+        --amendment-text: var(--text);
+        --amendmentheading-text: #cc00ff;
 
         --def-border: #8ccbf2;
         --def-bg: #080818;
@@ -615,7 +623,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-11-02">2 November 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-11-26">26 November 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -623,7 +631,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <dt>Latest published version:
      <dd><a href="https://www.w3.org/TR/intersection-observer/">https://www.w3.org/TR/intersection-observer/</a>
      <dt>Previous Versions:
-     <dd><a href="https://www.w3.org/TR/2020/WD-intersection-observer-20201021/" rel="prev">https://www.w3.org/TR/2020/WD-intersection-observer-20201021/</a>
+     <dd><a href="https://www.w3.org/TR/2020/WD-intersection-observer-20201102/" rel="prev">https://www.w3.org/TR/2020/WD-intersection-observer-20201102/</a>
      <dt>Test Suite:
      <dd><a href="http://w3c-test.org/intersection-observer/">http://w3c-test.org/intersection-observer/</a>
      <dt>Issue Tracking:
@@ -1409,8 +1417,6 @@ and a <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverr
      <p>Append <var>intersectionObserverRegistration</var> to <var>target</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-element-registeredintersectionobservers-slot" id="ref-for-dom-element-registeredintersectionobservers-slot①">[[RegisteredIntersectionObservers]]</a></code> slot.</p>
     <li data-md>
      <p>Add <var>target</var> to <var>observer</var>’s internal <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot" id="ref-for-dom-intersectionobserver-observationtargets-slot③">[[ObservationTargets]]</a></code> slot.</p>
-    <li data-md>
-     <p>Schedule an iteration of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop">event loop</a> in the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root⑦">root</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context①">browsing context</a>.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.3" id="unobserve-target-element"><span class="secno">3.2.3. </span><span class="content">Unobserve a target Element</span><a class="self-link" href="#unobserve-target-element"></a></h4>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="unobserve-a-target-element">unobserve a target Element</dfn>, given an <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver②①">IntersectionObserver</a></code> <var>observer</var> and an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element①⑤">Element</a></code> <var>target</var>, follow these steps:</p>
@@ -1433,7 +1439,7 @@ return.</p>
     <li data-md>
      <p>Set <var>document</var>’s <a data-link-type="dfn" href="#document-intersectionobservertaskqueued" id="ref-for-document-intersectionobservertaskqueued①">IntersectionObserverTaskQueued</a> flag to true.</p>
     <li data-md>
-     <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> on the <a data-link-type="dfn" href="#intersectionobserver-task-source" id="ref-for-intersectionobserver-task-source">IntersectionObserver task source</a> associated with the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2⑧">document</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop①">event loop</a> to <a data-link-type="dfn" href="#notify-intersection-observers" id="ref-for-notify-intersection-observers">notify intersection observers</a>.</p>
+     <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> on the <a data-link-type="dfn" href="#intersectionobserver-task-source" id="ref-for-intersectionobserver-task-source">IntersectionObserver task source</a> associated with the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2⑧">document</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop">event loop</a> to <a data-link-type="dfn" href="#notify-intersection-observers" id="ref-for-notify-intersection-observers">notify intersection observers</a>.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.5" id="notify-intersection-observers-algo"><span class="secno">3.2.5. </span><span class="content"> Notify Intersection Observers</span><a class="self-link" href="#notify-intersection-observers-algo"></a></h4>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="notify-intersection-observers">notify intersection observers</dfn> for a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2⑨">document</a></code> <var>document</var>,
@@ -1443,7 +1449,7 @@ run these steps:</p>
      <p>Set <var>document</var>’s <a data-link-type="dfn" href="#document-intersectionobservertaskqueued" id="ref-for-document-intersectionobservertaskqueued②">IntersectionObserverTaskQueued</a> flag to false.</p>
     <li data-md>
      <p>Let <var>notify list</var> be a list of all <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver②②">IntersectionObserver</a></code>s
-whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root⑧">root</a></code> is in the DOM tree of <var>document</var>.</p>
+whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root⑦">root</a></code> is in the DOM tree of <var>document</var>.</p>
     <li data-md>
      <p>For each <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver②③">IntersectionObserver</a></code> object <var>observer</var> in <var>notify list</var>,
 run these steps:</p>
@@ -1496,8 +1502,8 @@ the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browser
        <p>If <var>container</var> has overflow clipping or a css <a data-link-type="dfn" href="http://www.w3.org/TR/css-masking-1/#propdef-clip-path" id="ref-for-propdef-clip-path">clip-path</a> property,
 update <var>intersectionRect</var> by applying <var>container</var>’s clip.</p>
       <li data-md>
-       <p>If <var>container</var> is the root element of a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context②">browsing context</a>,
-update <var>container</var> to be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context③">browsing context</a>’s <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①③">document</a></code>;
+       <p>If <var>container</var> is the root element of a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context①">browsing context</a>,
+update <var>container</var> to be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context②">browsing context</a>’s <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①③">document</a></code>;
 otherwise, update <var>container</var> to be the <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#containing-block" id="ref-for-containing-block①">containing block</a> of <var>container</var>.</p>
      </ol>
     <li data-md>
@@ -1514,7 +1520,7 @@ otherwise, update <var>container</var> to be the <a data-link-type="dfn" href="h
    <ol>
     <li data-md>
      <p>Let <var>observer list</var> be a list of all <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver②⑤">IntersectionObserver</a></code>s
-whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root⑨">root</a></code> is in the DOM tree of <var>document</var>.
+whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root⑧">root</a></code> is in the DOM tree of <var>document</var>.
 For the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context④">top-level browsing context</a>, this includes <a data-link-type="dfn" href="#intersectionobserver-implicit-root-observer" id="ref-for-intersectionobserver-implicit-root-observer③">implicit root observers</a>.</p>
     <li data-md>
      <p>For each <var>observer</var> in <var>observer list</var>:</p>
@@ -2283,10 +2289,9 @@ The IntersectionObserver interface</a>
 The IntersectionObserver interface</a> <a href="#ref-for-dom-intersectionobserver-root①">(2)</a> <a href="#ref-for-dom-intersectionobserver-root②">(3)</a> <a href="#ref-for-dom-intersectionobserver-root③">(4)</a> <a href="#ref-for-dom-intersectionobserver-root④">(5)</a>
     <li><a href="#ref-for-dom-intersectionobserver-root⑤">2.3. 
 The IntersectionObserverEntry interface</a> <a href="#ref-for-dom-intersectionobserver-root⑥">(2)</a>
-    <li><a href="#ref-for-dom-intersectionobserver-root⑦">3.2.2. Observe a target Element</a>
-    <li><a href="#ref-for-dom-intersectionobserver-root⑧">3.2.5. 
+    <li><a href="#ref-for-dom-intersectionobserver-root⑦">3.2.5. 
 Notify Intersection Observers</a>
-    <li><a href="#ref-for-dom-intersectionobserver-root⑨">3.2.8. 
+    <li><a href="#ref-for-dom-intersectionobserver-root⑧">3.2.8. 
 Run the Update Intersection Observations Steps</a>
    </ul>
   </aside>
