@@ -504,7 +504,7 @@ IntersectionObserver.prototype._checkForIntersections = function() {
     if (!this._rootContainsTarget(target)) {
       rootBounds = getEmptyRect();
     } else if (!crossOriginUpdater || this.root) {
-      rootBounds = rootRect
+      rootBounds = rootRect;
     }
 
     var newEntry = item.entry = new IntersectionObserverEntry({
@@ -718,9 +718,7 @@ IntersectionObserver.prototype._hasCrossedThreshold =
  * @private
  */
 IntersectionObserver.prototype._rootIsInDom = function() {
-  var rootDoc =
-    (this.root && (this.root.ownerDocument || this.root)) || document;
-  return !this.root || containsDeep(rootDoc, this.root);
+  return !this.root || containsDeep(document, this.root);
 };
 
 
@@ -734,7 +732,7 @@ IntersectionObserver.prototype._rootContainsTarget = function(target) {
   var rootDoc =
     (this.root && (this.root.ownerDocument || this.root)) || document;
   return (
-    containsDeep(this.root || rootDoc, target) &&
+    containsDeep(rootDoc, target) &&
     (!this.root || rootDoc == target.ownerDocument)
   );
 };
@@ -999,6 +997,11 @@ function getParentNode(node) {
   return parent;
 }
 
+/**
+ * Returns true if `node` is a Document.
+ * @param {!Node} node
+ * @returns {boolean}
+ */
 function isDoc(node) {
   return node && node.nodeType === 9;
 }
