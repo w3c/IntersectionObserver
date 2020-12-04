@@ -1414,14 +1414,45 @@ describe('IntersectionObserver', function() {
               top: 0, // if root=null, then this would be 100.
               left: 0,
               height: 90,
-              width: bodyWidth,
-            })
+              width: bodyWidth
+            });
             expect(records.length).to.be(1);
             expect(rect(records[0].rootBounds)).to.eql(getRootRect(iframeDoc));
             expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
             done();
           },
           { root: iframeDoc }
+        );
+
+        io.observe(iframeTargetEl1);
+      });
+
+      it('handles tracking iframe viewport with rootMargin', function(done) {
+        iframe.style.height = '100px';
+
+        var io =  new IntersectionObserver(
+          function (records) {
+            io.unobserve(iframeTargetEl1);
+            var intersectionRect = rect({
+              top: 0, // if root=null, then this would be 100.
+              left: 0,
+              height: 200,
+              width: bodyWidth
+            });
+
+            // rootMargin: 100% --> 3x width + 3x height.
+            var expectedRootBounds = rect({
+              top: -100,
+              left: -bodyWidth,
+              width: bodyWidth * 3,
+              height: 100 * 3
+            });
+            expect(records.length).to.be(1);
+            expect(rect(records[0].rootBounds)).to.eql(expectedRootBounds);
+            expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
+            done();
+          },
+          { root: iframeDoc, rootMargin: '100%' }
         );
 
         io.observe(iframeTargetEl1);
