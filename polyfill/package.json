@@ -1,6 +1,6 @@
 {
   "name": "intersection-observer",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "A polyfill for IntersectionObserver",
   "main": "intersection-observer",
   "repository": {
