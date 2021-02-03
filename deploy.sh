@@ -3,7 +3,7 @@ set -e # Exit with nonzero exit code if anything fails
 
 # From https://gist.github.com/domenic/ec8b0fc8ab45f39403dd
 
-SOURCE_BRANCH=("master" "v2")
+SOURCE_BRANCH=("main" "v2")
 TARGET_BRANCH="gh-pages"
 
 function doCompile {
