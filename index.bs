@@ -14,6 +14,7 @@ Group: webapps
 Repository: W3C/IntersectionObserver
 Test Suite: http://w3c-test.org/intersection-observer/
 Ignored Vars: rootMargin, docs, now
+Markup Shorthands: markdown yes
 </pre>
 
 <pre class="anchors">
@@ -775,6 +776,14 @@ which has privacy and security considerations of its own. It is however unlikely
 {{IntersectionObserver}} is vulnerable to timing-related exploits. Timestamps are generated
 at most once per rendering update (see [[#event-loop]]), which is far too
 infrequent for the familiar kind of timing attack.
+
+<!-- ============================================================ -->
+<h2 id=internationalization>Internationalization</h2>
+<!-- ============================================================ -->
+
+*This section is non-normative.*
+
+There are no known issues concerning internationalization.
 
 <!-- ============================================================ -->
 <h2 id=acknowledgements>Acknowledgements</h2>
