@@ -4,9 +4,9 @@
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <title>Intersection Observer</title>
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version 3886cea8, updated Wed Dec 2 15:53:33 2020 -0800" name="generator">
+  <meta content="Bikeshed version 3d6a6fcbb, updated Wed Jun 16 16:19:39 2021 -0700" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="76ba9761eadab4091927b2497bfa13e59c9e25d8" name="document-revision">
+  <meta content="cac7ad29d28629f8d25affda853eda3440b05f97" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -113,9 +113,9 @@ pre .property::before, pre .property::after {
     --ins-bg: transparent;
 
     --a-normal-text: #034575;
-    --a-normal-underline: #707070;
+    --a-normal-underline: #bbb;
     --a-visited-text: var(--a-normal-text);
-    --a-visited-underline: #bbb;
+    --a-visited-underline: #707070;
     --a-hover-bg: rgba(75%, 75%, 75%, .25);
     --a-active-text: #c00;
     --a-active-underline: #c00;
@@ -623,7 +623,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-12-10">10 December 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2021-06-24">24 June 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -631,7 +631,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <dt>Latest published version:
      <dd><a href="https://www.w3.org/TR/intersection-observer/">https://www.w3.org/TR/intersection-observer/</a>
      <dt>Previous Versions:
-     <dd><a href="https://www.w3.org/TR/2020/WD-intersection-observer-20201102/" rel="prev">https://www.w3.org/TR/2020/WD-intersection-observer-20201102/</a>
+     <dd><a href="https://www.w3.org/TR/2021/WD-intersection-observer-20210203/" rel="prev">https://www.w3.org/TR/2021/WD-intersection-observer-20210203/</a>
      <dt>Test Suite:
      <dd><a href="http://w3c-test.org/intersection-observer/">http://w3c-test.org/intersection-observer/</a>
      <dt>Issue Tracking:
@@ -644,7 +644,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2020 <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="https://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="https://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="https://www.keio.ac.jp/">Keio</a>, <a href="https://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document" rel="license">permissive document license</a> rules apply. </p>
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2021 <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="https://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="https://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="https://www.keio.ac.jp/">Keio</a>, <a href="https://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document" rel="license">permissive document license</a> rules apply. </p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
@@ -662,7 +662,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    <p> Publication as an Editors Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr> Membership. This is a draft document and may
     be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite
     this document as other than work in progress. </p>
-   <p> This document was produced by a group operating under the <a href="https://www.w3.org/Consortium/Patent-Policy-20170801/"><abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/2004/01/pp-impl/114929/status" rel="disclosure">public list of any patent disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains <a href="https://www.w3.org/Consortium/Patent-Policy-20170801/#def-essential">Essential Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/Consortium/Patent-Policy-20170801/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. </p>
+   <p> This document was produced by a group operating under the <a href="https://www.w3.org/Consortium/Patent-Policy-20200915/"><abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/2004/01/pp-impl/114929/status" rel="disclosure">public list of any patent disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains <a href="https://www.w3.org/Consortium/Patent-Policy-20200915/#def-essential">Essential Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/Consortium/Patent-Policy-20200915/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. </p>
    <p>This document is governed by the <a href="https://www.w3.org/2020/Process-20200915/" id="w3c_process_revision">15 September 2020 W3C Process Document</a>. </p>
   </div>
   <div data-fill-with="at-risk"></div>
@@ -710,7 +710,8 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      </ol>
     <li><a href="#accessibility"><span class="secno">4</span> <span class="content">Accessibility Considerations</span></a>
     <li><a href="#privacy"><span class="secno">5</span> <span class="content">Privacy and Security</span></a>
-    <li><a href="#acknowledgements"><span class="secno">6</span> <span class="content">Acknowledgements</span></a>
+    <li><a href="#internationalization"><span class="secno">6</span> <span class="content">Internationalization</span></a>
+    <li><a href="#acknowledgements"><span class="secno">7</span> <span class="content">Acknowledgements</span></a>
     <li>
      <a href="#conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
      <ol class="toc">
@@ -786,7 +787,7 @@ it allows applications to significantly reduce their CPU, GPU and energy costs.<
    <div class="example" id="example-189ac2d4">
     <a class="self-link" href="#example-189ac2d4"></a> 
 <pre class="highlight"><c- a>var</c-> observer <c- o>=</c-> <c- k>new</c-> IntersectionObserver<c- p>(</c->changes <c- p>=></c-> <c- p>{</c->
-  <c- k>for</c-> <c- p>(</c-><c- kr>const</c-> change <c- k>of</c-> changes<c- p>)</c-> <c- p>{</c->
+  <c- k>for</c-> <c- p>(</c-><c- a>const</c-> change <c- k>of</c-> changes<c- p>)</c-> <c- p>{</c->
     console<c- p>.</c->log<c- p>(</c->change<c- p>.</c->time<c- p>);</c->               <c- c1>// Timestamp when the change occurred</c->
     console<c- p>.</c->log<c- p>(</c->change<c- p>.</c->rootBounds<c- p>);</c->         <c- c1>// Unclipped area of root</c->
     console<c- p>.</c->log<c- p>(</c->change<c- p>.</c->boundingClientRect<c- p>);</c-> <c- c1>// target.boundingClientRect()</c->
@@ -828,7 +829,7 @@ intersection with the <a data-link-type="dfn" href="#intersectionobserver-inters
       <hr>
       <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
       <hr>
-      <span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+      <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
      </div>
     </div>
    </div>
@@ -882,7 +883,7 @@ use-cases. Per-<code class="idl"><a data-link-type="idl" href="#dom-intersection
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -902,7 +903,7 @@ use-cases. Per-<code class="idl"><a data-link-type="idl" href="#dom-intersection
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -922,7 +923,7 @@ use-cases. Per-<code class="idl"><a data-link-type="idl" href="#dom-intersection
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -938,17 +939,18 @@ and <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-ob
 or create a separate <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver⑧">IntersectionObserver</a></code> for each <var>target</var>.</p>
      <dt data-md>
       <div class="mdn-anno wrapped">
-       <button class="mdn-anno-btn"><span>MDN</span></button>
+       <button class="mdn-anno-btn"><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></button>
        <div class="feature">
         <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/disconnect" title="The IntersectionObserver method disconnect() stops watching all of its target elements for visibility changes.">IntersectionObserver/disconnect</a></p>
+        <p class="all-engines-text">In all current engines.</p>
         <div class="support">
-         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
+         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
          <span class="opera yes"><span>Opera</span><span>Yes</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -964,17 +966,18 @@ whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverr
       </ol>
      <dt data-md>
       <div class="mdn-anno wrapped">
-       <button class="mdn-anno-btn"><span>MDN</span></button>
+       <button class="mdn-anno-btn"><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></button>
        <div class="feature">
         <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/takeRecords" title="The IntersectionObserver method takeRecords() returns an array of IntersectionObserverEntry objects, one for each targeted element which has experienced an intersection change since the last time the intersections were checked, either explicitly through a call to this method or implicitly by an automatic call to the observer&apos;s callback. ">IntersectionObserver/takeRecords</a></p>
+        <p class="all-engines-text">In all current engines.</p>
         <div class="support">
-         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
+         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
          <span class="opera yes"><span>Opera</span><span>Yes</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -1005,14 +1008,31 @@ whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverr
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
       <p><dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export id="dom-intersectionobserver-root"><code>root</code></dfn>, <span> of type <code class="idl-code">(Element or Document)</code>, readonly, nullable</span></p>
      <dd data-md>
       <p>The <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverinit-root" id="ref-for-dom-intersectionobserverinit-root">root</a></code> provided to the <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver⑨">IntersectionObserver</a></code> constructor, or <code>null</code> if none was provided.</p>
-     <dt data-md><dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export id="dom-intersectionobserver-rootmargin"><code>rootMargin</code></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①">DOMString</a>, readonly</span>
+     <dt data-md>
+      <div class="mdn-anno wrapped">
+       <button class="mdn-anno-btn"><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></button>
+       <div class="feature">
+        <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin" title="The IntersectionObserver interface&apos;s read-only rootMargin property is a string with syntax similar to that of the CSS margin property. Each side of the rectangle represented by rootMargin is added to the corresponding side in the root element&apos;s bounding box before the intersection test is performed. This lets you, for example, adjust the bounds outward so that the target element is considered 100% visible even if a certain number of pixels worth of width or height is clipped away, or treat the target as partially hidden if an edge is too close to the edge of the root&apos;s bounding box.">IntersectionObserver/rootMargin</a></p>
+        <p class="all-engines-text">In all current engines.</p>
+        <div class="support">
+         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
+         <hr>
+         <span class="opera yes"><span>Opera</span><span>Yes</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <hr>
+         <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+         <hr>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+        </div>
+       </div>
+      </div>
+      <p><dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserver" data-dfn-type="attribute" data-export id="dom-intersectionobserver-rootmargin"><code>rootMargin</code></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①">DOMString</a>, readonly</span></p>
      <dd data-md>
       <p>Offsets applied to the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle">root intersection rectangle</a>,
 effectively growing or shrinking the box that is used to calculate intersections. <b>These offsets are only applied when handling <a data-link-type="dfn" href="#intersectionobserver-same-origin-domain-target" id="ref-for-intersectionobserver-same-origin-domain-target①">same-origin-domain targets</a>;
@@ -1033,7 +1053,7 @@ this is not guaranteed to be identical to the <var>options</var>.<code class="id
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -1118,7 +1138,7 @@ append a duplicate of the second element to <var>tokens</var>.</p>
       <hr>
       <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
       <hr>
-      <span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+      <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
      </div>
     </div>
    </div>
@@ -1148,17 +1168,18 @@ append a duplicate of the second element to <var>tokens</var>.</p>
     <dl>
      <dt data-md>
       <div class="mdn-anno wrapped">
-       <button class="mdn-anno-btn"><span>MDN</span></button>
+       <button class="mdn-anno-btn"><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></button>
        <div class="feature">
         <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/boundingClientRect" title="The IntersectionObserverEntry interface&apos;s read-only boundingClientRect property returns a DOMRectReadOnly which in essence describes a rectangle describing the smallest rectangle that contains the entire target element.">IntersectionObserverEntry/boundingClientRect</a></p>
+        <p class="all-engines-text">In all current engines.</p>
         <div class="support">
-         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
+         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
          <span class="opera yes"><span>Opera</span><span>Yes</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -1168,17 +1189,18 @@ append a duplicate of the second element to <var>tokens</var>.</p>
 on the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target" id="ref-for-dom-intersectionobserverentry-target①">target</a></code>.</p>
      <dt data-md>
       <div class="mdn-anno wrapped">
-       <button class="mdn-anno-btn"><span>MDN</span></button>
+       <button class="mdn-anno-btn"><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></button>
        <div class="feature">
         <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/intersectionRect" title="The IntersectionObserverEntry interface&apos;s read-only intersectionRect property is a DOMRectReadOnly object which describes the smallest rectangle that contains the entire portion of the target element which is currently visible within the intersection root.">IntersectionObserverEntry/intersectionRect</a></p>
+        <p class="all-engines-text">In all current engines.</p>
         <div class="support">
-         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
+         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
          <span class="opera yes"><span>Opera</span><span>Yes</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -1203,7 +1225,7 @@ within the <a data-link-type="dfn" href="#intersectionobserver-root-intersection
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>16+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -1216,17 +1238,18 @@ to intersecting with a zero-area intersection rect (as will happen with
 edge-adjacent intersections, or when the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-boundingclientrect" id="ref-for-dom-intersectionobserverentry-boundingclientrect②">boundingClientRect</a></code> has zero area).</p>
      <dt data-md>
       <div class="mdn-anno wrapped">
-       <button class="mdn-anno-btn"><span>MDN</span></button>
+       <button class="mdn-anno-btn"><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></button>
        <div class="feature">
         <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/intersectionRatio" title="The IntersectionObserverEntry interface&apos;s read-only intersectionRatio property tells you how much of the target element is currently visible within the root&apos;s intersection ratio, as a value between 0.0 and 1.0.">IntersectionObserverEntry/intersectionRatio</a></p>
+        <p class="all-engines-text">In all current engines.</p>
         <div class="support">
-         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
+         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
          <span class="opera yes"><span>Opera</span><span>Yes</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -1237,17 +1260,18 @@ this will be the ratio of <code class="idl"><a data-link-type="idl" href="#dom-i
 1 if the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-isintersecting" id="ref-for-dom-intersectionobserverentry-isintersecting①">isIntersecting</a></code> is true, and 0 if not.</p>
      <dt data-md>
       <div class="mdn-anno wrapped">
-       <button class="mdn-anno-btn"><span>MDN</span></button>
+       <button class="mdn-anno-btn"><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></button>
        <div class="feature">
         <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/rootBounds" title="The IntersectionObserverEntry interface&apos;s read-only rootBounds property is a DOMRectReadOnly corresponding to the target&apos;s root intersection rectangle, offset by the IntersectionObserver.rootMargin if one is specified.">IntersectionObserverEntry/rootBounds</a></p>
+        <p class="all-engines-text">In all current engines.</p>
         <div class="support">
-         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
+         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
          <span class="opera yes"><span>Opera</span><span>Yes</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -1260,17 +1284,18 @@ this will be in a different coordinate system
 than <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-boundingclientrect" id="ref-for-dom-intersectionobserverentry-boundingclientrect⑤">boundingClientRect</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-intersectionrect" id="ref-for-dom-intersectionobserverentry-intersectionrect②">intersectionRect</a></code>.</p>
      <dt data-md>
       <div class="mdn-anno wrapped">
-       <button class="mdn-anno-btn"><span>MDN</span></button>
+       <button class="mdn-anno-btn"><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></button>
        <div class="feature">
         <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/target" title="The IntersectionObserverEntry interface&apos;s read-only target property indicates which targeted Element has changed its amount of intersection with the intersection root.">IntersectionObserverEntry/target</a></p>
+        <p class="all-engines-text">In all current engines.</p>
         <div class="support">
-         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
+         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
          <span class="opera yes"><span>Opera</span><span>Yes</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -1279,17 +1304,18 @@ than <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserveren
       <p>The <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element①①">Element</a></code> whose intersection with the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⓪">intersection root</a> changed.</p>
      <dt data-md>
       <div class="mdn-anno wrapped">
-       <button class="mdn-anno-btn"><span>MDN</span></button>
+       <button class="mdn-anno-btn"><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></button>
        <div class="feature">
         <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/time" title="The IntersectionObserverEntry interface&apos;s read-only time property is a DOMHighResTimeStamp that indicates the time at which the intersection change occurred relative to the time at which the document was created.">IntersectionObserverEntry/time</a></p>
+        <p class="all-engines-text">In all current engines.</p>
         <div class="support">
-         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
+         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
          <span class="opera yes"><span>Opera</span><span>Yes</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
+         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
         </div>
        </div>
       </div>
@@ -1312,24 +1338,7 @@ that generated the notification.</p>
      <dd data-md>
       <p>The <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver①⑥">root</a></code> to use for intersection.
 If not provided, use the <a data-link-type="dfn" href="#intersectionobserver-implicit-root" id="ref-for-intersectionobserver-implicit-root">implicit root</a>.</p>
-     <dt data-md>
-      <div class="mdn-anno wrapped">
-       <button class="mdn-anno-btn"><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></button>
-       <div class="feature">
-        <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin" title="The IntersectionObserver interface&apos;s read-only rootMargin property is a string with syntax similar to that of the CSS margin property. Each side of the rectangle represented by rootMargin is added to the corresponding side in the root element&apos;s bounding box before the intersection test is performed. This lets you, for example, adjust the bounds outward so that the target element is considered 100% visible even if a certain number of pixels worth of width or height is clipped away, or treat the target as partially hidden if an edge is too close to the edge of the root&apos;s bounding box.">IntersectionObserver/rootMargin</a></p>
-        <p class="all-engines-text">In all current engines.</p>
-        <div class="support">
-         <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-         <hr>
-         <span class="opera yes"><span>Opera</span><span>Yes</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-         <hr>
-         <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-         <hr>
-         <span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span>
-        </div>
-       </div>
-      </div>
-      <p><dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserverInit" data-dfn-type="dict-member" data-export id="dom-intersectionobserverinit-rootmargin"><code>rootMargin</code></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③">DOMString</a>, defaulting to <code>"0px"</code></span></p>
+     <dt data-md><dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserverInit" data-dfn-type="dict-member" data-export id="dom-intersectionobserverinit-rootmargin"><code>rootMargin</code></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③">DOMString</a>, defaulting to <code>"0px"</code></span>
      <dd data-md>
       <p>Similar to the CSS <a class="property" data-link-type="propdesc" href="https://drafts.csswg.org/css-box-4/#propdef-margin" id="ref-for-propdef-margin①">margin</a> property,
 this is a string of 1-4 components,
@@ -1536,7 +1545,7 @@ For the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/bro
           <li data-md>
            <p><var>thresholdIndex</var> be 0.</p>
           <li data-md>
-           <p><var>isIntersecting</var> be <var>false</var>.</p>
+           <p><var>isIntersecting</var> be false.</p>
           <li data-md>
            <p><var>targetRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly⑦">DOMRectReadOnly</a></code> with <var>x</var>, <var>y</var>, <var>width</var>, and <var>height</var> set to 0.</p>
           <li data-md>
@@ -1613,12 +1622,12 @@ in the in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipa
     <li>The <var>document</var> does not have <a data-link-type="dfn" href="#pending-initial-intersectionobserver-targets" id="ref-for-pending-initial-intersectionobserver-targets">pending initial IntersectionObserver targets</a>.
    </ul>
    <h2 class="heading settled" data-level="4" id="accessibility"><span class="secno">4. </span><span class="content">Accessibility Considerations</span><a class="self-link" href="#accessibility"></a></h2>
-   <p>*This section is non-normative.*</p>
+   <p><em>This section is non-normative.</em></p>
    <p>There are no known accessibility considerations for the core IntersectionObserver specification (this document).
 There are, however, related specifications and proposals that leverage and refer to this spec,
-which might have their own accessibility considerations. In particular, specifications for <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes">HTML 5 §2.6.7 Lazy loading attributes</a> and <a href="https://drafts.csswg.org/css-contain-2/#content-visibility">CSS Containment 2 §4 Suppressing An Element’s Contents Entirely: the content-visibility property</a> may have implications for <a href="https://html.spec.whatwg.org/multipage/interaction.html#find-in-page">HTML 5 §6.8 Find-in-page</a>, <a href="https://html.spec.whatwg.org/multipage/interaction.html#the-tabindex-attribute">HTML 5 §6.5.3 The tabindex attribute</a>, and <a href="https://githumb.com/WICG/spatial-navigation">spatial navigation</a>.</p>
+which might have their own accessibility considerations. In particular, specifications for <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes">HTML 5 §2.5.7 Lazy loading attributes</a> and <a href="https://drafts.csswg.org/css-contain-2/#content-visibility">CSS Containment 2 §4 Suppressing An Element’s Contents Entirely: the content-visibility property</a> may have implications for <a href="https://html.spec.whatwg.org/multipage/interaction.html#find-in-page">HTML 5 §6.8 Find-in-page</a>, <a href="https://html.spec.whatwg.org/multipage/interaction.html#the-tabindex-attribute">HTML 5 §6.5.3 The tabindex attribute</a>, and <a href="https://githumb.com/WICG/spatial-navigation">spatial navigation</a>.</p>
    <h2 class="heading settled" data-level="5" id="privacy"><span class="secno">5. </span><span class="content">Privacy and Security</span><a class="self-link" href="#privacy"></a></h2>
-   <p>*This section is non-normative.*</p>
+   <p><em>This section is non-normative.</em></p>
    <p>The main privacy concerns associated with this API relate to the information
 it may provide to code running in the context of a cross-origin iframe
 (i.e., the <a data-link-type="dfn" href="#intersectionobserver-cross-origin-domain-target" id="ref-for-intersectionobserver-cross-origin-domain-target①">cross-origin-domain target</a> case). In particular:</p>
@@ -1640,7 +1649,10 @@ does not reveal any information that was not already available by other means.</
 which has privacy and security considerations of its own. It is however unlikely that <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver③③">IntersectionObserver</a></code> is vulnerable to timing-related exploits. Timestamps are generated
 at most once per rendering update (see <a href="#event-loop">§ 3.4.1 HTML Processing Model: Event Loop</a>), which is far too
 infrequent for the familiar kind of timing attack.</p>
-   <h2 class="heading settled" data-level="6" id="acknowledgements"><span class="secno">6. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
+   <h2 class="heading settled" data-level="6" id="internationalization"><span class="secno">6. </span><span class="content">Internationalization</span><a class="self-link" href="#internationalization"></a></h2>
+   <p><em>This section is non-normative.</em></p>
+   <p>There are no known issues concerning internationalization.</p>
+   <h2 class="heading settled" data-level="7" id="acknowledgements"><span class="secno">7. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
    <p>Special thanks to <a href="https://github.com/w3c/IntersectionObserver/graphs/contributors">all the contributors</a> for their technical input and suggestions that led to improvements to this
 specification.</p>
   </main>
