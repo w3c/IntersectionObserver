@@ -19,4 +19,4 @@ jobs:
           W3C_WG_DECISION_URL: https://lists.w3.org/Archives/Public/public-webapps/2014JulSep/0627.html
           W3C_BUILD_OVERRIDE: |
             status: WD
-            shortname: IndexedDB
+            shortname: intersection-observer
