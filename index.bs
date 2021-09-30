@@ -198,9 +198,6 @@ a <a>target</a> whose <a>relevant settings object</a>'s <a>origin</a> is
 <a>same origin-domain</a> with the <a>top-level origin</a>, referred to as a
 <dfn for="IntersectionObserver">same-origin-domain target</dfn>;
 as opposed to a <dfn for="IntersectionObserver">cross-origin-domain target</dfn>.
-Any <a>target</a> of an <a>explicit root observer</a> is also a <a>same-origin-domain target</a>,
-since the <a>target</a> must be in the same <a>document</a> as the
-<a>intersection root</a>.
 
 Note: In {{MutationObserver}}, the {{MutationObserverInit}} options are passed
 to {{MutationObserver/observe()}} while in {{IntersectionObserver}} they are
