@@ -218,7 +218,7 @@ use-cases. Per-{{observe()}} options could be provided in the future if the need
 interface IntersectionObserver {
 	constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options = {});
 	readonly attribute (Element or Document)? root;
-	         attribute DOMString rootMargin;
+	readonly attribute DOMString rootMargin;
 	         attribute FrozenArray&lt;double&gt; thresholds;
 	undefined observe(Element target);
 	undefined unobserve(Element target);
@@ -279,14 +279,7 @@ interface IntersectionObserver {
 		this is not guaranteed to be identical to the |options|.{{IntersectionObserverInit/rootMargin}}
 		passed to the {{IntersectionObserver}} constructor.  If no
 		{{IntersectionObserverInit/rootMargin}} was passed to the {{IntersectionObserver}}
-		constructor, and the {{IntersectionObserver/rootMargin}} setter has not been invoked,
-		the value of this attribute is "0px 0px 0px 0px".
-
-		On setting, attempt to <a>parse a root margin</a>
-		from the given value.
-		If a list is returned,
-		set |this|'s internal {{[[rootMargin]]}} slot to that.
-		Otherwise, <a>throw</a> a {{SyntaxError}} exception.
+		constructor, the value of this attribute is "0px 0px 0px 0px".
 	: <dfn>thresholds</dfn>
 	::
 		On getting, returns {{[[thresholds]]}}, which is a list of thresholds,
