@@ -219,7 +219,7 @@ interface IntersectionObserver {
 	constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options = {});
 	readonly attribute (Element or Document)? root;
 	readonly attribute DOMString rootMargin;
-	         attribute FrozenArray&lt;double&gt; thresholds;
+	         attribute ObservableArray&lt;double&gt; thresholds;
 	undefined observe(Element target);
 	undefined unobserve(Element target);
 	undefined disconnect();
