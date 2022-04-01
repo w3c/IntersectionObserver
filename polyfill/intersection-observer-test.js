@@ -69,12 +69,15 @@ describe('IntersectionObserver', function() {
       io = new IntersectionObserver(noop);
       expect(io.root).to.be(null);
 
+      io = new IntersectionObserver(noop, {root: document});
+      expect(io.root).to.be(document);
+
       io = new IntersectionObserver(noop, {root: rootEl});
       expect(io.root).to.be(rootEl);
     });
 
 
-    it('throws when root is not an Element', function() {
+    it('throws when root is not a Document or Element', function() {
       expect(function() {
         io = new IntersectionObserver(noop, {root: 'foo'});
       }).to.throwException();
@@ -157,6 +160,21 @@ describe('IntersectionObserver', function() {
       }).to.throwException();
     });
 
+    it('fills in x and y in the resulting rects', function(done) {
+      io = new IntersectionObserver(function(records) {
+        expect(records.length).to.be(1);
+        var entry = records[0];
+        expect(entry.rootBounds.x).to.be(entry.rootBounds.left);
+        expect(entry.rootBounds.y).to.be(entry.rootBounds.top);
+        expect(entry.boundingClientRect.x).to.be(entry.boundingClientRect.left);
+        expect(entry.boundingClientRect.y).to.be(entry.boundingClientRect.top);
+        expect(entry.intersectionRect.x).to.be(entry.intersectionRect.left);
+        expect(entry.intersectionRect.y).to.be(entry.intersectionRect.top);
+        done();
+      }, {root: rootEl});
+      targetEl2.style.top = '-40px';
+      io.observe(targetEl1);
+    });
 
     it('triggers for all targets when observing begins', function(done) {
       io = new IntersectionObserver(function(records) {
@@ -941,6 +959,2213 @@ describe('IntersectionObserver', function() {
 
   });
 
+  describe('iframe', function() {
+    var iframe;
+    var iframeWin, iframeDoc;
+    var documentElement, body;
+    var iframeTargetEl1, iframeTargetEl2;
+    var bodyWidth;
+
+    beforeEach(function(done) {
+      iframe = document.createElement('iframe');
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('scrolling', 'yes');
+      iframe.style.position = 'fixed';
+      iframe.style.top = '0px';
+      iframe.style.width = '100px';
+      iframe.style.height = '200px';
+      iframe.onerror = function() {
+        done(new Error('iframe initialization failed'));
+      };
+      iframe.onload = function() {
+        iframe.onload = null;
+        iframeWin = iframe.contentWindow;
+        iframeDoc = iframeWin.document;
+        iframeDoc.open();
+        iframeDoc.write('<!DOCTYPE html><html><body>');
+        iframeDoc.write('<style>');
+        iframeDoc.write('body {margin: 0}');
+        iframeDoc.write('.target {height: 200px; margin-bottom: 2px; background: blue;}');
+        iframeDoc.write('</style>');
+        iframeDoc.close();
+
+        // Ensure the documentElement and body are always sorted on top. See
+        // `sortRecords` for more info.
+        documentElement = iframeDoc.documentElement;
+        body = iframeDoc.body;
+        documentElement.id = 'A1';
+        body.id = 'A1';
+
+        function createTarget(id, bg) {
+          var target = iframeDoc.createElement('div');
+          target.id = id;
+          target.className = 'target';
+          target.style.background = bg;
+          iframeDoc.body.appendChild(target);
+          return target;
+        }
+        iframeTargetEl1 = createTarget('target1', 'blue');
+        iframeTargetEl2 = createTarget('target2', 'green');
+        bodyWidth = iframeDoc.body.clientWidth;
+        done();
+      };
+      iframe.src = 'about:blank';
+      rootEl.appendChild(iframe);
+    });
+
+    afterEach(function() {
+      rootEl.removeChild(iframe);
+    });
+
+    function rect(r) {
+      return {
+        y: typeof r.y == 'number' ? r.y : r.top,
+        x: typeof r.x == 'number' ? r.x : r.left,
+        top: r.top,
+        left: r.left,
+        width: r.width != null ? r.width : r.right - r.left,
+        height: r.height != null ? r.height : r.bottom - r.top,
+        right: r.right != null ? r.right : r.left + r.width,
+        bottom: r.bottom != null ? r.bottom : r.top + r.height
+      };
+    }
+
+    function getRootRect(doc) {
+      var html = doc.documentElement;
+      var body = doc.body;
+      return rect({
+        top: 0,
+        left: 0,
+        right: html.clientWidth || body.clientWidth,
+        width: html.clientWidth || body.clientWidth,
+        bottom: html.clientHeight || body.clientHeight,
+        height: html.clientHeight || body.clientHeight
+      });
+    }
+
+    describe('same-origin iframe loaded in the mainframe', function() {
+      it('iframe targets do not intersect with a top root element', function(done) {
+        var io = new IntersectionObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(2);
+          expect(records[0].isIntersecting).to.be(false);
+          expect(records[1].isIntersecting).to.be(false);
+          done();
+          io.disconnect();
+        }, {root: rootEl});
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+      });
+
+      it('triggers for all targets in top-level root', function(done) {
+        var io = new IntersectionObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(2);
+          expect(records[0].isIntersecting).to.be(true);
+          expect(records[0].intersectionRatio).to.be(1);
+          expect(records[1].isIntersecting).to.be(false);
+          expect(records[1].intersectionRatio).to.be(0);
+
+          // The rootBounds is for the document's root.
+          expect(records[0].rootBounds.height).to.be(innerHeight);
+
+          done();
+          io.disconnect();
+        });
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+      });
+
+      it('triggers for all targets in iframe-level root', function(done) {
+        var io = new IntersectionObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(2);
+          expect(records[0].intersectionRatio).to.be(1);
+          expect(records[1].intersectionRatio).to.be(1);
+
+          // The rootBounds is for the document's root.
+          expect(rect(records[0].rootBounds)).
+            to.eql(rect(iframeDoc.body.getBoundingClientRect()));
+
+          done();
+          io.disconnect();
+        }, {root: iframeDoc.body});
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+      });
+
+      it('calculates rects for a fully visible frame', function(done) {
+        iframe.style.top = '0px';
+        iframe.style.height = '300px';
+        var io = new IntersectionObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(2);
+          expect(rect(records[0].rootBounds)).to.eql(getRootRect(document));
+          expect(rect(records[1].rootBounds)).to.eql(getRootRect(document));
+
+          // The target1 is fully visible.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          expect(rect(records[0].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[0].intersectionRect)).to.eql(clientRect1);
+          expect(records[0].isIntersecting).to.be(true);
+          expect(records[0].intersectionRatio).to.be(1);
+
+          // The target2 is partially visible.
+          var clientRect2 = rect({
+            top: 202,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect2 = rect({
+            top: 202,
+            left: 0,
+            width: bodyWidth,
+            // The bottom is clipped off.
+            bottom: 300
+          });
+          expect(rect(records[1].boundingClientRect)).to.eql(clientRect2);
+          expect(rect(records[1].intersectionRect)).to.eql(intersectRect2);
+          expect(records[1].isIntersecting).to.be(true);
+          expect(records[1].intersectionRatio).to.be.within(0.48, 0.5); // ~0.5
+
+          done();
+          io.disconnect();
+        });
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+      });
+
+      it('calculates rects for a fully visible and offset frame', function(done) {
+        iframe.style.top = '10px';
+        iframe.style.height = '300px';
+        var io = new IntersectionObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(2);
+          expect(rect(records[0].rootBounds)).to.eql(getRootRect(document));
+          expect(rect(records[1].rootBounds)).to.eql(getRootRect(document));
+
+          // The target1 is fully visible.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          expect(rect(records[0].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[0].intersectionRect)).to.eql(clientRect1);
+          expect(records[0].isIntersecting).to.be(true);
+          expect(records[0].intersectionRatio).to.be(1);
+
+          // The target2 is partially visible.
+          var clientRect2 = rect({
+            top: 202,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect2 = rect({
+            top: 202,
+            left: 0,
+            width: bodyWidth,
+            // The bottom is clipped off.
+            bottom: 300
+          });
+          expect(rect(records[1].boundingClientRect)).to.eql(clientRect2);
+          expect(rect(records[1].intersectionRect)).to.eql(intersectRect2);
+          expect(records[1].isIntersecting).to.be(true);
+          expect(records[1].intersectionRatio).to.be.within(0.48, 0.5); // ~0.5
+
+          done();
+          io.disconnect();
+        });
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+      });
+
+      it('calculates rects for a clipped frame on top', function(done) {
+        iframe.style.top = '-10px';
+        iframe.style.height = '300px';
+        var io = new IntersectionObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(2);
+          expect(rect(records[0].rootBounds)).to.eql(getRootRect(document));
+          expect(rect(records[1].rootBounds)).to.eql(getRootRect(document));
+
+          // The target1 is clipped at the top by the iframe's clipping.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect1 = rect({
+            left: 0,
+            width: bodyWidth,
+            // Top is clipped.
+            top: 10,
+            height: 200 - 10
+          });
+          expect(rect(records[0].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[0].intersectionRect)).to.eql(intersectRect1);
+          expect(records[0].isIntersecting).to.be(true);
+          expect(records[0].intersectionRatio).to.within(0.94, 0.96); // ~0.95
+
+          // The target2 is partially visible.
+          var clientRect2 = rect({
+            top: 202,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect2 = rect({
+            top: 202,
+            left: 0,
+            width: bodyWidth,
+            // The bottom is clipped off.
+            bottom: 300
+          });
+          expect(rect(records[1].boundingClientRect)).to.eql(clientRect2);
+          expect(rect(records[1].intersectionRect)).to.eql(intersectRect2);
+          expect(records[1].isIntersecting).to.be(true);
+          expect(records[1].intersectionRatio).to.be.within(0.48, 0.5); // ~0.49
+
+          done();
+          io.disconnect();
+        });
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+      });
+
+      it('calculates rects for a clipped frame on bottom', function(done) {
+        iframe.style.top = 'auto';
+        iframe.style.bottom = '-10px';
+        iframe.style.height = '300px';
+        var io = new IntersectionObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(2);
+          expect(rect(records[0].rootBounds)).to.eql(getRootRect(document));
+          expect(rect(records[1].rootBounds)).to.eql(getRootRect(document));
+
+          // The target1 is clipped at the top by the iframe's clipping.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          expect(rect(records[0].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[0].intersectionRect)).to.eql(clientRect1);
+          expect(records[0].isIntersecting).to.be(true);
+          expect(records[0].intersectionRatio).to.be(1);
+
+          // The target2 is partially visible.
+          var clientRect2 = rect({
+            top: 202,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect2 = rect({
+            top: 202,
+            left: 0,
+            width: bodyWidth,
+            // The bottom is clipped off.
+            bottom: 300 - 10
+          });
+          expect(rect(records[1].boundingClientRect)).to.eql(clientRect2);
+          expect(rect(records[1].intersectionRect)).to.eql(intersectRect2);
+          expect(records[1].isIntersecting).to.be(true);
+          expect(records[1].intersectionRatio).to.be.within(0.43, 0.45); // ~0.44
+
+          done();
+          io.disconnect();
+        });
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+      });
+
+      it('calculates rects for a fully visible frame and scrolled', function(done) {
+        iframe.style.top = '0px';
+        iframe.style.height = '300px';
+        iframeWin.scrollTo(0, 10);
+        var io = new IntersectionObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(2);
+          expect(rect(records[0].rootBounds)).to.eql(getRootRect(document));
+          expect(rect(records[1].rootBounds)).to.eql(getRootRect(document));
+
+          // The target1 is fully visible.
+          var clientRect1 = rect({
+            top: -10,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            // Height is only for the visible area.
+            height: 200 - 10
+          });
+          expect(rect(records[0].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[0].intersectionRect)).to.eql(intersectRect1);
+          expect(records[0].isIntersecting).to.be(true);
+          expect(records[0].intersectionRatio).to.within(0.94, 0.96); // ~0.95
+
+          // The target2 is partially visible.
+          var clientRect2 = rect({
+            top: 202 - 10,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect2 = rect({
+            top: 202 - 10,
+            left: 0,
+            width: bodyWidth,
+            // The bottom is clipped off.
+            bottom: 300
+          });
+          expect(rect(records[1].boundingClientRect)).to.eql(clientRect2);
+          expect(rect(records[1].intersectionRect)).to.eql(intersectRect2);
+          expect(records[1].isIntersecting).to.be(true);
+          expect(records[1].intersectionRatio).to.be.within(0.53, 0.55); // ~0.54
+
+          done();
+          io.disconnect();
+        });
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+      });
+
+      it('calculates rects for a clipped frame on top and scrolled', function(done) {
+        iframe.style.top = '-10px';
+        iframe.style.height = '300px';
+        iframeWin.scrollTo(0, 10);
+        var io = new IntersectionObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(2);
+          expect(rect(records[0].rootBounds)).to.eql(getRootRect(document));
+          expect(rect(records[1].rootBounds)).to.eql(getRootRect(document));
+
+          // The target1 is clipped at the top by the iframe's clipping.
+          var clientRect1 = rect({
+            top: -10,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect1 = rect({
+            left: 0,
+            width: bodyWidth,
+            // Top is clipped.
+            top: 10,
+            // The height is less by both: offset and scroll.
+            height: 200 - 10 - 10
+          });
+          expect(rect(records[0].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[0].intersectionRect)).to.eql(intersectRect1);
+          expect(records[0].isIntersecting).to.be(true);
+          expect(records[0].intersectionRatio).to.within(0.89, 0.91); // ~0.9
+
+          // The target2 is partially visible.
+          var clientRect2 = rect({
+            top: 202 - 10,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect2 = rect({
+            top: 202 - 10,
+            left: 0,
+            width: bodyWidth,
+            // The bottom is clipped off.
+            bottom: 300
+          });
+          expect(rect(records[1].boundingClientRect)).to.eql(clientRect2);
+          expect(rect(records[1].intersectionRect)).to.eql(intersectRect2);
+          expect(records[1].isIntersecting).to.be(true);
+          expect(records[1].intersectionRatio).to.be.within(0.53, 0.55); // ~0.54
+
+          done();
+          io.disconnect();
+        });
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+      });
+
+      it('handles tracking iframe viewport', function(done) {
+        iframe.style.height = '100px';
+        iframe.style.top = '100px';
+        iframeWin.scrollTo(0, 110);
+        // {root:iframeDoc} means to track the iframe viewport.
+        var io = new IntersectionObserver(
+          function (records) {
+            io.unobserve(iframeTargetEl1);
+
+            var intersectionRect = rect({
+              top: 0, // if root=null, then this would be 100.
+              left: 0,
+              height: 90,
+              width: bodyWidth
+            });
+            expect(records.length).to.be(1);
+            expect(rect(records[0].rootBounds)).to.eql(getRootRect(iframeDoc));
+            expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
+            done();
+          },
+          { root: iframeDoc }
+        );
+
+        io.observe(iframeTargetEl1);
+      });
+
+      it('handles tracking iframe viewport with rootMargin', function(done) {
+        iframe.style.height = '100px';
+
+        var io =  new IntersectionObserver(
+          function (records) {
+            io.unobserve(iframeTargetEl1);
+            var intersectionRect = rect({
+              top: 0, // if root=null, then this would be 100.
+              left: 0,
+              height: 200,
+              width: bodyWidth
+            });
+
+            // rootMargin: 100% --> 3x width + 3x height.
+            var expectedRootBounds = rect({
+              top: -100,
+              left: -bodyWidth,
+              width: bodyWidth * 3,
+              height: 100 * 3
+            });
+            expect(records.length).to.be(1);
+            expect(rect(records[0].rootBounds)).to.eql(expectedRootBounds);
+            expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
+            done();
+          },
+          { root: iframeDoc, rootMargin: '100%' }
+        );
+
+        io.observe(iframeTargetEl1);
+      });
+
+      // Current spec indicates that cross-document tracking yields
+      // an essentially empty IntersectionObserverEntry.
+      // See: https://github.com/w3c/IntersectionObserver/issues/87
+      it('does not track cross-document elements', function(done) {
+        var io = new IntersectionObserver(
+          function (records) {
+            io.unobserve(iframeTargetEl1)
+
+            expect(records.length).to.be(1);
+            const zeroesRect = rect({
+              top: 0,
+              left: 0,
+              width: 0,
+              height: 0
+            });
+            expect(rect(records[0].rootBounds)).to.eql(zeroesRect);
+            expect(rect(records[0].intersectionRect)).to.eql(zeroesRect);
+            expect(records.isIntersecting).false;
+            done();
+          },
+          { root: document }
+        );
+
+        io.observe(iframeTargetEl1);
+      });
+
+      it('handles style changes', function(done) {
+        var spy = sinon.spy();
+
+        // When first element becomes invisible, the second element will show.
+        // And in reverse: when the first element becomes visible again, the
+        // second element will disappear.
+        var io = new IntersectionObserver(spy);
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+
+        runSequence([
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(1);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            iframeTargetEl1.style.display = 'none';
+            setTimeout(function() {
+              expect(spy.callCount).to.be(2);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(0);
+              expect(records[0].isIntersecting).to.be(false);
+              expect(records[1].intersectionRatio).to.be(1);
+              expect(records[1].isIntersecting).to.be(true);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            iframeTargetEl1.style.display = '';
+            setTimeout(function() {
+              expect(spy.callCount).to.be(3);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            io.disconnect();
+            done();
+          }
+        ], done);
+      });
+
+      it('handles scroll changes', function(done) {
+        var spy = sinon.spy();
+
+        // Scrolling to the middle of the iframe shows the second box and
+        // hides the first.
+        var io = new IntersectionObserver(spy);
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+
+        runSequence([
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(1);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            iframeWin.scrollTo(0, 202);
+            setTimeout(function() {
+              expect(spy.callCount).to.be(2);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(0);
+              expect(records[0].isIntersecting).to.be(false);
+              expect(records[1].intersectionRatio).to.be(1);
+              expect(records[1].isIntersecting).to.be(true);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            iframeWin.scrollTo(0, 0);
+            setTimeout(function() {
+              expect(spy.callCount).to.be(3);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            io.disconnect();
+            done();
+          }
+        ], done);
+      });
+
+      it('handles iframe changes', function(done) {
+        var spy = sinon.spy();
+
+        // Iframe goes off screen and returns.
+        var io = new IntersectionObserver(spy);
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+
+        runSequence([
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(1);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              // Top-level bounds.
+              expect(records[0].rootBounds.height).to.be(innerHeight);
+              expect(records[0].intersectionRect.height).to.be(200);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            // Completely off screen.
+            iframe.style.top = '-202px';
+            setTimeout(function() {
+              expect(spy.callCount).to.be(2);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(1);
+              expect(records[0].intersectionRatio).to.be(0);
+              expect(records[0].isIntersecting).to.be(false);
+              // Top-level bounds.
+              expect(records[0].rootBounds.height).to.be(innerHeight);
+              expect(records[0].intersectionRect.height).to.be(0);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            // Partially returns.
+            iframe.style.top = '-100px';
+            setTimeout(function() {
+              expect(spy.callCount).to.be(3);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(1);
+              expect(records[0].intersectionRatio).to.be.within(0.45, 0.55);
+              expect(records[0].isIntersecting).to.be(true);
+              // Top-level bounds.
+              expect(records[0].rootBounds.height).to.be(innerHeight);
+              expect(records[0].intersectionRect.height / 200).to.be.within(0.45, 0.55);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            io.disconnect();
+            done();
+          }
+        ], done);
+      });
+
+      it('continues to monitor until the last target unobserved', function(done) {
+        var spy = sinon.spy();
+
+        // Iframe goes off screen and returns.
+        var io = new IntersectionObserver(spy);
+        io.observe(target1);
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+
+        runSequence([
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(1);
+              expect(spy.lastCall.args[0].length).to.be(3);
+
+              // Unobserve one from the main context and one from iframe.
+              io.unobserve(target1);
+              io.unobserve(iframeTargetEl2);
+
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            // Completely off screen.
+            iframe.style.top = '-202px';
+            setTimeout(function() {
+              expect(spy.callCount).to.be(2);
+              expect(spy.lastCall.args[0].length).to.be(1);
+
+              io.unobserve(iframeTargetEl1);
+
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            // Partially returns.
+            iframe.style.top = '-100px';
+            setTimeout(function() {
+              expect(spy.callCount).to.be(2);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            io.disconnect();
+            done();
+          }
+        ], done);
+      });
+    });
+
+    describe('same-origin iframe loaded in an iframe', function() {
+      var ASYNC_TIMEOUT = 300;
+
+      beforeEach(function(done) {
+        /* Uncomment these lines to force polyfill inside the iframe.
+        delete iframeWin.IntersectionObserver;
+        delete iframeWin.IntersectionObserverEntry;
+        */
+
+        // Install polyfill right into the iframe.
+        if (!iframeWin.IntersectionObserver) {
+          var script = iframeDoc.createElement('script');
+          script.src = 'intersection-observer.js';
+          script.onload = function() {
+            done();
+          };
+          iframeDoc.body.appendChild(script);
+        } else {
+          done();
+        }
+      });
+
+      function computeRectIntersection(rect1, rect2) {
+        var top = Math.max(rect1.top, rect2.top);
+        var bottom = Math.min(rect1.bottom, rect2.bottom);
+        var left = Math.max(rect1.left, rect2.left);
+        var right = Math.min(rect1.right, rect2.right);
+        var width = right - left;
+        var height = bottom - top;
+
+        return (width >= 0 && height >= 0) && {
+          top: top,
+          bottom: bottom,
+          left: left,
+          right: right,
+          width: width,
+          height: height
+        } || {
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          width: 0,
+          height: 0
+        };
+      }
+
+      function checkRootBounds(records) {
+        if (!supportsNativeIntersectionObserver(iframeWin)) {
+          records.forEach(function(record) {
+            expect(rect(record.rootBounds)).to.eql(getRootRect(document));
+          });
+        }
+      }
+
+      function applyParentRect(parentRect) {
+        iframe.style.top = parentRect.top + 'px';
+        iframe.style.left = parentRect.left + 'px';
+        iframe.style.height = parentRect.height + 'px';
+        iframe.style.width = parentRect.width + 'px';
+      }
+
+      function createObserver(callback, options, parentRect) {
+        var io = new iframeWin.IntersectionObserver(callback, options);
+        if (parentRect) {
+          applyParentRect(parentRect);
+        }
+        return io;
+      }
+
+      it('calculates rects for a fully visible frame', function(done) {
+        var parentRect = rect({top: 0, left: 20, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(3);
+          checkRootBounds(records);
+
+          // The documentElement is partially visible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300
+          }));
+          expect(records[0].isIntersecting).to.be(true);
+          // 300 / 404 == ~0.743
+          expect(records[0].intersectionRatio).to.be.within(0.74, 0.75);
+
+          // The document.body is partially visible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300
+          }));
+          expect(records[1].isIntersecting).to.be(true);
+          // 300 / 402 == ~0.746
+          expect(records[1].intersectionRatio).to.be.within(0.74, 0.75);
+
+          // The target1 is fully visible.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(clientRect1);
+          expect(records[2].isIntersecting).to.be(true);
+          expect(records[2].intersectionRatio).to.be(1);
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+      });
+
+      it('calculates rects for a fully visible and offset frame', function(done) {
+        var parentRect = rect({top: 10, left: 20, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(3);
+          checkRootBounds(records);
+
+          // The documentElement is partially visible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300
+          }));
+          expect(records[0].isIntersecting).to.be(true);
+          // 300 / 404 == ~0.743
+          expect(records[0].intersectionRatio).to.be.within(0.74, 0.75);
+
+          // The document.body is partially visible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300
+          }));
+          expect(records[1].isIntersecting).to.be(true);
+          // 300 / 402 == ~0.746
+          expect(records[1].intersectionRatio).to.be.within(0.74, 0.75);
+
+          // The target1 is fully visible.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(clientRect1);
+          expect(records[2].isIntersecting).to.be(true);
+          expect(records[2].intersectionRatio).to.be(1);
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+      });
+
+      it('calculates rects for a clipped frame on top', function(done) {
+        var parentRect = rect({top: -10, left: 20, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(3);
+          checkRootBounds(records);
+
+          // The documentElement is partially visible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(rect({
+            top: 10,
+            left: 0,
+            width: bodyWidth,
+            height: 300 - 10
+          }));
+          expect(records[0].isIntersecting).to.be(true);
+          // (300 - 10) / 404 == ~0.717
+          expect(records[0].intersectionRatio).to.be.within(0.71, 0.72);
+
+          // The document.body is partially visible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(rect({
+            top: 10,
+            left: 0,
+            width: bodyWidth,
+            height: 300 - 10
+          }));
+          expect(records[1].isIntersecting).to.be(true);
+          // (300 - 10) / 402 == ~0.721
+          expect(records[1].intersectionRatio).to.be.within(0.72, 0.73);
+
+          // The target1 is clipped at the top by the iframe's clipping.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect1 = rect({
+            left: 0,
+            width: bodyWidth,
+            // Top is clipped.
+            top: 10,
+            height: 200 - 10
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(intersectRect1);
+          expect(records[2].isIntersecting).to.be(true);
+          expect(records[2].intersectionRatio).to.within(0.94, 0.96); // ~0.95
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+      });
+
+      it('calculates rects for a clipped frame on bottom', function(done) {
+        var rootRect = getRootRect(document);
+        var parentRect = rect({top: rootRect.bottom - 300 + 10, left: 20, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(3);
+          checkRootBounds(records);
+
+          // The documentElement is partially visible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300 - 10
+          }));
+          expect(records[0].isIntersecting).to.be(true);
+          // (300 - 10) / 404 == ~0.717
+          expect(records[0].intersectionRatio).to.be.within(0.71, 0.72);
+
+          // The document.body is partially visible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300 - 10
+          }));
+          expect(records[1].isIntersecting).to.be(true);
+          // (300 - 10) / 402 == ~0.721
+          expect(records[1].intersectionRatio).to.be.within(0.72, 0.73);
+
+          // The target1 is clipped at the top by the iframe's clipping.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(clientRect1);
+          expect(records[2].isIntersecting).to.be(true);
+          expect(records[2].intersectionRatio).to.be(1);
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+      });
+
+      it('calculates rects for a fully visible and scrolled frame', function(done) {
+        iframeWin.scrollTo(0, 10);
+        var parentRect = rect({top: 0, left: 20, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(3);
+          checkRootBounds(records);
+
+          // The documentElement is partially visible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300
+          }));
+          expect(records[0].isIntersecting).to.be(true);
+          // 300 / 404 == ~0.743
+          expect(records[0].intersectionRatio).to.be.within(0.74, 0.75);
+
+          // The document.body is partially visible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300
+          }));
+          expect(records[1].isIntersecting).to.be(true);
+          // 300 / 402 == ~0.746
+          expect(records[1].intersectionRatio).to.be.within(0.74, 0.75);
+
+          // The target1 is fully visible.
+          var clientRect1 = rect({
+            top: -10,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            // Height is only for the visible area.
+            height: 200 - 10
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(intersectRect1);
+          expect(records[2].isIntersecting).to.be(true);
+          expect(records[2].intersectionRatio).to.within(0.94, 0.96); // ~0.95
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+      });
+
+      it('calculates rects for a clipped frame on top and scrolled', function(done) {
+        iframeWin.scrollTo(0, 10);
+        var parentRect = rect({top: -10, left: 0, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(4);
+          checkRootBounds(records);
+
+          // The documentElement is partially visible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(rect({
+            top: 10,
+            left: 0,
+            width: bodyWidth,
+            height: 300 - 10
+          }));
+          expect(records[0].isIntersecting).to.be(true);
+          // (300 - 10) / 404 == ~0.717
+          expect(records[0].intersectionRatio).to.be.within(0.71, 0.72);
+
+          // The document.body is partially visible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(rect({
+            top: 10,
+            left: 0,
+            width: bodyWidth,
+            height: 300 - 10
+          }));
+          expect(records[1].isIntersecting).to.be(true);
+          // (300 - 10) / 402 == ~0.721
+          expect(records[1].intersectionRatio).to.be.within(0.72, 0.73);
+
+          // The target1 is clipped at the top by the iframe's clipping.
+          var clientRect1 = rect({
+            top: -10,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect1 = rect({
+            left: 0,
+            width: bodyWidth,
+            // Top is clipped.
+            top: 10,
+            // The height is less by both: offset and scroll.
+            height: 200 - 10 - 10
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(intersectRect1);
+          expect(records[2].isIntersecting).to.be(true);
+          expect(records[2].intersectionRatio).to.within(0.89, 0.91); // ~0.9
+
+          // The target2 is partially visible.
+          var clientRect2 = rect({
+            top: 202 - 10,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect2 = rect({
+            top: 202 - 10,
+            left: 0,
+            width: bodyWidth,
+            // The bottom is clipped off.
+            bottom: 300
+          });
+          expect(rect(records[3].boundingClientRect)).to.eql(clientRect2);
+          expect(rect(records[3].intersectionRect)).to.eql(intersectRect2);
+          expect(records[3].isIntersecting).to.be(true);
+          expect(records[3].intersectionRatio).to.be.within(0.53, 0.55); // ~0.54
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+      });
+
+      it('calculates rects for a fully clipped frame', function(done) {
+        var parentRect = rect({top: -400, left: 20, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(3);
+          checkRootBounds(records);
+
+          var emptyRect = rect({
+            top: 0,
+            left: 0,
+            width: 0,
+            height: 0
+          });
+
+          // The documentElement is completely invisible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(emptyRect);
+          expect(records[0].isIntersecting).to.be(false);
+          expect(records[0].intersectionRatio).to.be(0);
+
+          // The document.body is completely invisible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(emptyRect);
+          expect(records[1].isIntersecting).to.be(false);
+          expect(records[1].intersectionRatio).to.be(0);
+
+          // The target1 is completely invisible.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(emptyRect);
+          expect(records[2].isIntersecting).to.be(false);
+          expect(records[2].intersectionRatio).to.be(0);
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+      });
+
+      it('handles style changes', function(done) {
+        var spy = sinon.spy();
+
+        var parentRect = rect({top: 0, left: 0, height: 200, width: 100});
+
+        // When first element becomes invisible, the second element will show.
+        // And in reverse: when the first element becomes visible again, the
+        // second element will disappear.
+        var io = createObserver(spy, {}, parentRect);
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+
+        runSequence([
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(1);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            iframeTargetEl1.style.display = 'none';
+            setTimeout(function() {
+              expect(spy.callCount).to.be(2);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(0);
+              expect(records[0].isIntersecting).to.be(false);
+              expect(records[1].intersectionRatio).to.be(1);
+              expect(records[1].isIntersecting).to.be(true);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            iframeTargetEl1.style.display = '';
+            setTimeout(function() {
+              expect(spy.callCount).to.be(3);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            io.disconnect();
+            done();
+          }
+        ], done);
+      });
+
+      it('handles scroll changes', function(done) {
+        var spy = sinon.spy();
+
+        var parentRect = rect({top: 0, left: 0, height: 200, width: 100});
+
+        // Scrolling to the middle of the iframe shows the second box and
+        // hides the first.
+        var io = createObserver(spy, {}, parentRect);
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+
+        runSequence([
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(1);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            iframeWin.scrollTo(0, 202);
+            setTimeout(function() {
+              expect(spy.callCount).to.be(2);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(0);
+              expect(records[0].isIntersecting).to.be(false);
+              expect(records[1].intersectionRatio).to.be(1);
+              expect(records[1].isIntersecting).to.be(true);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            iframeWin.scrollTo(0, 0);
+            setTimeout(function() {
+              expect(spy.callCount).to.be(3);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            io.disconnect();
+            done();
+          }
+        ], done);
+      });
+
+      it('handles parent rect changes', function(done) {
+        var spy = sinon.spy();
+
+        var parentRect = rect({top: 0, left: 0, height: 200, width: 100});
+
+        // Iframe goes off screen and returns.
+        var io = createObserver(spy, {}, parentRect);
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+
+        runSequence([
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(1);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              checkRootBounds(records);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              // Top-level bounds.
+              expect(records[0].intersectionRect.height).to.be(200);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            // Completely off screen.
+            applyParentRect(rect({top: -202, left: 0, height: 200, width: 100}));
+            setTimeout(function() {
+              expect(spy.callCount).to.be(2);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(1);
+              checkRootBounds(records);
+              expect(records[0].intersectionRatio).to.be(0);
+              expect(records[0].isIntersecting).to.be(false);
+              // Top-level bounds.
+              expect(records[0].intersectionRect.height).to.be(0);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            // Partially returns.
+            applyParentRect(rect({top: -100, left: 0, height: 200, width: 100}));
+            setTimeout(function() {
+              expect(spy.callCount).to.be(3);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(1);
+              checkRootBounds(records);
+              expect(records[0].intersectionRatio).to.be.within(0.45, 0.55);
+              expect(records[0].isIntersecting).to.be(true);
+              // Top-level bounds.
+              expect(records[0].intersectionRect.height / 200).to.be.within(0.45, 0.55);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            io.disconnect();
+            done();
+          }
+        ], done);
+      });
+    });
+
+    describe('cross-origin iframe', function() {
+      var ASYNC_TIMEOUT = 300;
+      var crossOriginUpdater;
+
+      beforeEach(function(done) {
+        Object.defineProperty(iframeWin, 'frameElement', {value: null});
+
+        /* Uncomment these lines to force polyfill inside the iframe.
+        delete iframeWin.IntersectionObserver;
+        delete iframeWin.IntersectionObserverEntry;
+        */
+
+        // Install polyfill right into the iframe.
+        if (!iframeWin.IntersectionObserver) {
+          var script = iframeDoc.createElement('script');
+          script.src = 'intersection-observer.js';
+          script.onload = function() {
+            if (iframeWin.IntersectionObserver._setupCrossOriginUpdater) {
+              crossOriginUpdater = iframeWin.IntersectionObserver._setupCrossOriginUpdater();
+            }
+            done();
+          };
+          iframeDoc.body.appendChild(script);
+        } else {
+          done();
+        }
+      });
+
+      afterEach(function() {
+        if (IntersectionObserver._resetCrossOriginUpdater) {
+          IntersectionObserver._resetCrossOriginUpdater();
+        }
+      });
+
+      function computeRectIntersection(rect1, rect2) {
+        var top = Math.max(rect1.top, rect2.top);
+        var bottom = Math.min(rect1.bottom, rect2.bottom);
+        var left = Math.max(rect1.left, rect2.left);
+        var right = Math.min(rect1.right, rect2.right);
+        var width = right - left;
+        var height = bottom - top;
+
+        return (width >= 0 && height >= 0) && {
+          top: top,
+          bottom: bottom,
+          left: left,
+          right: right,
+          width: width,
+          height: height
+        } || {
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          width: 0,
+          height: 0
+        };
+      }
+
+      function checkRootBoundsAreNull(records) {
+        if (!supportsNativeIntersectionObserver(iframeWin)) {
+          records.forEach(function(record) {
+            expect(record.rootBounds).to.be(null);
+          });
+        }
+      }
+
+      function applyParentRect(parentRect) {
+        if (crossOriginUpdater) {
+          var parentIntersectionRect = computeRectIntersection(
+              parentRect, getRootRect(document));
+          crossOriginUpdater(parentRect, parentIntersectionRect);
+        } else {
+          iframe.style.top = parentRect.top + 'px';
+          iframe.style.left = parentRect.left + 'px';
+          iframe.style.height = parentRect.height + 'px';
+          iframe.style.width = parentRect.width + 'px';
+        }
+      }
+
+      function createObserver(callback, options, parentRect) {
+        var io = new iframeWin.IntersectionObserver(callback, options);
+        if (parentRect) {
+          applyParentRect(parentRect);
+        }
+        return io;
+      }
+
+      it('calculates rects for a fully visible frame', function(done) {
+        var parentRect = rect({top: 0, left: 20, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(3);
+          checkRootBoundsAreNull(records);
+
+          // The documentElement is partially visible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300
+          }));
+          expect(records[0].isIntersecting).to.be(true);
+          // 300 / 404 == ~0.743
+          expect(records[0].intersectionRatio).to.be.within(0.74, 0.75);
+
+          // The document.body is partially visible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300
+          }));
+          expect(records[1].isIntersecting).to.be(true);
+          // 300 / 402 == ~0.746
+          expect(records[1].intersectionRatio).to.be.within(0.74, 0.75);
+
+          // The target1 is fully visible.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(clientRect1);
+          expect(records[2].isIntersecting).to.be(true);
+          expect(records[2].intersectionRatio).to.be(1);
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+      });
+
+      it('calculates rects for a fully visible and offset frame', function(done) {
+        var parentRect = rect({top: 10, left: 20, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(3);
+          checkRootBoundsAreNull(records);
+
+          // The documentElement is partially visible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300
+          }));
+          expect(records[0].isIntersecting).to.be(true);
+          // 300 / 404 == ~0.743
+          expect(records[0].intersectionRatio).to.be.within(0.74, 0.75);
+
+          // The document.body is partially visible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300
+          }));
+          expect(records[1].isIntersecting).to.be(true);
+          // 300 / 402 == ~0.746
+          expect(records[1].intersectionRatio).to.be.within(0.74, 0.75);
+
+          // The target1 is fully visible.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(clientRect1);
+          expect(records[2].isIntersecting).to.be(true);
+          expect(records[2].intersectionRatio).to.be(1);
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+      });
+
+      it('calculates rects for a clipped frame on top', function(done) {
+        var parentRect = rect({top: -10, left: 20, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(3);
+          checkRootBoundsAreNull(records);
+
+          // The documentElement is partially visible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(rect({
+            top: 10,
+            left: 0,
+            width: bodyWidth,
+            height: 300 - 10
+          }));
+          expect(records[0].isIntersecting).to.be(true);
+          // (300 - 10) / 404 == ~0.717
+          expect(records[0].intersectionRatio).to.be.within(0.71, 0.72);
+
+          // The document.body is partially visible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(rect({
+            top: 10,
+            left: 0,
+            width: bodyWidth,
+            height: 300 - 10
+          }));
+          expect(records[1].isIntersecting).to.be(true);
+          // (300 - 10) / 402 == ~0.721
+          expect(records[1].intersectionRatio).to.be.within(0.72, 0.73);
+
+          // The target1 is clipped at the top by the iframe's clipping.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect1 = rect({
+            left: 0,
+            width: bodyWidth,
+            // Top is clipped.
+            top: 10,
+            height: 200 - 10
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(intersectRect1);
+          expect(records[2].isIntersecting).to.be(true);
+          expect(records[2].intersectionRatio).to.within(0.94, 0.96); // ~0.95
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+      });
+
+      it('calculates rects for a clipped frame on bottom', function(done) {
+        var rootRect = getRootRect(document);
+        var parentRect = rect({top: rootRect.bottom - 300 + 10, left: 20, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(3);
+          checkRootBoundsAreNull(records);
+
+          // The documentElement is partially visible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300 - 10
+          }));
+          expect(records[0].isIntersecting).to.be(true);
+          // (300 - 10) / 404 == ~0.717
+          expect(records[0].intersectionRatio).to.be.within(0.71, 0.72);
+
+          // The document.body is partially visible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300 - 10
+          }));
+          expect(records[1].isIntersecting).to.be(true);
+          // (300 - 10) / 402 == ~0.721
+          expect(records[1].intersectionRatio).to.be.within(0.72, 0.73);
+
+          // The target1 is clipped at the top by the iframe's clipping.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(clientRect1);
+          expect(records[2].isIntersecting).to.be(true);
+          expect(records[2].intersectionRatio).to.be(1);
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+      });
+
+      it('calculates rects for a fully visible and scrolled frame', function(done) {
+        iframeWin.scrollTo(0, 10);
+        var parentRect = rect({top: 0, left: 20, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(3);
+          checkRootBoundsAreNull(records);
+
+          // The documentElement is partially visible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300
+          }));
+          expect(records[0].isIntersecting).to.be(true);
+          // 300 / 404 == ~0.743
+          expect(records[0].intersectionRatio).to.be.within(0.74, 0.75);
+
+          // The document.body is partially visible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 300
+          }));
+          expect(records[1].isIntersecting).to.be(true);
+          // 300 / 402 == ~0.746
+          expect(records[1].intersectionRatio).to.be.within(0.74, 0.75);
+
+          // The target1 is fully visible.
+          var clientRect1 = rect({
+            top: -10,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            // Height is only for the visible area.
+            height: 200 - 10
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(intersectRect1);
+          expect(records[2].isIntersecting).to.be(true);
+          expect(records[2].intersectionRatio).to.within(0.94, 0.96); // ~0.95
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+      });
+
+      it('calculates rects for a clipped frame on top and scrolled', function(done) {
+        iframeWin.scrollTo(0, 10);
+        var parentRect = rect({top: -10, left: 0, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(4);
+          checkRootBoundsAreNull(records);
+
+          // The documentElement is partially visible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(rect({
+            top: 10,
+            left: 0,
+            width: bodyWidth,
+            height: 300 - 10
+          }));
+          expect(records[0].isIntersecting).to.be(true);
+          // (300 - 10) / 404 == ~0.717
+          expect(records[0].intersectionRatio).to.be.within(0.71, 0.72);
+
+          // The document.body is partially visible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(rect({
+            top: 10,
+            left: 0,
+            width: bodyWidth,
+            height: 300 - 10
+          }));
+          expect(records[1].isIntersecting).to.be(true);
+          // (300 - 10) / 402 == ~0.721
+          expect(records[1].intersectionRatio).to.be.within(0.72, 0.73);
+
+          // The target1 is clipped at the top by the iframe's clipping.
+          var clientRect1 = rect({
+            top: -10,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect1 = rect({
+            left: 0,
+            width: bodyWidth,
+            // Top is clipped.
+            top: 10,
+            // The height is less by both: offset and scroll.
+            height: 200 - 10 - 10
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(intersectRect1);
+          expect(records[2].isIntersecting).to.be(true);
+          expect(records[2].intersectionRatio).to.within(0.89, 0.91); // ~0.9
+
+          // The target2 is partially visible.
+          var clientRect2 = rect({
+            top: 202 - 10,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          var intersectRect2 = rect({
+            top: 202 - 10,
+            left: 0,
+            width: bodyWidth,
+            // The bottom is clipped off.
+            bottom: 300
+          });
+          expect(rect(records[3].boundingClientRect)).to.eql(clientRect2);
+          expect(rect(records[3].intersectionRect)).to.eql(intersectRect2);
+          expect(records[3].isIntersecting).to.be(true);
+          expect(records[3].intersectionRatio).to.be.within(0.53, 0.55); // ~0.54
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+      });
+
+      it('calculates rects for a fully clipped frame', function(done) {
+        var parentRect = rect({top: -400, left: 20, height: 300, width: 100});
+        var io = createObserver(function(unsortedRecords) {
+          var records = sortRecords(unsortedRecords);
+          expect(records.length).to.be(3);
+          checkRootBoundsAreNull(records);
+
+          var emptyRect = rect({
+            top: 0,
+            left: 0,
+            width: 0,
+            height: 0
+          });
+
+          // The documentElement is completely invisible.
+          expect(rect(records[0].boundingClientRect))
+              .to.eql(rect(documentElement.getBoundingClientRect()));
+          expect(rect(records[0].intersectionRect)).to.eql(emptyRect);
+          expect(records[0].isIntersecting).to.be(false);
+          expect(records[0].intersectionRatio).to.be(0);
+
+          // The document.body is completely invisible.
+          expect(rect(records[1].boundingClientRect))
+              .to.eql(rect(body.getBoundingClientRect()));
+          expect(rect(records[1].intersectionRect)).to.eql(emptyRect);
+          expect(records[1].isIntersecting).to.be(false);
+          expect(records[1].intersectionRatio).to.be(0);
+
+          // The target1 is completely invisible.
+          var clientRect1 = rect({
+            top: 0,
+            left: 0,
+            width: bodyWidth,
+            height: 200
+          });
+          expect(rect(records[2].boundingClientRect)).to.eql(clientRect1);
+          expect(rect(records[2].intersectionRect)).to.eql(emptyRect);
+          expect(records[2].isIntersecting).to.be(false);
+          expect(records[2].intersectionRatio).to.be(0);
+
+          done();
+          io.disconnect();
+        }, {}, parentRect);
+        io.observe(documentElement);
+        io.observe(body);
+        io.observe(iframeTargetEl1);
+      });
+
+      it('blocks until crossOriginUpdater is called first time', function(done) {
+        if (supportsNativeIntersectionObserver(iframeWin)) {
+          // Skip: not possible to emulate with the native observer.
+          done();
+          return;
+        }
+
+        var spy = sinon.spy();
+
+        var parentRect = rect({top: 0, left: 20, height: 300, width: 100});
+
+        var io = createObserver(spy, {});
+        io.observe(iframeTargetEl1);
+
+        runSequence([
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(0);
+
+              // Issue the first update.
+              crossOriginUpdater(parentRect, null);
+
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(1);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(1);
+              expect(records[0].intersectionRatio).to.be(0);
+              expect(records[0].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            io.disconnect();
+            done();
+          }
+        ], done);
+      });
+
+      it('doesn\'t block with a root specified', function(done) {
+        var spy = sinon.spy();
+
+        var io = createObserver(spy, {root: body});
+        io.observe(iframeTargetEl1);
+
+        runSequence([
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(1);
+              var record = sortRecords(spy.lastCall.args[0])[0];
+              expect(record.intersectionRatio).to.be(1);
+              expect(record.isIntersecting).to.be(true);
+              expect(rect(record.rootBounds)).to.eql(rect(body.getBoundingClientRect()));
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            io.disconnect();
+            done();
+          }
+        ], done);
+      });
+
+      it('handles style changes', function(done) {
+        var spy = sinon.spy();
+
+        var parentRect = rect({top: 0, left: 0, height: 200, width: 100});
+
+        // When first element becomes invisible, the second element will show.
+        // And in reverse: when the first element becomes visible again, the
+        // second element will disappear.
+        var io = createObserver(spy, {}, parentRect);
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+
+        runSequence([
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(1);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            iframeTargetEl1.style.display = 'none';
+            setTimeout(function() {
+              expect(spy.callCount).to.be(2);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(0);
+              expect(records[0].isIntersecting).to.be(false);
+              expect(records[1].intersectionRatio).to.be(1);
+              expect(records[1].isIntersecting).to.be(true);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            iframeTargetEl1.style.display = '';
+            setTimeout(function() {
+              expect(spy.callCount).to.be(3);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            io.disconnect();
+            done();
+          }
+        ], done);
+      });
+
+      it('handles scroll changes', function(done) {
+        var spy = sinon.spy();
+
+        var parentRect = rect({top: 0, left: 0, height: 200, width: 100});
+
+        // Scrolling to the middle of the iframe shows the second box and
+        // hides the first.
+        var io = createObserver(spy, {}, parentRect);
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+
+        runSequence([
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(1);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            iframeWin.scrollTo(0, 202);
+            setTimeout(function() {
+              expect(spy.callCount).to.be(2);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(0);
+              expect(records[0].isIntersecting).to.be(false);
+              expect(records[1].intersectionRatio).to.be(1);
+              expect(records[1].isIntersecting).to.be(true);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            iframeWin.scrollTo(0, 0);
+            setTimeout(function() {
+              expect(spy.callCount).to.be(3);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            io.disconnect();
+            done();
+          }
+        ], done);
+      });
+
+      it('handles parent rect changes', function(done) {
+        var spy = sinon.spy();
+
+        var parentRect = rect({top: 0, left: 0, height: 200, width: 100});
+
+        // Iframe goes off screen and returns.
+        var io = createObserver(spy, {}, parentRect);
+        io.observe(iframeTargetEl1);
+        io.observe(iframeTargetEl2);
+
+        runSequence([
+          function(done) {
+            setTimeout(function() {
+              expect(spy.callCount).to.be(1);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(2);
+              checkRootBoundsAreNull(records);
+              expect(records[0].intersectionRatio).to.be(1);
+              expect(records[0].isIntersecting).to.be(true);
+              expect(records[1].intersectionRatio).to.be(0);
+              expect(records[1].isIntersecting).to.be(false);
+              // Top-level bounds.
+              expect(records[0].intersectionRect.height).to.be(200);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            // Completely off screen.
+            applyParentRect(rect({top: -202, left: 0, height: 200, width: 100}));
+            setTimeout(function() {
+              expect(spy.callCount).to.be(2);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(1);
+              checkRootBoundsAreNull(records);
+              expect(records[0].intersectionRatio).to.be(0);
+              expect(records[0].isIntersecting).to.be(false);
+              // Top-level bounds.
+              expect(records[0].intersectionRect.height).to.be(0);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            // Partially returns.
+            applyParentRect(rect({top: -100, left: 0, height: 200, width: 100}));
+            setTimeout(function() {
+              expect(spy.callCount).to.be(3);
+              var records = sortRecords(spy.lastCall.args[0]);
+              expect(records.length).to.be(1);
+              checkRootBoundsAreNull(records);
+              expect(records[0].intersectionRatio).to.be.within(0.45, 0.55);
+              expect(records[0].isIntersecting).to.be(true);
+              // Top-level bounds.
+              expect(records[0].intersectionRect.height / 200).to.be.within(0.45, 0.55);
+              done();
+            }, ASYNC_TIMEOUT);
+          },
+          function(done) {
+            io.disconnect();
+            done();
+          }
+        ], done);
+      });
+
+      it('handles tracking iframe viewport', function(done) {
+        iframe.style.height = '100px';
+        iframe.style.top = '100px';
+        iframeWin.scrollTo(0, 110);
+        // {root:iframeDoc} means to track the iframe viewport.
+        var io = createObserver(
+          function (records) {
+            io.unobserve(iframeTargetEl1);
+            var intersectionRect = rect({
+              top: 0, // if root=null, then this would be 100.
+              left: 0,
+              height: 90,
+              width: bodyWidth
+            });
+            expect(records.length).to.be(1);
+            expect(rect(records[0].rootBounds)).to.eql(getRootRect(iframeDoc));
+            expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
+            done();
+          },
+          { root: iframeDoc }
+        );
+
+        io.observe(iframeTargetEl1);
+      });
+
+      it('handles tracking iframe viewport with rootMargin', function(done) {
+        iframe.style.height = '100px';
+
+        var io = createObserver(
+          function (records) {
+            io.unobserve(iframeTargetEl1);
+            var intersectionRect = rect({
+              top: 0, // if root=null, then this would be 100.
+              left: 0,
+              height: 200,
+              width: bodyWidth
+            });
+
+            // rootMargin: 100% --> 3x width + 3x height.
+            var expectedRootBounds = rect({
+              top: -100,
+              left: -bodyWidth,
+              width: bodyWidth * 3,
+              height: 100 * 3
+            });
+            expect(records.length).to.be(1);
+            expect(rect(records[0].rootBounds)).to.eql(expectedRootBounds);
+            expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
+            done();
+          },
+          { root: iframeDoc, rootMargin: '100%' }
+        );
+
+        io.observe(iframeTargetEl1);
+      });
+    });
+  });
 });
 
 
@@ -967,11 +3192,13 @@ function runSequence(functions, done) {
 /**
  * Returns whether or not the current browser has native support for
  * IntersectionObserver.
+ * @param {Window=} win
  * @return {boolean} True if native support is detected.
  */
-function supportsNativeIntersectionObserver() {
-  return 'IntersectionObserver' in window &&
-      window.IntersectionObserver.toString().indexOf('[native code]') > -1;
+function supportsNativeIntersectionObserver(win) {
+  win = win || window;
+  return 'IntersectionObserver' in win &&
+      win.IntersectionObserver.toString().indexOf('[native code]') > -1;
 }
 
 

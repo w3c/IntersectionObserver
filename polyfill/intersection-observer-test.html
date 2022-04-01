@@ -27,6 +27,13 @@ Licensed under the W3C SOFTWARE AND DOCUMENT NOTICE AND LICENSE.
   <!-- Setup -->
   <script>mocha.setup({ui:'bdd'});</script>
 
+  <!-- Uncomment this script to force the polyfill installation
+  <script>
+    delete window.IntersectionObserver;
+    delete window.IntersectionObserverEntry;
+  </script>
+  -->
+
   <!-- Script under test -->
   <script src="intersection-observer.js"></script>
 
