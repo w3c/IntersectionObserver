@@ -69,12 +69,15 @@ describe('IntersectionObserver', function() {
       io = new IntersectionObserver(noop);
       expect(io.root).to.be(null);
 
+      io = new IntersectionObserver(noop, {root: document});
+      expect(io.root).to.be(document);
+
       io = new IntersectionObserver(noop, {root: rootEl});
       expect(io.root).to.be(rootEl);
     });
 
 
-    it('throws when root is not an Element', function() {
+    it('throws when root is not a Document or Element', function() {
       expect(function() {
         io = new IntersectionObserver(noop, {root: 'foo'});
       }).to.throwException();
@@ -1396,6 +1399,89 @@ describe('IntersectionObserver', function() {
         });
         io.observe(iframeTargetEl1);
         io.observe(iframeTargetEl2);
+      });
+
+      it('handles tracking iframe viewport', function(done) {
+        iframe.style.height = '100px';
+        iframe.style.top = '100px';
+        iframeWin.scrollTo(0, 110);
+        // {root:iframeDoc} means to track the iframe viewport.
+        var io = new IntersectionObserver(
+          function (records) {
+            io.unobserve(iframeTargetEl1);
+
+            var intersectionRect = rect({
+              top: 0, // if root=null, then this would be 100.
+              left: 0,
+              height: 90,
+              width: bodyWidth
+            });
+            expect(records.length).to.be(1);
+            expect(rect(records[0].rootBounds)).to.eql(getRootRect(iframeDoc));
+            expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
+            done();
+          },
+          { root: iframeDoc }
+        );
+
+        io.observe(iframeTargetEl1);
+      });
+
+      it('handles tracking iframe viewport with rootMargin', function(done) {
+        iframe.style.height = '100px';
+
+        var io =  new IntersectionObserver(
+          function (records) {
+            io.unobserve(iframeTargetEl1);
+            var intersectionRect = rect({
+              top: 0, // if root=null, then this would be 100.
+              left: 0,
+              height: 200,
+              width: bodyWidth
+            });
+
+            // rootMargin: 100% --> 3x width + 3x height.
+            var expectedRootBounds = rect({
+              top: -100,
+              left: -bodyWidth,
+              width: bodyWidth * 3,
+              height: 100 * 3
+            });
+            expect(records.length).to.be(1);
+            expect(rect(records[0].rootBounds)).to.eql(expectedRootBounds);
+            expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
+            done();
+          },
+          { root: iframeDoc, rootMargin: '100%' }
+        );
+
+        io.observe(iframeTargetEl1);
+      });
+
+      // Current spec indicates that cross-document tracking yields
+      // an essentially empty IntersectionObserverEntry.
+      // See: https://github.com/w3c/IntersectionObserver/issues/87
+      it('does not track cross-document elements', function(done) {
+        var io = new IntersectionObserver(
+          function (records) {
+            io.unobserve(iframeTargetEl1)
+
+            expect(records.length).to.be(1);
+            const zeroesRect = rect({
+              top: 0,
+              left: 0,
+              width: 0,
+              height: 0
+            });
+            expect(rect(records[0].rootBounds)).to.eql(zeroesRect);
+            expect(rect(records[0].intersectionRect)).to.eql(zeroesRect);
+            expect(records.isIntersecting).false;
+            done();
+          },
+          { root: document }
+        );
+
+        io.observe(iframeTargetEl1);
       });
 
       it('handles style changes', function(done) {
@@ -3021,6 +3107,62 @@ describe('IntersectionObserver', function() {
             done();
           }
         ], done);
+      });
+
+      it('handles tracking iframe viewport', function(done) {
+        iframe.style.height = '100px';
+        iframe.style.top = '100px';
+        iframeWin.scrollTo(0, 110);
+        // {root:iframeDoc} means to track the iframe viewport.
+        var io = createObserver(
+          function (records) {
+            io.unobserve(iframeTargetEl1);
+            var intersectionRect = rect({
+              top: 0, // if root=null, then this would be 100.
+              left: 0,
+              height: 90,
+              width: bodyWidth
+            });
+            expect(records.length).to.be(1);
+            expect(rect(records[0].rootBounds)).to.eql(getRootRect(iframeDoc));
+            expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
+            done();
+          },
+          { root: iframeDoc }
+        );
+
+        io.observe(iframeTargetEl1);
+      });
+
+      it('handles tracking iframe viewport with rootMargin', function(done) {
+        iframe.style.height = '100px';
+
+        var io = createObserver(
+          function (records) {
+            io.unobserve(iframeTargetEl1);
+            var intersectionRect = rect({
+              top: 0, // if root=null, then this would be 100.
+              left: 0,
+              height: 200,
+              width: bodyWidth
+            });
+
+            // rootMargin: 100% --> 3x width + 3x height.
+            var expectedRootBounds = rect({
+              top: -100,
+              left: -bodyWidth,
+              width: bodyWidth * 3,
+              height: 100 * 3
+            });
+            expect(records.length).to.be(1);
+            expect(rect(records[0].rootBounds)).to.eql(expectedRootBounds);
+            expect(rect(records[0].intersectionRect)).to.eql(intersectionRect);
+            done();
+          },
+          { root: iframeDoc, rootMargin: '100%' }
+        );
+
+        io.observe(iframeTargetEl1);
       });
     });
   });

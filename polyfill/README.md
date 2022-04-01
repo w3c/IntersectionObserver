@@ -61,16 +61,16 @@ There are, however, additional use cases that the default configuration will not
 
 If you need to handle any of these use-cases, you can configure the polyfill to poll the document by setting the `POLL_INTERVAL` property. This can be set either globally or on a per-instance basis.
 
-**Enabling polling for all instance:**
+**Enabling polling for all instances:**
 
-To enable polling for all instance, set a value for `POLL_INTERVAL` on the `IntersectionObserver` prototype:
+To enable polling for all instances, set a value for `POLL_INTERVAL` on the `IntersectionObserver` prototype:
 
 
 ```js
 IntersectionObserver.prototype.POLL_INTERVAL = 100; // Time in milliseconds.
 ```
 
-**Enabling polling for individual instance:**
+**Enabling polling for individual instances:**
 
 To enable polling on only specific instances, set a `POLL_INTERVAL` value on the instance itself:
 
@@ -94,7 +94,7 @@ var io = new IntersectionObserver(callback);
 io.USE_MUTATION_OBSERVER = false;
 ```
 
-This is recommended in cases where the DOM will update frequently but you know those updates will have no affect on the position or your target elements.
+This is recommended in cases where the DOM will update frequently but you know those updates will have no effect on the position or your target elements.
 
 
 ## iframe support
@@ -171,7 +171,7 @@ Legacy support is also possible in very old browsers by including a shim for ES5
 <script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"></script>
 ```
 
-With these polyfills, `IntersectionObserver` has been tested an known to work in the following browsers:
+With these polyfills, `IntersectionObserver` has been tested and known to work in the following browsers:
 
 <table>
   <tr>
@@ -210,4 +210,4 @@ With these polyfills, `IntersectionObserver` has been tested an known to work in
 
 To run the test suite for the `IntersectionObserver` polyfill, open the [`intersection-observer-test.html`](./intersection-observer-test.html) page in the browser of your choice.
 
-If you run the tests in a browser that support `IntersectionObserver` natively, the tests will be run against the native implementation. If it doesn't the tests will be run against the polyfill.
+If you run the tests in a browser that supports `IntersectionObserver` natively, the tests will be run against the native implementation. If it doesn't, the tests will be run against the polyfill.

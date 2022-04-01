@@ -6,7 +6,7 @@ This repo outlines an API that can be used to understand movement of DOM element
 
 ## Observing Position
 
-The web's traditional position calculation mechanisms rely on explicit queries of DOM state. Some of these are known to cause style recalcuation and layout and, frequently, are redundant thanks to the requirement that scripts poll for this information.
+The web's traditional position calculation mechanisms rely on explicit queries of DOM state. Some of these are known to cause style recalculation and layout and, frequently, are redundant thanks to the requirement that scripts poll for this information.
 
 A body of common practice has evolved that relies on these behaviors, however, including (but not limited to):
 
@@ -164,7 +164,7 @@ function init() {
   // Notify when a scroll-item gets within, or moves beyond, 500px from the visible scroll surface.
   var opts = { 
     root: document.querySelector(".container"),
-    rootMargin: "500px 0px" 
+    rootMargin: "500px 0px"
   };
   var observer = new IntersectionObserver(manageItemPositionChanges, opts);
   // Set up observer on the items

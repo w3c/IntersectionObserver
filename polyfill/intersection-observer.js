@@ -131,8 +131,12 @@ function IntersectionObserver(callback, opt_options) {
     throw new Error('callback must be a function');
   }
 
-  if (options.root && options.root.nodeType != 1) {
-    throw new Error('root must be an Element');
+  if (
+    options.root &&
+    options.root.nodeType != 1 &&
+    options.root.nodeType != 9
+  ) {
+    throw new Error('root must be a Document or Element');
   }
 
   // Binds and throttles `this._checkForIntersections`.
@@ -395,7 +399,9 @@ IntersectionObserver.prototype._monitorIntersections = function(doc) {
   });
 
   // Also monitor the parent.
-  if (doc != (this.root && this.root.ownerDocument || document)) {
+  var rootDoc =
+    (this.root && (this.root.ownerDocument || this.root)) || document;
+  if (doc != rootDoc) {
     var frame = getFrameElement(doc);
     if (frame) {
       this._monitorIntersections(frame.ownerDocument);
@@ -415,7 +421,8 @@ IntersectionObserver.prototype._unmonitorIntersections = function(doc) {
     return;
   }
 
-  var rootDoc = (this.root && this.root.ownerDocument || document);
+  var rootDoc =
+    (this.root && (this.root.ownerDocument || this.root)) || document;
 
   // Check if any dependent targets are still remaining.
   var hasDependentTargets =
@@ -493,11 +500,18 @@ IntersectionObserver.prototype._checkForIntersections = function() {
     var intersectionRect = rootIsInDom && rootContainsTarget &&
         this._computeTargetAndRootIntersection(target, targetRect, rootRect);
 
+    var rootBounds = null;
+    if (!this._rootContainsTarget(target)) {
+      rootBounds = getEmptyRect();
+    } else if (!crossOriginUpdater || this.root) {
+      rootBounds = rootRect;
+    }
+
     var newEntry = item.entry = new IntersectionObserverEntry({
       time: now(),
       target: target,
       boundingClientRect: targetRect,
-      rootBounds: crossOriginUpdater && !this.root ? null : rootRect,
+      rootBounds: rootBounds,
       intersectionRect: intersectionRect
     });
 
@@ -618,12 +632,13 @@ IntersectionObserver.prototype._computeTargetAndRootIntersection =
  */
 IntersectionObserver.prototype._getRootRect = function() {
   var rootRect;
-  if (this.root) {
+  if (this.root && !isDoc(this.root)) {
     rootRect = getBoundingClientRect(this.root);
   } else {
     // Use <html>/<body> instead of window since scroll bars affect size.
-    var html = document.documentElement;
-    var body = document.body;
+    var doc = isDoc(this.root) ? this.root : document;
+    var html = doc.documentElement;
+    var body = doc.body;
     rootRect = {
       top: 0,
       left: 0,
@@ -714,8 +729,12 @@ IntersectionObserver.prototype._rootIsInDom = function() {
  * @private
  */
 IntersectionObserver.prototype._rootContainsTarget = function(target) {
-  return containsDeep(this.root || document, target) &&
-    (!this.root || this.root.ownerDocument == target.ownerDocument);
+  var rootDoc =
+    (this.root && (this.root.ownerDocument || this.root)) || document;
+  return (
+    containsDeep(rootDoc, target) &&
+    (!this.root || rootDoc == target.ownerDocument)
+  );
 };
 
 
@@ -965,17 +984,26 @@ function getParentNode(node) {
     return getFrameElement(node);
   }
 
+  // If the parent has element that is assigned through shadow root slot
+  if (parent && parent.assignedSlot) {
+    parent = parent.assignedSlot.parentNode
+  }
+
   if (parent && parent.nodeType == 11 && parent.host) {
     // If the parent is a shadow root, return the host element.
     return parent.host;
   }
 
-  if (parent && parent.assignedSlot) {
-    // If the parent is distributed in a <slot>, return the parent of a slot.
-    return parent.assignedSlot.parentNode;
-  }
-
   return parent;
+}
+
+/**
+ * Returns true if `node` is a Document.
+ * @param {!Node} node
+ * @returns {boolean}
+ */
+function isDoc(node) {
+  return node && node.nodeType === 9;
 }
 
 
