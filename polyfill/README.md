@@ -61,16 +61,16 @@ There are, however, additional use cases that the default configuration will not
 
 If you need to handle any of these use-cases, you can configure the polyfill to poll the document by setting the `POLL_INTERVAL` property. This can be set either globally or on a per-instance basis.
 
-**Enabling polling for all instance:**
+**Enabling polling for all instances:**
 
-To enable polling for all instance, set a value for `POLL_INTERVAL` on the `IntersectionObserver` prototype:
+To enable polling for all instances, set a value for `POLL_INTERVAL` on the `IntersectionObserver` prototype:
 
 
 ```js
 IntersectionObserver.prototype.POLL_INTERVAL = 100; // Time in milliseconds.
 ```
 
-**Enabling polling for individual instance:**
+**Enabling polling for individual instances:**
 
 To enable polling on only specific instances, set a `POLL_INTERVAL` value on the instance itself:
 
@@ -94,25 +94,84 @@ var io = new IntersectionObserver(callback);
 io.USE_MUTATION_OBSERVER = false;
 ```
 
-This is recommended in cases where the DOM will update frequently but you know those updates will have no affect on the position or your target elements.
+This is recommended in cases where the DOM will update frequently but you know those updates will have no effect on the position or your target elements.
+
+
+## iframe support
+
+### Same-origin iframes
+
+Same-origin iframes are supported by the polyfill out of the box.
+
+
+### Cross-origin iframes
+
+Additional code and configuration are required to support cross-origin iframes,
+both on the iframe and host sides.
+
+The setup is as following:
+
+1. The host and iframe will establish a messaging channel.
+2. The host will setup its own IntersectionObserver instance for the
+cross-origin iframe element. It can either use the this polyfill or any other
+approach. For each IntersectionObserverEntry for the iframe it will forward
+intersection data to the iframe via messaging.
+3. The iframe will load the polyfill and configure it by calling the
+`_setupCrossOriginUpdater()` method. It will call the provided callback
+whenever it receives the intersection data from the the parent via messaging.
+
+A hypothetical host code:
+
+```javascript
+function forwardIntersectionToIframe(iframe) {
+  createMessagingChannel(iframe, function(port) {
+    var io = new IntersectionObserver(function() {
+      port.postMessage({
+        boundingClientRect: serialize(boundingClientRect),
+        intersectionRect: serialize(intersectionRect)
+      });
+    }, {threshold: [0, 0.1, ..., 1]});
+    io.observe(iframe);
+  });
+}
+```
+
+Notice that the host should provide a `threshold` argument for the desired
+level of precision. Otherwise, the iframe side may not update as frequently as
+desired.
+
+A hypothetical iframe code:
+
+```javascript
+createMessagingChannel(parent, function(port) {
+  if (IntersectionObserver._setupCrossOriginUpdater) {
+    var crossOriginUpdater = IntersectionObserver._setupCrossOriginUpdater();
+    port.onmessage = function(event) {
+      crossOriginUpdater(
+        deserialize(event.data.boundingClientRect),
+        deserialize(event.data.intersectionRect)
+      );
+    };
+  }
+});
+```
+
 
 ## Limitations
 
-This polyfill does not attempt to report intersections across same-origin `iframe` boundaries. While supporting same-origin iframes is technically possible, it would drastically reduce performance. Since most `iframe` usage on the web is cross-origin, this polyfill chooses to optimize for performantly handling the most common use cases. (Note: neither this polyfill nor native implementations support reporting intersections across cross-origin `iframe` boundaries.)
-
-This polyfill also does not support the [proposed v2 additions](https://github.com/szager-chromium/IntersectionObserver/blob/v2/explainer.md), as these features are not currently possible to do with JavaScript and existing web APIs.
+This polyfill does not support the [proposed v2 additions](https://github.com/szager-chromium/IntersectionObserver/blob/v2/explainer.md), as these features are not currently possible to do with JavaScript and existing web APIs.
 
 ## Browser support
 
 The polyfill has been tested and known to work in the latest version of all browsers.
 
-Legacy support is also possible in very old browsers by including a shim for ES5 as well as the `window.getComputedStyle` method. The easiest way to load the IntersectionObserver polyfill and have it work in the widest range of browsers is via [polyfill.io](https://cdn.polyfill.io/v2/docs/), which will automatically include dependencies where necessary:
+Legacy support is also possible in very old browsers by including a shim for ES5 as well as the `window.getComputedStyle` method. The easiest way to load the IntersectionObserver polyfill and have it work in the widest range of browsers is via [polyfill.io](https://cdn.polyfill.io/v3/), which will automatically include dependencies where necessary:
 
 ```html
-<script src="https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"></script>
 ```
 
-With these polyfills, `IntersectionObserver` has been tested an known to work in the following browsers:
+With these polyfills, `IntersectionObserver` has been tested and known to work in the following browsers:
 
 <table>
   <tr>
@@ -151,4 +210,4 @@ With these polyfills, `IntersectionObserver` has been tested an known to work in
 
 To run the test suite for the `IntersectionObserver` polyfill, open the [`intersection-observer-test.html`](./intersection-observer-test.html) page in the browser of your choice.
 
-If you run the tests in a browser that support `IntersectionObserver` natively, the tests will be run against the native implementation. If it doesn't the tests will be run against the polyfill.
+If you run the tests in a browser that supports `IntersectionObserver` natively, the tests will be run against the native implementation. If it doesn't, the tests will be run against the polyfill.
