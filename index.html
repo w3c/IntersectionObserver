@@ -8,7 +8,7 @@
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
   <meta content="Bikeshed version fb1e763a4, updated Tue Mar 1 13:13:50 2022 -0800" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="6093f7da0b190330b160329f46ac153ea4420f0b" name="document-revision">
+  <meta content="12a3efc79f2bd432de9b57b3a86071cbcf159901" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1506,15 +1506,15 @@ run these steps:</p>
      <p><a data-link-type="dfn" href="#queue-an-intersection-observer-task" id="ref-for-queue-an-intersection-observer-task">Queue an intersection observer task</a> for <var>document</var>.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.7" id="calculate-intersection-rect-algo"><span class="secno">3.2.7. </span><span class="content"> Compute the Intersection of a Target Element and the Root</span><a class="self-link" href="#calculate-intersection-rect-algo"></a></h4>
-   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="compute-the-intersection">compute the intersection</dfn> between a <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target①⓪">target</a> and the observer’s <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①①">intersection root</a>,
+   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="compute-the-intersection">compute the intersection</dfn> between a <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target①⓪">target</a> <var>target</var> and an <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①①">intersection root</a> <var>root</var>,
 run these steps:</p>
    <ol>
     <li data-md>
-     <p>Let <var>intersectionRect</var> be the result of running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect" id="ref-for-dom-element-getboundingclientrect③">getBoundingClientRect()</a></code> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target①①">target</a>.</p>
+     <p>Let <var>intersectionRect</var> be the result of running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect" id="ref-for-dom-element-getboundingclientrect③">getBoundingClientRect()</a></code> algorithm on <var>target</var>.</p>
     <li data-md>
-     <p>Let <var>container</var> be the <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#containing-block" id="ref-for-containing-block">containing block</a> of the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target①②">target</a>.</p>
+     <p>Let <var>container</var> be the <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#containing-block" id="ref-for-containing-block">containing block</a> of <var>target</var>.</p>
     <li data-md>
-     <p>While <var>container</var> is not the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①②">intersection root</a>:</p>
+     <p>While <var>container</var> is not <var>root</var>:</p>
      <ol>
       <li data-md>
        <p>If <var>container</var> is the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①①">document</a></code> of a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context①">nested browsing context</a>,
@@ -1531,11 +1531,11 @@ update <var>container</var> to be the <a data-link-type="dfn" href="https://html
 otherwise, update <var>container</var> to be the <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#containing-block" id="ref-for-containing-block①">containing block</a> of <var>container</var>.</p>
      </ol>
     <li data-md>
-     <p>Map <var>intersectionRect</var> to the coordinate space of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①③">intersection root</a>.</p>
+     <p>Map <var>intersectionRect</var> to the coordinate space of <var>root</var>.</p>
     <li data-md>
      <p>Update <var>intersectionRect</var> by intersecting it with the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle⑥">root intersection rectangle</a>.</p>
     <li data-md>
-     <p>Map <var>intersectionRect</var> to the coordinate space of the <a data-link-type="dfn" href="https://drafts.csswg.org/css2/visuren.html#viewport" id="ref-for-viewport⑤">viewport</a> of the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①④">document</a></code> containing the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target①③">target</a>.</p>
+     <p>Map <var>intersectionRect</var> to the coordinate space of the <a data-link-type="dfn" href="https://drafts.csswg.org/css2/visuren.html#viewport" id="ref-for-viewport⑤">viewport</a> of the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①④">document</a></code> containing <var>target</var>.</p>
     <li data-md>
      <p>Return <var>intersectionRect</var>.</p>
    </ol>
@@ -1567,23 +1567,23 @@ For the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/bro
            <p><var>intersectionRect</var> be a <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly⑧">DOMRectReadOnly</a></code> with <var>x</var>, <var>y</var>, <var>width</var>, and <var>height</var> set to 0.</p>
          </ul>
         <li data-md>
-         <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①④">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root" id="ref-for-intersectionobserver-implicit-root①">implicit root</a>,
-and <var>target</var> is not in the same <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①⑥">document</a></code> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑤">intersection root</a>,
+         <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①②">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root" id="ref-for-intersectionobserver-implicit-root①">implicit root</a>,
+and <var>target</var> is not in the same <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①⑥">document</a></code> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①③">intersection root</a>,
 skip to step 11.</p>
         <li data-md>
-         <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑥">intersection root</a> is an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element①⑧">Element</a></code>,
-and <var>target</var> is not a descendant of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑦">intersection root</a> in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain" id="ref-for-containing-block-chain①">containing block chain</a>, skip to step 11.</p>
+         <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①④">intersection root</a> is an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element①⑧">Element</a></code>,
+and <var>target</var> is not a descendant of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑤">intersection root</a> in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain" id="ref-for-containing-block-chain①">containing block chain</a>, skip to step 11.</p>
         <li data-md>
          <p>Set <var>targetRect</var> to the <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly⑨">DOMRectReadOnly</a></code> obtained
 by running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect" id="ref-for-dom-element-getboundingclientrect④">getBoundingClientRect()</a></code> algorithm on <var>target</var>.</p>
         <li data-md>
-         <p>Set <var>intersectionRect</var> to the result of running the <a data-link-type="dfn" href="#compute-the-intersection" id="ref-for-compute-the-intersection">compute the intersection</a> algorithm on <var>target</var>.</p>
+         <p>Let <var>intersectionRect</var> be the result of running the <a data-link-type="dfn" href="#compute-the-intersection" id="ref-for-compute-the-intersection">compute the intersection</a> algorithm on <var>target</var> and <var>observer</var>’s <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑥">intersection root</a>.</p>
         <li data-md>
          <p>Let <var>targetArea</var> be <var>targetRect</var>’s area.</p>
         <li data-md>
          <p>Let <var>intersectionArea</var> be <var>intersectionRect</var>’s area.</p>
         <li data-md>
-         <p>Set <var>isIntersecting</var> to true if <var>targetRect</var> and <var>rootBounds</var> intersect or are edge-adjacent,
+         <p>Let <var>isIntersecting</var> be true if <var>targetRect</var> and <var>rootBounds</var> intersect or are edge-adjacent,
 even if the intersection has zero area (because <var>rootBounds</var> or <var>targetRect</var> have
 zero area).</p>
         <li data-md>
@@ -2182,7 +2182,7 @@ The IntersectionObserver interface</a> <a href="#ref-for-intersectionobserver-ta
     <li><a href="#ref-for-intersectionobserver-target⑨">2.4. 
 The IntersectionObserverInit dictionary</a>
     <li><a href="#ref-for-intersectionobserver-target①⓪">3.2.7. 
-Compute the Intersection of a Target Element and the Root</a> <a href="#ref-for-intersectionobserver-target①①">(2)</a> <a href="#ref-for-intersectionobserver-target①②">(3)</a> <a href="#ref-for-intersectionobserver-target①③">(4)</a>
+Compute the Intersection of a Target Element and the Root</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="callbackdef-intersectionobservercallback">
@@ -2204,9 +2204,9 @@ The IntersectionObserver interface</a> <a href="#ref-for-intersectionobserver-in
     <li><a href="#ref-for-intersectionobserver-intersection-root⑨">2.3. 
 The IntersectionObserverEntry interface</a> <a href="#ref-for-intersectionobserver-intersection-root①⓪">(2)</a>
     <li><a href="#ref-for-intersectionobserver-intersection-root①①">3.2.7. 
-Compute the Intersection of a Target Element and the Root</a> <a href="#ref-for-intersectionobserver-intersection-root①②">(2)</a> <a href="#ref-for-intersectionobserver-intersection-root①③">(3)</a>
-    <li><a href="#ref-for-intersectionobserver-intersection-root①④">3.2.8. 
-Run the Update Intersection Observations Steps</a> <a href="#ref-for-intersectionobserver-intersection-root①⑤">(2)</a> <a href="#ref-for-intersectionobserver-intersection-root①⑥">(3)</a> <a href="#ref-for-intersectionobserver-intersection-root①⑦">(4)</a>
+Compute the Intersection of a Target Element and the Root</a>
+    <li><a href="#ref-for-intersectionobserver-intersection-root①②">3.2.8. 
+Run the Update Intersection Observations Steps</a> <a href="#ref-for-intersectionobserver-intersection-root①③">(2)</a> <a href="#ref-for-intersectionobserver-intersection-root①④">(3)</a> <a href="#ref-for-intersectionobserver-intersection-root①⑤">(4)</a> <a href="#ref-for-intersectionobserver-intersection-root①⑥">(5)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="intersectionobserver-implicit-root">
