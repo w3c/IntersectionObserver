@@ -39,8 +39,8 @@ urlPrefix: https://html.spec.whatwg.org/multipage/
 		type: dfn; text: queue a task
 		type: dfn; text: run the fullscreen rendering steps
 		type: dfn; text: run the animation frame callbacks
+		url: #processing-model-8; type: dfn; text: HTML Event Loops Processing Model
 		type: dfn; text: relevant settings object
-		url: #event-loop-processing-model; type: dfn; text: HTML Processing Model
 		url: #concept-environment-top-level-origin; type: dfn; text: top-level origin
 	urlPrefix: infrastructure.html;
 		url: #dfn-callback-this-value; type: dfn; text: callback this value
@@ -645,8 +645,8 @@ run these steps:
 <h4 id='update-intersection-observations-algo'>
 Run the Update Intersection Observations Steps</h4>
 
-To <dfn>run the update intersection observations steps</dfn> for a
-{{document}} |document| given a timestamp |time|, run these steps:
+To <dfn export>run the update intersection observations steps</dfn> for a
+<a>Document</a> |document| given a timestamp |time|, run these steps:
 
 1. Let |observer list| be a list of all {{IntersectionObserver}}s
 	whose {{IntersectionObserver/root}} is in the DOM tree of |document|.
@@ -711,16 +711,9 @@ External Spec Integrations</h3>
 <h4 id='event-loop'>
 HTML Processing Model: Event Loop</h4>
 
-An <a>Intersection Observer</a> processing step should take place
-during the "<i>Update the rendering</i>" steps,
-after step 12, <a>run the animation frame callbacks</a>,
-in the in the <a>HTML Processing Model</a>.
-
-This step is:
-
-<ol start="13">
-	<li>For each <a>fully active</a> {{document}} in |docs|, <a>Run the update intersection observations steps</a> for that {{document}}, passing in |now| as the timestamp.</li>
-</ol>
+An Intersection Observer processing step exists as a substep
+within the "<i>Update the rendering</i>" step,
+in the <a>HTML Event Loops Processing Model</a>.
 
 <h4 id='pending-initial-observation'>Pending initial IntersectionObserver targets</h4>
 A {{document}} is said to have <dfn>pending initial IntersectionObserver targets</dfn>
