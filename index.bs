@@ -620,12 +620,12 @@ run these steps:
 <h4 id='calculate-intersection-rect-algo'>
 Compute the Intersection of a Target Element and the Root</h4>
 
-To <dfn>compute the intersection</dfn> between a <a>target</a> and the observer's <a>intersection root</a>,
+To <dfn>compute the intersection</dfn> between a <a>target</a> |target| and an <a>intersection root</a> |root|,
 run these steps:
 
-1. Let |intersectionRect| be the result of running the {{Element/getBoundingClientRect()}} algorithm on the <a>target</a>.
-2. Let |container| be the <a>containing block</a> of the <a>target</a>.
-3. While |container| is not the <a>intersection root</a>:
+1. Let |intersectionRect| be the result of running the {{Element/getBoundingClientRect()}} algorithm on |target|.
+2. Let |container| be the <a>containing block</a> of |target|.
+3. While |container| is not |root|:
 	1. If |container| is the {{document}} of a <a>nested browsing context</a>,
 		update |intersectionRect| by clipping to the <a>viewport</a>
 		of the {{document}}, and update |container| to be
@@ -637,9 +637,9 @@ run these steps:
 		update |container| to be the <a>browsing context</a>'s {{document}};
 		otherwise, update |container| to be the <a>containing block</a>
 		of |container|.
-4. Map |intersectionRect| to the coordinate space of the <a>intersection root</a>.
+4. Map |intersectionRect| to the coordinate space of |root|.
 5. Update |intersectionRect| by intersecting it with the <a>root intersection rectangle</a>.
-6. Map |intersectionRect| to the coordinate space of the <a>viewport</a> of the {{document}} containing the <a>target</a>.
+6. Map |intersectionRect| to the coordinate space of the <a>viewport</a> of the {{document}} containing |target|.
 7. Return |intersectionRect|.
 
 <h4 id='update-intersection-observations-algo'>
@@ -667,11 +667,11 @@ To <dfn>run the update intersection observations steps</dfn> for a
 			in the <a>containing block chain</a>, skip to step 11.
 		4. Set |targetRect| to the {{DOMRectReadOnly}} obtained
 			by running the {{Element/getBoundingClientRect()}} algorithm on |target|.
-		5. Set |intersectionRect| to the result of running the <a>compute the intersection</a>
-			algorithm on |target|.
-		6. Let |targetArea| be |targetRect|'s area.
-		7. Let |intersectionArea| be |intersectionRect|'s area.
-		8. Set |isIntersecting| to true if |targetRect| and |rootBounds| intersect or are edge-adjacent,
+		4. Let |intersectionRect| be the result of running the <a>compute the intersection</a>
+			algorithm on |target| and |observer|'s <a>intersection root</a>.
+		5. Let |targetArea| be |targetRect|'s area.
+		6. Let |intersectionArea| be |intersectionRect|'s area.
+		7. Let |isIntersecting| be true if |targetRect| and |rootBounds| intersect or are edge-adjacent,
 			even if the intersection has zero area (because |rootBounds| or |targetRect| have
 			zero area).
 		9. If |targetArea| is non-zero, let |intersectionRatio| be |intersectionArea| divided by |targetArea|.<br>
