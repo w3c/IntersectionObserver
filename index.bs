@@ -230,7 +230,7 @@ interface IntersectionObserver {
 </pre>
 
 <div dfn-type="method" dfn-for="IntersectionObserver">
-	: <dfn constructor lt="IntersectionObserver(callback, options)">
+	: <dfn constructor lt="IntersectionObserver(callback, options = {})">
 		new IntersectionObserver(callback, options)</dfn>
 	::
 		Return the result of running the <a>initialize a new IntersectionObserver</a>
