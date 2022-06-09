@@ -39,7 +39,7 @@ urlPrefix: https://html.spec.whatwg.org/multipage/
 		type: dfn; text: queue a task
 		type: dfn; text: run the fullscreen rendering steps
 		type: dfn; text: run the animation frame callbacks
-		url: #processing-model-8; type: dfn; text: HTML Event Loops Processing Model
+		url: #event-loop-processing-model; type: dfn; text: HTML Event Loops Processing Model
 		type: dfn; text: relevant settings object
 		url: #concept-environment-top-level-origin; type: dfn; text: top-level origin
 	urlPrefix: infrastructure.html;
@@ -727,7 +727,7 @@ if there is at least one {{IntersectionObserver}} meeting these criteria:
 		</li>
 	</ol>
 
-In the <a>HTML Processing Model</a>, under the "<i>Update the rendering</i>" step, the "<i>Unnecessary rendering</i>" step should be modified to add an additional requirement for skipping the rendering update:
+In the <a>HTML Event Loops Processing Model</a>, under the "<i>Update the rendering</i>" step, the "<i>Unnecessary rendering</i>" step should be modified to add an additional requirement for skipping the rendering update:
 
 <ul><li>The |document| does not have <a>pending initial IntersectionObserver targets</a>.</li></ul>
 
