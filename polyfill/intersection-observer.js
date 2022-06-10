@@ -821,8 +821,8 @@ function removeEvent(node, event, fn, opt_useCapture) {
   if (typeof node.removeEventListener == 'function') {
     node.removeEventListener(event, fn, opt_useCapture || false);
   }
-  else if (typeof node.detatchEvent == 'function') {
-    node.detatchEvent('on' + event, fn);
+  else if (typeof node.detachEvent == 'function') {
+    node.detachEvent('on' + event, fn);
   }
 }
 
