@@ -6,9 +6,9 @@
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="Bikeshed version fb1e763a4, updated Tue Mar 1 13:13:50 2022 -0800" name="generator">
+  <meta content="Bikeshed version 37b7e7e68, updated Fri May 27 15:08:11 2022 -0700" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="12a3efc79f2bd432de9b57b3a86071cbcf159901" name="document-revision">
+  <meta content="c124e54bcbd58f704268cea22a8e1d9b7eac59bd" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -635,7 +635,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-04-01">1 April 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-06-10">10 June 2022</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -1540,7 +1540,7 @@ otherwise, update <var>container</var> to be the <a data-link-type="dfn" href="h
      <p>Return <var>intersectionRect</var>.</p>
    </ol>
    <h4 class="heading settled" data-level="3.2.8" id="update-intersection-observations-algo"><span class="secno">3.2.8. </span><span class="content"> Run the Update Intersection Observations Steps</span><a class="self-link" href="#update-intersection-observations-algo"></a></h4>
-   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="run-the-update-intersection-observations-steps">run the update intersection observations steps</dfn> for a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①⑤">document</a></code> <var>document</var> given a timestamp <var>time</var>, run these steps:</p>
+   <p>To <dfn data-dfn-type="dfn" data-export id="run-the-update-intersection-observations-steps">run the update intersection observations steps<a class="self-link" href="#run-the-update-intersection-observations-steps"></a></dfn> for a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#document" id="ref-for-document③">Document</a> <var>document</var> given a timestamp <var>time</var>, run these steps:</p>
    <ol>
     <li data-md>
      <p>Let <var>observer list</var> be a list of all <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver②⑤">IntersectionObserver</a></code>s
@@ -1568,7 +1568,7 @@ For the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/bro
          </ul>
         <li data-md>
          <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①②">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root" id="ref-for-intersectionobserver-implicit-root①">implicit root</a>,
-and <var>target</var> is not in the same <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①⑥">document</a></code> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①③">intersection root</a>,
+and <var>target</var> is not in the same <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①⑤">document</a></code> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①③">intersection root</a>,
 skip to step 11.</p>
         <li data-md>
          <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①④">intersection root</a> is an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element①⑧">Element</a></code>,
@@ -1617,22 +1617,17 @@ passing in <var>observer</var>, <var>time</var>, <var>rootBounds</var>, <var>tar
    <p>An <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver②⑦">IntersectionObserver</a></code> will continue observing a target until either the observer’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-unobserve" id="ref-for-dom-intersectionobserver-unobserve③">unobserve()</a></code> method is called with the target as argument; or the observer’s <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-disconnect" id="ref-for-dom-intersectionobserver-disconnect②">disconnect()</a></code> is called.</p>
    <h3 class="heading settled" data-level="3.4" id="external-spec-integrations"><span class="secno">3.4. </span><span class="content"> External Spec Integrations</span><a class="self-link" href="#external-spec-integrations"></a></h3>
    <h4 class="heading settled" data-level="3.4.1" id="event-loop"><span class="secno">3.4.1. </span><span class="content"> HTML Processing Model: Event Loop</span><a class="self-link" href="#event-loop"></a></h4>
-   <p>An <a data-link-type="dfn" href="#intersection-observer" id="ref-for-intersection-observer①">Intersection Observer</a> processing step should take place
-during the "<i>Update the rendering</i>" steps,
-after step 12, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#run-the-animation-frame-callbacks" id="ref-for-run-the-animation-frame-callbacks">run the animation frame callbacks</a>,
-in the in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model" id="ref-for-event-loop-processing-model">HTML Processing Model</a>.</p>
-   <p>This step is:</p>
-   <ol start="13">
-    <li>For each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#fully-active" id="ref-for-fully-active①">fully active</a> <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①⑦">document</a></code> in <var>docs</var>, <a data-link-type="dfn" href="#run-the-update-intersection-observations-steps" id="ref-for-run-the-update-intersection-observations-steps">Run the update intersection observations steps</a> for that <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①⑧">document</a></code>, passing in <var>now</var> as the timestamp.
-   </ol>
+   <p>An Intersection Observer processing step exists as a substep
+within the "<i>Update the rendering</i>" step,
+in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model" id="ref-for-event-loop-processing-model">HTML Event Loops Processing Model</a>.</p>
    <h4 class="heading settled" data-level="3.4.2" id="pending-initial-observation"><span class="secno">3.4.2. </span><span class="content">Pending initial IntersectionObserver targets</span><a class="self-link" href="#pending-initial-observation"></a></h4>
-    A <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①⑨">document</a></code> is said to have <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="pending-initial-intersectionobserver-targets">pending initial IntersectionObserver targets</dfn> if there is at least one <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver②⑧">IntersectionObserver</a></code> meeting these criteria: 
+    A <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#dom-document-2" id="ref-for-dom-document-2①⑥">document</a></code> is said to have <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="pending-initial-intersectionobserver-targets">pending initial IntersectionObserver targets</dfn> if there is at least one <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver②⑧">IntersectionObserver</a></code> meeting these criteria: 
    <ol>
     <li>The <var>observer</var>’s <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver②⑨">root</a></code> is in the <var>document</var> (for the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context⑤">top-level browsing context</a>, this includes <a data-link-type="dfn" href="#intersectionobserver-implicit-root-observer" id="ref-for-intersectionobserver-implicit-root-observer④">implicit root observers</a>). 
     <li>The <var>observer</var> has at least one <var>target</var> in its <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-observationtargets-slot" id="ref-for-dom-intersectionobserver-observationtargets-slot⑥">[[ObservationTargets]]</a></code> slot for which
 		    no <code class="idl"><a data-link-type="idl" href="#intersectionobserverentry" id="ref-for-intersectionobserverentry⑤">IntersectionObserverEntry</a></code> has yet been queued. 
    </ol>
-   <p>In the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model" id="ref-for-event-loop-processing-model①">HTML Processing Model</a>, under the "<i>Update the rendering</i>" step, the "<i>Unnecessary rendering</i>" step should be modified to add an additional requirement for skipping the rendering update:</p>
+   <p>In the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model" id="ref-for-event-loop-processing-model①">HTML Event Loops Processing Model</a>, under the "<i>Update the rendering</i>" step, the "<i>Unnecessary rendering</i>" step should be modified to add an additional requirement for skipping the rendering update:</p>
    <ul>
     <li>The <var>document</var> does not have <a data-link-type="dfn" href="#pending-initial-intersectionobserver-targets" id="ref-for-pending-initial-intersectionobserver-targets">pending initial IntersectionObserver targets</a>.
    </ul>
@@ -1970,10 +1965,8 @@ Queue an IntersectionObserverEntry</a>
     <li><a href="#ref-for-dom-document-2①①">3.2.7. 
 Compute the Intersection of a Target Element and the Root</a> <a href="#ref-for-dom-document-2①②">(2)</a> <a href="#ref-for-dom-document-2①③">(3)</a> <a href="#ref-for-dom-document-2①④">(4)</a>
     <li><a href="#ref-for-dom-document-2①⑤">3.2.8. 
-Run the Update Intersection Observations Steps</a> <a href="#ref-for-dom-document-2①⑥">(2)</a>
-    <li><a href="#ref-for-dom-document-2①⑦">3.4.1. 
-HTML Processing Model: Event Loop</a> <a href="#ref-for-dom-document-2①⑧">(2)</a>
-    <li><a href="#ref-for-dom-document-2①⑨">3.4.2. Pending initial IntersectionObserver targets</a>
+Run the Update Intersection Observations Steps</a>
+    <li><a href="#ref-for-dom-document-2①⑥">3.4.2. Pending initial IntersectionObserver targets</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-same-origin-domain">
@@ -2079,7 +2072,7 @@ The IntersectionObserverInit dictionary</a>
      <li><span class="dfn-paneled" id="term-for-domrectreadonly">DOMRectReadOnly</span>
     </ul>
    <li>
-    <a data-link-type="biblio">[HTML]</a> defines the following terms:
+    <a data-link-type="biblio">[html]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-dom-document-2">document</span>
      <li><span class="dfn-paneled" id="term-for-same-origin-domain">same origin-domain</span>
@@ -2100,6 +2093,8 @@ The IntersectionObserverInit dictionary</a>
   <dl>
    <dt id="biblio-css-box-4">[CSS-BOX-4]
    <dd>Elika Etemad. <a href="https://www.w3.org/TR/css-box-4/"><cite>CSS Box Model Module Level 4</cite></a>. 21 April 2020. WD. URL: <a href="https://www.w3.org/TR/css-box-4/">https://www.w3.org/TR/css-box-4/</a>
+   <dt id="biblio-css-contain-2">[CSS-CONTAIN-2]
+   <dd>CSS Containment Module Level 2 URL: <a href="https://drafts.csswg.org/css-contain-2/">https://drafts.csswg.org/css-contain-2/</a>
    <dt id="biblio-css-syntax-3">[CSS-SYNTAX-3]
    <dd>Tab Atkins Jr.; Simon Sapin. <a href="https://www.w3.org/TR/css-syntax-3/"><cite>CSS Syntax Module Level 3</cite></a>. 24 December 2021. CR. URL: <a href="https://www.w3.org/TR/css-syntax-3/">https://www.w3.org/TR/css-syntax-3/</a>
    <dt id="biblio-css-values-3">[CSS-VALUES-3]
@@ -2113,7 +2108,7 @@ The IntersectionObserverInit dictionary</a>
    <dt id="biblio-geometry-1">[GEOMETRY-1]
    <dd>Simon Pieters; Chris Harrelson. <a href="https://www.w3.org/TR/geometry-1/"><cite>Geometry Interfaces Module Level 1</cite></a>. 4 December 2018. CR. URL: <a href="https://www.w3.org/TR/geometry-1/">https://www.w3.org/TR/geometry-1/</a>
    <dt id="biblio-html">[HTML]
-   <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
+   <dd>A vocabulary and associated APIs for HTML and XHTML URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
    <dt id="biblio-rfc2119">[RFC2119]
    <dd>S. Bradner. <a href="https://datatracker.ietf.org/doc/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>
    <dt id="biblio-webidl">[WEBIDL]
@@ -2168,8 +2163,6 @@ The IntersectionObserverInit dictionary</a>
    <ul>
     <li><a href="#ref-for-intersection-observer">3. 
 Processing Model</a>
-    <li><a href="#ref-for-intersection-observer①">3.4.1. 
-HTML Processing Model: Event Loop</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="intersectionobserver-target">
@@ -2650,13 +2643,6 @@ Run the Update Intersection Observations Steps</a>
    <ul>
     <li><a href="#ref-for-compute-the-intersection">3.2.8. 
 Run the Update Intersection Observations Steps</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="run-the-update-intersection-observations-steps">
-   <b><a href="#run-the-update-intersection-observations-steps">#run-the-update-intersection-observations-steps</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-run-the-update-intersection-observations-steps">3.4.1. 
-HTML Processing Model: Event Loop</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="pending-initial-intersectionobserver-targets">
