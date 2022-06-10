@@ -2,7 +2,7 @@
   "name": "intersection-observer",
   "version": "0.12.0",
   "description": "A polyfill for IntersectionObserver",
-  "main": "intersection-observer",
+  "main": "intersection-observer.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:w3c/IntersectionObserver.git"
