@@ -29,7 +29,7 @@ Given the opportunity to reduce CPU use, increase battery life, and eliminate ja
 ```js
 function callback(entries) {
   entries.forEach(function(entry) {
-    if (isIntersecting(entry.intersectionRect))
+    if (entry.isIntersecting)
       doSomething();
   });
 };
