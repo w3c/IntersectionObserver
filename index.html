@@ -8,7 +8,7 @@
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
   <meta content="Bikeshed version 37b7e7e68, updated Fri May 27 15:08:11 2022 -0700" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="ae54887fef3e0b4990493d01c8ece90c573c2b5e" name="document-revision">
+  <meta content="46cbd248c0cc05e437ad31c2762bc89c9fd59de1" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -799,13 +799,13 @@ continuous polling,
 and use of custom plugins.
 By removing the need for these methods
 it allows applications to significantly reduce their CPU, GPU and energy costs.</p>
-   <div class="example" id="example-189ac2d4">
-    <a class="self-link" href="#example-189ac2d4"></a> 
+   <div class="example" id="example-ffe37088">
+    <a class="self-link" href="#example-ffe37088"></a> 
 <pre class="highlight"><c- a>var</c-> observer <c- o>=</c-> <c- ow>new</c-> IntersectionObserver<c- p>(</c->changes <c- p>=></c-> <c- p>{</c->
   <c- k>for</c-> <c- p>(</c-><c- a>const</c-> change <c- k>of</c-> changes<c- p>)</c-> <c- p>{</c->
     console<c- p>.</c->log<c- p>(</c->change<c- p>.</c->time<c- p>);</c->               <c- c1>// Timestamp when the change occurred</c->
     console<c- p>.</c->log<c- p>(</c->change<c- p>.</c->rootBounds<c- p>);</c->         <c- c1>// Unclipped area of root</c->
-    console<c- p>.</c->log<c- p>(</c->change<c- p>.</c->boundingClientRect<c- p>);</c-> <c- c1>// target.boundingClientRect()</c->
+    console<c- p>.</c->log<c- p>(</c->change<c- p>.</c->boundingClientRect<c- p>);</c-> <c- c1>// target.getBoundingClientRect()</c->
     console<c- p>.</c->log<c- p>(</c->change<c- p>.</c->intersectionRect<c- p>);</c->   <c- c1>// boundingClientRect, clipped by its containing block ancestors, and intersected with rootBounds</c->
     console<c- p>.</c->log<c- p>(</c->change<c- p>.</c->intersectionRatio<c- p>);</c->  <c- c1>// Ratio of intersectionRect area to boundingClientRect area</c->
     console<c- p>.</c->log<c- p>(</c->change<c- p>.</c->target<c- p>);</c->             <c- c1>// the Element target</c->
