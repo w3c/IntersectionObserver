@@ -10,4 +10,5 @@ Implementation status:
 
 [Draft Spec](https://w3c.github.io/IntersectionObserver/)
 
-[Polyfill](./polyfill/)
+Given that multiple native implementations of IntersectionObserver exist today, the polyfill that
+was formerly maintained in this repo is no longer supported and has been archived at https://github.com/GoogleChromeLabs/intersection-observer.
