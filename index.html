@@ -8,7 +8,7 @@
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
   <meta content="Bikeshed version 37b7e7e68, updated Fri May 27 15:08:11 2022 -0700" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="eb168cb5e3288d693472e6b67f237515ec073d37" name="document-revision">
+  <meta content="591d13aaa3266e1bc3a48827b1d16840db0bc352" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -635,7 +635,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-06-15">15 June 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-07-06">6 July 2022</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -645,7 +645,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <dt>Latest published version:
       <dd><a href="https://www.w3.org/TR/intersection-observer/">https://www.w3.org/TR/intersection-observer/</a>
       <dt>Previous Versions:
-      <dd><a href="https://www.w3.org/TR/2022/WD-intersection-observer-20220614/" rel="prev">https://www.w3.org/TR/2022/WD-intersection-observer-20220614/</a>
+      <dd><a href="https://www.w3.org/TR/2022/WD-intersection-observer-20220615/" rel="prev">https://www.w3.org/TR/2022/WD-intersection-observer-20220615/</a>
       <dt>Test Suite:
       <dd><a href="http://w3c-test.org/intersection-observer/">http://w3c-test.org/intersection-observer/</a>
       <dt>Feedback:
@@ -840,11 +840,11 @@ intersection with the <a data-link-type="dfn" href="#intersectionobserver-inters
      <div class="support">
       <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
       <hr>
-      <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+      <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
       <hr>
       <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
       <hr>
-      <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
      </div>
     </div>
    </div>
@@ -879,11 +879,11 @@ use-cases. Per-<code class="idl"><a data-link-type="idl" href="#dom-intersection
      <div class="support">
       <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
       <hr>
-      <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+      <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
       <hr>
       <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
       <hr>
-      <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+      <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
      </div>
     </div>
    </div>
@@ -913,11 +913,11 @@ use-cases. Per-<code class="idl"><a data-link-type="idl" href="#dom-intersection
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -933,11 +933,11 @@ use-cases. Per-<code class="idl"><a data-link-type="idl" href="#dom-intersection
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -960,11 +960,11 @@ or create a separate <code class="idl"><a data-link-type="idl" href="#intersecti
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -987,11 +987,11 @@ whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverr
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -1018,11 +1018,11 @@ whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverr
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -1038,11 +1038,11 @@ whose <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverr
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -1063,11 +1063,11 @@ this is not guaranteed to be identical to the <var>options</var>.<code class="id
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -1090,7 +1090,7 @@ If no <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-in
     <dt>Otherwise, if the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root⑤">intersection root</a> has a <a data-link-type="dfn" href="#intersectionobserver-content-clip" id="ref-for-intersectionobserver-content-clip">content clip</a>, 
     <dd>it’s the element’s <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#content-area" id="ref-for-content-area">content area</a>. 
     <dt>Otherwise, 
-    <dd>it’s the result of running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect" id="ref-for-dom-element-getboundingclientrect">getBoundingClientRect()</a></code> algorithm on the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root⑥">intersection root</a>. 
+    <dd>it’s the result of <a data-link-type="dfn" href="https://drafts.csswg.org/cssom-view-1/#element-get-the-bounding-box" id="ref-for-element-get-the-bounding-box">getting the bounding box</a> for the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root⑥">intersection root</a>. 
    </dl>
    <p>When calculating the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle①">root intersection rectangle</a> for
 a <a data-link-type="dfn" href="#intersectionobserver-same-origin-domain-target" id="ref-for-intersectionobserver-same-origin-domain-target②">same-origin-domain target</a>, the rectangle is then expanded
@@ -1149,11 +1149,11 @@ append a duplicate of the second element to <var>tokens</var>.</p>
      <div class="support">
       <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
       <hr>
-      <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+      <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
       <hr>
       <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
       <hr>
-      <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
      </div>
     </div>
    </div>
@@ -1190,18 +1190,17 @@ append a duplicate of the second element to <var>tokens</var>.</p>
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
       <p><dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export id="dom-intersectionobserverentry-boundingclientrect"><code>boundingClientRect</code></dfn>, <span> of type <a data-link-type="idl-name" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly③">DOMRectReadOnly</a>, readonly</span></p>
      <dd data-md>
-      <p>A <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly④">DOMRectReadOnly</a></code> obtained by running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect" id="ref-for-dom-element-getboundingclientrect①">getBoundingClientRect()</a></code> algorithm
-on the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target" id="ref-for-dom-intersectionobserverentry-target①">target</a></code>.</p>
+      <p>A <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly④">DOMRectReadOnly</a></code> obtained by <a data-link-type="dfn" href="https://drafts.csswg.org/cssom-view-1/#element-get-the-bounding-box" id="ref-for-element-get-the-bounding-box①">getting the bounding box</a> for <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target" id="ref-for-dom-intersectionobserverentry-target①">target</a></code>.</p>
      <dt data-md>
       <div class="mdn-anno wrapped">
        <button class="mdn-anno-btn"><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></button>
@@ -1211,11 +1210,11 @@ on the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -1236,11 +1235,11 @@ within the <a data-link-type="dfn" href="#intersectionobserver-root-intersection
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>58+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>45+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>16+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>58+</span></span><span class="webview_android yes"><span>Android WebView</span><span>58+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>7.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>43+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -1260,11 +1259,11 @@ edge-adjacent intersections, or when the <code class="idl"><a data-link-type="id
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -1282,11 +1281,11 @@ this will be the ratio of <code class="idl"><a data-link-type="idl" href="#dom-i
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -1306,11 +1305,11 @@ than <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserveren
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -1326,11 +1325,11 @@ than <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserveren
         <div class="support">
          <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
          <hr>
-         <span class="opera yes"><span>Opera</span><span>38+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+         <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
          <hr>
          <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
          <hr>
-         <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="safari_ios yes"><span>iOS Safari</span><span>12.2+</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>51+</span></span><span class="webview_android yes"><span>Android WebView</span><span>51+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>5.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>41+</span></span>
+         <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
         </div>
        </div>
       </div>
@@ -1371,8 +1370,7 @@ greater than or equal to any threshold to less than that threshold,
 and vice versa.</p>
       <p>Threshold values must be in the range of [0, 1.0] and represent a
 percentage of the area of the rectangle produced
-by running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect" id="ref-for-dom-element-getboundingclientrect②">getBoundingClientRect()</a></code> algorithm
-on the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target⑨">target</a>.</p>
+by <a data-link-type="dfn" href="https://drafts.csswg.org/cssom-view-1/#element-get-the-bounding-box" id="ref-for-element-get-the-bounding-box②">getting the bounding box</a> for <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target⑨">target</a>.</p>
       <p class="note" role="note"><span>Note:</span> 0.0 is effectively "any non-zero number of pixels".</p>
     </dl>
    </div>
@@ -1510,7 +1508,7 @@ run these steps:</p>
 run these steps:</p>
    <ol>
     <li data-md>
-     <p>Let <var>intersectionRect</var> be the result of running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect" id="ref-for-dom-element-getboundingclientrect③">getBoundingClientRect()</a></code> algorithm on <var>target</var>.</p>
+     <p>Let <var>intersectionRect</var> be the result of <a data-link-type="dfn" href="https://drafts.csswg.org/cssom-view-1/#element-get-the-bounding-box" id="ref-for-element-get-the-bounding-box③">getting the bounding box</a> for <var>target</var>.</p>
     <li data-md>
      <p>Let <var>container</var> be the <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#containing-block" id="ref-for-containing-block">containing block</a> of <var>target</var>.</p>
     <li data-md>
@@ -1574,8 +1572,7 @@ skip to step 11.</p>
          <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①④">intersection root</a> is an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element①⑧">Element</a></code>,
 and <var>target</var> is not a descendant of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑤">intersection root</a> in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain" id="ref-for-containing-block-chain①">containing block chain</a>, skip to step 11.</p>
         <li data-md>
-         <p>Set <var>targetRect</var> to the <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly⑨">DOMRectReadOnly</a></code> obtained
-by running the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect" id="ref-for-dom-element-getboundingclientrect④">getBoundingClientRect()</a></code> algorithm on <var>target</var>.</p>
+         <p>Set <var>targetRect</var> to the <code class="idl"><a data-link-type="idl" href="https://drafts.fxtf.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly⑨">DOMRectReadOnly</a></code> obtained by <a data-link-type="dfn" href="https://drafts.csswg.org/cssom-view-1/#element-get-the-bounding-box" id="ref-for-element-get-the-bounding-box④">getting the bounding box</a> for <var>target</var>.</p>
         <li data-md>
          <p>Let <var>intersectionRect</var> be the result of running the <a data-link-type="dfn" href="#compute-the-intersection" id="ref-for-compute-the-intersection">compute the intersection</a> algorithm on <var>target</var> and <var>observer</var>’s <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑥">intersection root</a>.</p>
         <li data-md>
@@ -1691,7 +1688,7 @@ specification.</p>
     and are set apart from the normative text
     with <code>class="note"</code>,
     like this: </p>
-   <p class="note" role="note">Note, this is an informative note. </p>
+   <p class="note" role="note">Note, this is an informative note.</p>
    <h3 class="no-ref no-num heading settled" id="w3c-conformant-algorithms"><span class="content">Conformant Algorithms</span><a class="self-link" href="#w3c-conformant-algorithms"></a></h3>
    <p>Requirements phrased in the imperative as part of algorithms
     (such as "strip any leading space characters"
@@ -1855,18 +1852,18 @@ The IntersectionObserver interface</a>
 The IntersectionObserver interface</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-dom-element-getboundingclientrect">
-   <a href="https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect">https://drafts.csswg.org/cssom-view-1/#dom-element-getboundingclientrect</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-element-get-the-bounding-box">
+   <a href="https://drafts.csswg.org/cssom-view-1/#element-get-the-bounding-box">https://drafts.csswg.org/cssom-view-1/#element-get-the-bounding-box</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-element-getboundingclientrect">2.2. 
+    <li><a href="#ref-for-element-get-the-bounding-box">2.2. 
 The IntersectionObserver interface</a>
-    <li><a href="#ref-for-dom-element-getboundingclientrect①">2.3. 
+    <li><a href="#ref-for-element-get-the-bounding-box①">2.3. 
 The IntersectionObserverEntry interface</a>
-    <li><a href="#ref-for-dom-element-getboundingclientrect②">2.4. 
+    <li><a href="#ref-for-element-get-the-bounding-box②">2.4. 
 The IntersectionObserverInit dictionary</a>
-    <li><a href="#ref-for-dom-element-getboundingclientrect③">3.2.7. 
+    <li><a href="#ref-for-element-get-the-bounding-box③">3.2.7. 
 Compute the Intersection of a Target Element and the Root</a>
-    <li><a href="#ref-for-dom-element-getboundingclientrect④">3.2.8. 
+    <li><a href="#ref-for-element-get-the-bounding-box④">3.2.8. 
 Run the Update Intersection Observations Steps</a>
    </ul>
   </aside>
@@ -2052,7 +2049,7 @@ The IntersectionObserverInit dictionary</a>
    <li>
     <a data-link-type="biblio">[cssom-view-1]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-dom-element-getboundingclientrect">getBoundingClientRect()</span>
+     <li><span class="dfn-paneled" id="term-for-element-get-the-bounding-box">get the bounding box</span>
     </ul>
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
