@@ -3,10 +3,14 @@ on:
   pull_request: {}
   push:
     branches: [main]
+permissions:
+  contents: read
 jobs:
   main:
     name: Build, Validate, Deploy
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v2
       - uses: w3c/spec-prod@v2
