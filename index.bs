@@ -753,10 +753,10 @@ The main privacy concerns associated with this API relate to the information
 it may provide to code running in the context of a cross-origin iframe
 (i.e., the <a>cross-origin-domain target</a> case). In particular:
 
- * There is no universal consensus on the privacy implications of
+* There is no universal consensus on the privacy implications of
 	revealing whether an iframe is within the global viewport.
 
- * There is a risk that the API may be used to probe for information
+* There is a risk that the API may be used to probe for information
 	about the geometry of the global viewport itself,
 	which may be used to deduce the user's hardware configuration.
 	The motivation for disabling the effects of {{IntersectionObserver/rootMargin}}
