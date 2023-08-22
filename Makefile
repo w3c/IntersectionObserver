@@ -6,7 +6,7 @@ remote: index.bs
 	                       --output index.html \
 	                       --write-out "%{http_code}" \
 	                       --header "Accept: text/plain, text/html" \
-	                       -F force=1 \
+	                       -F die-on=warning \
 	                       -F md-Text-Macro="COMMIT-SHA LOCAL COPY" \
 	                       -F file=@index.bs) && \
 	[[ "$$HTTP_STATUS" -eq "200" ]]) || ( \
