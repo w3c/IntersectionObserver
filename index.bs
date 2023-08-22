@@ -168,7 +168,7 @@ The IntersectionObserverCallback</h3>
 	callback IntersectionObserverCallback = undefined (sequence&lt;IntersectionObserverEntry> entries, IntersectionObserver observer);
 </pre>
 
-This callback will be invoked when there are changes to <a>target</a>'s
+This callback will be invoked when there are changes to <a for="IntersectionObserver">target</a>'s
 intersection with the <a>intersection root</a>, as per the
 <a>processing model</a>.
 
@@ -176,7 +176,7 @@ intersection with the <a>intersection root</a>, as per the
 The IntersectionObserver interface</h3>
 
 The {{IntersectionObserver}} interface can be used to observe changes in the
-intersection of an <a>intersection root</a> and one or more <a>target</a> {{Element}}s.
+intersection of an <a>intersection root</a> and one or more <a for="IntersectionObserver">target</a> {{Element}}s.
 
 The <dfn for="IntersectionObserver">intersection root</dfn>
 for an {{IntersectionObserver}} is the value of its {{IntersectionObserver/root}} attribute
@@ -186,22 +186,22 @@ referred to as the <dfn for="IntersectionObserver">implicit root</dfn>.
 
 An {{IntersectionObserver}} with a non-<code>null</code> {{IntersectionObserver/root}}
 is referred to as an <dfn for="IntersectionObserver">explicit root observer</dfn>,
-and it can observe any <a>target</a> {{Element}} that is a descendant of the
+and it can observe any <a for="IntersectionObserver">target</a> {{Element}} that is a descendant of the
 {{IntersectionObserver/root}} in the <a>containing block chain</a>.
 An {{IntersectionObserver}} with a <code>null</code> {{IntersectionObserver/root}}
 is referred to as an <dfn for="IntersectionObserver">implicit root observer</dfn>.
-Valid <a>targets</a> for an <a>implicit root observer</a> include
+Valid <a for="IntersectionObserver">targets</a> for an <a>implicit root observer</a> include
 any {{Element}} in the <a>top-level browsing context</a>,
 as well as any {{Element}} in any <a>nested browsing context</a>
 which is in the <a>list of the descendant browsing contexts</a> of the <a>top-level browsing context</a>.
 
 When dealing with <a>implicit root observers</a>, the API makes a distinction between
-a <a>target</a> whose <a>relevant settings object</a>'s <a>origin</a> is
+a <a for="IntersectionObserver">target</a> whose <a>relevant settings object</a>'s <a>origin</a> is
 <a>same origin-domain</a> with the <a>top-level origin</a>, referred to as a
 <dfn for="IntersectionObserver">same-origin-domain target</dfn>;
 as opposed to a <dfn for="IntersectionObserver">cross-origin-domain target</dfn>.
-Any <a>target</a> of an <a>explicit root observer</a> is also a <a>same-origin-domain target</a>,
-since the <a>target</a> must be in the same <a>document</a> as the
+Any <a for="IntersectionObserver">target</a> of an <a>explicit root observer</a> is also a <a>same-origin-domain target</a>,
+since the <a for="IntersectionObserver">target</a> must be in the same <a>document</a> as the
 <a>intersection root</a>.
 
 Note: In {{MutationObserver}}, the {{MutationObserverInit}} options are passed
@@ -212,7 +212,7 @@ being observed could have a different set of attributes to filter for. For
 track multiple targets using the same set of options; or they may use a different
 observer for each tracked target.
 {{IntersectionObserverInit/rootMargin}} or {{threshold}} values for each
-<a>target</a> seems to introduce more complexity without solving additional
+<a for="IntersectionObserver">target</a> seems to introduce more complexity without solving additional
 use-cases. Per-{{observe()}} options could be provided in the future if the need arises.
 
 <pre class="idl">
@@ -321,7 +321,7 @@ with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle.
 
 Note: {{IntersectionObserver/rootMargin}} only applies to the <a>intersection root</a> itself.
-If a <a>target</a> {{Element}} is clipped by an ancestor other than the
+If a <a for="IntersectionObserver">target</a> {{Element}} is clipped by an ancestor other than the
 <a>intersection root</a>, that clipping is unaffected by
 {{IntersectionObserver/rootMargin}}.
 
@@ -468,7 +468,7 @@ dictionary IntersectionObserverInit {
 
 		Threshold values must be in the range of [0, 1.0] and represent a
 		percentage of the area of the rectangle produced
-		by <a>getting the bounding box</a> for <a>target</a>.
+		by <a>getting the bounding box</a> for <a for="IntersectionObserver">target</a>.
 
 		Note: 0.0 is effectively "any non-zero number of pixels".
 </div>
@@ -619,7 +619,7 @@ run these steps:
 <h4 id='calculate-intersection-rect-algo'>
 Compute the Intersection of a Target Element and the Root</h4>
 
-To <dfn>compute the intersection</dfn> between a <a>target</a> |target| and an <a>intersection root</a> |root|,
+To <dfn>compute the intersection</dfn> between a <a for="IntersectionObserver">target</a> |target| and an <a>intersection root</a> |root|,
 run these steps:
 
 1. Let |intersectionRect| be the result of <a>getting the bounding box</a> for |target|.
