@@ -374,7 +374,7 @@ or failure:
 When calculating a <a>scrollport</a> intersection rectangle for
 a <a>same-origin-domain target</a>, the rectangle is expanded
 according to the offsets in the {{IntersectionObserver}}’s {{[[scrollMargin]]}} slot
-in a manner similar to CSS's 'margin' property,
+in a manner similar to CSS's <a href="https://www.w3.org/TR/css-box-3/#margins">margin</a> property,
 with the four values indicating the amount the top, right, bottom, and left edges, respectively, are offset by,
 with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle.
