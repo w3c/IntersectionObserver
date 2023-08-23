@@ -845,7 +845,7 @@ it may provide to code running in the context of a cross-origin iframe
 	about the geometry of the global viewport itself,
 	which may be used to deduce the user's hardware configuration.
 	The motivation for disabling the effects of {{IntersectionObserver/rootMargin}}
-	and suppressing {{IntersectionObserverEntry/rootBounds}}
+	and {{IntersectionObserver/scrollMargin}}, and suppressing {{IntersectionObserverEntry/rootBounds}}
 	for <a>cross-origin-domain targets</a> is to prevent such probing.
 
 It should be noted that prior to {{IntersectionObserver}}, web developers
