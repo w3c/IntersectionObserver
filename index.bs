@@ -501,6 +501,7 @@ The IntersectionObserverInit dictionary</h3>
 dictionary IntersectionObserverInit {
 	(Element or Document)?  root = null;
 	DOMString rootMargin = "0px";
+	DOMString scrollMargin = "";
 	(double or sequence&lt;double>) threshold = 0;
 };
 </pre>
@@ -517,6 +518,18 @@ dictionary IntersectionObserverInit {
 		each either an <a>absolute length</a> or a percentage.
 
 		<pre class="example" highlight=js>
+			"5px"                // all margins set to 5px
+			"5px 10px"           // top & bottom = 5px, right & left = 10px
+			"-10px 5px 8px"      // top = -10px, right & left = 5px, bottom = 8px
+			"-10px -5px 5px 8px" // top = -10px, right = -5px, bottom = 5px, left = 8px
+		</pre>
+	: <dfn>scrollMargin</dfn>
+	::
+		This is a string of 0-4 components,
+		each either an <a>absolute length</a> or a percentage.
+
+		<pre class="example" highlight=js>
+			""                   // no scroll margins
 			"5px"                // all margins set to 5px
 			"5px 10px"           // top & bottom = 5px, right & left = 10px
 			"-10px 5px 8px"      // top = -10px, right & left = 5px, bottom = 8px
