@@ -713,9 +713,11 @@ run these steps:
 		of the {{document}}, and update |container| to be
 		the <a>browsing context container</a> of |container|.
 	2. Map |intersectionRect| to the coordinate space of |container|.
-	3. If |container| has a <a>content clip</a> or a css <a>clip-path</a> property,
+	3. If |container| is scrollable, apply the {{IntersectionObserver}}’s
+		{{[[scrollMargin]]}} to the |container|'s clip rect.
+	4. If |container| has a <a>content clip</a> or a css <a>clip-path</a> property,
 		update |intersectionRect| by applying |container|'s clip.
-	4. If |container| is the root element of a <a>browsing context</a>,
+	5. If |container| is the root element of a <a>browsing context</a>,
 		update |container| to be the <a>browsing context</a>'s {{document}};
 		otherwise, update |container| to be the <a>containing block</a>
 		of |container|.
