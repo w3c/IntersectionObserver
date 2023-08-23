@@ -381,6 +381,8 @@ Percentages are resolved relative to the width of the undilated rectangle.
 
 Note: {{IntersectionObserver/scrollMargin}} affects the clipping of <a for="IntersectionObserver">target</a>
 by all scrollable ancestors up to and including the <a>intersection root</a>.
+Both the {{IntersectionObserver/scrollMargin}} and the {{IntersectionObserver/rootMargin}}
+are applied to a scrollable <a>intersection root's</a> rectangle.
 
 Note: <a>scrollport</a> intersection rectangles are not affected by
 <a>pinch zoom</a> and will report the unadjusted <a>viewport</a>, consistent with the
