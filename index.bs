@@ -286,7 +286,7 @@ interface IntersectionObserver {
 		constructor, the value of this attribute is "0px 0px 0px 0px".
 	: <dfn>scrollMargin</dfn>
 	::
-		Offsets are applied to <a>scrollable intersection rectangles</a>,
+		Offsets are applied to <a>scrollports</a> on the path from <a>intersection root</a> to <a for="IntersectionObserver">target</a>,
 		effectively growing or shrinking the box that is used to calculate intersections.
 		<b>These offsets are only applied when handling <a>same-origin-domain targets</a>;
 		for <a>cross-origin-domain targets</a> they are ignored.</b>
@@ -371,14 +371,8 @@ or failure:
 	append a duplicate of the second element to |tokens|.
 7. Return |tokens|.
 
-The <dfn for="IntersectionObserver">scrollable intersection rectangles</dfn>
-for an {{IntersectionObserver}}
-are the rectangles of scrollable containers on the path from the
-<a>intersection root</a> to <a for="IntersectionObserver">target</a>
-which could clip the target's rectangle.
-
-When calculating the <a>scrollable intersection rectangles</a> for
-a <a>same-origin-domain target</a>, the rectangle is then expanded
+When calculating a <a>scrollport</a> intersection rectangle for
+a <a>same-origin-domain target</a>, the rectangle is expanded
 according to the offsets in the {{IntersectionObserver}}’s {{[[scrollMargin]]}} slot
 in a manner similar to CSS's 'margin' property,
 with the four values indicating the amount the top, right, bottom, and left edges, respectively, are offset by,
@@ -388,7 +382,7 @@ Percentages are resolved relative to the width of the undilated rectangle.
 Note: {{IntersectionObserver/scrollMargin}} affects the clipping of <a for="IntersectionObserver">target</a>
 by all scrollable ancestors up to and including the <a>intersection root</a>.
 
-Note: <a>scrollable intersection rectangles</a> are not affected by
+Note: <a>scrollport</a> intersection rectangles are not affected by
 <a>pinch zoom</a> and will report the unadjusted <a>viewport</a>, consistent with the
 intent of pinch zooming (to act like a magnifying glass and NOT change layout.)
 
