@@ -17,7 +17,3 @@ remote: index.bs
 
 local: index.bs
 	bikeshed spec index.bs index.html --md-Text-Macro="COMMIT-SHA LOCAL COPY"
-
-deploy: index.bs
-	curl --remote-name --fail https://resources.whatwg.org/build/deploy.sh
-	bash ./deploy.sh
