@@ -222,6 +222,7 @@ interface IntersectionObserver {
 	constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options = {});
 	readonly attribute (Element or Document)? root;
 	readonly attribute DOMString rootMargin;
+	readonly attribute DOMString scrollMargin;
 	readonly attribute FrozenArray&lt;double&gt; thresholds;
 	undefined observe(Element target);
 	undefined unobserve(Element target);
@@ -283,6 +284,20 @@ interface IntersectionObserver {
 		passed to the {{IntersectionObserver}} constructor.  If no
 		{{IntersectionObserverInit/rootMargin}} was passed to the {{IntersectionObserver}}
 		constructor, the value of this attribute is "0px 0px 0px 0px".
+	: <dfn>scrollMargin</dfn>
+	::
+		Offsets are applied to <a>scrollable intersection rectangles</a>,
+		effectively growing or shrinking the box that is used to calculate intersections.
+		<b>These offsets are only applied when handling <a>same-origin-domain targets</a>;
+		for <a>cross-origin-domain targets</a> they are ignored.</b>
+
+		On getting, return the result of serializing the elements of {{[[scrollMargin]]}}
+		space-separated, where pixel lengths serialize as the numeric value followed by "px",
+		and percentages serialize as the numeric value followed by "%".  Note that
+		this is not guaranteed to be identical to the |options|.{{IntersectionObserverInit/scrollMargin}}
+		passed to the {{IntersectionObserver}} constructor.  If no
+		{{IntersectionObserverInit/scrollMargin}} was passed to the {{IntersectionObserver}}
+		constructor, the value of this attribute is an empty string.
 	: <dfn>thresholds</dfn>
 	::
 		A list of thresholds, sorted in increasing numeric order,
@@ -342,6 +357,53 @@ or failure:
 	return failure.
 4. If there are zero elements in |tokens|,
 	set |tokens| to ["0px"].
+5. Replace each |token| in |tokens|:
+	* If |token| is an <a>absolute length</a> <a>dimension</a> token,
+		replace it with a an equivalent pixel length.
+	* If |token| is a <<percentage>> token,
+		replace it with an equivalent percentage.
+	* Otherwise, return failure.
+6. If there is one element in |tokens|,
+	append three duplicates of that element to |tokens|.
+	Otherwise, if there are two elements are |tokens|,
+	append a duplicate of each element to |tokens|.
+	Otherwise, if there are three elements in |tokens|,
+	append a duplicate of the second element to |tokens|.
+7. Return |tokens|.
+
+The <dfn for="IntersectionObserver">scrollable intersection rectangles</dfn>
+for an {{IntersectionObserver}}
+are the rectangles of scrollable containers on the path from the
+<a>intersection root</a> to <a for="IntersectionObserver">target</a>
+which could clip the target's rectangle.
+
+When calculating the <a>scrollable intersection rectangles</a> for
+a <a>same-origin-domain target</a>, the rectangle is then expanded
+according to the offsets in the {{IntersectionObserver}}’s {{[[scrollMargin]]}} slot
+in a manner similar to CSS's 'margin' property,
+with the four values indicating the amount the top, right, bottom, and left edges, respectively, are offset by,
+with positive lengths indicating an outward offset.
+Percentages are resolved relative to the width of the undilated rectangle.
+
+Note: {{IntersectionObserver/scrollMargin}} affects the clipping of <a for="IntersectionObserver">target</a>
+by all scrollable ancestors up to and including the <a>intersection root</a>.
+
+Note: <a>scrollable intersection rectangles</a> are not affected by
+<a>pinch zoom</a> and will report the unadjusted <a>viewport</a>, consistent with the
+intent of pinch zooming (to act like a magnifying glass and NOT change layout.)
+
+To <dfn for="IntersectionObserver">parse a scroll margin</dfn>
+from an input string |scrollMarginString|,
+returning either an empty list, a list of 4 pixel lengths or percentages,
+or failure:
+
+1. <a>Parse a list of component values</a> |scrollMarginString|,
+	storing the result as |tokens|.
+2. Remove all whitespace tokens from |tokens|.
+3. If the length of |tokens| is greater than 4,
+	return failure.
+4. If there are zero elements in |tokens|,
+	set |tokens| to [].
 5. Replace each |token| in |tokens|:
 	* If |token| is an <a>absolute length</a> <a>dimension</a> token,
 		replace it with a an equivalent pixel length.
