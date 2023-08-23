@@ -587,7 +587,9 @@ which are initialized to empty lists and an internal
 <dfn attribute for=IntersectionObserver>\[[callback]]</dfn> slot
 which is initialized by {{IntersectionObserver(callback, options)}}</a>.
 They also have an internal <dfn attribute for=IntersectionObserver>\[[rootMargin]]</dfn> slot
-which is a list of four pixel lengths or percentages.
+which is a list of four pixel lengths or percentages, and an internal
+<dfn attribute for=IntersectionObserver>\[[scrollMargin]]</dfn> slot
+which is either an empty list or a list of four pixel lengths or percentages.
 
 <h3 id='algorithms'>
 Algorithms</h2>
