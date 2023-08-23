@@ -604,15 +604,20 @@ and an {{IntersectionObserverInit}} dictionary |options|, run these steps:
 	If a list is returned,
 	set |this|'s internal {{[[rootMargin]]}} slot to that.
 	Otherwise, <a>throw</a> a {{SyntaxError}} exception.
-4. Let |thresholds| be a list equal to
+4. Attempt to <a>parse a scroll margin</a>
+	from |options|.{{IntersectionObserverInit/scrollMargin}}.
+	If a list is returned,
+	set |this|'s internal {{[[scrollMargin]]}} slot to that.
+	Otherwise, <a>throw</a> a {{SyntaxError}} exception.
+5. Let |thresholds| be a list equal to
 	|options|.{{IntersectionObserverInit/threshold}}.
-5. If any value in |thresholds| is less than 0.0 or greater than
+6. If any value in |thresholds| is less than 0.0 or greater than
 	1.0, <a>throw</a> a {{RangeError}} exception.
-6. Sort |thresholds| in ascending order.
-7. If |thresholds| is empty, append <code>0</code> to |thresholds|.
-8. The {{IntersectionObserver/thresholds}} attribute getter will return
+7. Sort |thresholds| in ascending order.
+8. If |thresholds| is empty, append <code>0</code> to |thresholds|.
+9. The {{IntersectionObserver/thresholds}} attribute getter will return
 	this sorted |thresholds| list.
-9. Return |this|.
+10. Return |this|.
 
 <h4 id='observe-target-element'>Observe a target Element</h4>
 
