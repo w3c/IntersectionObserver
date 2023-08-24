@@ -341,36 +341,6 @@ If a <a for="IntersectionObserver">target</a> {{Element}} is clipped by an ances
 <a>intersection root</a>, that clipping is unaffected by
 {{IntersectionObserver/rootMargin}}.
 
-Note: <a>Root intersection rectangle</a> is not affected by
-<a>pinch zoom</a> and will report the unadjusted <a>viewport</a>, consistent with the
-intent of pinch zooming (to act like a magnifying glass and NOT change layout.)
-
-To <dfn>parse a root margin</dfn>
-from an input string |marginString|,
-returning either a list of 4 pixel lengths or percentages,
-or failure:
-
-1. <a>Parse a list of component values</a> |marginString|,
-	storing the result as |tokens|.
-2. Remove all whitespace tokens from |tokens|.
-3. If the length of |tokens| is greater than 4,
-	return failure.
-4. If there are zero elements in |tokens|,
-	set |tokens| to ["0px"].
-5. Replace each |token| in |tokens|:
-	* If |token| is an <a>absolute length</a> <a>dimension</a> token,
-		replace it with a an equivalent pixel length.
-	* If |token| is a <<percentage>> token,
-		replace it with an equivalent percentage.
-	* Otherwise, return failure.
-6. If there is one element in |tokens|,
-	append three duplicates of that element to |tokens|.
-	Otherwise, if there are two elements are |tokens|,
-	append a duplicate of each element to |tokens|.
-	Otherwise, if there are three elements in |tokens|,
-	append a duplicate of the second element to |tokens|.
-7. Return |tokens|.
-
 When calculating a <a>scrollport</a> intersection rectangle for
 a <a>same-origin-domain target</a>, the rectangle is expanded
 according to the offsets in the {{IntersectionObserver}}’s {{[[scrollMargin]]}} slot
@@ -384,22 +354,22 @@ by all scrollable ancestors up to and including the <a>intersection root</a>.
 Both the {{IntersectionObserver/scrollMargin}} and the {{IntersectionObserver/rootMargin}}
 are applied to a scrollable <a>intersection root's</a> rectangle.
 
-Note: <a>scrollport</a> intersection rectangles are not affected by
+Note: <a>Root intersection rectangle</a> and <a>scrollport</a> intersection rectangles are not affected by
 <a>pinch zoom</a> and will report the unadjusted <a>viewport</a>, consistent with the
 intent of pinch zooming (to act like a magnifying glass and NOT change layout.)
 
-To <dfn for="IntersectionObserver">parse a scroll margin</dfn>
-from an input string |scrollMarginString|,
-returning either an empty list, a list of 4 pixel lengths or percentages,
+To <dfn>parse a margin</dfn> (root or scroll)
+from an input string |marginString|,
+returning either a list of 4 pixel lengths or percentages,
 or failure:
 
-1. <a>Parse a list of component values</a> |scrollMarginString|,
+1. <a>Parse a list of component values</a> |marginString|,
 	storing the result as |tokens|.
 2. Remove all whitespace tokens from |tokens|.
 3. If the length of |tokens| is greater than 4,
 	return failure.
 4. If there are zero elements in |tokens|,
-	set |tokens| to [].
+	set |tokens| to ["0px"].
 5. Replace each |token| in |tokens|:
 	* If |token| is an <a>absolute length</a> <a>dimension</a> token,
 		replace it with a an equivalent pixel length.
@@ -497,7 +467,7 @@ The IntersectionObserverInit dictionary</h3>
 dictionary IntersectionObserverInit {
 	(Element or Document)?  root = null;
 	DOMString rootMargin = "0px";
-	DOMString scrollMargin = "";
+	DOMString scrollMargin = "0px";
 	(double or sequence&lt;double>) threshold = 0;
 };
 </pre>
@@ -521,16 +491,11 @@ dictionary IntersectionObserverInit {
 		</pre>
 	: <dfn>scrollMargin</dfn>
 	::
-		This is a string of 0-4 components,
+		Similar to {{IntersectionObserverInit/rootMargin}},
+		this is a string of 1-4 components,
 		each either an <a>absolute length</a> or a percentage.
 
-		<pre class="example" highlight=js>
-			""                   // no scroll margins
-			"5px"                // all margins set to 5px
-			"5px 10px"           // top & bottom = 5px, right & left = 10px
-			"-10px 5px 8px"      // top = -10px, right & left = 5px, bottom = 8px
-			"-10px -5px 5px 8px" // top = -10px, right = -5px, bottom = 5px, left = 8px
-		</pre>
+		See {{IntersectionObserverInit/rootMargin}} above for the example.
 	: <dfn>threshold</dfn>
 	::
 		List of threshold(s) at which to trigger callback.
@@ -597,12 +562,12 @@ and an {{IntersectionObserverInit}} dictionary |options|, run these steps:
 
 1. Let |this| be a new {{IntersectionObserver}} object
 2. Set |this|'s internal {{[[callback]]}} slot to |callback|.
-3. Attempt to <a>parse a root margin</a>
+3. Attempt to <a>parse a margin</a>
 	from |options|.{{IntersectionObserverInit/rootMargin}}.
 	If a list is returned,
 	set |this|'s internal {{[[rootMargin]]}} slot to that.
 	Otherwise, <a>throw</a> a {{SyntaxError}} exception.
-4. Attempt to <a>parse a scroll margin</a>
+4. Attempt to <a>parse a margin</a>
 	from |options|.{{IntersectionObserverInit/scrollMargin}}.
 	If a list is returned,
 	set |this|'s internal {{[[scrollMargin]]}} slot to that.
