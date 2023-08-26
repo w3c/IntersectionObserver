@@ -287,7 +287,7 @@ interface IntersectionObserver {
 	: <dfn>scrollMargin</dfn>
 	::
 		Offsets are applied to <a>scrollports</a> on the path from <a>intersection root</a> to <a for="IntersectionObserver">target</a>,
-		effectively growing or shrinking the box that is used to calculate intersections.
+		effectively growing or shrinking the boxes that are used to calculate intersections.
 		<b>These offsets are only applied when handling <a>same-origin-domain targets</a>;
 		for <a>cross-origin-domain targets</a> they are ignored.</b>
 
@@ -297,7 +297,7 @@ interface IntersectionObserver {
 		this is not guaranteed to be identical to the |options|.{{IntersectionObserverInit/scrollMargin}}
 		passed to the {{IntersectionObserver}} constructor.  If no
 		{{IntersectionObserverInit/scrollMargin}} was passed to the {{IntersectionObserver}}
-		constructor, the value of this attribute is an empty string.
+		constructor, the value of this attribute is "0px 0px 0px 0px".
 	: <dfn>thresholds</dfn>
 	::
 		A list of thresholds, sorted in increasing numeric order,
@@ -547,10 +547,9 @@ IntersectionObserver</h4>
 which are initialized to empty lists and an internal
 <dfn attribute for=IntersectionObserver>\[[callback]]</dfn> slot
 which is initialized by {{IntersectionObserver(callback, options)}}</a>.
-They also have an internal <dfn attribute for=IntersectionObserver>\[[rootMargin]]</dfn> slot
-which is a list of four pixel lengths or percentages, and an internal
-<dfn attribute for=IntersectionObserver>\[[scrollMargin]]</dfn> slot
-which is either an empty list or a list of four pixel lengths or percentages.
+They also have internal <dfn attribute for=IntersectionObserver>\[[rootMargin]]</dfn>
+and <dfn attribute for=IntersectionObserver>\[[scrollMargin]]</dfn> slots
+which are lists of four pixel lengths or percentages.
 
 <h3 id='algorithms'>
 Algorithms</h2>
