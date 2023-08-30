@@ -287,7 +287,7 @@ interface IntersectionObserver {
 	: <dfn>scrollMargin</dfn>
 	::
 		Offsets are applied to <a>scrollports</a> on the path from <a>intersection root</a> to <a for="IntersectionObserver">target</a>,
-		effectively growing or shrinking the boxes that are used to calculate intersections.
+		effectively growing or shrinking the clip rects used to calculate intersections.
 		<b>These offsets are only applied when handling <a>same-origin-domain targets</a>;
 		for <a>cross-origin-domain targets</a> they are ignored.</b>
 
