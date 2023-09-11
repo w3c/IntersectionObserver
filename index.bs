@@ -344,7 +344,7 @@ If a <a for="IntersectionObserver">target</a> {{Element}} is clipped by an ances
 When calculating a <a>scrollport</a> intersection rectangle for
 a <a>same-origin-domain target</a>, the rectangle is expanded
 according to the offsets in the {{IntersectionObserver}}’s {{[[scrollMargin]]}} slot
-in a manner similar to CSS's <a href="https://www.w3.org/TR/css-box-3/#margins">margin</a> property,
+in a manner similar to CSS's 'margin' property,
 with the four values indicating the amount the top, right, bottom, and left edges, respectively, are offset by,
 with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle.
@@ -673,7 +673,7 @@ run these steps:
 		of the {{document}}, and update |container| to be
 		the <a>browsing context container</a> of |container|.
 	2. Map |intersectionRect| to the coordinate space of |container|.
-	3. If |container| is a <a href="https://www.w3.org/TR/css-overflow/#scroll-container">scroll-container</a>, apply the {{IntersectionObserver}}’s
+	3. If |container| is a <a>scroll container</a>, apply the {{IntersectionObserver}}’s
 		{{[[scrollMargin]]}} to the |container|'s clip rect.
 	4. If |container| has a <a>content clip</a> or a css <a>clip-path</a> property,
 		update |intersectionRect| by applying |container|'s clip.
