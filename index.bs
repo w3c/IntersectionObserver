@@ -221,7 +221,7 @@ interface IntersectionObserver {
 	constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options = {});
 	readonly attribute (Element or Document)? root;
 	readonly attribute DOMString rootMargin;
-	readonly attribute FrozenArray&lt;double&gt; thresholds;
+	         attribute ObservableArray&lt;double&gt; thresholds;
 	undefined observe(Element target);
 	undefined unobserve(Element target);
 	undefined disconnect();
@@ -284,12 +284,21 @@ interface IntersectionObserver {
 		constructor, the value of this attribute is "0px 0px 0px 0px".
 	: <dfn>thresholds</dfn>
 	::
-		A list of thresholds, sorted in increasing numeric order,
+		On getting, returns {{[[thresholds]]}}, which is a list of thresholds,
+		sorted in increasing numeric order,
 		where each threshold is a ratio of intersection area to bounding box area
 		of an observed target.  Notifications for a target are generated when any
 		of the thresholds are crossed for that target.
 		If no |options|.{{IntersectionObserverInit/threshold}} was provided to the
-		{{IntersectionObserver}} constructor, the value of this attribute will be [0].
+		{{IntersectionObserver}} constructor,
+		and the {{IntersectionObserver/thresholds}} setter has not been invoked,
+		the value of this attribute will be [0].
+
+		On setting, let |sortedThresholds| be the result of
+		<a>validate and sort a thresholds list</a> for
+		|options|.{{IntersectionObserverInit/threshold}}.
+		If |sortedThresholds| is failure, then <a>throw</a> a {{RangeError}} exception.
+		Otherwise, set |this|'s internal {{[[thresholds]]}} slot to |sortedThresholds|.
 </div>
 
 An {{Element}} is defined as having a <dfn for="IntersectionObserver">content clip</dfn> if its computed style has <a>overflow properties</a> that cause its content to be clipped to the element's padding edge.
@@ -354,6 +363,15 @@ or failure:
 	Otherwise, if there are three elements in |tokens|,
 	append a duplicate of the second element to |tokens|.
 7. Return |tokens|.
+
+To <dfn>validate and sort a thresholds list</dfn> from a list |thresholds|,
+returning either a list or failure:
+
+1. If any value in |thresholds| is less than 0.0 or greater than
+	1.0, then return failure.
+2. Let |sortedThresholds| be the result of <a for="list" lt="sort">sorting |thresholds| in ascending order</a>.
+3. If |sortedThresholds| is empty, then append <code>0</code> to |sortedThresholds|.
+4. Return |sortedThresholds|.
 
 <h3 id="intersection-observer-entry">
 The IntersectionObserverEntry interface</h3>
@@ -498,7 +516,7 @@ which is initialized to an empty list.
 This list holds <dfn interface>IntersectionObserverRegistration</dfn> records,
 which have an <dfn attribute for=IntersectionObserverRegistration>observer</dfn> property
 holding an {{IntersectionObserver}}, a <dfn attribute for=IntersectionObserverRegistration>previousThresholdIndex</dfn> property
-holding a number between -1 and the length of the observer's {{IntersectionObserver/thresholds}} property (inclusive), and
+holding a number between -1 and the length of the observer's internal {{[[thresholds]]}} slot (inclusive), and
 a <dfn attribute for=IntersectionObserverRegistration>previousIsIntersecting</dfn> property holding a boolean.
 
 <h4 id='intersection-observer-private-slots'>
@@ -511,7 +529,9 @@ which are initialized to empty lists and an internal
 <dfn attribute for=IntersectionObserver>\[[callback]]</dfn> slot
 which is initialized by {{IntersectionObserver(callback, options)}}</a>.
 They also have an internal <dfn attribute for=IntersectionObserver>\[[rootMargin]]</dfn> slot
-which is a list of four pixel lengths or percentages.
+which is a list of four pixel lengths or percentages, and
+an internal <dfn attribute for=IntersectionObserver>\[[thresholds]]</dfn> slot
+which is a sorted list of thresholds.
 
 <h3 id='algorithms'>
 Algorithms</h2>
@@ -528,15 +548,12 @@ and an {{IntersectionObserverInit}} dictionary |options|, run these steps:
 	If a list is returned,
 	set |this|'s internal {{[[rootMargin]]}} slot to that.
 	Otherwise, <a>throw</a> a {{SyntaxError}} exception.
-4. Let |thresholds| be a list equal to
+4. Let |sortedThresholds| be the result of
+	<a>validate and sort a thresholds list</a> for
 	|options|.{{IntersectionObserverInit/threshold}}.
-5. If any value in |thresholds| is less than 0.0 or greater than
-	1.0, <a>throw</a> a {{RangeError}} exception.
-6. Sort |thresholds| in ascending order.
-7. If |thresholds| is empty, append <code>0</code> to |thresholds|.
-8. The {{IntersectionObserver/thresholds}} attribute getter will return
-	this sorted |thresholds| list.
-9. Return |this|.
+5. If |sortedThresholds| is failure, then <a>throw</a> a {{RangeError}} exception.
+6. Set |this|'s internal {{[[thresholds]]}} slot to |sortedThresholds|.
+7. Return |this|.
 
 <h4 id='observe-target-element'>Observe a target Element</h4>
 
@@ -675,7 +692,7 @@ To <dfn export>run the update intersection observations steps</dfn> for a
 			zero area).
 		9. If |targetArea| is non-zero, let |intersectionRatio| be |intersectionArea| divided by |targetArea|.<br>
 			Otherwise, let |intersectionRatio| be <code>1</code> if |isIntersecting| is true, or <code>0</code> if |isIntersecting| is false.
-		10. Set |thresholdIndex| to the index of the first entry in |observer|.{{thresholds}} whose value is greater than |intersectionRatio|, or the length of |observer|.{{thresholds}} if |intersectionRatio| is greater than or equal to the last entry in |observer|.{{thresholds}}.
+		10. Set |thresholdIndex| to the index of the first entry in |observer|'s internal {{[[thresholds]]}} slot whose value is greater than |intersectionRatio|, or the length of |observer|'s internal {{[[thresholds]]}} slot if |intersectionRatio| is greater than or equal to the last entry in |observer|'s internal {{[[thresholds]]}} slot.
 		11. Let |intersectionObserverRegistration| be the {{IntersectionObserverRegistration}} record
 			in |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot
 			whose {{IntersectionObserverRegistration/observer}} property is equal to |observer|.
