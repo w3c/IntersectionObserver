@@ -8,6 +8,7 @@ Previous version: from biblio
 Level: none
 Editor: Stefan Zager, Google, szager@google.com, w3cid 91208
 Editor: Emilio Cobos Álvarez , Mozilla, emilio@mozilla.com, w3cid 106537
+Editor: Traian Captan, Google, tcaptan@google.com, w3cid 137959
 Former Editor: Michael Blain, Google, mpb@google.com, w3cid 73819
 Abstract: This specification describes an API that can be used to understand the visibility and position of DOM elements ("targets") relative to a containing element or to the top-level viewport ("root"). The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
 Group: webapps
@@ -221,6 +222,7 @@ interface IntersectionObserver {
 	constructor(IntersectionObserverCallback callback, optional IntersectionObserverInit options = {});
 	readonly attribute (Element or Document)? root;
 	readonly attribute DOMString rootMargin;
+	readonly attribute DOMString scrollMargin;
 	readonly attribute FrozenArray&lt;double&gt; thresholds;
 	undefined observe(Element target);
 	undefined unobserve(Element target);
@@ -282,6 +284,20 @@ interface IntersectionObserver {
 		passed to the {{IntersectionObserver}} constructor.  If no
 		{{IntersectionObserverInit/rootMargin}} was passed to the {{IntersectionObserver}}
 		constructor, the value of this attribute is "0px 0px 0px 0px".
+	: <dfn>scrollMargin</dfn>
+	::
+		Offsets are applied to <a>scrollports</a> on the path from <a>intersection root</a> to <a for="IntersectionObserver">target</a>,
+		effectively growing or shrinking the clip rects used to calculate intersections.
+		<b>These offsets are only applied when handling <a>same-origin-domain targets</a>;
+		for <a>cross-origin-domain targets</a> they are ignored.</b>
+
+		On getting, return the result of serializing the elements of {{[[scrollMargin]]}}
+		space-separated, where pixel lengths serialize as the numeric value followed by "px",
+		and percentages serialize as the numeric value followed by "%".  Note that
+		this is not guaranteed to be identical to the |options|.{{IntersectionObserverInit/scrollMargin}}
+		passed to the {{IntersectionObserver}} constructor.  If no
+		{{IntersectionObserverInit/scrollMargin}} was passed to the {{IntersectionObserver}}
+		constructor, the value of this attribute is "0px 0px 0px 0px".
 	: <dfn>thresholds</dfn>
 	::
 		A list of thresholds, sorted in increasing numeric order,
@@ -325,11 +341,24 @@ If a <a for="IntersectionObserver">target</a> {{Element}} is clipped by an ances
 <a>intersection root</a>, that clipping is unaffected by
 {{IntersectionObserver/rootMargin}}.
 
-Note: <a>Root intersection rectangle</a> is not affected by
+When calculating a <a>scrollport</a> intersection rectangle for
+a <a>same-origin-domain target</a>, the rectangle is expanded
+according to the offsets in the {{IntersectionObserver}}’s {{[[scrollMargin]]}} slot
+in a manner similar to CSS's 'margin' property,
+with the four values indicating the amount the top, right, bottom, and left edges, respectively, are offset by,
+with positive lengths indicating an outward offset.
+Percentages are resolved relative to the width of the undilated rectangle.
+
+Note: {{IntersectionObserver/scrollMargin}} affects the clipping of <a for="IntersectionObserver">target</a>
+by all scrollable ancestors up to and including the <a>intersection root</a>.
+Both the {{IntersectionObserver/scrollMargin}} and the {{IntersectionObserver/rootMargin}}
+are applied to a scrollable <a>intersection root's</a> rectangle.
+
+Note: <a>Root intersection rectangle</a> and <a>scrollport</a> intersection rectangles are not affected by
 <a>pinch zoom</a> and will report the unadjusted <a>viewport</a>, consistent with the
 intent of pinch zooming (to act like a magnifying glass and NOT change layout.)
 
-To <dfn>parse a root margin</dfn>
+To <dfn>parse a margin</dfn> (root or scroll)
 from an input string |marginString|,
 returning either a list of 4 pixel lengths or percentages,
 or failure:
@@ -438,6 +467,7 @@ The IntersectionObserverInit dictionary</h3>
 dictionary IntersectionObserverInit {
 	(Element or Document)?  root = null;
 	DOMString rootMargin = "0px";
+	DOMString scrollMargin = "0px";
 	(double or sequence&lt;double>) threshold = 0;
 };
 </pre>
@@ -459,6 +489,13 @@ dictionary IntersectionObserverInit {
 			"-10px 5px 8px"      // top = -10px, right & left = 5px, bottom = 8px
 			"-10px -5px 5px 8px" // top = -10px, right = -5px, bottom = 5px, left = 8px
 		</pre>
+	: <dfn>scrollMargin</dfn>
+	::
+		Similar to {{IntersectionObserverInit/rootMargin}},
+		this is a string of 1-4 components,
+		each either an <a>absolute length</a> or a percentage.
+
+		See {{IntersectionObserverInit/rootMargin}} above for the example.
 	: <dfn>threshold</dfn>
 	::
 		List of threshold(s) at which to trigger callback.
@@ -510,8 +547,9 @@ IntersectionObserver</h4>
 which are initialized to empty lists and an internal
 <dfn attribute for=IntersectionObserver>\[[callback]]</dfn> slot
 which is initialized by {{IntersectionObserver(callback, options)}}</a>.
-They also have an internal <dfn attribute for=IntersectionObserver>\[[rootMargin]]</dfn> slot
-which is a list of four pixel lengths or percentages.
+They also have internal <dfn attribute for=IntersectionObserver>\[[rootMargin]]</dfn>
+and <dfn attribute for=IntersectionObserver>\[[scrollMargin]]</dfn> slots
+which are lists of four pixel lengths or percentages.
 
 <h3 id='algorithms'>
 Algorithms</h2>
@@ -523,20 +561,25 @@ and an {{IntersectionObserverInit}} dictionary |options|, run these steps:
 
 1. Let |this| be a new {{IntersectionObserver}} object
 2. Set |this|'s internal {{[[callback]]}} slot to |callback|.
-3. Attempt to <a>parse a root margin</a>
+3. Attempt to <a>parse a margin</a>
 	from |options|.{{IntersectionObserverInit/rootMargin}}.
 	If a list is returned,
 	set |this|'s internal {{[[rootMargin]]}} slot to that.
 	Otherwise, <a>throw</a> a {{SyntaxError}} exception.
-4. Let |thresholds| be a list equal to
+4. Attempt to <a>parse a margin</a>
+	from |options|.{{IntersectionObserverInit/scrollMargin}}.
+	If a list is returned,
+	set |this|'s internal {{[[scrollMargin]]}} slot to that.
+	Otherwise, <a>throw</a> a {{SyntaxError}} exception.
+5. Let |thresholds| be a list equal to
 	|options|.{{IntersectionObserverInit/threshold}}.
-5. If any value in |thresholds| is less than 0.0 or greater than
+6. If any value in |thresholds| is less than 0.0 or greater than
 	1.0, <a>throw</a> a {{RangeError}} exception.
-6. Sort |thresholds| in ascending order.
-7. If |thresholds| is empty, append <code>0</code> to |thresholds|.
-8. The {{IntersectionObserver/thresholds}} attribute getter will return
+7. Sort |thresholds| in ascending order.
+8. If |thresholds| is empty, append <code>0</code> to |thresholds|.
+9. The {{IntersectionObserver/thresholds}} attribute getter will return
 	this sorted |thresholds| list.
-9. Return |this|.
+10. Return |this|.
 
 <h4 id='observe-target-element'>Observe a target Element</h4>
 
@@ -630,9 +673,11 @@ run these steps:
 		of the {{document}}, and update |container| to be
 		the <a>browsing context container</a> of |container|.
 	2. Map |intersectionRect| to the coordinate space of |container|.
-	3. If |container| has a <a>content clip</a> or a css <a>clip-path</a> property,
+	3. If |container| is a <a>scroll container</a>, apply the {{IntersectionObserver}}’s
+		{{[[scrollMargin]]}} to the |container|'s clip rect.
+	4. If |container| has a <a>content clip</a> or a css <a>clip-path</a> property,
 		update |intersectionRect| by applying |container|'s clip.
-	4. If |container| is the root element of a <a>browsing context</a>,
+	5. If |container| is the root element of a <a>browsing context</a>,
 		update |container| to be the <a>browsing context</a>'s {{document}};
 		otherwise, update |container| to be the <a>containing block</a>
 		of |container|.
@@ -760,7 +805,7 @@ it may provide to code running in the context of a cross-origin iframe
 	about the geometry of the global viewport itself,
 	which may be used to deduce the user's hardware configuration.
 	The motivation for disabling the effects of {{IntersectionObserver/rootMargin}}
-	and suppressing {{IntersectionObserverEntry/rootBounds}}
+	and {{IntersectionObserver/scrollMargin}}, and suppressing {{IntersectionObserverEntry/rootBounds}}
 	for <a>cross-origin-domain targets</a> is to prevent such probing.
 
 It should be noted that prior to {{IntersectionObserver}}, web developers
