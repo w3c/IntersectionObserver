@@ -303,7 +303,8 @@ interface IntersectionObserver {
 		of an observed target.  Notifications for a target are generated when any
 		of the thresholds are crossed for that target.
 		If no |options|.{{IntersectionObserverInit/threshold}} was provided to the
-		{{IntersectionObserver}} constructor, the value of this attribute will be [0].
+		{{IntersectionObserver}} constructor, or the sequence is empty, the value
+		of this attribute will be [0].
 </div>
 
 An {{Element}} is defined as having a <dfn for="IntersectionObserver">content clip</dfn> if its computed style has <a>overflow properties</a> that cause its content to be clipped to the element's padding edge.
