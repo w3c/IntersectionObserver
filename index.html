@@ -7,7 +7,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version 82ce88815, updated Thu Sep 7 16:33:55 2023 -0700" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="e1c37975ea6072a5d9a5563dc9f85dd230b26f66" name="document-revision">
+  <meta content="ef83cd25ec091f25420a0b487c23210b64c9cfff" name="document-revision">
 <style>/* Boilerplate: style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
@@ -868,7 +868,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Intersection Observer</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2023-10-03">3 October 2023</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2023-10-18">18 October 2023</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -878,7 +878,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <dt>Latest published version:
       <dd><a href="https://www.w3.org/TR/intersection-observer/">https://www.w3.org/TR/intersection-observer/</a>
       <dt>Previous Versions:
-      <dd><a href="https://www.w3.org/TR/2023/WD-intersection-observer-20230929/" rel="prev">https://www.w3.org/TR/2023/WD-intersection-observer-20230929/</a>
+      <dd><a href="https://www.w3.org/TR/2023/WD-intersection-observer-20231003/" rel="prev">https://www.w3.org/TR/2023/WD-intersection-observer-20231003/</a>
       <dt>Test Suite:
       <dd><a href="http://w3c-test.org/intersection-observer/">http://w3c-test.org/intersection-observer/</a>
       <dt>Feedback:
@@ -1172,7 +1172,7 @@ If no <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-in
 of this attribute will be [0].</p>
     </dl>
    </div>
-   <p>An <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑦">Element</a></code> is defined as having a <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport id="intersectionobserver-content-clip">content clip</dfn> if its computed style has <a data-link-type="dfn" href="https://drafts.csswg.org/css-overflow-3/#overflow-properties" id="ref-for-overflow-properties">overflow properties</a> that cause its content to be clipped to the element’s padding edge.</p>
+   <p>An <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑦">Element</a></code> is defined as having a <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport id="intersectionobserver-content-clip">content clip</dfn> if its computed style has <a data-link-type="dfn" href="https://drafts.csswg.org/css-overflow-3/#overflow-properties" id="ref-for-overflow-properties">overflow properties</a> that cause its content to be clipped to the element’s <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#padding-edge" id="ref-for-padding-edge">padding edge</a>.</p>
    <p>The <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport id="intersectionobserver-root-intersection-rectangle">root intersection rectangle</dfn> for an <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver①⑤">IntersectionObserver</a></code> is the rectangle we’ll use to check against the targets.</p>
    <dl class="switch">
     <dt>If the <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver①⑥">IntersectionObserver</a></code> is an <a data-link-type="dfn" href="#intersectionobserver-implicit-root-observer" id="ref-for-intersectionobserver-implicit-root-observer②">implicit root observer</a>, 
@@ -1180,7 +1180,7 @@ of this attribute will be [0].</p>
     <dt>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root⑤">intersection root</a> is a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#dom-document-2" id="ref-for-dom-document-2③">document</a></code>, 
     <dd>it’s the size of the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#dom-document-2" id="ref-for-dom-document-2④">document</a></code>'s <a data-link-type="dfn" href="https://drafts.csswg.org/css2/visuren.html#viewport" id="ref-for-viewport②">viewport</a> (note that this processing step can only be reached if the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#dom-document-2" id="ref-for-dom-document-2⑤">document</a></code> is <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#fully-active" id="ref-for-fully-active">fully active</a>). 
     <dt>Otherwise, if the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root⑥">intersection root</a> has a <a data-link-type="dfn" href="#intersectionobserver-content-clip" id="ref-for-intersectionobserver-content-clip">content clip</a>, 
-    <dd>it’s the element’s <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#content-area" id="ref-for-content-area">content area</a>. 
+    <dd>it’s the element’s <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#padding-area" id="ref-for-padding-area">padding area</a>. 
     <dt>Otherwise, 
     <dd>it’s the result of <a data-link-type="dfn" href="https://drafts.csswg.org/cssom-view-1/#element-get-the-bounding-box" id="ref-for-element-get-the-bounding-box">getting the bounding box</a> for the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root⑦">intersection root</a>. 
    </dl>
@@ -1824,7 +1824,6 @@ specification.</p>
      <li><span class="dfn-paneled" id="7e97fcbf">clip-path</span>
      <li><span class="dfn-paneled" id="23ef900a">containing block</span>
      <li><span class="dfn-paneled" id="e0c5f84d">containing block chain</span>
-     <li><span class="dfn-paneled" id="eda7c1d4">content area</span>
      <li><span class="dfn-paneled" id="fd0b4a9a">document</span>
      <li><span class="dfn-paneled" id="8ac02c3e">double</span>
      <li><span class="dfn-paneled" id="c6d19e56">event loop</span>
@@ -1834,6 +1833,8 @@ specification.</p>
      <li><span class="dfn-paneled" id="25d33108">nested browsing context</span>
      <li><span class="dfn-paneled" id="73317570">origin</span>
      <li><span class="dfn-paneled" id="1a3d4de6">overflow properties</span>
+     <li><span class="dfn-paneled" id="2c543ae5">padding area</span>
+     <li><span class="dfn-paneled" id="b1242144">padding edge</span>
      <li><span class="dfn-paneled" id="dddc4776">pinch zoom</span>
      <li><span class="dfn-paneled" id="9a517a7d">queue a task</span>
      <li><span class="dfn-paneled" id="9c4c1e66">relevant settings object</span>
@@ -2574,7 +2575,6 @@ window.dfnpanelData['382d14c8'] = {"dfnID": "382d14c8", "url": "https://html.spe
 window.dfnpanelData['7e97fcbf'] = {"dfnID": "7e97fcbf", "url": "http://www.w3.org/TR/css-masking-1/#propdef-clip-path", "dfnText": "clip-path", "refSections": [{"refs": [{"id": "ref-for-propdef-clip-path"}], "title": "3.2.7. \nCompute the Intersection of a Target Element and the Root"}], "external": true};
 window.dfnpanelData['23ef900a'] = {"dfnID": "23ef900a", "url": "https://drafts.csswg.org/css-box/#containing-block", "dfnText": "containing block", "refSections": [{"refs": [{"id": "ref-for-containing-block"}, {"id": "ref-for-containing-block\u2460"}], "title": "3.2.7. \nCompute the Intersection of a Target Element and the Root"}], "external": true};
 window.dfnpanelData['e0c5f84d'] = {"dfnID": "e0c5f84d", "url": "https://drafts.csswg.org/css-display/#containing-block-chain", "dfnText": "containing block chain", "refSections": [{"refs": [{"id": "ref-for-containing-block-chain"}], "title": "2.2. \nThe IntersectionObserver interface"}, {"refs": [{"id": "ref-for-containing-block-chain\u2460"}], "title": "3.2.8. \nRun the Update Intersection Observations Steps"}], "external": true};
-window.dfnpanelData['eda7c1d4'] = {"dfnID": "eda7c1d4", "url": "https://drafts.csswg.org/css-box/#content-area", "dfnText": "content area", "refSections": [{"refs": [{"id": "ref-for-content-area"}], "title": "2.2. \nThe IntersectionObserver interface"}], "external": true};
 window.dfnpanelData['fd0b4a9a'] = {"dfnID": "fd0b4a9a", "url": "https://html.spec.whatwg.org/multipage/dom.html#document", "dfnText": "document", "refSections": [{"refs": [{"id": "ref-for-document"}], "title": "2.2. \nThe IntersectionObserver interface"}, {"refs": [{"id": "ref-for-document\u2462"}], "title": "3.2.8. \nRun the Update Intersection Observations Steps"}], "external": true};
 window.dfnpanelData['8ac02c3e'] = {"dfnID": "8ac02c3e", "url": "https://heycam.github.io/webidl/#idl-double", "dfnText": "double", "refSections": [{"refs": [{"id": "ref-for-idl-double"}, {"id": "ref-for-idl-double\u2460"}], "title": "2.2. \nThe IntersectionObserver interface"}, {"refs": [{"id": "ref-for-idl-double\u2461"}, {"id": "ref-for-idl-double\u2462"}, {"id": "ref-for-idl-double\u2463"}], "title": "2.3. \nThe IntersectionObserverEntry interface"}, {"refs": [{"id": "ref-for-idl-double\u2464"}, {"id": "ref-for-idl-double\u2465"}], "title": "2.4. \nThe IntersectionObserverInit dictionary"}], "external": true};
 window.dfnpanelData['c6d19e56'] = {"dfnID": "c6d19e56", "url": "https://html.spec.whatwg.org/multipage/webappapis.html#event-loop", "dfnText": "event loop", "refSections": [{"refs": [{"id": "ref-for-event-loop"}], "title": "3.2.4. \nQueue an Intersection Observer Task"}], "external": true};
@@ -2584,6 +2584,8 @@ window.dfnpanelData['10e56401'] = {"dfnID": "10e56401", "url": "https://html.spe
 window.dfnpanelData['25d33108'] = {"dfnID": "25d33108", "url": "https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context", "dfnText": "nested browsing context", "refSections": [{"refs": [{"id": "ref-for-nested-browsing-context"}], "title": "2.2. \nThe IntersectionObserver interface"}, {"refs": [{"id": "ref-for-nested-browsing-context\u2460"}], "title": "3.2.7. \nCompute the Intersection of a Target Element and the Root"}], "external": true};
 window.dfnpanelData['73317570'] = {"dfnID": "73317570", "url": "https://html.spec.whatwg.org/multipage/origin.html#origin", "dfnText": "origin", "refSections": [{"refs": [{"id": "ref-for-origin"}], "title": "2.2. \nThe IntersectionObserver interface"}], "external": true};
 window.dfnpanelData['1a3d4de6'] = {"dfnID": "1a3d4de6", "url": "https://drafts.csswg.org/css-overflow-3/#overflow-properties", "dfnText": "overflow properties", "refSections": [{"refs": [{"id": "ref-for-overflow-properties"}], "title": "2.2. \nThe IntersectionObserver interface"}], "external": true};
+window.dfnpanelData['2c543ae5'] = {"dfnID": "2c543ae5", "url": "https://drafts.csswg.org/css-box/#padding-area", "dfnText": "padding area", "refSections": [{"refs": [{"id": "ref-for-padding-area"}], "title": "2.2. \nThe IntersectionObserver interface"}], "external": true};
+window.dfnpanelData['b1242144'] = {"dfnID": "b1242144", "url": "https://drafts.csswg.org/css-box/#padding-edge", "dfnText": "padding edge", "refSections": [{"refs": [{"id": "ref-for-padding-edge"}], "title": "2.2. \nThe IntersectionObserver interface"}], "external": true};
 window.dfnpanelData['dddc4776'] = {"dfnID": "dddc4776", "url": "https://drafts.csswg.org/cssom-view-1/#pinch-zoom", "dfnText": "pinch zoom", "refSections": [{"refs": [{"id": "ref-for-pinch-zoom"}], "title": "2.2. \nThe IntersectionObserver interface"}], "external": true};
 window.dfnpanelData['9a517a7d'] = {"dfnID": "9a517a7d", "url": "https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task", "dfnText": "queue a task", "refSections": [{"refs": [{"id": "ref-for-queue-a-task"}], "title": "3.2.4. \nQueue an Intersection Observer Task"}], "external": true};
 window.dfnpanelData['9c4c1e66'] = {"dfnID": "9c4c1e66", "url": "https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object", "dfnText": "relevant settings object", "refSections": [{"refs": [{"id": "ref-for-relevant-settings-object"}], "title": "2.2. \nThe IntersectionObserver interface"}], "external": true};
