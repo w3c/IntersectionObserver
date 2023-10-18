@@ -58,7 +58,8 @@ urlPrefix: https://heycam.github.io/webidl/
 	url: #hierarchyrequesterror; type: exception; text: HierarchyRequestError
 urlPrefix: https://drafts.csswg.org/css-box/
 	url: #containing-block; type: dfn; text: containing block
-	url: #content-area; type: dfn; text: content area
+	url: #padding-area; type: dfn; text: padding area
+	url: #padding-edge; type: dfn; text: padding edge
 urlPrefix: https://drafts.csswg.org/css-display/
 	url: #containing-block-chain; type: dfn; text: containing block chain
 urlPrefix: http://www.w3.org/TR/css-masking-1/
@@ -307,7 +308,7 @@ interface IntersectionObserver {
 		of this attribute will be [0].
 </div>
 
-An {{Element}} is defined as having a <dfn for="IntersectionObserver">content clip</dfn> if its computed style has <a>overflow properties</a> that cause its content to be clipped to the element's padding edge.
+An {{Element}} is defined as having a <dfn for="IntersectionObserver">content clip</dfn> if its computed style has <a>overflow properties</a> that cause its content to be clipped to the element's <a>padding edge</a>.
 
 The <dfn for=IntersectionObserver>root intersection rectangle</dfn>
 for an {{IntersectionObserver}}
@@ -321,7 +322,7 @@ is the rectangle we'll use to check against the targets.
 	<dd>it's the size of the {{document}}'s <a>viewport</a> (note that this processing step can only be reached if the {{document}} is <a>fully active</a>).
 
 	<dt>Otherwise, if the <a>intersection root</a> has a <a>content clip</a>,
-	<dd>it's the element's <a>content area</a>.
+	<dd>it's the element's <a>padding area</a>.
 
 	<dt>Otherwise,
 	<dd>it's the result of <a>getting the bounding box</a> for the <a>intersection root</a>.
