@@ -49,6 +49,7 @@ urlPrefix: https://html.spec.whatwg.org/multipage/
 		type: dfn; text: origin
 urlPrefix: https://heycam.github.io/webidl/
 	url: #dfn-simple-exception; type:exception;
+		text: NotAllowedError
 		text: RangeError
 		text: TypeError
 		text: SyntaxError
@@ -56,6 +57,9 @@ urlPrefix: https://heycam.github.io/webidl/
 	urlPrefix: #idl-; type:interface; text: double
 	urlPrefix: #idl-; type:interface; text: undefined
 	url: #hierarchyrequesterror; type: exception; text: HierarchyRequestError
+urlPrefix: https://drafts.csswg.org/css-backgrounds/
+	url: #shadow-blur; type:dfn; text: blur
+	url: #blur-radius; type:dfn; text: blur radius
 urlPrefix: https://drafts.csswg.org/css-box/
 	url: #containing-block; type: dfn; text: containing block
 	url: #padding-area; type: dfn; text: padding area
@@ -64,12 +68,19 @@ urlPrefix: https://drafts.csswg.org/css-display/
 	url: #containing-block-chain; type: dfn; text: containing block chain
 urlPrefix: http://www.w3.org/TR/css-masking-1/
 	url: #propdef-clip-path; type:dfn; text: clip-path
+urlPrefix: https://drafts.csswg.org/css-overflow-3/
+	url: #ink-overflow-rectangle; type:dfn; text: ink overflow rectangle
+	url: #ink-overflow-region; type:dfn; text: ink overflow region
+	url: #overflow-properties; type:dfn; text: overflow properties
+urlPrefix: https://drafts.csswg.org/css-transforms-1/
+	url: #transformation-matrix; type:dfn; text: transformation matrix
+	url: #serialization-of-the-computed-value; type:dfn; text: serialization
+	url: #identity-transform-function; type:dfn; text: identity transform function
+	url: #post-multiplied; type:dfn; text: post-multiplied
 urlPrefix: https://drafts.csswg.org/cssom-view-1/
 	url: #pinch-zoom; type:dfn; text: pinch zoom
 urlPrefix: https://drafts.csswg.org/css2/visuren.html
 	url: #viewport; type:dfn; text: viewport
-urlPrefix: https://drafts.csswg.org/css-overflow-3/
-	url: #overflow-properties; type:dfn; text: overflow properties
 </pre>
 
 <pre class="link-defaults">
@@ -225,6 +236,8 @@ interface IntersectionObserver {
 	readonly attribute DOMString rootMargin;
 	readonly attribute DOMString scrollMargin;
 	readonly attribute FrozenArray&lt;double&gt; thresholds;
+	readonly attribute long delay;
+	readonly attribute boolean trackVisibility;
 	undefined observe(Element target);
 	undefined unobserve(Element target);
 	undefined disconnect();
@@ -247,7 +260,7 @@ interface IntersectionObserver {
 
 		Note: {{MutationObserver}} does not implement {{unobserve()}}.
 		For {{IntersectionObserver}}, {{unobserve()}} addresses the
-		lazy-loading use case. After |target| becomes visible,
+		lazy-loading use case. After loading is initiated for |target|,
 		it does not need to be tracked.
 		It would be more work to either {{disconnect()}} all |target|s
 		and {{observe()}} the remaining ones,
@@ -306,6 +319,14 @@ interface IntersectionObserver {
 		If no |options|.{{IntersectionObserverInit/threshold}} was provided to the
 		{{IntersectionObserver}} constructor, or the sequence is empty, the value
 		of this attribute will be [0].
+	: <dfn>delay</dfn>
+	::
+		A number indicating the minimum delay in milliseconds
+		between notifications from this observer for a given target.
+	: <dfn>trackVisibility</dfn>
+	::
+		A boolean indicating whether this {{IntersectionObserver}} will track
+		changes in a target's <a>visibility</a>.
 </div>
 
 An {{Element}} is defined as having a <dfn for="IntersectionObserver">content clip</dfn> if its computed style has <a>overflow properties</a> that cause its content to be clipped to the element's <a>padding edge</a>.
@@ -401,6 +422,7 @@ interface IntersectionObserverEntry {
 	readonly attribute DOMRectReadOnly boundingClientRect;
 	readonly attribute DOMRectReadOnly intersectionRect;
 	readonly attribute boolean isIntersecting;
+	readonly attribute boolean isVisible;
 	readonly attribute double intersectionRatio;
 	readonly attribute Element target;
 };
@@ -411,6 +433,7 @@ dictionary IntersectionObserverEntryInit {
 	required DOMRectInit boundingClientRect;
 	required DOMRectInit intersectionRect;
 	required boolean isIntersecting;
+	required boolean isVisible;
 	required double intersectionRatio;
 	required Element target;
 };
@@ -428,8 +451,8 @@ dictionary IntersectionObserverEntryInit {
 		rects (up to but not including {{IntersectionObserver/root}}),
 		intersected with the <a>root intersection rectangle</a>.
 		This value represents the portion of
-		{{IntersectionObserverEntry/target}} actually visible
-		within the <a>root intersection rectangle</a>.
+		{{IntersectionObserverEntry/target}} that intersects with
+		the <a>root intersection rectangle</a>.
 	: <dfn>isIntersecting</dfn>
 	::
 		True if the {{IntersectionObserverEntry/target}} intersects with the
@@ -440,6 +463,11 @@ dictionary IntersectionObserverEntryInit {
 		to intersecting with a zero-area intersection rect (as will happen with
 		edge-adjacent intersections, or when the {{IntersectionObserverEntry/boundingClientRect}}
 		has zero area).
+	: <dfn>isVisible</dfn>
+	::
+		True if {{IntersectionObserver/trackVisibility}} is <code>true</code>
+		and the <a>visibility</a> algorithm,
+		when run on {{IntersectionObserverEntry/target}}, returns <code>true</code>.
 	: <dfn>intersectionRatio</dfn>
 	::
 		If the {{IntersectionObserverEntry/boundingClientRect}} has non-zero area,
@@ -474,6 +502,8 @@ dictionary IntersectionObserverInit {
 	DOMString rootMargin = "0px";
 	DOMString scrollMargin = "0px";
 	(double or sequence&lt;double>) threshold = 0;
+	long delay = 0;
+	boolean trackVisibility = false;
 };
 </pre>
 
@@ -513,6 +543,16 @@ dictionary IntersectionObserverInit {
 		by <a>getting the bounding box</a> for <a for="IntersectionObserver">target</a>.
 
 		Note: 0.0 is effectively "any non-zero number of pixels".
+	: <dfn>delay</dfn>
+	::
+		A number specifying the minimum delay in milliseconds
+		between notifications from the observer for a given target.
+	: <dfn>trackVisibility</dfn>
+	::
+		A boolean indicating whether the observer should track <a>visibility</a>.
+		Note that tracking <a>visibility</a> is likely to be a more expensive operation
+		than tracking intersections. It is recommended that this option be used
+		only when necessary.
 </div>
 
 <h2 dfn id='intersection-observer-processing-model'>
@@ -538,23 +578,32 @@ Element</h4>
 <dfn attribute for=Element>\[[RegisteredIntersectionObservers]]</dfn> slot,
 which is initialized to an empty list.
 This list holds <dfn interface>IntersectionObserverRegistration</dfn> records,
-which have an <dfn attribute for=IntersectionObserverRegistration>observer</dfn> property
-holding an {{IntersectionObserver}}, a <dfn attribute for=IntersectionObserverRegistration>previousThresholdIndex</dfn> property
-holding a number between -1 and the length of the observer's {{IntersectionObserver/thresholds}} property (inclusive), and
-a <dfn attribute for=IntersectionObserverRegistration>previousIsIntersecting</dfn> property holding a boolean.
+which have:
+	* an <dfn attribute for=IntersectionObserverRegistration>observer</dfn> property
+	holding an {{IntersectionObserver}}.
+	* a <dfn attribute for=IntersectionObserverRegistration>previousThresholdIndex</dfn> property
+	holding a number between -1 and the length of the observer's {{IntersectionObserver/thresholds}} property (inclusive).
+	* a <dfn attribute for=IntersectionObserverRegistration>previousIsIntersecting</dfn> property
+	holding a boolean.
+	* a <dfn attribute for=IntersectionObserverRegistration>lastUpdateTime</dfn> property
+	holding a {{DOMHighResTimeStamp}} value.
+	* a <dfn attribute for=IntersectionObserverRegistration>previousIsVisible</dfn> property
+	holding a boolean.
 
 <h4 id='intersection-observer-private-slots'>
 IntersectionObserver</h4>
 
-{{IntersectionObserver}} objects have internal
-<dfn attribute for=IntersectionObserver>\[[QueuedEntries]]</dfn> and
-<dfn attribute for=IntersectionObserver>\[[ObservationTargets]]</dfn> slots,
-which are initialized to empty lists and an internal
-<dfn attribute for=IntersectionObserver>\[[callback]]</dfn> slot
-which is initialized by {{IntersectionObserver(callback, options)}}</a>.
-They also have internal <dfn attribute for=IntersectionObserver>\[[rootMargin]]</dfn>
-and <dfn attribute for=IntersectionObserver>\[[scrollMargin]]</dfn> slots
-which are lists of four pixel lengths or percentages.
+{{IntersectionObserver}} objects have the following internal slots:
+	* A <dfn attribute for=IntersectionObserver>\[[QueuedEntries]]</dfn> slot
+	initialized to an empty list.
+	* A <dfn attribute for=IntersectionObserver>\[[ObservationTargets]]</dfn> slot
+	initialized to an empty list.
+	* A <dfn attribute for=IntersectionObserver>\[[callback]]</dfn> slot
+	which is initialized by {{IntersectionObserver(callback, options)}}.
+	* A <dfn attribute for=IntersectionObserver>\[[rootMargin]]</dfn> slot
+	which is a list of four pixel lengths or percentages.
+	* A <dfn attribute for=IntersectionObserver>\[[scrollMargin]]</dfn> slot
+	which is a list of four pixel lengths or percentages.
 
 <h3 id='algorithms'>
 Algorithms</h2>
@@ -584,7 +633,12 @@ and an {{IntersectionObserverInit}} dictionary |options|, run these steps:
 8. If |thresholds| is empty, append <code>0</code> to |thresholds|.
 9. The {{IntersectionObserver/thresholds}} attribute getter will return
 	this sorted |thresholds| list.
-10. Return |this|.
+10. If |options|.{{IntersectionObserverInit/trackVisibility}} is <code>true</code>,
+	and |options|.{{IntersectionObserverInit/delay}} is not specified or is less than <code>100</code>,
+	<a>throw</a> a {{NotAllowedError}} exception.
+11. Set |this|'s internal {{[[delay]]}} slot to |options|.{{IntersectionObserverInit/delay}}.
+12. Set |this|'s internal {{[[trackVisibility]]}} slot to |options|.{{IntersectionObserverInit/trackVisibility}}.
+13. Return |this|.
 
 <h4 id='observe-target-element'>Observe a target Element</h4>
 
@@ -597,7 +651,8 @@ and an {{Element}} |target|, follow these steps:
 	an {{IntersectionObserverRegistration}} record
 	with an {{IntersectionObserverRegistration/observer}} property set to |observer|,
 	a {{IntersectionObserverRegistration/previousThresholdIndex}} property set to <code>-1</code>,
-	and a {{IntersectionObserverRegistration/previousIsIntersecting}} property set to <code>false</code>.
+	a {{IntersectionObserverRegistration/previousIsIntersecting}} property set to <code>false</code>,
+	and a {{IntersectionObserverRegistration/previousIsVisible}} property set to <code>false</code>.
 3. Append |intersectionObserverRegistration|
 	to |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
 4. Add |target| to |observer|'s internal {{[[ObservationTargets]]}} slot.
