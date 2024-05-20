@@ -49,7 +49,6 @@ urlPrefix: https://html.spec.whatwg.org/multipage/
 		type: dfn; text: origin
 urlPrefix: https://heycam.github.io/webidl/
 	url: #dfn-simple-exception; type:exception;
-		text: NotAllowedError
 		text: RangeError
 		text: TypeError
 		text: SyntaxError
@@ -464,9 +463,8 @@ dictionary IntersectionObserverEntryInit {
 		has zero area).
 	: <dfn>isVisible</dfn>
 	::
-		True if {{IntersectionObserver/trackVisibility}} is <code>true</code>
-		and the <a>visibility</a> algorithm,
-		when run on {{IntersectionObserverEntry/target}}, returns <code>true</code>.
+		Contains the result of running the <a>visibility</a> algorithm
+		on {{IntersectionObserverEntry/target}}.
 	: <dfn>intersectionRatio</dfn>
 	::
 		If the {{IntersectionObserverEntry/boundingClientRect}} has non-zero area,
@@ -603,6 +601,12 @@ IntersectionObserver</h4>
 		which is a list of four pixel lengths or percentages.
 	* A <dfn attribute for=IntersectionObserver>\[[scrollMargin]]</dfn> slot
 		which is a list of four pixel lengths or percentages.
+	* A <dfn attribute for=IntersectionObserver>\[[thresholds]]</dfn> slot
+		which is initialized by {{IntersectionObserver(callback, options)}}.
+	* A <dfn attribute for=IntersectionObserver>\[[delay]]</dfn> slot
+		which is initialized by {{IntersectionObserver(callback, options)}}.
+	* A <dfn attribute for=IntersectionObserver>\[[trackVisibility]]</dfn> slot
+		which is initialized by {{IntersectionObserver(callback, options)}}.
 
 <h3 id='algorithms'>
 Algorithms</h2>
@@ -632,10 +636,10 @@ and an {{IntersectionObserverInit}} dictionary |options|, run these steps:
 8. If |thresholds| is empty, append <code>0</code> to |thresholds|.
 9. The {{IntersectionObserver/thresholds}} attribute getter will return
 	this sorted |thresholds| list.
-10. If |options|.{{IntersectionObserverInit/trackVisibility}} is <code>true</code>,
-	and |options|.{{IntersectionObserverInit/delay}} is not specified or is less than <code>100</code>,
-	<a>throw</a> a {{NotAllowedError}} exception.
-11. Set |this|'s internal {{[[delay]]}} slot to |options|.{{IntersectionObserverInit/delay}}.
+10. Let |delay| be the value of |options|.{{IntersectionObserverInit/delay}}.
+11. If |options|.{{IntersectionObserverInit/trackVisibility}} is true
+	and |delay| is less than <code>100</code>, set |delay| to <code>100</code>.
+11. Set |this|'s internal {{[[delay]]}} slot to |options|.{{IntersectionObserverInit/delay}} to |delay|.
 12. Set |this|'s internal {{[[trackVisibility]]}} slot to |options|.{{IntersectionObserverInit/trackVisibility}}.
 13. Return |this|.
 
@@ -650,8 +654,8 @@ and an {{Element}} |target|, follow these steps:
 	an {{IntersectionObserverRegistration}} record
 	with an {{IntersectionObserverRegistration/observer}} property set to |observer|,
 	a {{IntersectionObserverRegistration/previousThresholdIndex}} property set to <code>-1</code>,
-	a {{IntersectionObserverRegistration/previousIsIntersecting}} property set to <code>false</code>,
-	and a {{IntersectionObserverRegistration/previousIsVisible}} property set to <code>false</code>.
+	a {{IntersectionObserverRegistration/previousIsIntersecting}} property set to false,
+	and a {{IntersectionObserverRegistration/previousIsVisible}} property set to false.
 3. Append |intersectionObserverRegistration|
 	to |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot.
 4. Add |target| to |observer|'s internal {{[[ObservationTargets]]}} slot.
@@ -749,7 +753,7 @@ run these steps:
 Compute whether a Target is unoccluded, untransformed, unfiltered, and opaque.</h4>
 
 To compute the <dfn>visibility</dfn> of a <a for="IntersectionObserver">target</a>, run these steps:
-1. If the |observer|'s {{IntersectionObserver/trackVisibility}} attribute is false, return true.
+1. If the |observer|'s {{IntersectionObserver/trackVisibility}} attribute is false, return false.
 2. If the <a for="IntersectionObserver">target</a> has an <a>effective transformation matrix</a> other than a 2D translation or proportional 2D upscaling, return false.
 3. If the <a for="IntersectionObserver">target</a>, or any element in its <a>containing block chain</a>, has an effective opacity other than 100%, return false.
 4. If the <a for="IntersectionObserver">target</a>, or any element in its <a>containing block chain</a>, has any filters applied, return false.
