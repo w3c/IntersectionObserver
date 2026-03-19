@@ -609,7 +609,7 @@ IntersectionObserver</h4>
 		which is initialized by {{IntersectionObserver(callback, options)}}.
 
 <h3 id='algorithms'>
-Algorithms</h2>
+Algorithms</h3>
 
 <h4 id='initialize-new-intersection-observer'>Initialize a new IntersectionObserver</h4>
 
@@ -837,7 +837,7 @@ To <dfn export>run the update intersection observations steps</dfn> for a
 			{{IntersectionObserverRegistration/previousIsVisible}} property.
 
 <h3 id='lifetime'>
-IntersectionObserver Lifetime</h2>
+IntersectionObserver Lifetime</h3>
 
 An {{IntersectionObserver}} will remain alive until both of these conditions hold:
 <ul>
