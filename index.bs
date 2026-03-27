@@ -704,9 +704,7 @@ run these steps:
 		slot.
 	3. Clear |observer|'s internal {{[[QueuedEntries]]}} slot.
 	4. Let |callback| be the value of |observer|'s internal {{[[callback]]}} slot.
-	5. Invoke |callback| with |queue| as the first argument, |observer| as the second argument,
-		and |observer| as the <a>callback this value</a>.
-		If this throws an exception, <a>report the exception</a>.
+	5. [=Invoke=] |callback| with « |queue|, |observer| », "`report`", and |observer|.
 
 <h4 id='queue-intersection-observer-entry-algo'>
 Queue an IntersectionObserverEntry</h4>
