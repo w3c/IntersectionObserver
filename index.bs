@@ -884,7 +884,7 @@ There are, however, related specifications and proposals that leverage and refer
 which might have their own accessibility considerations. In particular, specifications for
 [[html#lazy-loading-attributes]] and [[css-contain-2#content-visibility]]
 may have implications for [[html#find-in-page]], [[html#the-tabindex-attribute]], and
-<a href="https://githumb.com/WICG/spatial-navigation">spatial navigation</a>.
+<a href="https://github.com/WICG/spatial-navigation">spatial navigation</a>.
 
 <!-- ============================================================ -->
 <h2 id=privacy>Privacy and Security</h2>
