@@ -11,7 +11,7 @@ Editor: Emilio Cobos Álvarez , Mozilla, emilio@mozilla.com, w3cid 106537
 Editor: Traian Captan, Google, tcaptan@google.com, w3cid 137959
 Former Editor: Michael Blain, Google, mpb@google.com, w3cid 73819
 Abstract: This specification describes an API that can be used to understand the visibility and position of DOM elements ("targets") relative to a containing element or to the top-level viewport ("root"). The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.
-Group: webapps
+Group: csswg
 Repository: W3C/IntersectionObserver
 Test Suite: http://w3c-test.org/intersection-observer/
 Ignored Vars: rootMargin, docs, now
