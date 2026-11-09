@@ -6,6 +6,7 @@ Shortname: intersection-observer
 TR: https://www.w3.org/TR/intersection-observer/
 Previous version: from biblio
 Level: none
+Work Status: Testing
 Editor: Stefan Zager, Google, szager@google.com, w3cid 91208
 Editor: Emilio Cobos Álvarez , Mozilla, emilio@mozilla.com, w3cid 106537
 Editor: Traian Captan, Google, tcaptan@google.com, w3cid 137959
