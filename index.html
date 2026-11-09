@@ -5,9 +5,10 @@
   <title>Intersection Observer</title>
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version 0ef803fdf, updated Tue Jan 6 11:59:39 2026 -0800" name="generator">
+  <meta content="Bikeshed version e0b165ae4, updated Mon Nov 2 15:16:49 2026 -0800" name="generator">
   <link href="https://www.w3.org/TR/intersection-observer/" rel="canonical">
-  <meta content="633339846d89a39b3797168bcf249d8739e0cb00" name="revision">
+  <link href="https://drafts.csswg.org/csslogo.ico" rel="icon">
+  <meta content="a001b855df0b047500a3ed604b222ad603576659" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -303,7 +304,7 @@ pre .property::before, pre .property::after {
 </style>
 <style>/* Boilerplate: style-counters */
 body {
-    counter-reset: example figure issue;
+    counter-reset: example figure issue table;
 }
 .issue {
     counter-increment: issue;
@@ -329,6 +330,13 @@ figcaption {
 figcaption:not(.no-marker)::before {
     content: "Figure " counter(figure) " ";
 }
+
+figure.table figcaption {
+    counter-increment: table;
+}
+figure.table figcaption:not(.no-marker)::before {
+    content: "Table " counter(table) " ";
+}
 </style>
 <style>/* Boilerplate: style-dfn-panel */
 :root {
@@ -353,14 +361,17 @@ figcaption:not(.no-marker)::before {
     height: auto;
     max-height: 500px;
     overflow: auto;
+    margin: 0;
     padding: 0.5em 0.75em;
     font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
     background: var(--dfnpanel-bg);
     color: var(--dfnpanel-text);
     border: outset 0.2em;
     white-space: normal; /* in case it's moved into a pre */
+    inset: auto;
+    position-area: bottom span-right;
+    position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
 }
-.dfn-panel:not(.on) { display: none; }
 .dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
 .dfn-panel > b { display: block; }
 .dfn-panel a { color: var(--dfnpanel-text); }
@@ -380,6 +391,9 @@ figcaption:not(.no-marker)::before {
 .dfn-panel.activated {
     display: inline-block;
     position: fixed;
+    position-area: none;
+    top: auto;
+    right: auto;
     left: 8px;
     bottom: 2em;
     margin: 0 auto;
@@ -436,7 +450,8 @@ figcaption:not(.no-marker)::before {
     opacity: 1;
 }
 
-.dfn-paneled[role="button"] { cursor: help; }
+.dfn-paneled { cursor: help; }
+.dfn-paneled > .dfn-panelbutton { all: unset; }
 
 .highlighted {
     animation: target-fade 3s;
@@ -552,11 +567,10 @@ a[href].issue-return {
 	vertical-align: top;
 }
 .mdn-anno > .feature {
-	margin-top: 20px;
+	margin-top: 6px;
 }
 .mdn-anno > .feature:not(:first-of-type) {
 	border-top: 1px solid #999;
-	margin-top: 6px;
 	padding-top: 2px;
 }
 .mdn-anno > .feature > .less-than-two-engines-text {
@@ -914,6 +928,167 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     c-[vm] { color: #cb4b16 } /* Name.Variable.Magic */
     c-[il] { color: #657b83 } /* Literal.Number.Integer.Long */
 }
+
+@media print {
+    /* Darken colors for print that would otherwise print too faintly */
+    c-[c]  { color: #555555 } /* Comment */
+    c-[d]  { color: #555555 } /* Comment.Multiline */
+    c-[cp] { color: #555555 } /* Comment.Preproc */
+    c-[c1] { color: #555555 } /* Comment.Single */
+    c-[cs] { color: #555555 } /* Comment.Special */
+    c-[o]  { color: #222222 } /* Operator */
+    c-[p]  { color: #222222 } /* Punctuation */
+    c-[ow] { color: #222222 } /* Operator.Word */
+    c-[s]  { color: #664400 } /* Literal.String */
+    c-[t]  { color: #664400 } /* Literal.String.Single */
+    c-[u]  { color: #664400 } /* Literal.String.Double */
+    c-[sb] { color: #664400 } /* Literal.String.Backtick */
+    c-[sc] { color: #664400 } /* Literal.String.Char */
+    c-[sd] { color: #664400 } /* Literal.String.Doc */
+    c-[se] { color: #664400 } /* Literal.String.Escape */
+    c-[sh] { color: #664400 } /* Literal.String.Heredoc */
+    c-[si] { color: #664400 } /* Literal.String.Interpol */
+    c-[sx] { color: #664400 } /* Literal.String.Other */
+    c-[sr] { color: #664400 } /* Literal.String.Regex */
+    c-[ss] { color: #664400 } /* Literal.String.Symbol */
+}
+</style>
+<style>/* Boilerplate: style-wpt */
+:root {
+    --wpt-border: hsl(0, 0%, 60%);
+    --wpt-bg: hsl(0, 0%, 95%);
+    --wpt-text: var(--text);
+    --wptheading-text: hsl(0, 0%, 30%);
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --wpt-border: hsl(0, 0%, 30%);
+        --wpt-bg: var(--borderedblock-bg);
+        --wpt-text: var(--text);
+        --wptheading-text: hsl(0, 0%, 60%);
+    }
+}
+.wpt-tests-block {
+    list-style: none;
+    border-left: .5em solid var(--wpt-border);
+    background: var(--wpt-bg);
+    color: var(--wpt-text);
+    margin: 1em auto;
+    padding: .5em;
+}
+.wpt-tests-block summary {
+    color: var(--wptheading-text);
+    font-weight: normal;
+    text-transform: uppercase;
+}
+.wpt-tests-block summary::marker{
+    color: var(--wpt-border);
+}
+.wpt-tests-block summary:hover::marker{
+    color: var(--wpt-text);
+}
+/*
+   The only content  of a wpt test block in its closed state is the <summary>,
+   which contains the word TESTS,
+   and that is absolutely positioned.
+   In that closed state, wpt test blocks are styled
+   to have a top margin whose height is exactly equal
+   to the height of the absolutely positioned <summary>,
+   and no other background/padding/margin/border.
+   The wpt test block elements will therefore allow the maring
+   of the previous/next block elements
+   to collapse through them;
+   if this combined margin would be larger than its own top margin,
+   it stays as is,
+   and therefore the pre-existing vertical rhythm of the document is undisturbed.
+   If that combined margin would be smaller, it is grown to that size.
+   This means that the wpt test block ensures
+   that there's always enough vertical space to insert the summary,
+   without adding more than is needed.
+*/
+.wpt-tests-block:not([open]){
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 0.75em;
+    line-height: 1;
+    position: relative;
+    margin: 1em 0 0;
+}
+.wpt-tests-block:not([open]) summary {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+/*
+   It is possible that both the last child of a block element
+   and the block element itself
+   would be annotated with a <wpt> block each.
+   If the block element has a padding or a border,
+   that's fine, but otherwise
+   the bottom margin of the block and of its last child would collapse
+   and both <wpt> elements would overlap, being both placed there.
+   To avoid that, add 1px of padding to the <wpt> element annotating the last child
+   to prevent the bottom margin of the block and of its last child from collapsing
+   (and as much negative margin,
+   as wel only want to prevent margin collapsing,
+   but are not trying to actually take more space).
+*/
+.wpt-tests-block:not([open]):last-child {
+    padding-bottom: 1px;
+    margin-bottom: -1px;
+}
+/*
+   Exception to the previous rule:
+   don't do that in non-last list items,
+   because it's not necessary,
+   and would therefore consume more space than strictly needed.
+   Lists must have list items as children, not <wpt> elements,
+   so a <wpt> element cannot be a sibling of a list item,
+   and the collision that the previous rule avoids cannot happen.
+*/
+li:not(:last-child) > .wpt-tests-block:not([open]):last-child,
+dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+.wpt-tests-block:not([open]):not(:hover){
+    opacity: 0.5;
+}
+.wpt-tests-list {
+    list-style: none;
+    display: grid;
+    margin: 0;
+    padding: 0;
+    grid-template-columns: 1fr max-content auto auto;
+    grid-column-gap: .5em;
+}
+.wpt-tests-block hr:last-child {
+    display: none;
+}
+.wpt-test {
+    display: contents;
+}
+.wpt-test > a {
+    text-decoration: underline;
+    border: none;
+}
+.wpt-test > .wpt-name { grid-column: 1; }
+.wpt-test > .wpt-results { grid-column: 2; }
+.wpt-test > .wpt-live { grid-column: 3; }
+.wpt-test > .wpt-source { grid-column: 4; }
+
+.wpt-test > .wpt-results {
+    display: flex;
+    gap: .1em;
+}
+.wpt-test .wpt-result {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    border-radius: 50%;
+    position: relative;
+}
 </style>
  <body class="h-entry">
   <div class="head">
@@ -923,7 +1098,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 </p>
    <h1 class="no-ref p-name" id="title">Intersection Observer</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types/#ED">Editor’s Draft</a>,
-    <time class="dt-updated" datetime="2026-03-19">19 March 2026</time></p>
+    <time class="dt-updated" datetime="2026-11-09">9 November 2026</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -937,13 +1112,15 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <dt>Test Suite:
       <dd><a href="http://w3c-test.org/intersection-observer/">http://w3c-test.org/intersection-observer/</a>
       <dt>Feedback:
-      <dd><a href="https://github.com/W3C/IntersectionObserver/issues/">GitHub</a>
+      <dd><a href="https://github.com/w3c/csswg-drafts/labels/intersection-observer">CSSWG Issues Repository</a>
       <dt class="editor">Editors:
       <dd class="editor h-card p-author vcard" data-editor-id="91208"><a class="email fn p-name u-email" href="mailto:szager@google.com">Stefan Zager</a> (<span class="org p-org">Google</span>)
       <dd class="editor h-card p-author vcard" data-editor-id="106537"><a class="email fn p-name u-email" href="mailto:emilio@mozilla.com">Emilio Cobos Álvarez</a> (<span class="org p-org">Mozilla</span>)
       <dd class="editor h-card p-author vcard" data-editor-id="137959"><a class="email fn p-name u-email" href="mailto:tcaptan@google.com">Traian Captan</a> (<span class="org p-org">Google</span>)
       <dt class="editor">Former Editor:
       <dd class="editor h-card p-author vcard" data-editor-id="73819"><a class="email fn p-name u-email" href="mailto:mpb@google.com">Michael Blain</a> (<span class="org p-org">Google</span>)
+      <dt>Suggest an Edit for this Spec:
+      <dd><a href="https://github.com/w3c/csswg-drafts/blob/main/intersection-observer/Overview.bs">GitHub Editor</a>
      </dl>
     </div>
    </details>
@@ -955,27 +1132,31 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="p-summary" data-fill-with="abstract">
    <h2 class="heading no-num no-ref no-toc settled" id="abstract"><span class="content">Abstract</span></h2>
    <p>This specification describes an API that can be used to understand the visibility and position of DOM elements ("targets") relative to a containing element or to the top-level viewport ("root"). The position is delivered asynchronously and is useful for understanding the visibility of elements and implementing pre-loading and deferred loading of DOM content.</p>
+   
+
+
+<a href="https://www.w3.org/TR/CSS/">CSS</a> is a language for describing the rendering of structured documents
+(such as HTML and XML)
+on screen, on paper, etc.
+
+
   </div>
   <h2 class="heading no-num no-ref no-toc settled" id="sotd"><span class="content">Status of this document</span></h2>
   <div data-fill-with="status">
    <p>
-	This document was published by the <a href="https://www.w3.org/groups/wg/webapps">Web Applications Working Group</a> as an Editor’s Draft.
+	This is a public copy of the editors’ draft.
+	It is provided for discussion only and may change at any moment.
+	Its publication here does not imply endorsement of its contents by W3C.
+	Don’t cite this document other than as work in progress.
 
 </p>
-   <p>
-	Publication as an Editor’s Draft does not imply endorsement by <abbr title="World Wide Web Consortium">W3C</abbr> and its Members.
-
-</p>
-   <p>
-	This is a draft document
-	and may be updated, replaced
-	or obsoleted by other documents at any time.
-	It is inappropriate to cite this document as other than a work in progress.
-
-
-
-</p>
-   <p>This document was produced by a group operating under the <a href="https://www.w3.org/policies/patent-policy/"><abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/groups/wg/webapps/ipr" rel="disclosure">public list of any patent disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent that the individual believes contains <a href="https://www.w3.org/policies/patent-policy/#def-essential">Essential Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/policies/patent-policy/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+   <p>Please send feedback
+	by <a href="https://github.com/w3c/csswg-drafts/issues">filing issues in GitHub</a> (preferred),
+	including the spec code “intersection-observer” in the title, like this:
+	“[intersection-observer] <i>…summary of comment…</i>”.
+	All issues and comments are <a href="https://lists.w3.org/Archives/Public/public-css-archive/">archived</a>.
+	Alternately, feedback can be sent to the (<a href="https://lists.w3.org/Archives/Public/www-style/">archived</a>) public mailing list
+	<a href="mailto:www-style@w3.org?Subject=%5Bintersection-observer%5D%20PUT%20SUBJECT%20HERE">www-style@w3.org</a>.
 
 </p>
    <p>This document is governed by the
@@ -1052,10 +1233,22 @@ HTML Processing Model: Event Loop</span></a>
     <li><a href="#internationalization"><span class="secno">6</span> <span class="content">Internationalization</span></a>
     <li><a href="#acknowledgements"><span class="secno">7</span> <span class="content">Acknowledgements</span></a>
     <li>
-     <a href="#w3c-conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
+     <a href="#w3c-conformance"><span class="secno"></span> <span class="content">
+Conformance</span></a>
      <ol class="toc">
-      <li><a href="#w3c-conventions"><span class="secno"></span> <span class="content">Document conventions</span></a>
-      <li><a href="#w3c-conformant-algorithms"><span class="secno"></span> <span class="content">Conformant Algorithms</span></a>
+      <li><a href="#w3c-conventions"><span class="secno"></span> <span class="content">
+Document conventions</span></a>
+      <li><a href="#w3c-conformance-classes"><span class="secno"></span> <span class="content">
+Conformance classes</span></a>
+      <li>
+       <a href="#w3c-partial"><span class="secno"></span> <span class="content">
+Partial implementations</span></a>
+       <ol class="toc">
+        <li><a href="#w3c-conform-future-proofing"><span class="secno"></span> <span class="content">
+Implementations of Unstable and Proprietary Features</span></a>
+       </ol>
+      <li><a href="#w3c-testing"><span class="secno"></span> <span class="content">
+Non-experimental implementations</span></a>
      </ol>
     <li>
      <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
@@ -1178,17 +1371,17 @@ and it can observe any <a data-link-type="dfn" href="#intersectionobserver-targe
 <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root②">root</a></code> in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain" id="ref-for-containing-block-chain">containing block chain</a>.
 An <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver④">IntersectionObserver</a></code> with a <code>null</code> <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-root" id="ref-for-dom-intersectionobserver-root③">root</a></code>
 is referred to as an <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport id="intersectionobserver-implicit-root-observer">implicit root observer</dfn>.
-Valid <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target③">target</a>s for an <a data-link-type="dfn" href="#intersectionobserver-implicit-root-observer" id="ref-for-intersectionobserver-implicit-root-observer">implicit root observer</a> include
+Valid <span id="ref-for-intersectionobserver-target③">target</span>s for an <a data-link-type="dfn" href="#intersectionobserver-implicit-root-observer" id="ref-for-intersectionobserver-implicit-root-observer">implicit root observer</a> include
 any <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element②">Element</a></code> in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context①">top-level browsing context</a>,
 as well as any <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element③">Element</a></code> in any <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context">nested browsing context</a>
-which is in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#list-of-the-descendant-browsing-contexts" id="ref-for-list-of-the-descendant-browsing-contexts">list of the descendant browsing contexts</a> of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context②">top-level browsing context</a>.</p>
+which is in the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#list-of-the-descendant-browsing-contexts" id="ref-for-list-of-the-descendant-browsing-contexts">list of the descendant browsing contexts</a> of the <span id="ref-for-top-level-browsing-context②">top-level browsing context</span>.</p>
    <p>When dealing with <a data-link-type="dfn" href="#intersectionobserver-implicit-root-observer" id="ref-for-intersectionobserver-implicit-root-observer①">implicit root observers</a>, the API makes a distinction between
 a <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target④">target</a> whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object">relevant settings object</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#origin" id="ref-for-origin">origin</a> is
 <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin-domain" id="ref-for-same-origin-domain">same origin-domain</a> with the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-top-level-origin" id="ref-for-concept-environment-top-level-origin">top-level origin</a>, referred to as a
 <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport id="intersectionobserver-same-origin-domain-target">same-origin-domain target</dfn>;
 as opposed to a <dfn class="dfn-paneled" data-dfn-for="IntersectionObserver" data-dfn-type="dfn" data-noexport id="intersectionobserver-cross-origin-domain-target">cross-origin-domain target</dfn>.
-Any <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target⑤">target</a> of an <a data-link-type="dfn" href="#intersectionobserver-explicit-root-observer" id="ref-for-intersectionobserver-explicit-root-observer">explicit root observer</a> is also a <a data-link-type="dfn" href="#intersectionobserver-same-origin-domain-target" id="ref-for-intersectionobserver-same-origin-domain-target">same-origin-domain target</a>,
-since the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target⑥">target</a> must be in the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#document" id="ref-for-document">document</a> as the
+Any <span id="ref-for-intersectionobserver-target⑤">target</span> of an <a data-link-type="dfn" href="#intersectionobserver-explicit-root-observer" id="ref-for-intersectionobserver-explicit-root-observer">explicit root observer</a> is also a <a data-link-type="dfn" href="#intersectionobserver-same-origin-domain-target" id="ref-for-intersectionobserver-same-origin-domain-target">same-origin-domain target</a>,
+since the <span id="ref-for-intersectionobserver-target⑥">target</span> must be in the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#document" id="ref-for-document">document</a> as the
 <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root③">intersection root</a>.</p>
    <p class="note" role="note"><span class="marker">Note:</span> In <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#mutationobserver" id="ref-for-mutationobserver">MutationObserver</a></code>, the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dictdef-mutationobserverinit" id="ref-for-dictdef-mutationobserverinit">MutationObserverInit</a></code> options are passed
 to <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#dom-mutationobserver-observe" id="ref-for-dom-mutationobserver-observe">observe()</a></code> while in <code class="idl"><a data-link-type="idl" href="#intersectionobserver" id="ref-for-intersectionobserver⑤">IntersectionObserver</a></code> they are
@@ -1340,7 +1533,7 @@ with positive lengths indicating an outward offset.
 Percentages are resolved relative to the width of the undilated rectangle.</p>
    <p class="note" role="note"><span class="marker">Note:</span> <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin" id="ref-for-dom-intersectionobserver-rootmargin①">rootMargin</a></code> only applies to the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root⑧">intersection root</a> itself.
 If a <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target⑨">target</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑧">Element</a></code> is clipped by an ancestor other than the
-<a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root⑨">intersection root</a>, that clipping is unaffected by
+<span id="ref-for-intersectionobserver-intersection-root⑨">intersection root</span>, that clipping is unaffected by
 <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin" id="ref-for-dom-intersectionobserver-rootmargin②">rootMargin</a></code>.</p>
    <dl>
     <dt data-md>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="apply-scroll-margin-to-a-scrollport">apply scroll margin to a scrollport</dfn>
@@ -1357,7 +1550,7 @@ for <a data-link-type="dfn" href="#intersectionobserver-cross-origin-domain-targ
      <p class="note" role="note"><span class="marker">Note:</span> <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-scrollmargin" id="ref-for-dom-intersectionobserver-scrollmargin①">scrollMargin</a></code> affects the clipping of <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target①⓪">target</a>
 by all scrollable ancestors up to and including the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⓪">intersection root</a>.
 Both the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-scrollmargin" id="ref-for-dom-intersectionobserver-scrollmargin②">scrollMargin</a></code> and the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserver-rootmargin" id="ref-for-dom-intersectionobserver-rootmargin③">rootMargin</a></code>
-are applied to a scrollable <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①①">intersection root’s</a> rectangle.</p>
+are applied to a scrollable <span id="ref-for-intersectionobserver-intersection-root①①">intersection root’s</span> rectangle.</p>
    </dl>
    <p class="note" role="note"><span class="marker">Note:</span> <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle②">Root intersection rectangle</a> and <a data-link-type="dfn" href="https://drafts.csswg.org/css-overflow-3/#scrollport" id="ref-for-scrollport②">scrollport</a> intersection rectangles are not affected by
 <a data-link-type="dfn" href="https://drafts.csswg.org/cssom-view-1/#pinch-zoom" id="ref-for-pinch-zoom">pinch zoom</a> and will report the unadjusted <a data-link-type="dfn" href="https://drafts.csswg.org/css2/visuren.html#viewport" id="ref-for-viewport③">viewport</a>, consistent with the
@@ -1440,7 +1633,7 @@ rects (up to but not including <code class="idl"><a data-link-type="idl" href="#
 intersected with the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle③">root intersection rectangle</a>.
 This value represents the portion of
 <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target" id="ref-for-dom-intersectionobserverentry-target③">target</a></code> that intersects with
-the <a data-link-type="dfn" href="#intersectionobserver-root-intersection-rectangle" id="ref-for-intersectionobserver-root-intersection-rectangle④">root intersection rectangle</a>.</p>
+the <span id="ref-for-intersectionobserver-root-intersection-rectangle④">root intersection rectangle</span>.</p>
      <dt data-md><dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserverEntry" data-dfn-type="attribute" data-export id="dom-intersectionobserverentry-isintersecting"><code>isIntersecting</code></dfn>, <span> of type <a data-link-type="idl-name" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean⑥">boolean</a>, readonly</span>
      <dd data-md>
       <p>True if the <code class="idl"><a data-link-type="idl" href="#dom-intersectionobserverentry-target" id="ref-for-dom-intersectionobserverentry-target④">target</a></code> intersects with the
@@ -1530,7 +1723,7 @@ between notifications from the observer for a given target.</p>
      <dt data-md><dfn class="dfn-paneled idl-code" data-dfn-for="IntersectionObserverInit" data-dfn-type="dict-member" data-export id="dom-intersectionobserverinit-trackvisibility"><code>trackVisibility</code></dfn>, <span> of type <a data-link-type="idl-name" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean⑨">boolean</a>, defaulting to <code>false</code></span>
      <dd data-md>
       <p>A boolean indicating whether the observer should track <a data-link-type="dfn" href="#visibility" id="ref-for-visibility②">visibility</a>.
-Note that tracking <a data-link-type="dfn" href="#visibility" id="ref-for-visibility③">visibility</a> is likely to be a more expensive operation
+Note that tracking <span id="ref-for-visibility③">visibility</span> is likely to be a more expensive operation
 than tracking intersections. It is recommended that this option be used
 only when necessary.</p>
     </dl>
@@ -1767,7 +1960,7 @@ the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browser
 update <var>intersectionRect</var> by applying <var>container</var>’s clip.</p>
       <li data-md>
        <p>If <var>container</var> is the root element of a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context①">browsing context</a>,
-update <var>container</var> to be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context②">browsing context</a>’s <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#dom-document-2" id="ref-for-dom-document-2①③">document</a></code>;
+update <var>container</var> to be the <span id="ref-for-browsing-context②">browsing context</span>’s <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#dom-document-2" id="ref-for-dom-document-2①③">document</a></code>;
 otherwise, update <var>container</var> to be the <a data-link-type="dfn" href="https://drafts.csswg.org/css-box/#containing-block" id="ref-for-containing-block①">containing block</a>
 of <var>container</var>.</p>
      </ol>
@@ -1795,7 +1988,7 @@ Compute whether a Target is unoccluded, untransformed, unfiltered, and opaque.</
     <li data-md>
      <p>If the implementation cannot guarantee that the <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target①⑦">target</a> is completely unoccluded by other page content, return false.</p>
    </ol>
-   <p class="note" role="note"><span class="marker">Note:</span> Implementations should use the <a data-link-type="dfn" href="https://drafts.csswg.org/css-overflow-3/#ink-overflow-rectangle" id="ref-for-ink-overflow-rectangle">ink overflow rectangle</a> of page content when determining whether a <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target①⑧">target</a> is occluded. For blur effects, which have theoretically infinite extent, the <a data-link-type="dfn" href="https://drafts.csswg.org/css-overflow-3/#ink-overflow-rectangle" id="ref-for-ink-overflow-rectangle①">ink overflow rectangle</a> is defined by the finite-area approximation described for the <a data-link-type="dfn" href="https://drafts.fxtf.org/filter-effects/#funcdef-filter-blur" id="ref-for-funcdef-filter-blur">blur</a> filter function.</p>
+   <p class="note" role="note"><span class="marker">Note:</span> Implementations should use the <a data-link-type="dfn" href="https://drafts.csswg.org/css-overflow-3/#ink-overflow-rectangle" id="ref-for-ink-overflow-rectangle">ink overflow rectangle</a> of page content when determining whether a <a data-link-type="dfn" href="#intersectionobserver-target" id="ref-for-intersectionobserver-target①⑧">target</a> is occluded. For blur effects, which have theoretically infinite extent, the <span id="ref-for-ink-overflow-rectangle①">ink overflow rectangle</span> is defined by the finite-area approximation described for the <a data-link-type="dfn" href="https://drafts.fxtf.org/filter-effects/#funcdef-filter-blur" id="ref-for-funcdef-filter-blur">blur</a> filter function.</p>
    <ol start="6">
     <li data-md>
      <p>Return true.</p>
@@ -1862,11 +2055,11 @@ For the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/bro
          </ul>
         <li data-md>
          <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑥">intersection root</a> is not the <a data-link-type="dfn" href="#intersectionobserver-implicit-root" id="ref-for-intersectionobserver-implicit-root①">implicit root</a>,
-and <var>target</var> is not in the same <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#dom-document-2" id="ref-for-dom-document-2①⑤">document</a></code> as the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑦">intersection root</a>,
+and <var>target</var> is not in the same <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#dom-document-2" id="ref-for-dom-document-2①⑤">document</a></code> as the <span id="ref-for-intersectionobserver-intersection-root①⑦">intersection root</span>,
 skip to step 11.</p>
         <li data-md>
          <p>If the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑧">intersection root</a> is an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element①⑧">Element</a></code>,
-and <var>target</var> is not a descendant of the <a data-link-type="dfn" href="#intersectionobserver-intersection-root" id="ref-for-intersectionobserver-intersection-root①⑨">intersection root</a>
+and <var>target</var> is not a descendant of the <span id="ref-for-intersectionobserver-intersection-root①⑨">intersection root</span>
 in the <a data-link-type="dfn" href="https://drafts.csswg.org/css-display/#containing-block-chain" id="ref-for-containing-block-chain③">containing block chain</a>, skip to step 11.</p>
         <li data-md>
          <p>Set <var>targetRect</var> to the <code class="idl"><a data-link-type="idl" href="https://drafts.csswg.org/geometry-1/#domrectreadonly" id="ref-for-domrectreadonly⑨">DOMRectReadOnly</a></code> obtained by <a data-link-type="dfn" href="https://drafts.csswg.org/cssom-view-1/#element-get-the-bounding-box" id="ref-for-element-get-the-bounding-box④">getting the bounding box</a> for
@@ -1992,62 +2185,138 @@ infrequent for the familiar kind of timing attack.</p>
    <p>Special thanks to <a href="https://github.com/w3c/IntersectionObserver/graphs/contributors">all the contributors</a> for their technical input and suggestions that led to improvements to this
 specification.</p>
   </main>
-  <div data-fill-with="conformance">
-   <h2 class="heading no-num no-ref settled" id="w3c-conformance"><span class="content">Conformance</span><a class="self-link" href="#w3c-conformance"></a></h2>
-   <h3 class="heading no-num no-ref settled" id="w3c-conventions"><span class="content">Document conventions</span><a class="self-link" href="#w3c-conventions"></a></h3>
-   <p>Conformance requirements are expressed
-    with a combination of descriptive assertions
-    and RFC 2119 terminology.
-    The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL”
-    in the normative parts of this document
-    are to be interpreted as described in RFC 2119.
-    However, for readability,
-    these words do not appear in all uppercase letters in this specification.
+  <h2 class="heading no-num no-ref settled" id="w3c-conformance"><span class="content">
+Conformance</span><a class="self-link" href="#w3c-conformance"></a></h2>
+  <h3 class="heading no-ref settled" id="w3c-conventions"><span class="content">
+Document conventions</span><a class="self-link" href="#w3c-conventions"></a></h3>
+  <p>Conformance requirements are expressed with a combination of
+    descriptive assertions and RFC 2119 terminology. The key words “MUST”,
+    “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”,
+    “RECOMMENDED”, “MAY”, and “OPTIONAL” in the normative parts of this
+    document are to be interpreted as described in RFC 2119.
+    However, for readability, these words do not appear in all uppercase
+    letters in this specification.
 
     </p>
-   <p>All of the text of this specification is normative
-    except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119" title="Key words for use in RFCs to Indicate Requirement Levels">[RFC2119]</a>
-
-    </p>
-   <p>Examples in this specification are introduced with the words “for example”
-    or are set apart from the normative text
-    with <code>class="example"</code>,
+  <p>All of the text of this specification is normative except sections
+    explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119" title="Key words for use in RFCs to Indicate Requirement Levels">[RFC2119]</a></p>
+  <p>Examples in this specification are introduced with the words “for example”
+    or are set apart from the normative text with <code>class="example"</code>,
     like this:
 
     </p>
-   <div class="example" id="w3c-example">
-    <a class="self-link" href="#w3c-example"></a>
+  <div class="example" id="w3c-example">
+   <a class="self-link" href="#w3c-example"></a>
         
-    <p>This is an example of an informative example.
-    </p>
-   </div>
-   <p>Informative notes begin with the word “Note”
-    and are set apart from the normative text
-    with <code>class="note"</code>,
-    like this:
-
-    </p>
-   <p class="note" role="note">Note, this is an informative note.</p>
-   <section>
-    <h3 class="heading no-num no-ref settled" id="w3c-conformant-algorithms"><span class="content">Conformant Algorithms</span><a class="self-link" href="#w3c-conformant-algorithms"></a></h3>
-    <p>Requirements phrased in the imperative as part of algorithms
-    (such as "strip any leading space characters"
-    or "return false and abort these steps")
-    are to be interpreted with the meaning of the key word
-    ("must", "should", "may", etc)
-    used in introducing the algorithm.
-
-    </p>
-    <p>Conformance requirements phrased as algorithms or specific steps
-    can be implemented in any manner,
-    so long as the end result is equivalent.
-    In particular, the algorithms defined in this specification
-    are intended to be easy to understand
-    and are not intended to be performant.
-    Implementers are encouraged to optimize.
-</p>
-   </section>
+   <p>This is an example of an informative example.</p>
   </div>
+  <p>Informative notes begin with the word “Note” and are set apart from the
+    normative text with <code>class="note"</code>, like this:
+
+    </p>
+  <p class="note" role="note">Note, this is an informative note.</p>
+  <p>Advisements are normative sections styled to evoke special attention and are
+    set apart from other normative text with <code>&lt;strong class="advisement"></code>, like
+    this:
+
+    <strong class="advisement">
+        UAs MUST provide an accessible alternative.
+    </strong></p>
+  <details class="wpt-tests-block" dir="ltr" lang="en" open>
+   <summary>Tests</summary>
+   <p>Tests relating to the content of this specification
+                     may be documented in “Tests” blocks like this one.
+                     Any such block is non-normative.</p>
+   <ul class="wpt-tests-list"></ul>
+   <hr>
+  </details>
+  <h3 class="heading no-ref settled" id="w3c-conformance-classes"><span class="content">
+Conformance classes</span><a class="self-link" href="#w3c-conformance-classes"></a></h3>
+  <p>Conformance to this specification
+    is defined for three conformance classes:
+    </p>
+  <dl>
+   <dt>style sheet
+            
+   <dd>A <a href="http://www.w3.org/TR/CSS21/conform.html#style-sheet">CSS
+            style sheet</a>.
+        
+   <dt>renderer
+            
+   <dd>A <a href="http://www.w3.org/TR/CSS21/conform.html#user-agent">UA</a>
+            that interprets the semantics of a style sheet and renders
+            documents that use them.
+        
+   <dt>authoring tool
+            
+   <dd>A <a href="http://www.w3.org/TR/CSS21/conform.html#user-agent">UA</a>
+            that writes a style sheet.
+    
+  </dl>
+  <p>A style sheet is conformant to this specification
+    if all of its statements that use syntax defined in this module are valid
+    according to the generic CSS grammar and the individual grammars of each
+    feature defined in this module.
+
+    </p>
+  <p>A renderer is conformant to this specification
+    if, in addition to interpreting the style sheet as defined by the
+    appropriate specifications, it supports all the features defined
+    by this specification by parsing them correctly
+    and rendering the document accordingly. However, the inability of a
+    UA to correctly render a document due to limitations of the device
+    does not make the UA non-conformant. (For example, a UA is not
+    required to render color on a monochrome monitor.)
+
+    </p>
+  <p>An authoring tool is conformant to this specification
+    if it writes style sheets that are syntactically correct according to the
+    generic CSS grammar and the individual grammars of each feature in
+    this module, and meet all other conformance requirements of style sheets
+    as described in this module.
+
+</p>
+  <h3 class="heading no-ref settled" id="w3c-partial"><span class="content">
+Partial implementations</span><a class="self-link" href="#w3c-partial"></a></h3>
+  <p>So that authors can exploit the forward-compatible parsing rules to
+    assign fallback values, CSS renderers <strong>must</strong>
+    treat as invalid (and <a href="http://www.w3.org/TR/CSS21/conform.html#ignore">ignore
+    as appropriate</a>) any at-rules, properties, property values, keywords,
+    and other syntactic constructs for which they have no usable level of
+    support. In particular, user agents <strong>must not</strong> selectively
+    ignore unsupported component values and honor supported values in a single
+    multi-value property declaration: if any value is considered invalid
+    (as unsupported values must be), CSS requires that the entire declaration
+    be ignored.</p>
+  <h4 class="heading settled" id="w3c-conform-future-proofing"><span class="content">
+Implementations of Unstable and Proprietary Features</span><a class="self-link" href="#w3c-conform-future-proofing"></a></h4>
+  <p>To avoid clashes with future stable CSS features,
+        the CSSWG recommends <a href="http://www.w3.org/TR/CSS/#future-proofing">following best practices</a> for the implementation of <a href="http://www.w3.org/TR/CSS/#unstable">unstable</a> features and <a href="http://www.w3.org/TR/CSS/#proprietary-extension">proprietary extensions</a> to CSS.
+
+</p>
+  <h3 class="heading no-ref settled" id="w3c-testing"><span class="content">
+Non-experimental implementations</span><a class="self-link" href="#w3c-testing"></a></h3>
+  <p>Once a specification reaches the Candidate Recommendation stage,
+    non-experimental implementations are possible, and implementors should
+    release an unprefixed implementation of any CR-level feature they
+    can demonstrate to be correctly implemented according to spec.
+
+    </p>
+  <p>To establish and maintain the interoperability of CSS across
+    implementations, the CSS Working Group requests that non-experimental
+    CSS renderers submit an implementation report (and, if necessary, the
+    testcases used for that implementation report) to the W3C before
+    releasing an unprefixed implementation of any CSS features. Testcases
+    submitted to W3C are subject to review and correction by the CSS
+    Working Group.
+
+    </p>
+  <p>Further information on submitting testcases and implementation reports
+    can be found from on the CSS Working Group’s website at
+    <a href="http://www.w3.org/Style/CSS/Test/">http://www.w3.org/Style/CSS/Test/</a>.
+    Questions should be directed to the
+    <a href="http://lists.w3.org/Archives/Public/public-css-testsuite">public-css-testsuite@w3.org</a>
+    mailing list.</p>
   <script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
   <h2 class="heading no-num no-ref settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="heading no-num no-ref settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
@@ -2379,277 +2648,56 @@ specification.</p>
 };
 
 </pre>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-intersectionobserver">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-intersectionobserver" data-mdn="v1|API/IntersectionObserver/IntersectionObserver|9|55,12.1,51,@!,79,15,-,55,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/IntersectionObserver" title="The IntersectionObserver() constructor creates and returns a new IntersectionObserver object.">IntersectionObserver/IntersectionObserver</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android yes"><span>Firefox for Android</span><span>55+</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-disconnect">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-disconnect" data-mdn="v1|API/IntersectionObserver/disconnect|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/disconnect" title="The IntersectionObserver method disconnect() stops watching all of its target elements for visibility changes.">IntersectionObserver/disconnect</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-observe">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-observe" data-mdn="v1|API/IntersectionObserver/observe|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/observe" title="The IntersectionObserver method observe() adds an element to the set of target elements being watched by the IntersectionObserver. One observer has one set of thresholds and one root, but can watch multiple target elements for visibility changes in keeping with those.">IntersectionObserver/observe</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-root">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-root" data-mdn="v1|API/IntersectionObserver/root|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/root" title="The IntersectionObserver interface&apos;s read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer&apos;s target.">IntersectionObserver/root</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-rootmargin">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-rootmargin" data-mdn="v1|API/IntersectionObserver/rootMargin|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin" title="The IntersectionObserver interface&apos;s read-only rootMargin property is a string with syntax similar to that of the CSS margin property. Each side of the rectangle represented by rootMargin is added to the corresponding side in the root element&apos;s bounding box before the intersection test is performed. This lets you, for example, adjust the bounds outward so that the target element is considered 100% visible even if a certain number of pixels worth of width or height is clipped away, or treat the target as partially hidden if an edge is too close to the edge of the root&apos;s bounding box.">IntersectionObserver/rootMargin</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-takerecords">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-takerecords" data-mdn="v1|API/IntersectionObserver/takeRecords|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/takeRecords" title="The IntersectionObserver method takeRecords() returns an array of IntersectionObserverEntry objects, one for each targeted element which has experienced an intersection change since the last time the intersections were checked, either explicitly through a call to this method or implicitly by an automatic call to the observer&apos;s callback.">IntersectionObserver/takeRecords</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-thresholds">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-thresholds" data-mdn="v1|API/IntersectionObserver/thresholds|9|55,12.1,52,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds" title="The IntersectionObserver interface&apos;s read-only thresholds property returns the list of intersection thresholds that was specified when the observer was instantiated with IntersectionObserver(). If only one threshold ratio was provided when instantiating the object, this will be an array containing that single value.">IntersectionObserver/thresholds</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>52+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-unobserve">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserver-unobserve" data-mdn="v1|API/IntersectionObserver/unobserve|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/unobserve" title="The IntersectionObserver method unobserve() instructs the IntersectionObserver to stop observing the specified target element.">IntersectionObserver/unobserve</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="intersection-observer-interface">
+  <details class="mdn-anno unpositioned" data-anno-for="intersection-observer-interface" data-mdn="v1|API/IntersectionObserver|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver" title="The IntersectionObserver interface of the Intersection Observer API provides a way to asynchronously observe changes in the intersection of a target element with an ancestor element or with a top-level document&apos;s viewport. The ancestor element or viewport is referred to as the root.">IntersectionObserver</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-boundingclientrect">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-boundingclientrect" data-mdn="v1|API/IntersectionObserverEntry/boundingClientRect|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/boundingClientRect" title="The IntersectionObserverEntry interface&apos;s read-only boundingClientRect property returns a DOMRectReadOnly which in essence describes a rectangle describing the smallest rectangle that contains the entire target element.">IntersectionObserverEntry/boundingClientRect</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-intersectionratio">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-intersectionratio" data-mdn="v1|API/IntersectionObserverEntry/intersectionRatio|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/intersectionRatio" title="The IntersectionObserverEntry interface&apos;s read-only intersectionRatio property tells you how much of the target element is currently visible within the root&apos;s intersection ratio, as a value between 0.0 and 1.0.">IntersectionObserverEntry/intersectionRatio</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-intersectionrect">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-intersectionrect" data-mdn="v1|API/IntersectionObserverEntry/intersectionRect|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/intersectionRect" title="The IntersectionObserverEntry interface&apos;s read-only intersectionRect property is a DOMRectReadOnly object which describes the smallest rectangle that contains the entire portion of the target element which is currently visible within the intersection root.">IntersectionObserverEntry/intersectionRect</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-isintersecting">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-isintersecting" data-mdn="v1|API/IntersectionObserverEntry/isIntersecting|9|55,12.1,58,@!,79,16,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/isIntersecting" title="The IntersectionObserverEntry interface&apos;s read-only isIntersecting property is a Boolean value which is true if the target element intersects with the intersection observer&apos;s root. If this is true, then, the IntersectionObserverEntry describes a transition into a state of intersection; if it&apos;s false, then you know the transition is from intersecting to not-intersecting.">IntersectionObserverEntry/isIntersecting</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>58+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>16+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-rootbounds">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-rootbounds" data-mdn="v1|API/IntersectionObserverEntry/rootBounds|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/rootBounds" title="The IntersectionObserverEntry interface&apos;s read-only rootBounds property is a DOMRectReadOnly corresponding to the target&apos;s root intersection rectangle, offset by the IntersectionObserver.rootMargin if one is specified.">IntersectionObserverEntry/rootBounds</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-target">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-target" data-mdn="v1|API/IntersectionObserverEntry/target|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/target" title="The IntersectionObserverEntry interface&apos;s read-only target property indicates which targeted Element has changed its amount of intersection with the intersection root.">IntersectionObserverEntry/target</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-time">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-intersectionobserverentry-time" data-mdn="v1|API/IntersectionObserverEntry/time|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry/time" title="The IntersectionObserverEntry interface&apos;s read-only time property is a DOMHighResTimeStamp that indicates the time at which the intersection change occurred relative to the time at which the document was created.">IntersectionObserverEntry/time</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="intersection-observer-entry">
+  <details class="mdn-anno unpositioned" data-anno-for="intersection-observer-entry" data-mdn="v1|API/IntersectionObserverEntry|9|55,12.1,51,@!,79,15,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry" title="The IntersectionObserverEntry interface of the Intersection Observer API describes the intersection between the target element and its root container at a specific moment of transition.">IntersectionObserverEntry</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>55+</span></span><span class="safari yes"><span>Safari</span><span>12.1+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>15+</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
 <script>/* Boilerplate: script-dom-helper */
 "use strict";
@@ -3005,16 +3053,6 @@ let dfnPanelData = {
 
 document.addEventListener("DOMContentLoaded", ()=>{
     genAllDfnPanels();
-
-    document.body.addEventListener("click", (e) => {
-        // If not handled already, just hide all dfn panels.
-        hideAllDfnPanels();
-    });
-});
-
-window.addEventListener("resize", () => {
-    // Pin any visible dfn panel
-    queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>positionDfnPanel(el));
 });
 
 function genAllDfnPanels() {
@@ -3026,16 +3064,17 @@ function genAllDfnPanels() {
             continue;
         }
         dfn.panelData = panelData;
-        insertDfnPopupAction(dfn);
+        genDfnPanel(dfn, panelData);
     }
 }
 
 function genDfnPanel(dfn, { dfnID, url, dfnText, refSections, external }) {
-    const dfnPanel = mk.aside({
-        class: "dfn-panel on",
+    const dfnPanel = mk.dialog({
+        class: "dfn-panel",
         id: `infopanel-for-${dfnID}`,
+        popover: "hint",
         "data-for": dfnID,
-        "aria-labelled-by":`infopaneltitle-for-${dfnID}`,
+        "aria-labelledby": `infopaneltitle-for-${dfnID}`,
         },
         mk.span({id:`infopaneltitle-for-${dfnID}`, style:"display:none"},
             `Info about the '${dfnText}' ${external?"external":""} reference.`),
@@ -3067,106 +3106,34 @@ function genDfnPanel(dfn, { dfnID, url, dfnText, refSections, external }) {
         event.stopPropagation();
         refocusOnTarget(event);
     });
-    dfnPanel.addEventListener('keydown', (event) => {
-        if(event.keyCode == 27) { // Escape key
-            hideDfnPanel({dfnPanel});
-            event.stopPropagation();
-            event.preventDefault();
+
+    dfnPanel.addEventListener('toggle', event=>{
+        if(event.newState == "closed") {
+            unpinDfnPanel(dfnPanel);
         }
     });
 
     dfnPanel.dfn = dfn;
     dfn.dfnPanel = dfnPanel;
+    dfn.after(dfnPanel);
+    const button = mk.button(
+        {
+            class:"dfn-panelbutton",
+            "popovertarget":dfnPanel.id
+        },
+        ...dfn.childNodes
+    );
+    dfn.append(button);
     return dfnPanel;
-}
-
-
-
-function hideAllDfnPanels() {
-    // Delete the currently-active dfn panel.
-    queryAll(".dfn-panel").forEach(dfnPanel=>hideDfnPanel({dfnPanel}));
-}
-
-function showDfnPanel(dfn) {
-    hideAllDfnPanels(); // Only display one at a time.
-
-    dfn.setAttribute("aria-expanded", "true");
-
-    const dfnPanel = genDfnPanel(dfn, dfn.panelData);
-
-    // Give the dfn a unique tabindex, and then
-    // give all the tabbable panel bits successive indexes.
-    let tabIndex = 100;
-    dfn.tabIndex = tabIndex++;
-    const tabbable = dfnPanel.querySelectorAll(":is(a, button)");
-    for (const el of tabbable) {
-        el.tabIndex = tabIndex++;
-    }
-
-    append(document.body, dfnPanel);
-    positionDfnPanel(dfnPanel);
-}
-
-function positionDfnPanel(dfnPanel) {
-    const dfn = dfnPanel.dfn;
-    const dfnPos = getBounds(dfn);
-    dfnPanel.style.top = dfnPos.bottom + "px";
-    dfnPanel.style.left = dfnPos.left + "px";
-
-    const panelPos = dfnPanel.getBoundingClientRect();
-    const panelMargin = 8;
-    const maxRight = document.body.parentNode.clientWidth - panelMargin;
-    if (panelPos.right > maxRight) {
-        const overflowAmount = panelPos.right - maxRight;
-        const newLeft = Math.max(panelMargin, dfnPos.left - overflowAmount);
-        dfnPanel.style.left = newLeft + "px";
-    }
 }
 
 function pinDfnPanel(dfnPanel) {
     // Switch it to "activated" state, which pins it.
     dfnPanel.classList.add("activated");
-    dfnPanel.style.position = "fixed";
-    dfnPanel.style.left = null;
-    dfnPanel.style.top = null;
 }
 
-function hideDfnPanel({dfn, dfnPanel}) {
-    if(!dfnPanel) dfnPanel = dfn.dfnPanel;
-    if(!dfn) dfn = dfnPanel.dfn;
-    dfn.dfnPanel = undefined;
-    dfnPanel.dfn = undefined;
-    dfn.setAttribute("aria-expanded", "false");
-    dfn.tabIndex = undefined;
-    dfnPanel.remove()
-}
-
-function toggleDfnPanel(dfn) {
-    if(dfn.dfnPanel) {
-        hideDfnPanel(dfn);
-    } else {
-        showDfnPanel(dfn);
-    }
-}
-
-function insertDfnPopupAction(dfn) {
-    dfn.setAttribute('role', 'button');
-    dfn.setAttribute('aria-expanded', 'false')
-    dfn.tabIndex = 0;
-    dfn.classList.add('has-dfn-panel');
-    dfn.addEventListener('click', (event) => {
-        toggleDfnPanel(dfn);
-        event.stopPropagation();
-    });
-    dfn.addEventListener('keypress', (event) => {
-        const kc = event.keyCode;
-        // 32->Space, 13->Enter
-        if(kc == 32 || kc == 13) {
-            toggleDfnPanel(dfn);
-            event.stopPropagation();
-            event.preventDefault();
-        }
-    });
+function unpinDfnPanel(dfnPanel) {
+    dfnPanel.classList.remove("activated");
 }
 
 function refocusOnTarget(event) {
@@ -3176,21 +3143,6 @@ function refocusOnTarget(event) {
         // This is needed after browser scrolls to the destination.
         target.focus();
     });
-}
-
-// TODO: shared util
-// Returns the root-level absolute position {left and top} of element.
-function getBounds(el, relativeTo=document.body) {
-    const relativeRect = relativeTo.getBoundingClientRect();
-    const elRect = el.getBoundingClientRect();
-    const top = elRect.top - relativeRect.top;
-    const left = elRect.left - relativeRect.left;
-    return {
-        top,
-        left,
-        bottom: top + elRect.height,
-        right: left + elRect.width,
-    }
 }
 
 function scrollToTargetAndHighlight(event) {
@@ -3383,6 +3335,213 @@ function genLinkingSyntaxes(dfn) {
         )
     ];
 }
+}
+</script>
+<script>/* Boilerplate: script-mdn-anno */
+"use strict";
+{
+'use strict';
+// File copied from https://github.com/whatwg/whatwg.org/blob/main/resources.whatwg.org/standard-mdn-annos.js
+
+// Builds MDN annotation panels on demand from the compact `data-mdn` attribute written by
+// the spec generator (wattsi's EncodeMDNAnnotations; Bikeshed's mdnspeclinks.py builds its
+// panels eagerly for now). Only the wire format is shared: the browser labels, the
+// engine-support strings and the render grouping all live here.
+//
+// Archived commit snapshots load this file forever, so every format version this script
+// has ever understood has to keep working. Evolve the format by adding a branch in
+// `hydrate`, never by redefining a version that has already shipped.
+
+const MDN_URL = 'https://developer.mozilla.org/en-US/docs/Web/';
+const CANIUSE_URL = 'https://caniuse.com/#feat=';
+
+// Render groups, in the order they appear in a panel, separated by <hr>.
+const CURRENT_ENGINES = 0;
+const BORROWED_ENGINES = 1;
+const RETIRED_ENGINES = 2;
+const MOBILE = 3;
+const NON_BROWSER = 4;
+const GROUP_COUNT = 5;
+
+// Cell slots, in the order they appear in `data-mdn`. APPEND-ONLY: a new browser goes at
+// the end and is never inserted, so that old data still lines up and old copies of this
+// script can keep ignoring the cells they don't know about. `group` is what decides where
+// a row is rendered, so appending to this list doesn't constrain where the row shows up.
+const SLOTS = [
+  { id: 'firefox', label: 'Firefox', group: CURRENT_ENGINES },
+  { id: 'safari', label: 'Safari', group: CURRENT_ENGINES },
+  { id: 'chrome', label: 'Chrome', group: CURRENT_ENGINES },
+  { id: 'opera', label: 'Opera', group: BORROWED_ENGINES, mirrors: 'Chrome' },
+  { id: 'edge_blink', label: 'Edge', group: BORROWED_ENGINES },
+  { id: 'edge', label: 'Edge (Legacy)', group: RETIRED_ENGINES },
+  { id: 'ie', label: 'IE', group: RETIRED_ENGINES },
+  { id: 'firefox_android', label: 'Firefox for Android', group: MOBILE, mirrors: 'Firefox' },
+  { id: 'safari_ios', label: 'iOS Safari', group: MOBILE, mirrors: 'Safari' },
+  { id: 'chrome_android', label: 'Chrome for Android', group: MOBILE, mirrors: 'Chrome' },
+  { id: 'webview_android', label: 'Android WebView', group: MOBILE, mirrors: 'Chrome' },
+  { id: 'samsunginternet_android', label: 'Samsung Internet', group: MOBILE, mirrors: 'Chrome' },
+  { id: 'opera_android', label: 'Opera Mobile', group: MOBILE, mirrors: 'Chrome' },
+  { id: 'nodejs', label: 'Node.js', group: NON_BROWSER },
+];
+
+// One mnemonic character per engine-support note.
+const LEVELS = {
+  '0': { class: 'less-than-two-engines-text', text: 'In no current engines.' },
+  '1': { class: 'less-than-two-engines-text', text: 'In only one current engine.' },
+  '9': { class: 'all-engines-text', text: 'In all current engines.' },
+  's': { class: 'less-than-two-engines-text', text: 'Support in one engine under other name.' },
+  'S': { class: 'less-than-two-engines-text', text: 'Support in some engines under other name.' },
+  'v': { class: 'less-than-two-engines-text', text: 'Prefixed support in one engine.' },
+  'V': { class: 'less-than-two-engines-text', text: 'Prefixed support in some engines.' },
+  'p': { class: 'less-than-two-engines-text', text: 'Partial support in one engine.' },
+  'P': { class: 'less-than-two-engines-text', text: 'Partial support in some engines.' },
+};
+
+// Leading character of a cell, qualifying how the version after it should be read. `flag`
+// is whether to mark the version with 🔰 as well as explaining it in a tooltip.
+const CAVEATS = {
+  '*': { flag: true, title: () => 'Partial implementation.' },
+  '^': { flag: true, title: () => 'Requires setting a user preference or runtime flag.' },
+  '$': { flag: true, title: () => 'Requires a prefix or alternative name.' },
+  // Mirrored support is far too common to flag every occurrence; the tooltip is enough.
+  '@': { flag: false, title: (slot) => `Support is mirrored from ${slot.mirrors ?? 'the upstream browser'}.` },
+};
+
+const FLAG = '\u{1F530}'; // 🔰, marks a version that comes with a caveat
+const EN_DASH = '–';
+
+function element(name, attributes, ...children) {
+  const node = document.createElement(name);
+  for (const [attribute, value] of Object.entries(attributes)) {
+    if (value !== undefined) {
+      node.setAttribute(attribute, value);
+    }
+  }
+  node.append(...children);
+  return node;
+}
+
+function splitOnce(string, separator) {
+  const at = string.indexOf(separator);
+  return at === -1 ? [string, undefined] : [string.slice(0, at), string.slice(at + 1)];
+}
+
+// A version body says both whether the browser supports the feature and since when.
+function readVersion(body) {
+  if (body === '?') {
+    return { state: 'unknown', version: '?' };
+  }
+  if (body === '-') {
+    return { state: 'no', version: 'None' };
+  }
+  if (body === '!') {
+    return { state: 'yes', version: 'Yes' };
+  }
+  if (body.startsWith('=')) {
+    // A version that will never be superseded, so no trailing "+".
+    return { state: 'yes', version: body.slice(1) };
+  }
+  const [added, removed] = body.split('-');
+  if (removed !== undefined) {
+    return { state: 'no', version: added + EN_DASH + removed };
+  }
+  return { state: 'yes', version: added + '+' };
+}
+
+function readCell(cell, slot) {
+  const caveat = CAVEATS[cell[0]];
+  const { state, version } = readVersion(caveat ? cell.slice(1) : cell);
+  return {
+    state,
+    version: caveat?.flag ? `${FLAG} ${version}` : version,
+    title: caveat?.title(slot),
+  };
+}
+
+// A browser row is the browser's name in one cell and its version in the next. The logo
+// comes from CSS, keyed off the browser id in the row's class.
+function browserRow(slot, cell) {
+  const { state, version, title } = readCell(cell, slot);
+  return element('span', { class: `${slot.id} ${state}` },
+    element('span', {}, slot.label),
+    element('span', { title }, version));
+}
+
+// The caniuse row has a single cell instead, since its logo needs no label beside it.
+function caniuseRow(field) {
+  const [feature, title] = splitOnce(field, ',');
+  const link = element('a', { href: CANIUSE_URL + feature, title }, 'caniuse.com table');
+  return element('span', { class: 'caniuse' }, element('span', {}, link));
+}
+
+function supportTable(cells, caniuse) {
+  const groups = Array.from({ length: GROUP_COUNT }, () => []);
+  SLOTS.forEach((slot, slotIndex) => {
+    // An empty cell means this browser gets no row at all. Cells beyond SLOTS are
+    // browsers added after this copy of the script was written; ignore them.
+    if (cells[slotIndex]) {
+      groups[slot.group].push(browserRow(slot, cells[slotIndex]));
+    }
+  });
+  if (caniuse !== undefined) {
+    groups.push([caniuseRow(caniuse)]);
+  }
+
+  const table = element('div', { class: 'support' });
+  for (const rows of groups.filter((rows) => rows.length > 0)) {
+    if (table.hasChildNodes()) {
+      table.append(element('hr', {}));
+    }
+    table.append(...rows);
+  }
+  return table;
+}
+
+function featurePanel(record) {
+  const [slug, level, cells, caniuse] = record.split('|');
+
+  const article = element('a', { href: MDN_URL + slug }, slug.slice(slug.indexOf('/') + 1));
+  const panel = element('div', { class: 'feature' }, element('p', {}, article));
+
+  if (level in LEVELS) {
+    panel.append(element('p', { class: LEVELS[level].class }, LEVELS[level].text));
+  }
+  if (cells) {
+    panel.append(supportTable(cells.split(','), caniuse));
+  }
+  return panel;
+}
+
+function hydrate(anno) {
+  const [version, features] = splitOnce(anno.dataset.mdn, '|');
+  delete anno.dataset.mdn; // Only ever hydrate a panel once.
+
+  if (version !== 'v1') {
+    console.warn(`Unsupported MDN annotation data version "${version}".`, anno);
+    return;
+  }
+  anno.append(...features.split('~').map(featurePanel));
+}
+
+function hydrateIfNeeded(node) {
+  if (node instanceof Element && node.matches('.mdn-anno[data-mdn]')) {
+    hydrate(node);
+  }
+}
+
+// A click on the summary arrives before the browser opens the <details>, so hydrating
+// from it means the panel never flashes empty. That covers pointers and the keyboard,
+// since activating a summary dispatches a click either way.
+document.addEventListener('click', (event) => {
+  if (event.target instanceof Element) {
+    hydrateIfNeeded(event.target.closest('summary')?.parentElement);
+  }
+}, true);
+
+// And `toggle` is the catch-all for a panel opened some other way, such as find-in-page
+// or a fragment navigation into it. It fires a task after the state has already changed,
+// and it doesn't bubble, so it has to be a capture listener.
+document.addEventListener('toggle', (event) => hydrateIfNeeded(event.target), true);
 }
 </script>
 <script>/* Boilerplate: script-position-annos */
