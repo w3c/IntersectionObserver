@@ -713,15 +713,20 @@ run these steps:
 Queue an IntersectionObserverEntry</h4>
 
 To <dfn>queue an IntersectionObserverEntry</dfn> for an {{IntersectionObserver}} |observer|, given a
-{{document}} |document|; {{DOMHighResTimeStamp}} |time|;
-{{DOMRect}}s |rootBounds|, |boundingClientRect|, |intersectionRect|, and |isIntersecting| flag;
-and an {{Element}} |target|;
-run these steps:
+{{document}} |document|, {{DOMHighResTimeStamp}} |time|, {{DOMRect}}s |rootBounds|,
+|boundingClientRect| and |intersectionRect|, booleans |isIntersecting| and |isVisible|,
+a double |intersectionRatio|, and an {{Element}} |target|, run these steps:
 
-1. Construct an {{IntersectionObserverEntry}}, passing in |time|, |rootBounds|,
-	|boundingClientRect|, |intersectionRect|, |isIntersecting|, and |target|.
-2. Append it to |observer|'s internal {{[[QueuedEntries]]}} slot.
-3. <a>Queue an intersection observer task</a> for |document|.
+1. Let |entryRootBounds| be |rootBounds| if |target| is a <a>same-origin-domain target</a>,
+	and null otherwise.
+2. Construct an {{IntersectionObserverEntry}} using an {{IntersectionObserverEntryInit}}
+	dictionary with members <code>time</code>, <code>rootBounds</code>,
+	<code>boundingClientRect</code>, <code>intersectionRect</code>, <code>isIntersecting</code>,
+	<code>isVisible</code>, <code>intersectionRatio</code>, and <code>target</code> set to
+	|time|, |entryRootBounds|, |boundingClientRect|, |intersectionRect|, |isIntersecting|,
+	|isVisible|, |intersectionRatio|, and |target| respectively.
+3. Append it to |observer|'s internal {{[[QueuedEntries]]}} slot.
+4. <a>Queue an intersection observer task</a> for |document|.
 
 <h4 id='calculate-intersection-rect-algo'>
 Compute the Intersection of a Target Element and the Root</h4>
@@ -753,7 +758,7 @@ run these steps:
 <h4 id='calculate-visibility-algo'>
 Compute whether a Target is unoccluded, untransformed, unfiltered, and opaque.</h4>
 
-To compute the <dfn>visibility</dfn> of a <a for="IntersectionObserver">target</a>, run these steps:
+To compute the <dfn>visibility</dfn> of a <a for="IntersectionObserver">target</a> |target| for an {{IntersectionObserver}} |observer|, run these steps:
 1. If the |observer|'s {{IntersectionObserver/trackVisibility}} attribute is false, return false.
 2. If the <a for="IntersectionObserver">target</a> has an <a>effective transformation matrix</a> other than a 2D translation or proportional 2D upscaling, return false.
 3. If the <a for="IntersectionObserver">target</a>, or any element in its <a>containing block chain</a>, has an effective opacity other than 100%, return false.
@@ -816,7 +821,7 @@ To <dfn export>run the update intersection observations steps</dfn> for a
 		12. If |targetArea| is non-zero, let |intersectionRatio| be |intersectionArea| divided by |targetArea|.<br>
 			Otherwise, let |intersectionRatio| be <code>1</code> if |isIntersecting| is true, or <code>0</code> if |isIntersecting| is false.
 		13. Set |thresholdIndex| to the index of the first entry in |observer|.{{thresholds}} whose value is greater than |intersectionRatio|, or the length of |observer|.{{thresholds}} if |intersectionRatio| is greater than or equal to the last entry in |observer|.{{thresholds}}.
-		14. Let |isVisible| be the result of running the <a>visibility</a> algorithm on |target|.
+		14. Let |isVisible| be the result of running the <a>visibility</a> algorithm on |target| for |observer|.
 		15. Let |previousThresholdIndex| be the |registration|'s
 		    {{IntersectionObserverRegistration/previousThresholdIndex}} property.
 		16. Let |previousIsIntersecting| be the |registration|'s
@@ -827,9 +832,9 @@ To <dfn export>run the update intersection observations steps</dfn> for a
 		    or if |isIntersecting| does not equal |previousIsIntersecting|,
 		    or if |isVisible| does not equal |previousIsVisible|,
 			<a>queue an IntersectionObserverEntry</a>,
-			passing in |observer|, |time|, |rootBounds|,
+			passing in |observer|, |document|, |time|, |rootBounds|,
 			|targetRect|, |intersectionRect|, |isIntersecting|,
-			|isVisible|, and |target|.
+			|isVisible|, |intersectionRatio|, and |target|.
 		19. Assign |thresholdIndex| to |registration|'s
 			{{IntersectionObserverRegistration/previousThresholdIndex}} property.
 		20. Assign |isIntersecting| to |registration|'s
