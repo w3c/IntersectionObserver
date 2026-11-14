@@ -640,7 +640,7 @@ and an {{IntersectionObserverInit}} dictionary |options|, run these steps:
 10. Let |delay| be the value of |options|.{{IntersectionObserverInit/delay}}.
 11. If |options|.{{IntersectionObserverInit/trackVisibility}} is true
 	and |delay| is less than <code>100</code>, set |delay| to <code>100</code>.
-11. Set |this|'s internal {{[[delay]]}} slot to |options|.{{IntersectionObserverInit/delay}} to |delay|.
+11. Set |this|'s internal {{[[delay]]}} slot to |delay|.
 12. Set |this|'s internal {{[[trackVisibility]]}} slot to |options|.{{IntersectionObserverInit/trackVisibility}}.
 13. Return |this|.
 
