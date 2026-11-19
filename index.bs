@@ -667,9 +667,9 @@ To <dfn>unobserve a target Element</dfn>, given an {{IntersectionObserver}} |obs
 and an {{Element}} |target|, follow these steps:
 
 1. Remove the {{IntersectionObserverRegistration}} record
-	whose {{IntersectionObserverRegistration/observer}} property is equal to |this|
+	whose {{IntersectionObserverRegistration/observer}} property is equal to |observer|
 	from |target|'s internal {{[[RegisteredIntersectionObservers]]}} slot, if present.
-2. Remove |target| from |this|'s internal {{[[ObservationTargets]]}} slot, if present
+2. Remove |target| from |observer|'s internal {{[[ObservationTargets]]}} slot, if present
 
 <h4 id='queue-intersection-observer-task'>
 Queue an Intersection Observer Task</h4>
